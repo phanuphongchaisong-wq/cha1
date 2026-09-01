@@ -114,6 +114,7 @@
             cursor: pointer; width: 100%; transition: all 0.3s ease; margin-bottom: 12px; 
             display: flex; align-items: center; justify-content: center; gap: 10px;
             text-transform: uppercase; position: relative; overflow: hidden;
+            text-decoration: none; /* for anchor tags */
         }
         .btn:active { transform: scale(0.97); }
 
@@ -241,6 +242,7 @@
         <p class="verifying-text" id="verify-loader" style="display:none;">SENDING SLIP TO ADMIN...</p>
     </div>
 
+    <!-- ⏳ STAGE 4: AWAITING REMOTE APPROVAL -->
     <div class="vip-panel" id="panel-approval">
         <div class="header">
             <h1 style="color: var(--gold-main);">AWAITING APPROVAL</h1>
@@ -251,9 +253,13 @@
             ⏳ WAITING FOR ADMIN APPROVAL...
         </div>
 
+        <!-- ปุ่มจะโผล่มาตรงนี้หลังน้องกดอนุมัติ -->
+        <a href="#" id="final-redirect-btn" class="btn btn-gold" style="display: none; margin-top: 20px;">[ 👉 คลิกเพื่อเข้าสู่โปรไฟล์ ]</a>
+
         <p class="status-msg" id="approval-error">ยังไม่ได้กดอนุมัติ หรือรหัสไม่ถูกต้อง</p>
     </div>
 
+    <!-- 👑 STAGE 5: ADMIN APPROVAL PANEL -->
     <div class="vip-panel" id="panel-admin">
         <div class="header">
             <h1 style="color: var(--green-success);">ADMIN CONTROL</h1>
@@ -284,8 +290,7 @@
 
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1490595359574196365/IcvVP4SyQx2iivyoFzARrv_C_3jKs1k82aLUGRSaSYC7_UmbgVzpVqncvS9gKjsaDs5T"; 
 
-        // 👉 แก้บั๊ก API เปลี่ยนมาใช้ Local Storage ผ่าน URL แทน
-        // ระบบนี้จะเสถียร 100% ไม่พึ่งพิงเซิร์ฟเวอร์ภายนอกอีกต่อไป
+        const STORAGE_API_BASE = "https://api.restful-api.dev/objects";
 
         let currentTarget = ''; 
         let currentRequestId = ''; 
@@ -397,10 +402,8 @@
             document.querySelector('.upload-wrapper').style.display = 'none';
             loader.style.display = 'block';
 
-            // สร้าง ID แบบเสถียร ไม่พึ่งพา API ภายนอก
+            // ใช้ API ชั่วคราวสร้าง ID (เพื่อเลี่ยงบั๊ก Cache ในมือถือ)
             const newReqId = "REQ_" + Math.random().toString(36).substr(2, 9).toUpperCase();
-            
-            // ใช้ localStorage.io เพื่อเป็นตัวกลางข้อมูลแบบฟรีและไม่มีล่ม
             const syncUrl = `https://getpantry.cloud/apiv1/pantry/1a2b3c4d-vip-system/basket/${newReqId}`;
             
             fetch(syncUrl, {
@@ -413,7 +416,6 @@
                 sendDiscordNotification(fileInput.files[0], newReqId);
             })
             .catch(() => {
-                // เผื่อสุดวิสัยจริงๆ ให้สุ่ม ID ไปเลย
                 currentRequestId = newReqId;
                 sendDiscordNotification(fileInput.files[0], newReqId);
             });
@@ -464,12 +466,15 @@
                     if (resData && resData.status === 'approved') {
                         clearInterval(pollingTimer);
                         
-                        document.getElementById('waiting-status-text').innerHTML = "<b style='color:#00ff88; font-size:18px;'>✅ APPROVED BY ADMIN!</b><br>กำลังนำคุณเข้าสู่โปรไฟล์...";
+                        // ถ้าน้องกดอนุมัติ ให้โชว์ปุ่มขึ้นมาแทนที่จะเด้งเอง
+                        document.getElementById('waiting-status-text').innerHTML = "<b style='color:#00ff88; font-size:18px;'>✅ APPROVED BY ADMIN!</b><br>อนุมัติสำเร็จแล้วจร้าาาาาาาาาา";
                         document.getElementById('live-polling-loader').style.display = 'none';
 
-                        setTimeout(() => {
-                            window.location.href = LINKS[resData.target || currentTarget]; 
-                        }, 1500);
+                        // เปิดปุ่มให้พี่รหัสกดเข้าไปเอง
+                        const finalBtn = document.getElementById('final-redirect-btn');
+                        finalBtn.style.display = 'flex';
+                        finalBtn.href = LINKS[resData.target || currentTarget];
+                        finalBtn.target = "_blank"; // ให้เปิดแท็บใหม่
                     }
                 })
                 .catch(() => {});
@@ -489,7 +494,7 @@
                 body: JSON.stringify({ status: "approved" })
             })
             .then(() => {
-                statusMsg.innerText = "✅ อนุมัติสำเร็จแล้ว! หน้าจอพี่รหัสจะถูกปลดล็อกและเปิดวาร์ปทันที";
+                statusMsg.innerText = "✅ อนุมัติสำเร็จแล้ว! หน้าจอพี่รหัสจะขึ้นปุ่มให้กดเปิดวาร์ปทันที";
             })
             .catch(() => {
                 statusMsg.innerText = "⚠️ การเชื่อมต่อขัดข้อง แต่อาจจะอนุมัติไปแล้ว (ให้พี่รหัสลองรีเฟรชหน้าจอ)";
