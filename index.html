@@ -16,12 +16,14 @@
             --bg-color: #0a0b1e;
             --accent-cyan: #00f3ff;
             --accent-purple: #9d00ff;
+            --accent-red: #ff3366;
             --text-main: #f0f0f0;
             --text-muted: #666;
-            --glass-bg: rgba(10, 11, 30, 0.7);
+            --glass-bg: rgba(10, 11, 30, 0.75);
             --glass-border: rgba(255, 255, 255, 0.1);
             --glow-cyan: 0 0 15px var(--accent-cyan);
             --glow-purple: 0 0 15px var(--accent-purple);
+            --glow-red: 0 0 15px var(--accent-red);
         }
 
         body, html {
@@ -48,232 +50,235 @@
             z-index: -1;
         }
 
-        /* Glassmorphism Secure Gate Container */
-        .secure-gate-container {
+        /* Glassmorphism Container Base */
+        .glass-panel {
             background-color: var(--glass-bg);
             backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
-            padding: 50px 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
             width: 90%;
-            max-width: 500px;
+            max-width: 450px;
             text-align: center;
-            transition: transform 0.5s ease, opacity 0.5s ease;
-            position: relative;
+            position: absolute;
             z-index: 10;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .secure-gate-container.unlocked {
-            transform: scale(1.1);
+        /* 1. Secure Gate Container */
+        #secure-gate {
+            transform: scale(1);
+            opacity: 1;
+        }
+        #secure-gate.hidden {
+            transform: scale(0.8);
             opacity: 0;
             pointer-events: none;
         }
 
-        /* Header Section */
-        .header {
-            font-family: 'Fira Code', monospace;
-            margin-bottom: 40px;
+        /* 2. Contact Vectors Container */
+        #contact-vectors {
+            transform: scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+            display: none; /* Initial state before logic */
+        }
+        #contact-vectors.active {
+            display: block;
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            pointer-events: all;
+        }
+        #contact-vectors.hidden {
+            transform: scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s ease;
         }
 
+        /* 3. Payment Gateway Container */
+        #payment-gateway {
+            transform: scale(0.8);
+            opacity: 0;
+            pointer-events: none;
+            display: none;
+            border-color: rgba(255, 51, 102, 0.3);
+            box-shadow: 0 10px 40px rgba(255, 51, 102, 0.15);
+        }
+        #payment-gateway.active {
+            display: block;
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            pointer-events: all;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Headers */
+        .header {
+            font-family: 'Fira Code', monospace;
+            margin-bottom: 30px;
+        }
         .header h1 {
             color: var(--accent-cyan);
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             margin-bottom: 10px;
             text-shadow: var(--glow-cyan);
         }
-
         .header p {
             color: var(--text-muted);
             font-size: 14px;
-            font-weight: 300;
             margin-top: 0;
         }
 
         /* Input Fields */
         .input-group {
             text-align: left;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
-
         .input-label {
             font-family: 'Fira Code', monospace;
             display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            font-size: 14px;
+            margin-bottom: 8px;
+            font-size: 13px;
             color: #aaa;
-            letter-spacing: 1px;
         }
-
-        .input-field-wrapper {
-            position: relative;
-        }
-
         input {
             width: 100%;
-            padding: 15px 20px;
+            padding: 14px 18px;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
             color: var(--accent-cyan);
             font-family: 'Fira Code', monospace;
-            font-size: 16px;
-            transition: border-color 0.3s, box-shadow 0.3s;
+            font-size: 15px;
             box-sizing: border-box;
+            transition: border-color 0.3s;
         }
-
         input:focus {
             outline: none;
             border-color: var(--accent-cyan);
             box-shadow: var(--glow-cyan);
         }
-
-        /* Stylized Date Input */
         input[type="date"]::-webkit-calendar-picker-indicator {
             filter: invert(1);
             opacity: 0.5;
             cursor: pointer;
         }
 
-        /* Elegant Execute Button */
-        .execute-btn {
-            background: linear-gradient(135deg, var(--accent-purple) 0%, #d814ff 100%);
-            color: white;
+        /* Buttons */
+        .btn {
             border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
+            padding: 15px;
+            border-radius: 8px;
             font-family: 'Fira Code', monospace;
             font-weight: 700;
-            font-size: 16px;
-            letter-spacing: 1.5px;
+            font-size: 15px;
             cursor: pointer;
             width: 100%;
-            text-transform: uppercase;
-            transition: transform 0.1s, box-shadow 0.3s, background-position 0.5s;
-            background-size: 200% 200%;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-        }
-
-        .execute-btn:hover {
-            box-shadow: var(--glow-purple);
-            background-position: right center;
-        }
-
-        .execute-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* Status & Error Messages */
-        .status-msg {
-            font-family: 'Fira Code', monospace;
-            font-size: 14px;
-            margin-top: 20px;
-            display: none;
-        }
-
-        .error-msg {
-            color: #ff4757;
-            text-shadow: 0 0 10px #ff4757;
-        }
-
-        /*
-         * =========================================
-         * ✅ UNLOCKED STATE (AFTER SUCCESS)
-         * =========================================
-         */
-        .contact-vectors-container {
-            display: none;
-            animation: fadeIn 1s ease 0.5s forwards;
-            max-width: 600px;
-            width: 90%;
-            position: absolute;
-            z-index: 10;
-        }
-
-        .contact-card {
-            background-color: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            text-align: center;
-        }
-
-        .contact-header {
-            font-family: 'Fira Code', monospace;
-            margin-bottom: 30px;
-        }
-
-        .contact-header h1 {
-            color: var(--accent-cyan);
-            font-size: 24px;
-            text-shadow: var(--glow-cyan);
-            margin-bottom: 5px;
-        }
-
-        .contact-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .vector-btn {
-            text-decoration: none;
-            padding: 18px 25px;
-            border-radius: 10px;
-            color: white;
-            font-family: 'Fira Code', monospace;
-            font-weight: 700;
-            font-size: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            transition: transform 0.2s, box-shadow 0.3s;
+            gap: 10px;
+            margin-bottom: 15px;
         }
+        .btn:active { transform: scale(0.97); }
 
-        .vector-btn:hover {
-            transform: scale(1.03);
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-purple) 0%, #d814ff 100%);
+            color: white;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(157, 0, 255, 0.3);
         }
+        .btn-primary:hover { box-shadow: var(--glow-purple); }
 
-        .facebook-vector {
+        .btn-fb {
             background: linear-gradient(135deg, #1877F2 0%, #3b5998 100%);
-            box-shadow: 0 4px 15px rgba(24, 119, 242, 0.3);
+            color: white;
         }
-
-        .facebook-vector:hover {
-            box-shadow: 0 4px 25px rgba(24, 119, 242, 0.6);
-        }
-
-        .instagram-vector {
+        .btn-ig {
             background: linear-gradient(135deg, #f09433 0%, #cc2366 100%);
-            box-shadow: 0 4px 15px rgba(230, 104, 60, 0.3);
+            color: white;
+        }
+        .btn-cancel {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #aaa;
+            margin-bottom: 0;
+        }
+        .btn-cancel:hover { background: rgba(255,255,255,0.05); color: white; }
+
+        /* Payment Specifics */
+        .payment-header h1 {
+            color: var(--accent-red);
+            text-shadow: var(--glow-red);
+        }
+        .amount-display {
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+            font-family: 'Fira Code', monospace;
+            margin: 20px 0;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+        .mock-qr {
+            width: 180px;
+            height: 180px;
+            background: rgba(255,255,255,0.05);
+            border: 2px dashed rgba(255,51,102,0.5);
+            border-radius: 10px;
+            margin: 0 auto 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--accent-red);
+            flex-direction: column;
+            gap: 10px;
+        }
+        .mock-qr img {
+            width: 100px;
+            opacity: 0.7;
         }
 
-        .instagram-vector:hover {
-            box-shadow: 0 4px 25px rgba(230, 104, 60, 0.6);
+        .status-msg {
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            margin-top: 15px;
+            display: none;
+            color: #ff4757;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* For the animated log text */
         .system-log {
             font-family: 'Fira Code', monospace;
-            font-size: 12px;
-            color: #555;
+            font-size: 11px;
+            color: #444;
             position: absolute;
             bottom: 20px;
             right: 20px;
             text-align: right;
             pointer-events: none;
+        }
+        
+        /* Loading overlay for payment */
+        .verifying-text {
+            color: var(--accent-cyan);
+            font-size: 14px;
+            display: none;
+            margin-top: 15px;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
     </style>
 </head>
@@ -282,118 +287,193 @@
     <!-- 🌌 Dynamic Particle Background -->
     <canvas id="bg-canvas"></canvas>
 
-    <!-- 🛡️ Secure Gate: The Password Screen -->
-    <div class="secure-gate-container" id="secure-gate">
+    <!-- 🛡️ STAGE 1: Secure Gate (Login) -->
+    <div class="glass-panel" id="secure-gate">
         <div class="header">
-            <h1>// SECURE ACCESS GATE //</h1>
+            <h1>// SECURE_ACCESS_GATE //</h1>
             <p>[AWAITING_DECRYPTION_KEYS]...</p>
-        }
         </div>
 
         <div class="input-group">
             <label class="input-label" for="hint-input">[KEY_1] - HINT_DECODING_MATRIX</label>
-            <div class="input-field-wrapper">
-                <input type="text" id="hint-input" placeholder=">> ENTER_HINT_CODE" autocomplete="off">
-            </div>
+            <input type="text" id="hint-input" placeholder=">> ENTER_HINT_CODE" autocomplete="off">
         </div>
 
         <div class="input-group">
             <label class="input-label" for="password-input">[KEY_2] - TEMPORAL_STAMP_VERIFICATION</label>
-            <div class="input-field-wrapper">
-                <input type="date" id="password-input" autocomplete="off">
-            </div>
+            <input type="date" id="password-input" autocomplete="off">
         </div>
 
-        <button class="execute-btn" onclick="executeAccessProtocol()">[ EXECUTE_ACCESS_PROTOCOL_03 ]</button>
-        <p class="status-msg error-msg" id="status-message">// ERROR: KEYS_MISMATCH // ACCESS_DENIED.</p>
+        <button class="btn btn-primary" onclick="executeAccessProtocol()">[ EXECUTE_PROTOCOL ]</button>
+        <p class="status-msg" id="login-error">// ERROR: KEYS_MISMATCH //</p>
     </div>
 
-    <!-- ✅ Unlocked Content: Contact Vectors -->
-    <div class="contact-vectors-container" id="contact-vectors">
-        <div class="contact-card">
-            <div class="contact-header">
-                <h1>// ACCESS_GRANTED //</h1>
-                <p>Welcome, Senior Mentor. Target Acquired.</p>
-            }
-            </div>
-            
-            <div class="contact-list">
-                <a href="https://www.facebook.com/share/1Ei8GRPBro/?mibextid=wwXIfr" target="_blank" class="vector-btn facebook-vector">
-                    // [OPEN_FACEBOOK_VECTOR]
-                </a>
-                <a href="https://www.instagram.com/t.anno24?igsi=a2h5MjBrczh3Z25l&utm_source=qr" target="_blank" class="vector-btn instagram-vector">
-                    // [OPEN_INSTAGRAM_VECTOR]
-                </a>
-            </div>
+    <!-- ✅ STAGE 2: Unlocked Content (Vectors) -->
+    <div class="glass-panel" id="contact-vectors">
+        <div class="header">
+            <h1>// ACCESS_GRANTED //</h1>
+            <p>Welcome, Senior Mentor. Target Acquired.</p>
         </div>
+        
+        <button class="btn btn-fb" onclick="initiatePayment('fb')">
+            // [OPEN_FACEBOOK_VECTOR]
+        </button>
+        <button class="btn btn-ig" onclick="initiatePayment('ig')">
+            // [OPEN_INSTAGRAM_VECTOR]
+        </button>
+    </div>
+
+    <!-- 💸 STAGE 3: Payment Ransom (The Prank) -->
+    <div class="glass-panel" id="payment-gateway">
+        <div class="header payment-header">
+            <h1>// PREMIUM_ACCESS_REQUIRED //</h1>
+            <p>To unlock this vector, a transaction is required.</p>
+        </div>
+        
+        <div class="amount-display">99.00 THB</div>
+        
+        <div class="mock-qr">
+            <!-- สร้าง QR หลอกๆ ด้วย CSS -->
+            <div style="width: 100px; height: 100px; background: repeating-linear-gradient(45deg, var(--accent-red), var(--accent-red) 10px, transparent 10px, transparent 20px); opacity: 0.5;"></div>
+            <span>[ SCAN_PROMPTPAY_QR ]</span>
+        </div>
+
+        <button class="btn btn-primary" id="btn-verify" onclick="verifyPayment()">[ VERIFY_TRANSFER ]</button>
+        <button class="btn btn-cancel" onclick="cancelPayment()">[ CANCEL ]</button>
+        
+        <p class="verifying-text" id="verify-loader">// VERIFYING_BLOCKCHAIN_TRANSACTION... PLEASE WAIT //</p>
     </div>
 
     <!-- Decorative log text -->
-    <div class="system-log">
+    <div class="system-log" id="sys-log">
         log: system_gate_initialized<br>
         status: awaiting_input...
     </div>
 
     <script>
-        /*
-         * =========================================
-         * 🔧 JavaScript - Logic & Effects
-         * =========================================
-         */
+        /* =========================================
+         * 🔧 CONFIGURATION (ตั้งค่าลิ้งก์และรหัสที่นี่)
+         * ========================================= */
+        const CORRECT_HINT = "ไม่แดกชามะนาว";
+        const CORRECT_DATE = "2003-12-24"; 
 
-        // ==========================================
-        // 🔧 ตั้งค่ารหัสผ่านที่นี่
-        // ==========================================
-        const CORRECT_HINT = "ไม่แดกชามะนาว"; // **อย่าเปลี่ยน** คำใบ้ที่น้องให้มา
-        const CORRECT_DATE = "2003-12-24"; // **นี่คือวันเกิดที่คุณต้องตั้งค่า** รูปแบบ: ค.ศ.-เดือน-วัน (YYYY-MM-DD)
+        const LINKS = {
+            fb: "https://www.facebook.com/share/1Ei8GRPBro/?mibextid=wwXIfr",
+            ig: "https://www.instagram.com/t.anno24?igsi=a2h5MjBrczh3Z25l&utm_source=qr"
+        };
 
-        // Element selection
-        const gate = document.getElementById('secure-gate');
-        const vectors = document.getElementById('contact-vectors');
-        const statusMsg = document.getElementById('status-message');
-        const logText = document.querySelector('.system-log');
+        // DOM Elements
+        const elGate = document.getElementById('secure-gate');
+        const elVectors = document.getElementById('contact-vectors');
+        const elPayment = document.getElementById('payment-gateway');
+        const elLog = document.getElementById('sys-log');
+        let currentTarget = ''; // เก็บว่าพี่รหัสจะกดไปแอพไหน
 
+        /* --- STAGE 1: ตรวจรหัสผ่าน --- */
         function executeAccessProtocol() {
-            // ดึงค่าที่พี่รหัสพิมพ์เข้ามา
-            let userHint = document.getElementById('hint-input').value.trim();
-            let userDate = document.getElementById('password-input').value;
+            let hint = document.getElementById('hint-input').value.trim();
+            let date = document.getElementById('password-input').value;
+            let errorMsg = document.getElementById('login-error');
 
-            // ตรวจสอบข้อมูลแบบเคร่งครัด
-            if (userHint === CORRECT_HINT && userDate === CORRECT_DATE) {
-                // ✅ สำเร็จ: เริ่มเอฟเฟกต์ปลดล็อก
-                gate.classList.add('unlocked'); // ซ่อนหน้าแรกแบบมีอนิเมชั่น
-                statusMsg.style.display = 'none';
+            if (hint === CORRECT_HINT && date === CORRECT_DATE) {
+                // รหัสถูก
+                errorMsg.style.display = 'none';
+                elGate.classList.add('hidden');
                 
-                // โชว์หน้า Contact
                 setTimeout(() => {
-                    gate.style.display = 'none';
-                    vectors.style.display = 'block';
-                    logText.innerHTML = "log: access_granted<br>status: vectors_deployed";
-                }, 500);
+                    elGate.style.display = 'none';
+                    elVectors.classList.add('active');
+                    updateLog("access_granted", "vectors_deployed");
+                }, 400);
             } else {
-                // ❌ ล้มเหลว: แสดงข้อความ error และเขย่ากล่อง
-                statusMsg.style.display = 'block';
-                logText.innerHTML = "log: error_keys_mismatch<br>status: retry_awaited";
-                gate.style.animation = 'shake 0.3s ease-in-out';
-                setTimeout(() => gate.style.animation = '', 300);
+                // รหัสผิด
+                errorMsg.style.display = 'block';
+                elGate.style.transform = 'scale(0.98)';
+                setTimeout(() => elGate.style.transform = 'scale(1)', 150);
+                updateLog("error_keys_mismatch", "retry_awaited");
             }
         }
 
-        // ==========================================
-        // 🌌 Dynamic Particle Background - JavaScript
-        // ==========================================
+        /* --- STAGE 2: เด้งหน้าเก็บตังค์ --- */
+        function initiatePayment(targetApp) {
+            currentTarget = targetApp;
+            elVectors.classList.remove('active');
+            elVectors.classList.add('hidden');
+
+            setTimeout(() => {
+                elVectors.style.display = 'none';
+                elPayment.classList.add('active');
+                updateLog("premium_firewall_triggered", "awaiting_funds_99_thb");
+            }, 400);
+        }
+
+        /* --- STAGE 3: ตรวจสอบโอนเงิน (หลอกๆ) --- */
+        function verifyPayment() {
+            const btnVerify = document.getElementById('btn-verify');
+            const loader = document.getElementById('verify-loader');
+            
+            // เปลี่ยนปุ่มเป็นกำลังโหลด
+            btnVerify.style.display = 'none';
+            document.querySelector('.btn-cancel').style.display = 'none';
+            loader.style.display = 'block';
+            updateLog("verifying_transaction", "processing...");
+
+            // แกล้งหน่วงเวลา 3 วินาที ให้ดูสมจริง
+            setTimeout(() => {
+                loader.innerText = "// TRANSACTION_APPROVED // BYPASSING_FIREWALL...";
+                loader.style.color = "#00f3ff";
+                updateLog("transaction_approved", "unlocking_target_url");
+
+                // เปิดวาร์ปไปโปรไฟล์จริงๆ
+                setTimeout(() => {
+                    window.open(LINKS[currentTarget], '_blank');
+                    
+                    // รีเซ็ตหน้ากลับไปโชว์ปุ่มวาร์ปเหมือนเดิม
+                    resetToVectors();
+                }, 1500);
+            }, 3000);
+        }
+
+        /* กลับไปหน้าเลือกลิ้งก์ใหม่ถ้ายกเลิกการจ่าย */
+        function cancelPayment() {
+            elPayment.classList.remove('active');
+            setTimeout(() => {
+                elPayment.style.display = 'none';
+                elVectors.style.display = 'block';
+                elVectors.classList.remove('hidden');
+                elVectors.classList.add('active');
+                updateLog("transaction_aborted", "vectors_deployed");
+            }, 400);
+        }
+
+        /* รีเซ็ตหน้า Payment หลังเปิดวาร์ปเสร็จ */
+        function resetToVectors() {
+            document.getElementById('btn-verify').style.display = 'flex';
+            document.querySelector('.btn-cancel').style.display = 'block';
+            const loader = document.getElementById('verify-loader');
+            loader.style.display = 'none';
+            loader.innerText = "// VERIFYING_BLOCKCHAIN_TRANSACTION... PLEASE WAIT //";
+            loader.style.color = "var(--accent-cyan)";
+            cancelPayment();
+        }
+
+        function updateLog(log, status) {
+            elLog.innerHTML = `log: ${log}<br>status: ${status}`;
+        }
+
+        /* =========================================
+         * 🌌 BACKGROUND EFFECTS (PARTICLES)
+         * ========================================= */
         const canvas = document.getElementById('bg-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        window.addEventListener('resize', () => {
+        function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             createParticles();
-        });
+        }
+        window.addEventListener('resize', resizeCanvas);
 
         class Particle {
             constructor() {
@@ -412,7 +492,7 @@
                 if (this.y < 0) this.y = canvas.height;
             }
             draw() {
-                ctx.fillStyle = 'rgba(0, 243, 255, 0.4)';
+                ctx.fillStyle = 'rgba(0, 243, 255, 0.3)';
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
@@ -421,24 +501,18 @@
 
         function createParticles() {
             particles = [];
-            const numberOfParticles = (canvas.width * canvas.height) / 8000;
-            for (let i = 0; i < numberOfParticles; i++) {
-                particles.push(new Particle());
-            }
+            const count = (canvas.width * canvas.height) / 9000;
+            for (let i = 0; i < count; i++) particles.push(new Particle());
         }
 
         function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update();
-                particles[i].draw();
-            }
+            particles.forEach(p => { p.update(); p.draw(); });
             requestAnimationFrame(animate);
         }
 
-        createParticles();
+        resizeCanvas();
         animate();
     </script>
-
 </body>
 </html>
