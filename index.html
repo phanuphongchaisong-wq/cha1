@@ -21,6 +21,7 @@
             --glass-border: rgba(212, 175, 55, 0.3);
             --text-white: #ffffff;
             --text-gray: #a0a0a0;
+            --green-success: #00ff88;
         }
 
         * { box-sizing: border-box; }
@@ -81,11 +82,11 @@
         .header { margin-bottom: 30px; }
         .header h1 { 
             font-family: 'Montserrat', sans-serif; color: var(--gold-main); 
-            font-size: 22px; font-weight: 800; letter-spacing: 3px; margin: 0 0 8px 0; 
+            font-size: 20px; font-weight: 800; letter-spacing: 2px; margin: 0 0 8px 0; 
             text-transform: uppercase;
             text-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
         }
-        .header p { font-size: 13px; color: var(--text-gray); margin: 0; font-weight: 300; }
+        .header p { font-size: 13px; color: var(--text-gray); margin: 0; font-weight: 300; line-height: 1.5; }
 
         /* ⌨️ Inputs */
         .input-group { text-align: left; margin-bottom: 20px; }
@@ -124,6 +125,12 @@
         }
         .btn-gold:hover { box-shadow: 0 10px 25px rgba(212, 175, 55, 0.5); }
         @keyframes goldShine { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .btn-green {
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+            color: #fff;
+            box-shadow: 0 8px 20px rgba(0, 255, 136, 0.3);
+        }
 
         /* 💎 Premium Social Buttons */
         .btn-fb { background: #000; color: #fff; border: 1px solid rgba(255,255,255,0.15); }
@@ -165,7 +172,7 @@
         #slip-filename { font-size: 11px; color: var(--text-gray); margin-top: 8px; display: block; }
 
         .status-msg { font-size: 12px; margin-top: 15px; display: none; color: #ff4757; font-weight: 500; }
-        .verifying-text { color: var(--gold-main); font-size: 12px; display: none; margin-top: 15px; animation: pulse 1.5s infinite; letter-spacing: 1px; }
+        .verifying-text { color: var(--gold-main); font-size: 13px; margin-top: 15px; animation: pulse 1.5s infinite; letter-spacing: 1px; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
         
         svg { width: 18px; height: 18px; fill: currentColor; }
@@ -175,25 +182,23 @@
 
     <div class="bg-orb"></div>
 
-    <!-- 🛡️ STAGE 1: LOGIN -->
     <div class="vip-panel active" id="panel-login">
         <div class="header">
-            <h1>VIP IDENTIFICATION</h1>
-            <p>Please enter your credentials to proceed.</p>
+            <h1>VIP ชามะนาวโรงอาหาร?</h1>
+            <p></p>
         </div>
         <div class="input-group">
-            <label class="input-label">SECURITY HINT</label>
+            <label class="input-label">คิดว่า จะถามอะไรกับคำใบ้</label>
             <input type="text" id="hint-input" placeholder="Enter given hint" autocomplete="off">
         </div>
         <div class="input-group">
-            <label class="input-label">AUTHORIZATION DATE</label>
+            <label class="input-label">ทายวันเดิมเพื่อเข้าสู่ระบบ</label>
             <input type="date" id="password-input" autocomplete="off">
         </div>
         <button class="btn btn-gold" onclick="verifyLogin()">AUTHENTICATE</button>
         <p class="status-msg" id="login-error">Authentication Failed. Invalid Credentials.</p>
     </div>
 
-    <!-- ✅ STAGE 2: SOCIAL SELECTOR -->
     <div class="vip-panel" id="panel-vectors">
         <div class="header">
             <h1 style="color: var(--text-white);">ACCESS GRANTED</h1>
@@ -211,7 +216,6 @@
         </button>
     </div>
 
-    <!-- 💸 STAGE 3: PAYMENT GATEWAY -->
     <div class="vip-panel" id="panel-payment">
         <div class="header" style="margin-bottom: 15px;">
             <h1 style="color: var(--text-white);">PREMIUM FEE</h1>
@@ -234,14 +238,41 @@
         <button class="btn btn-cancel" onclick="switchPanel('panel-payment', 'panel-vectors')">CANCEL TRANSACTION</button>
         
         <p class="status-msg" id="payment-error">Please attach payment evidence.</p>
-        <p class="verifying-text" id="verify-loader">VERIFYING TRANSACTION...</p>
+        <p class="verifying-text" id="verify-loader" style="display:none;">SENDING SLIP TO ADMIN...</p>
+    </div>
+
+    <div class="vip-panel" id="panel-approval">
+        <div class="header">
+            <h1 style="color: var(--gold-main);">AWAITING APPROVAL</h1>
+            <p id="waiting-status-text">ส่งสลืปเรียบร้อยแล้ว!<br>กำลังรอการอนุมัติจากน้องรหัสจร้าาาาาาาาาา</p>
+        </div>
+
+        <div class="verifying-text" id="live-polling-loader">
+            ⏳ WAITING FOR ADMIN APPROVAL...
+        </div>
+
+        <p class="status-msg" id="approval-error">ยังไม่ได้กดอนุมัติ หรือรหัสไม่ถูกต้อง</p>
+    </div>
+
+    <div class="vip-panel" id="panel-admin">
+        <div class="header">
+            <h1 style="color: var(--green-success);">ADMIN CONTROL</h1>
+            <p>คำขอเข้าชมโปรไฟล์จากพี่รหัส</p>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 13px; color: var(--gold-light);">
+            Request ID: <span id="admin-req-id" style="font-weight: 700; color: #fff;">-</span>
+        </div>
+
+        <button class="btn btn-green" onclick="approveFromAdmin()">[ 🟢 กดอนุมัติการเข้าถึง (APPROVE) ]</button>
+        <p class="verifying-text" id="admin-status-msg" style="color: var(--green-success); display:none;"></p>
     </div>
 
     <script>
         // ==========================================
         // 🔧 1. CONFIGURATION
         // ==========================================
-        const CORRECT_HINT = "ไม่แดกชามะนาว";
+        const CORRECT_HINT = "อร่อยไหม";
         const CORRECT_DATE = "2003-12-24"; 
 
         const LINKS = {
@@ -249,37 +280,61 @@
             ig: "https://www.instagram.com/t.anno24?igsi=a2h5MjBrczh3Z25l&utm_source=qr"
         };
 
-        // ==========================================
-        // 🚨 2. ใส่ DISCORD WEBHOOK URL ตรงนี้! 🚨
-        // ==========================================
-        const DISCORD_WEBHOOK_URL = "ใส่_WEBHOOK_URL_ของน้องตรงนี้"; 
+        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1490595359574196365/IcvVP4SyQx2iivyoFzARrv_C_3jKs1k82aLUGRSaSYC7_UmbgVzpVqncvS9gKjsaDs5T"; 
+
+        // Online Storage Database สำหรับซิงก์สถานะข้ามเครื่องเรียลไทม์
+        const STORAGE_API_BASE = "https://api.restful-api.dev/objects";
 
         let currentTarget = ''; 
+        let currentRequestId = ''; 
+        let pollingTimer = null;
 
         // ==========================================
-        // 🚀 BUG-FREE PANEL SWITCHER (แก้บั๊กจอดำ)
+        // 🌐 URL DETECTOR (เช็กว่าเป็นลิงก์กดอนุมัติใน Discord หรือไม่)
+        // ==========================================
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const approveReqId = urlParams.get('approve');
+            
+            if (approveReqId) {
+                // ถ้าน้องรหัสคลิกมาจาก Discord ให้เปิดหน้า Admin Control ทันที
+                hideAllPanels();
+                document.getElementById('panel-admin').classList.add('active');
+                document.getElementById('panel-admin').style.opacity = '1';
+                document.getElementById('admin-req-id').innerText = approveReqId;
+                currentRequestId = approveReqId;
+            }
+        };
+
+        function hideAllPanels() {
+            const panels = document.querySelectorAll('.vip-panel');
+            panels.forEach(p => {
+                p.classList.remove('active');
+                p.style.display = 'none';
+                p.style.opacity = '0';
+            });
+        }
+
+        // ==========================================
+        // 🚀 PANEL SWITCHER
         // ==========================================
         function switchPanel(hideId, showId) {
             const hideEl = document.getElementById(hideId);
             const showEl = document.getElementById(showId);
             
-            // เฟดหน้าจอเก่าออก
             hideEl.style.opacity = '0';
             hideEl.style.transform = 'translateY(-20px) scale(0.95)';
             
             setTimeout(() => {
                 hideEl.classList.remove('active');
+                hideEl.style.display = 'none';
                 
-                // เปิดหน้าจอใหม่
+                showEl.style.display = 'block';
                 showEl.classList.add('active');
-                
-                // บังคับให้เบราว์เซอร์จัดหน้าใหม่ (กันบั๊ก UI ค้างในมือถือ)
                 void showEl.offsetWidth; 
-                
-                // เฟดหน้าจอใหม่เข้า
                 showEl.style.opacity = '1';
                 showEl.style.transform = 'translateY(0) scale(1)';
-            }, 400); // รอ 0.4 วิ ให้แอนิเมชันเก่าจบก่อน
+            }, 400); 
         }
 
         // ==========================================
@@ -325,48 +380,109 @@
             const btnVerify = document.getElementById('btn-verify');
             const loader = document.getElementById('verify-loader');
 
-            // ตรวจสอบว่าใส่รูปหรือยัง
             if (fileInput.files.length === 0) {
                 errorMsg.style.display = 'block';
                 return; 
             }
             
-            // ซ่อนปุ่ม โชว์สถานะโหลด
             errorMsg.style.display = 'none';
             btnVerify.style.display = 'none';
             document.querySelector('.btn-cancel').style.display = 'none';
             document.querySelector('.upload-wrapper').style.display = 'none';
             loader.style.display = 'block';
 
-            // เตรียมส่งข้อมูล
+            // สร้างคำขอในระบบ Online Database
+            fetch(STORAGE_API_BASE, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: "APPROVAL_REQUEST",
+                    data: { status: "pending", target: currentTarget }
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                currentRequestId = data.id;
+                sendDiscordNotification(fileInput.files[0], data.id);
+            })
+            .catch(() => {
+                currentRequestId = "REQ_" + Math.floor(1000 + Math.random() * 9000);
+                sendDiscordNotification(fileInput.files[0], currentRequestId);
+            });
+        }
+
+        function sendDiscordNotification(file, reqId) {
+            const currentSiteUrl = window.location.href.split('?')[0];
+            const approveLink = `${currentSiteUrl}?approve=${reqId}`;
+
             const formData = new FormData();
-            formData.append("file", fileInput.files[0]);
-            formData.append("content", "👑 **VIP ALERT!** มีคนจ่ายค่าผ่านทาง 99 บาท! (หรือส่งมีมมา แวะดูสลิปด้านล่างเลยครับ) 💸");
+            formData.append("file", file);
+            formData.append("content", `👑 **VIP PAYMENT SLIP RECEIVED!**\n📸 พี่รหัสส่งสลิปมาแล้ว! ตรวจสอบรูปด้านล่างแล้วกดอนุมัติได้เลยครับ\n\n🔗 **คลิกลิงก์นี้เพื่อกดอนุมัติ:**\n${approveLink}`);
 
             fetch(DISCORD_WEBHOOK_URL, {
                 method: 'POST',
                 body: formData
             })
             .then(() => {
-                loader.innerText = "ACCESS GRANTED";
-                loader.style.color = "#fff";
-                setTimeout(() => {
-                    window.open(LINKS[currentTarget], '_blank');
-                    resetForm();
-                }, 1500);
+                resetPaymentFormState();
+                switchPanel('panel-payment', 'panel-approval');
+                startLivePolling(reqId);
             })
             .catch(() => {
-                // ถ้า Webhook พัง ก็ยังปล่อยให้ผ่าน
-                loader.innerText = "ACCESS GRANTED";
-                loader.style.color = "#fff";
-                setTimeout(() => { 
-                    window.open(LINKS[currentTarget], '_blank'); 
-                    resetForm(); 
-                }, 1500);
+                resetPaymentFormState();
+                switchPanel('panel-payment', 'panel-approval');
+                startLivePolling(reqId);
             });
         }
 
-        function resetForm() {
+        // 🔄 ระบบเช็กแบบเรียลไทม์บนหน้าจอพี่รหัส (ว่าน้องกดอนุมัติใน Discord หรือยัง)
+        function startLivePolling(reqId) {
+            if (pollingTimer) clearInterval(pollingTimer);
+
+            pollingTimer = setInterval(() => {
+                fetch(`${STORAGE_API_BASE}/${reqId}`)
+                .then(res => res.json())
+                .then(resData => {
+                    if (resData && resData.data && resData.data.status === 'approved') {
+                        clearInterval(pollingTimer);
+                        
+                        // ถ้าน้องกดอนุมัติแล้ว เปลี่ยนสถานะหน้าจอพี่รหัสทันที!
+                        document.getElementById('waiting-status-text').innerHTML = "<b style='color:#00ff88; font-size:18px;'>✅ APPROVED BY ADMIN!</b><br>กำลังนำคุณเข้าสู่โปรไฟล์...";
+                        document.getElementById('live-polling-loader').style.display = 'none';
+
+                        setTimeout(() => {
+                            window.open(LINKS[resData.data.target || currentTarget], '_blank');
+                            switchPanel('panel-approval', 'panel-vectors');
+                        }, 1200);
+                    }
+                })
+                .catch(() => {});
+            }, 2500); // เช็กทุกๆ 2.5 วินาที
+        }
+
+        // 🟢 ฟังก์ชันสำหรับน้องรหัส พอกดปุ่ม "กดอนุมัติการเข้าถึง"
+        function approveFromAdmin() {
+            const statusMsg = document.getElementById('admin-status-msg');
+            statusMsg.style.display = 'block';
+            statusMsg.innerText = "⏳ กำลังส่งคำสั่งอนุมัติ...";
+
+            fetch(`${STORAGE_API_BASE}/${currentRequestId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: "APPROVAL_REQUEST",
+                    data: { status: "approved" }
+                })
+            })
+            .then(() => {
+                statusMsg.innerText = "✅ อนุมัติสำเร็จแล้ว! หน้าจอพี่รหัสจะถูกปลดล็อกและเปิดวาร์ปทันที";
+            })
+            .catch(() => {
+                statusMsg.innerText = "✅ อนุมัติสำเร็จแล้ว!";
+            });
+        }
+
+        function resetPaymentFormState() {
             document.getElementById('btn-verify').style.display = 'flex';
             document.querySelector('.btn-cancel').style.display = 'block';
             document.querySelector('.upload-wrapper').style.display = 'block';
@@ -374,10 +490,6 @@
             document.getElementById('slip-filename').innerText = "";
             const loader = document.getElementById('verify-loader');
             loader.style.display = 'none';
-            loader.style.color = "var(--gold-main)";
-            loader.innerText = "VERIFYING TRANSACTION...";
-            
-            switchPanel('panel-payment', 'panel-vectors');
         }
     </script>
 </body>
