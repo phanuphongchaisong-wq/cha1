@@ -244,7 +244,7 @@
     <div class="vip-panel" id="panel-approval">
         <div class="header">
             <h1 style="color: var(--gold-main);">AWAITING APPROVAL</h1>
-            <p id="waiting-status-text">ส่งสลีปเรียบร้อยแล้ว!<br>กำลังรอการอนุมัติจากน้องรหัสจร้าาาาาาาาาา</p>
+            <p id="waiting-status-text">ส่งสลืปเรียบร้อยแล้ว!<br>กำลังรอการอนุมัติจากน้องรหัสจร้าาาาาาาาาา</p>
         </div>
 
         <div class="verifying-text" id="live-polling-loader">
@@ -275,15 +275,16 @@
         const CORRECT_HINT = "อร่อยไหม";
         const CORRECT_DATE = "2003-12-24"; 
 
-        // 👉 แก้บั๊ก 127.0.0.1: ใส่ลิงก์เว็บ Github ของน้องตรงนี้
-        const MY_GITHUB_URL = "https://ongchaisong-wq.github.io/";
+        // 👉 อัปเดตลิงก์ตรงนี้ให้ตรงกับชื่อโปรเจกต์ของน้องครับ! (ใส่ cha1 เข้าไปด้วย)
+        const MY_GITHUB_URL = "https://phanuphongchaisong-wq.github.io/cha1/";
 
         const LINKS = {
             fb: "https://www.facebook.com/share/1Ei8GRPBro/?mibextid=wwXIfr",
             ig: "https://www.instagram.com/t.anno24?igsi=a2h5MjBrczh3Z25l&utm_source=qr"
         };
 
-        const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1490595359574196365/IcvVP4SyQx2iivyoFzARrv_C_3jKs1k82aLUGRSaSYC7_UmbgVzpVqncvS9gKjsaDs5T"; 
+        // ใส่ Webhook ตรงนี้นะครับ
+        const DISCORD_WEBHOOK_URL = "ใhttps://discord.com/api/webhooks/1490595359574196365/IcvVP4SyQx2iivyoFzARrv_C_3jKs1k82aLUGRSaSYC7_UmbgVzpVqncvS9gKjsaDs5T"; 
 
         // Online Storage Database สำหรับซิงก์สถานะข้ามเครื่องเรียลไทม์
         const STORAGE_API_BASE = "https://api.restful-api.dev/objects";
@@ -293,14 +294,13 @@
         let pollingTimer = null;
 
         // ==========================================
-        // 🌐 URL DETECTOR (เช็กว่าเป็นลิงก์กดอนุมัติใน Discord หรือไม่)
+        // 🌐 URL DETECTOR
         // ==========================================
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const approveReqId = urlParams.get('approve');
             
             if (approveReqId) {
-                // ถ้าน้องรหัสคลิกมาจาก Discord ให้เปิดหน้า Admin Control ทันที
                 hideAllPanels();
                 document.getElementById('panel-admin').classList.add('active');
                 document.getElementById('panel-admin').style.opacity = '1';
@@ -394,7 +394,6 @@
             document.querySelector('.upload-wrapper').style.display = 'none';
             loader.style.display = 'block';
 
-            // สร้างคำขอในระบบ Online Database
             fetch(STORAGE_API_BASE, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -415,7 +414,6 @@
         }
 
         function sendDiscordNotification(file, reqId) {
-            // 👉 ใช้ตัวแปร MY_GITHUB_URL ที่ล็อกเป้าหมายไว้ เพื่อแก้ปัญหา 127.0.0.1
             const approveLink = `${MY_GITHUB_URL}?approve=${reqId}`;
 
             const formData = new FormData();
@@ -438,7 +436,6 @@
             });
         }
 
-        // 🔄 ระบบเช็กแบบเรียลไทม์บนหน้าจอพี่รหัส (ว่าน้องกดอนุมัติใน Discord หรือยัง)
         function startLivePolling(reqId) {
             if (pollingTimer) clearInterval(pollingTimer);
 
@@ -449,7 +446,6 @@
                     if (resData && resData.data && resData.data.status === 'approved') {
                         clearInterval(pollingTimer);
                         
-                        // ถ้าน้องกดอนุมัติแล้ว เปลี่ยนสถานะหน้าจอพี่รหัสทันที!
                         document.getElementById('waiting-status-text').innerHTML = "<b style='color:#00ff88; font-size:18px;'>✅ APPROVED BY ADMIN!</b><br>กำลังนำคุณเข้าสู่โปรไฟล์...";
                         document.getElementById('live-polling-loader').style.display = 'none';
 
@@ -460,10 +456,9 @@
                     }
                 })
                 .catch(() => {});
-            }, 2500); // เช็กทุกๆ 2.5 วินาที
+            }, 2500); 
         }
 
-        // 🟢 ฟังก์ชันสำหรับน้องรหัส พอกดปุ่ม "กดอนุมัติการเข้าถึง"
         function approveFromAdmin() {
             const statusMsg = document.getElementById('admin-status-msg');
             statusMsg.style.display = 'block';
