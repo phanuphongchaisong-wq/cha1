@@ -114,7 +114,7 @@
             cursor: pointer; width: 100%; transition: all 0.3s ease; margin-bottom: 12px; 
             display: flex; align-items: center; justify-content: center; gap: 10px;
             text-transform: uppercase; position: relative; overflow: hidden;
-            text-decoration: none; /* for anchor tags */
+            text-decoration: none;
         }
         .btn:active { transform: scale(0.97); }
 
@@ -246,15 +246,15 @@
     <div class="vip-panel" id="panel-approval">
         <div class="header">
             <h1 style="color: var(--gold-main);">AWAITING APPROVAL</h1>
-            <p id="waiting-status-text">ส่งสลืปเรียบร้อยแล้ว!<br>กำลังรอการอนุมัติจากน้องรหัสจร้าาาาาาาาาา</p>
+            <p id="waiting-status-text">ส่งสลิปเรียบร้อยแล้ว!<br>กำลังรอการอนุมัติจากน้องรหัสจร้าาาาาาาาาา</p>
         </div>
 
         <div class="verifying-text" id="live-polling-loader">
             ⏳ WAITING FOR ADMIN APPROVAL...
         </div>
 
-        <!-- ปุ่มจะโผล่มาตรงนี้หลังน้องกดอนุมัติ -->
-        <a href="#" id="final-redirect-btn" class="btn btn-gold" style="display: none; margin-top: 20px;">[ 👉 คลิกเพื่อเข้าสู่โปรไฟล์ ]</a>
+        <!-- 🚀 ปุ่มวาร์ป จะเด้งขึ้นมาหลังจากน้องกดอนุมัติ -->
+        <a href="#" id="final-redirect-btn" class="btn btn-gold" style="display: none; margin-top: 20px;">[ 👉 ไปที่โปรไฟล์ ]</a>
 
         <p class="status-msg" id="approval-error">ยังไม่ได้กดอนุมัติ หรือรหัสไม่ถูกต้อง</p>
     </div>
@@ -290,6 +290,7 @@
 
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1490595359574196365/IcvVP4SyQx2iivyoFzARrv_C_3jKs1k82aLUGRSaSYC7_UmbgVzpVqncvS9gKjsaDs5T"; 
 
+        // 👉 แก้บั๊ก API เปลี่ยนมาใช้ RESTful-API.dev (ฟรี & ไม่ต้องสมัคร)
         const STORAGE_API_BASE = "https://api.restful-api.dev/objects";
 
         let currentTarget = ''; 
@@ -402,22 +403,27 @@
             document.querySelector('.upload-wrapper').style.display = 'none';
             loader.style.display = 'block';
 
-            // ใช้ API ชั่วคราวสร้าง ID (เพื่อเลี่ยงบั๊ก Cache ในมือถือ)
-            const newReqId = "REQ_" + Math.random().toString(36).substr(2, 9).toUpperCase();
-            const syncUrl = `https://getpantry.cloud/apiv1/pantry/1a2b3c4d-vip-system/basket/${newReqId}`;
-            
-            fetch(syncUrl, {
+            // 🟢 สร้างคำขออนุมัติไปยังฐานข้อมูลที่เสถียร
+            fetch(STORAGE_API_BASE, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: "pending", target: currentTarget })
+                body: JSON.stringify({
+                    name: "VIP_APPROVAL_SYSTEM",
+                    data: { status: "pending", target: currentTarget }
+                })
             })
-            .then(() => {
-                currentRequestId = newReqId;
-                sendDiscordNotification(fileInput.files[0], newReqId);
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.id) {
+                    currentRequestId = data.id;
+                    sendDiscordNotification(fileInput.files[0], data.id);
+                } else {
+                    throw new Error("Failed to get ID");
+                }
             })
             .catch(() => {
-                currentRequestId = newReqId;
-                sendDiscordNotification(fileInput.files[0], newReqId);
+                alert("ระบบขัดข้อง กรุณาลองใหม่อีกครั้ง");
+                resetPaymentFormState();
             });
         }
 
@@ -425,7 +431,7 @@
             let currentSiteUrl = window.location.href.split('?')[0].split('#')[0];
             
             if (currentSiteUrl.includes('127.0.0.1') || currentSiteUrl.includes('localhost') || !currentSiteUrl.includes('github.io')) {
-                currentSiteUrl = "https://phanuphongchaisong-wq.github.io/cha1/";
+                currentSiteUrl = MY_GITHUB_URL;
             }
             
             if (!currentSiteUrl.endsWith('/') && !currentSiteUrl.endsWith('.html')) {
@@ -457,24 +463,22 @@
         function startLivePolling(reqId) {
             if (pollingTimer) clearInterval(pollingTimer);
 
-            const syncUrl = `https://getpantry.cloud/apiv1/pantry/1a2b3c4d-vip-system/basket/${reqId}`;
-
             pollingTimer = setInterval(() => {
-                fetch(syncUrl + "?t=" + new Date().getTime(), { cache: "no-store" })
+                // 🟢 เช็กข้อมูลจากฐานข้อมูลว่าน้องกดอนุมัติหรือยัง
+                fetch(`${STORAGE_API_BASE}/${reqId}?_t=${new Date().getTime()}`, { cache: "no-store" })
                 .then(res => res.json())
                 .then(resData => {
-                    if (resData && resData.status === 'approved') {
+                    if (resData && resData.data && resData.data.status === 'approved') {
                         clearInterval(pollingTimer);
                         
-                        // ถ้าน้องกดอนุมัติ ให้โชว์ปุ่มขึ้นมาแทนที่จะเด้งเอง
-                        document.getElementById('waiting-status-text').innerHTML = "<b style='color:#00ff88; font-size:18px;'>✅ APPROVED BY ADMIN!</b><br>อนุมัติสำเร็จแล้วจร้าาาาาาาาาา";
+                        // ถ้าน้องกดอนุมัติแล้ว จะแสดงข้อความสำเร็จ
+                        document.getElementById('waiting-status-text').innerHTML = "<b style='color:#00ff88; font-size:18px;'>✅ อนุมัติสำเร็จ!</b><br>น้องรหัสปลดล็อกให้แล้วจร้าาาาาาาาาา";
                         document.getElementById('live-polling-loader').style.display = 'none';
 
-                        // เปิดปุ่มให้พี่รหัสกดเข้าไปเอง
+                        // 🚀 โชว์ปุ่ม "ไปที่โปรไฟล์" ให้พี่รหัสกด
                         const finalBtn = document.getElementById('final-redirect-btn');
                         finalBtn.style.display = 'flex';
-                        finalBtn.href = LINKS[resData.target || currentTarget];
-                        finalBtn.target = "_blank"; // ให้เปิดแท็บใหม่
+                        finalBtn.href = LINKS[resData.data.target || currentTarget];
                     }
                 })
                 .catch(() => {});
@@ -486,18 +490,24 @@
             statusMsg.style.display = 'block';
             statusMsg.innerText = "⏳ กำลังส่งคำสั่งอนุมัติ...";
 
-            const syncUrl = `https://getpantry.cloud/apiv1/pantry/1a2b3c4d-vip-system/basket/${currentRequestId}`;
-
-            fetch(syncUrl, {
+            // 🟢 น้องรหัสกดอนุมัติ ส่งสถานะ 'approved' กลับไปที่ฐานข้อมูล
+            fetch(`${STORAGE_API_BASE}/${currentRequestId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: "approved" })
+                body: JSON.stringify({
+                    name: "VIP_APPROVAL_SYSTEM",
+                    data: { status: "approved", target: currentTarget }
+                })
             })
-            .then(() => {
-                statusMsg.innerText = "✅ อนุมัติสำเร็จแล้ว! หน้าจอพี่รหัสจะขึ้นปุ่มให้กดเปิดวาร์ปทันที";
+            .then(res => {
+                if (res.ok) {
+                    statusMsg.innerText = "✅ อนุมัติสำเร็จแล้ว! ให้พี่รหัสกดปุ่มเข้าโปรไฟล์ได้เลย";
+                } else {
+                    throw new Error("Update failed");
+                }
             })
             .catch(() => {
-                statusMsg.innerText = "⚠️ การเชื่อมต่อขัดข้อง แต่อาจจะอนุมัติไปแล้ว (ให้พี่รหัสลองรีเฟรชหน้าจอ)";
+                statusMsg.innerText = "⚠️ การเชื่อมต่อขัดข้อง ลองกดปุ่มอนุมัติอีกครั้ง";
             });
         }
 
