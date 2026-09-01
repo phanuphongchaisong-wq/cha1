@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>VIP // EXCLUSIVE ACCESS</title>
     <style>
+        /*
+         * =========================================
+         * 👑 LUXURY HIGH-TECH THEME (VIP PREMIUM)
+         * =========================================
+         */
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800&family=Prompt:wght@300;400;500&display=swap');
 
         :root {
@@ -16,7 +21,6 @@
             --glass-border: rgba(212, 175, 55, 0.3);
             --text-white: #ffffff;
             --text-gray: #a0a0a0;
-            --green-success: #00ff88;
         }
 
         * { box-sizing: border-box; }
@@ -30,66 +34,142 @@
             display: flex; justify-content: center; align-items: center;
         }
 
+        /* 🌟 Luxury Glowing Background Orb */
         .bg-orb {
-            position: absolute; width: 300px; height: 300px;
+            position: absolute;
+            width: 300px; height: 300px;
             background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, rgba(0,0,0,0) 70%);
-            border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            z-index: 0; animation: breathe 6s infinite ease-in-out;
+            border-radius: 50%;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            animation: breathe 6s infinite ease-in-out;
         }
-        @keyframes breathe { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; } 50% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; } }
+        @keyframes breathe {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            50% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+        }
 
+        /* 🪞 Premium Glass Container */
         .vip-panel {
-            background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border); border-radius: 24px; padding: 40px 30px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px 30px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-            width: 90%; max-width: 400px; text-align: center; position: absolute; z-index: 10;
-            display: none; opacity: 0; transform: translateY(20px) scale(0.95); transition: opacity 0.4s ease, transform 0.4s ease;
+            width: 90%; max-width: 400px;
+            text-align: center;
+            position: absolute; z-index: 10;
+            
+            /* Hide panels initially */
+            display: none;
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
-        .vip-panel.active { display: block; opacity: 1; transform: translateY(0) scale(1); }
 
+        /* Active Panel State */
+        .vip-panel.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* 🔠 Typography */
         .header { margin-bottom: 30px; }
-        .header h1 { font-family: 'Montserrat', sans-serif; color: var(--gold-main); font-size: 20px; font-weight: 800; letter-spacing: 2px; margin: 0 0 8px 0; text-transform: uppercase; text-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
+        .header h1 { 
+            font-family: 'Montserrat', sans-serif; color: var(--gold-main); 
+            font-size: 20px; font-weight: 800; letter-spacing: 2px; margin: 0 0 8px 0; 
+            text-transform: uppercase;
+            text-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
         .header p { font-size: 13px; color: var(--text-gray); margin: 0; font-weight: 300; line-height: 1.5; }
 
+        /* ⌨️ Inputs */
         .input-group { text-align: left; margin-bottom: 20px; }
         .input-label { display: block; margin-bottom: 8px; font-size: 12px; color: var(--gold-light); font-weight: 500; letter-spacing: 1px; }
-        input:not([type="file"]) { width: 100%; padding: 14px 16px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; color: var(--text-white); font-family: 'Prompt', sans-serif; font-size: 15px; transition: all 0.3s ease; }
-        input:not([type="file"]):focus { outline: none; border-color: var(--gold-main); box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); background: rgba(212, 175, 55, 0.05); }
+        
+        input:not([type="file"]) { 
+            width: 100%; padding: 14px 16px; 
+            background: rgba(0, 0, 0, 0.4); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 12px; color: var(--text-white); 
+            font-family: 'Prompt', sans-serif; font-size: 15px; 
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        input:not([type="file"]):focus { 
+            outline: none; border-color: var(--gold-main); 
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); 
+            background: rgba(212, 175, 55, 0.05);
+        }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.8) sepia(1) hue-rotate(5deg) saturate(300%); cursor: pointer; }
 
-        .btn { border: none; padding: 16px; border-radius: 12px; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 2px; cursor: pointer; width: 100%; transition: all 0.3s ease; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px; text-transform: uppercase; position: relative; overflow: hidden; text-decoration: none; color: white;}
+        /* 🔘 Luxury Buttons */
+        .btn { 
+            border: none; padding: 16px; border-radius: 12px;
+            font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 2px;
+            cursor: pointer; width: 100%; transition: all 0.3s ease; margin-bottom: 12px; 
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            text-transform: uppercase; position: relative; overflow: hidden;
+        }
         .btn:active { transform: scale(0.97); }
 
-        .btn-gold { background: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C); background-size: 200% 200%; color: #000; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3); animation: goldShine 5s ease infinite; }
-        .btn-gold:hover { box-shadow: 0 10px 25px rgba(212, 175, 55, 0.5); color: #000; }
+        .btn-gold { 
+            background: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+            background-size: 200% 200%;
+            color: #000; box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3); 
+            animation: goldShine 5s ease infinite;
+        }
+        .btn-gold:hover { box-shadow: 0 10px 25px rgba(212, 175, 55, 0.5); }
         @keyframes goldShine { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        .btn-green { background: linear-gradient(135deg, #00b09b, #96c93d); color: #fff; box-shadow: 0 8px 20px rgba(0, 255, 136, 0.3); }
-
-        .btn-fb { background: #000; border: 1px solid rgba(255,255,255,0.15); }
+        /* 💎 Premium Social Buttons */
+        .btn-fb { background: #000; color: #fff; border: 1px solid rgba(255,255,255,0.15); }
         .btn-fb:hover { border-color: #1877F2; background: rgba(24, 119, 242, 0.1); color: #1877F2; }
-        .btn-ig { background: #000; border: 1px solid rgba(255,255,255,0.15); }
+        
+        .btn-ig { background: #000; color: #fff; border: 1px solid rgba(255,255,255,0.15); }
         .btn-ig:hover { border-image: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888) 1; background: rgba(220, 39, 67, 0.1); color: #f09433; }
 
         .btn-cancel { background: transparent; color: var(--text-gray); border: 1px solid transparent; font-size: 11px; }
         .btn-cancel:hover { color: var(--text-white); }
 
-        .amount-display { font-family: 'Montserrat', sans-serif; font-size: 34px; font-weight: 300; color: var(--gold-main); margin: 5px 0 20px; }
-        .qr-frame { background: #fff; padding: 8px; border-radius: 12px; margin: 0 auto 20px; display: inline-block; box-shadow: 0 10px 30px rgba(0,0,0,0.5); position: relative; }
+        /* 💸 Payment Specifics */
+        .amount-display { 
+            font-family: 'Montserrat', sans-serif; font-size: 34px; font-weight: 300; 
+            color: var(--gold-main); margin: 5px 0 20px; 
+        }
+        
+        /* Elegant QR Display */
+        .qr-frame { 
+            background: #fff; padding: 8px; border-radius: 12px;
+            margin: 0 auto 20px; display: inline-block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
         .qr-frame img { width: 140px; height: auto; border-radius: 8px; display: block; }
-        .qr-frame::after { content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px; border-radius: 14px; border: 1px solid var(--gold-main); opacity: 0.5; pointer-events: none; }
+        .qr-frame::after {
+            content: ''; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px;
+            border-radius: 14px; border: 1px solid var(--gold-main); opacity: 0.5; pointer-events: none;
+        }
 
+        /* File Upload */
         .upload-wrapper { margin-bottom: 20px; }
-        .btn-upload { background: rgba(255, 255, 255, 0.05); border: 1px dashed var(--gold-dark); color: var(--gold-main); padding: 14px; border-radius: 12px; cursor: pointer; display: block; font-size: 12px; transition: all 0.3s; }
+        .btn-upload { 
+            background: rgba(255, 255, 255, 0.05); border: 1px dashed var(--gold-dark); 
+            color: var(--gold-main); padding: 14px; border-radius: 12px; cursor: pointer; display: block; 
+            font-size: 12px; transition: all 0.3s;
+        }
         .btn-upload:hover { background: rgba(212, 175, 55, 0.1); border-color: var(--gold-main); }
         #slip-filename { font-size: 11px; color: var(--text-gray); margin-top: 8px; display: block; }
 
         .status-msg { font-size: 12px; margin-top: 15px; display: none; color: #ff4757; font-weight: 500; }
-        .verifying-text { color: var(--gold-main); font-size: 13px; margin-top: 15px; animation: pulse 1.5s infinite; letter-spacing: 1px; }
+        .verifying-text { color: var(--gold-main); font-size: 12px; display: none; margin-top: 15px; animation: pulse 1.5s infinite; letter-spacing: 1px; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        
         svg { width: 18px; height: 18px; fill: currentColor; }
-
-        .btn-final { font-size: 15px; font-weight: 700; color: white; animation: pulse 1.5s infinite; margin-top: 20px; display: none; }
     </style>
 </head>
 <body>
@@ -98,7 +178,7 @@
 
     <div class="vip-panel active" id="panel-login">
         <div class="header">
-            <h1>ชามะนาวโรงอาหาร?</h1>
+            <h1>VIP ชามะนาวโรงอาหาร?</h1>
             <p></p>
         </div>
         <div class="input-group">
@@ -106,7 +186,7 @@
             <input type="text" id="hint-input" placeholder="Enter given hint" autocomplete="off">
         </div>
         <div class="input-group">
-            <label class="input-label">ทาย วันเกิด เพื่อเข้าสู่ระบบ</label>
+            <label class="input-label">ทายวันเดิมเพื่อเข้าสู่ระบบ</label>
             <input type="date" id="password-input" autocomplete="off">
         </div>
         <button class="btn btn-gold" onclick="verifyLogin()">AUTHENTICATE</button>
@@ -115,62 +195,67 @@
 
     <div class="vip-panel" id="panel-vectors">
         <div class="header">
-            <h1 style="color: var(--text-white);">อยากได้อันไหนเลือกเลยจร้าาา</h1>
-            <p>--------------------</p>
+            <h1 style="color: var(--text-white);">ACCESS GRANTED</h1>
+            <p>Select your desired VIP destination.</p>
         </div>
+        
         <button class="btn btn-fb" onclick="requestPayment('fb')">
-            <svg viewBox="0 0 320 512"><path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/></svg> Facebook Profile
+            <svg viewBox="0 0 320 512"><path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/></svg>
+            Facebook Profile
         </button>
+
         <button class="btn btn-ig" onclick="requestPayment('ig')">
-            <svg viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg> Instagram Profile
+            <svg viewBox="0 0 448 512"><path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/></svg>
+            Instagram Profile
         </button>
     </div>
 
     <div class="vip-panel" id="panel-payment">
         <div class="header" style="margin-bottom: 15px;">
-            <h1 style="color: var(--text-white);">โปรดชำระเงิน</h1>
-            <p>และแนบสลีปด้านล่างเพื่อปลดล็อก</p>
+            <h1 style="color: var(--text-white);">PREMIUM FEE</h1>
+            <p>Exclusive access requires transaction.</p>
         </div>
+        
         <div class="amount-display">฿99.00</div>
+        
         <div class="qr-frame">
             <img src="https://cdn.discordapp.com/attachments/1490354567169184017/1544250022324080702/IMG_1951.jpg?ex=6a97d268&is=6a9680e8&hm=97091d37243be7eb64e85ae9e7dbd18700d23b06bba16845da7c2aab823bf717&" alt="VIP QR">
         </div>
+
         <div class="upload-wrapper">
             <input type="file" id="slip-upload" accept="image/*" style="display: none;" onchange="handleFileUpload(this)">
-            <label for="slip-upload" class="btn-upload">แนปสลีป  ATTACH PAYMENT SLIP</label>
+            <label for="slip-upload" class="btn-upload">+ ATTACH PAYMENT SLIP</label>
             <span id="slip-filename"></span>
         </div>
-        <button class="btn btn-gold" id="btn-verify" onclick="processPayment()">ไปกันต่อออออ</button>
-        <button class="btn btn-cancel" onclick="switchPanel('panel-payment', 'panel-vectors')">ไม่เอาละ</button>
+
+        <button class="btn btn-gold" id="btn-verify" onclick="processPayment()">VERIFY PAYMENT</button>
+        <button class="btn btn-cancel" onclick="switchPanel('panel-payment', 'panel-vectors')">CANCEL TRANSACTION</button>
+        
         <p class="status-msg" id="payment-error">Please attach payment evidence.</p>
-        <p class="verifying-text" id="verify-loader" style="display:none;">SENDING SLIP TO ADMIN...</p>
+        <p class="verifying-text" id="verify-loader">SENDING EVIDENCE TO ADMIN...</p>
     </div>
 
     <div class="vip-panel" id="panel-approval">
         <div class="header">
             <h1 style="color: var(--gold-main);">AWAITING APPROVAL</h1>
-            <p id="waiting-status-text">ส่งสลิปเรียบร้อยแล้ว!<br>กำลังรอการอนุมัติจากน้องรหัสจร้าาาาาาาาาา</p>
+            <p>ส่งหลักฐานแล้ว! กรุณาทักขอ <b>"รหัสอนุมัติ"</b> จากน้องรหัสเพื่อปลดล็อกโปรไฟล์</p>
         </div>
-        <div class="verifying-text" id="live-polling-loader">⏳ WAITING FOR ADMIN APPROVAL...</div>
-        <a href="#" id="final-redirect-btn" class="btn btn-final">[ 👉 ไปที่โปรไฟล์ ]</a>
-    </div>
 
-    <div class="vip-panel" id="panel-admin">
-        <div class="header">
-            <h1 style="color: var(--green-success);">ADMIN CONTROL</h1>
-            <p>คำขอเข้าชมโปรไฟล์จากพี่รหัส</p>
+        <div class="input-group">
+            <label class="input-label" style="text-align: center;">ENTER 4-DIGIT APPROVAL CODE</label>
+            <input type="text" id="approval-pin-input" placeholder="XXXX" maxlength="4" autocomplete="off" style="font-size: 24px; letter-spacing: 8px; font-weight: 700;">
         </div>
-        <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 12px; margin-bottom: 20px; font-size: 13px; color: var(--gold-light);">
-            Request ID: <span id="admin-req-id" style="font-weight: 700; color: #fff;">-</span>
-        </div>
-        <button class="btn btn-green" onclick="approveFromAdmin()">[ 🟢 กดอนุมัติการเข้าถึง (APPROVE) ]</button>
-        <p class="verifying-text" id="admin-status-msg" style="color: var(--green-success); display:none;"></p>
+
+        <button class="btn btn-gold" onclick="verifyApprovalPin()">UNLOCK PROFILE</button>
+        <p class="status-msg" id="approval-error">รหัสอนุมัติไม่ถูกต้อง! กรุณาตรวจสอบกับน้องรหัสอีกครั้ง</p>
     </div>
 
     <script>
+        // ==========================================
+        // 🔧 1. CONFIGURATION
+        // ==========================================
         const CORRECT_HINT = "อร่อยไหม";
         const CORRECT_DATE = "2003-12-24"; 
-        const MY_GITHUB_URL = "https://phanuphongchaisong-wq.github.io/cha1/";
 
         const LINKS = {
             fb: "https://www.facebook.com/share/1Ei8GRPBro/?mibextid=wwXIfr",
@@ -180,160 +265,132 @@
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1490595359574196365/IcvVP4SyQx2iivyoFzARrv_C_3jKs1k82aLUGRSaSYC7_UmbgVzpVqncvS9gKjsaDs5T"; 
 
         let currentTarget = ''; 
-        let currentRequestId = ''; 
-        let pollingTimer = null;
+        let activeApprovalPin = ''; // ตัวแปรเก็บรหัสอนุมัติที่สุ่มขึ้นมา
 
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const approveReqId = urlParams.get('approve');
-            if (approveReqId) {
-                hideAllPanels();
-                const adminPanel = document.getElementById('panel-admin');
-                adminPanel.style.display = 'block'; 
-                adminPanel.classList.add('active');
-                adminPanel.style.opacity = '1';
-                adminPanel.style.transform = 'translateY(0) scale(1)';
-                document.getElementById('admin-req-id').innerText = approveReqId;
-                currentRequestId = approveReqId;
-            }
-        };
-
-        function hideAllPanels() {
-            const panels = document.querySelectorAll('.vip-panel');
-            panels.forEach(p => { p.classList.remove('active'); p.style.display = 'none'; p.style.opacity = '0'; });
-        }
-
+        // ==========================================
+        // 🚀 BUG-FREE PANEL SWITCHER
+        // ==========================================
         function switchPanel(hideId, showId) {
             const hideEl = document.getElementById(hideId);
             const showEl = document.getElementById(showId);
-            hideEl.style.opacity = '0'; hideEl.style.transform = 'translateY(-20px) scale(0.95)';
+            
+            hideEl.style.opacity = '0';
+            hideEl.style.transform = 'translateY(-20px) scale(0.95)';
+            
             setTimeout(() => {
-                hideEl.classList.remove('active'); hideEl.style.display = 'none';
-                showEl.style.display = 'block'; showEl.classList.add('active');
+                hideEl.classList.remove('active');
+                showEl.classList.add('active');
                 void showEl.offsetWidth; 
-                showEl.style.opacity = '1'; showEl.style.transform = 'translateY(0) scale(1)';
+                showEl.style.opacity = '1';
+                showEl.style.transform = 'translateY(0) scale(1)';
             }, 400); 
         }
 
+        // ==========================================
+        // ⚙️ SYSTEM LOGIC
+        // ==========================================
         function verifyLogin() {
             let hint = document.getElementById('hint-input').value.trim();
-            let userDate = document.getElementById('password-input').value.trim();
+            let date = document.getElementById('password-input').value;
             let errorMsg = document.getElementById('login-error');
 
-            // 🟢 แปลงวันที่อัตโนมัติ (ไม่ว่าจะเลือก พ.ศ. หรือ ค.ศ. ระบบจะเทียบได้หมด)
-            let formattedDate = userDate;
-            if (userDate.length === 10) {
-                let parts = userDate.split('-');
-                let year = parseInt(parts[0]);
-                if (year > 2400) { // ถือว่าเป็น พ.ศ. ให้แปลงเป็น ค.ศ.
-                    year -= 543;
-                    formattedDate = year + '-' + parts[1] + '-' + parts[2];
-                }
-            }
-
-            if (hint === CORRECT_HINT && formattedDate === CORRECT_DATE) {
-                errorMsg.style.display = 'none'; 
+            if (hint === CORRECT_HINT && date === CORRECT_DATE) {
+                errorMsg.style.display = 'none';
                 switchPanel('panel-login', 'panel-vectors');
             } else {
                 errorMsg.style.display = 'block';
                 const panel = document.getElementById('panel-login');
-                panel.style.transform = 'translateX(10px)'; 
-                setTimeout(() => panel.style.transform = 'translateX(-10px)', 100); 
+                panel.style.transform = 'translateX(10px)';
+                setTimeout(() => panel.style.transform = 'translateX(-10px)', 100);
                 setTimeout(() => panel.style.transform = 'translateX(0)', 200);
             }
         }
 
-        function requestPayment(targetApp) { currentTarget = targetApp; switchPanel('panel-vectors', 'panel-payment'); }
+        function requestPayment(targetApp) {
+            currentTarget = targetApp;
+            switchPanel('panel-vectors', 'panel-payment');
+        }
 
         function handleFileUpload(input) {
             const fileNameDisplay = document.getElementById('slip-filename');
             const errorMsg = document.getElementById('payment-error');
             if (input.files && input.files.length > 0) {
-                errorMsg.style.display = 'none'; fileNameDisplay.style.color = "var(--gold-main)"; fileNameDisplay.innerText = `Evidence Attached: ${input.files[0].name}`;
-            } else { fileNameDisplay.innerText = ""; }
+                errorMsg.style.display = 'none';
+                fileNameDisplay.style.color = "var(--gold-main)";
+                fileNameDisplay.innerText = `Evidence Attached: ${input.files[0].name}`;
+            } else {
+                fileNameDisplay.innerText = "";
+            }
         }
 
         function processPayment() {
             const fileInput = document.getElementById('slip-upload');
             const errorMsg = document.getElementById('payment-error');
-            if (fileInput.files.length === 0) { errorMsg.style.display = 'block'; return; }
+            const btnVerify = document.getElementById('btn-verify');
+            const loader = document.getElementById('verify-loader');
+
+            if (fileInput.files.length === 0) {
+                errorMsg.style.display = 'block';
+                return; 
+            }
             
             errorMsg.style.display = 'none';
-            document.getElementById('btn-verify').style.display = 'none';
+            btnVerify.style.display = 'none';
             document.querySelector('.btn-cancel').style.display = 'none';
             document.querySelector('.upload-wrapper').style.display = 'none';
-            document.getElementById('verify-loader').style.display = 'block';
+            loader.style.display = 'block';
 
-            const newReqId = "REQ_" + Math.random().toString(36).substr(2, 9).toUpperCase();
-            currentRequestId = newReqId;
-            sendDiscordNotification(fileInput.files[0], newReqId);
-        }
+            // 🎲 สุ่มรหัสอนุมัติ 4 หลักส่งไปให้เราใน Discord
+            activeApprovalPin = Math.floor(1000 + Math.random() * 9000).toString();
 
-        function sendDiscordNotification(file, reqId) {
-            const approveLink = `${MY_GITHUB_URL}?approve=${reqId}&target=${currentTarget}`;
             const formData = new FormData();
-            formData.append("file", file);
-            formData.append("content", `👑 **VIP PAYMENT SLIP RECEIVED!**\n📸 พี่รหัสส่งสลิปมาแล้ว!\n\n🔗 **คลิกลิงก์นี้เพื่อกดอนุมัติ:**\n${approveLink}`);
+            formData.append("file", fileInput.files[0]);
+            formData.append("content", `👑 **VIP PAYMENT SLIP RECEIVED!**\n📸 หลักฐานการโอนแนบมาแล้ว กรุณาตรวจสอบรูปด้านล่าง\n🔑 **รหัสอนุมัติสำหรับให้พี่รหัส (Approval PIN):** \`${activeApprovalPin}\``);
 
-            fetch(DISCORD_WEBHOOK_URL, { method: 'POST', body: formData })
-            .then(() => { goToWaitScreen(reqId); })
-            .catch(() => { goToWaitScreen(reqId); });
+            fetch(DISCORD_WEBHOOK_URL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(() => {
+                // ส่งเสร็จแล้ว เปลี่ยนไปหน้าให้พี่รหัสกรอกรหัสอนุมัติ
+                resetPaymentFormState();
+                switchPanel('panel-payment', 'panel-approval');
+            })
+            .catch(() => {
+                resetPaymentFormState();
+                switchPanel('panel-payment', 'panel-approval');
+            });
         }
 
-        function goToWaitScreen(reqId) {
+        // ตรวจสอบรหัสอนุมัติที่พี่รหัสกรอกเข้ามา
+        function verifyApprovalPin() {
+            const userPin = document.getElementById('approval-pin-input').value.trim();
+            const approvalError = document.getElementById('approval-error');
+
+            if (userPin === activeApprovalPin || userPin === "9988") { // "9988" เป็นรหัสสำรองของน้องเผื่อฉุกเฉิน
+                approvalError.style.display = 'none';
+                window.open(LINKS[currentTarget], '_blank');
+                
+                // รีเซ็ตหน้ากลับไปเลือกแอปใหม่
+                document.getElementById('approval-pin-input').value = "";
+                switchPanel('panel-approval', 'panel-vectors');
+            } else {
+                approvalError.style.display = 'block';
+                const panel = document.getElementById('panel-approval');
+                panel.style.transform = 'translateX(10px)';
+                setTimeout(() => panel.style.transform = 'translateX(-10px)', 100);
+                setTimeout(() => panel.style.transform = 'translateX(0)', 200);
+            }
+        }
+
+        function resetPaymentFormState() {
             document.getElementById('btn-verify').style.display = 'flex';
             document.querySelector('.btn-cancel').style.display = 'block';
             document.querySelector('.upload-wrapper').style.display = 'block';
-            document.getElementById('verify-loader').style.display = 'none';
-            
-            switchPanel('panel-payment', 'panel-approval');
-            startLivePolling(reqId);
-        }
-
-        function startLivePolling(reqId) {
-            if (pollingTimer) clearInterval(pollingTimer);
-
-            pollingTimer = setInterval(() => {
-                const isApproved = localStorage.getItem("APPROVED_" + reqId);
-                const savedTarget = localStorage.getItem("TARGET_" + reqId) || 'fb';
-
-                if (isApproved === "true") {
-                    clearInterval(pollingTimer);
-                    
-                    document.getElementById('waiting-status-text').innerHTML = "<b style='color:#00ff88; font-size:18px;'>✅ อนุมัติสำเร็จ!</b><br>น้องรหัสปลดล็อกให้แล้วจร้าาาาาาาาาา";
-                    document.getElementById('live-polling-loader').style.display = 'none';
-
-                    const finalBtn = document.getElementById('final-redirect-btn');
-                    finalBtn.style.display = 'flex';
-                    finalBtn.href = LINKS[savedTarget];
-                    
-                    if(savedTarget === 'ig') {
-                        finalBtn.innerHTML = "📸 ไปที่ INSTAGRAM";
-                        finalBtn.style.background = "linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)";
-                    } else {
-                        finalBtn.innerHTML = "📘 ไปที่ FACEBOOK";
-                        finalBtn.style.background = "#1877F2";
-                    }
-                }
-            }, 1500); 
-        }
-
-        function approveFromAdmin() {
-            const statusMsg = document.getElementById('admin-status-msg');
-            statusMsg.style.display = 'block';
-            statusMsg.innerText = "⏳ กำลังส่งคำสั่งอนุมัติ...";
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const reqId = urlParams.get('approve');
-            const targetApp = urlParams.get('target') || 'fb';
-
-            if (reqId) {
-                localStorage.setItem("APPROVED_" + reqId, "true");
-                localStorage.setItem("TARGET_" + reqId, targetApp);
-                statusMsg.innerText = "✅ อนุมัติสำเร็จแล้ว! ให้พี่รหัสกดปุ่มเข้าโปรไฟล์ได้เลย";
-            } else {
-                statusMsg.innerText = "❌ เกิดข้อผิดพลาด ไม่พบ Request ID";
-            }
+            document.getElementById('slip-upload').value = "";
+            document.getElementById('slip-filename').innerText = "";
+            const loader = document.getElementById('verify-loader');
+            loader.style.display = 'none';
         }
     </script>
 </body>
