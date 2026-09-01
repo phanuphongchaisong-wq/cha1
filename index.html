@@ -412,7 +412,11 @@
                     data: { status: "pending", target: currentTarget }
                 })
             })
-            .then(res => res.json())
+            // ----- แก้ไขจุดนี้เพื่อดัก Error สาเหตุให้ชัดเจนขึ้น -----
+            .then(res => {
+                if (!res.ok) throw new Error("HTTP Status " + res.status);
+                return res.json();
+            })
             .then(data => {
                 if (data && data.id) {
                     currentRequestId = data.id;
@@ -421,10 +425,12 @@
                     throw new Error("Failed to get ID");
                 }
             })
-            .catch(() => {
-                alert("ระบบขัดข้อง กรุณาลองใหม่อีกครั้ง");
+            .catch((err) => {
+                // จะมีข้อความสาเหตุต่อท้าย เพื่อให้เรารู้ว่าพังจากอะไร
+                alert("ระบบขัดข้อง กรุณาลองใหม่อีกครั้ง\nสาเหตุ: " + err.message);
                 resetPaymentFormState();
             });
+            // ---------------------------------------------------
         }
 
         function sendDiscordNotification(file, reqId) {
