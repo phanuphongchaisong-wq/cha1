@@ -300,9 +300,8 @@
             if (approveReqId) {
                 hideAllPanels();
                 
-                // 👉 [แก้ไขบั๊กกล่องล่องหนตรงนี้!]
                 const adminPanel = document.getElementById('panel-admin');
-                adminPanel.style.display = 'block'; // สั่งให้หน้าต่างแสดงผล
+                adminPanel.style.display = 'block'; 
                 adminPanel.classList.add('active');
                 adminPanel.style.opacity = '1';
                 adminPanel.style.transform = 'translateY(0) scale(1)';
@@ -453,7 +452,8 @@
             if (pollingTimer) clearInterval(pollingTimer);
 
             pollingTimer = setInterval(() => {
-                fetch(`${STORAGE_API_BASE}/${reqId}`)
+                // 👉 แก้บั๊กข้อ 1: เพิ่ม _t ป้องกันมือถือแอบจำข้อมูลเก่า
+                fetch(`${STORAGE_API_BASE}/${reqId}?_t=${new Date().getTime()}`, { cache: 'no-store' })
                 .then(res => res.json())
                 .then(resData => {
                     if (resData && resData.data && resData.data.status === 'approved') {
@@ -463,9 +463,9 @@
                         document.getElementById('live-polling-loader').style.display = 'none';
 
                         setTimeout(() => {
-                            window.open(LINKS[resData.data.target || currentTarget], '_blank');
-                            switchPanel('panel-approval', 'panel-vectors');
-                        }, 1200);
+                            // 👉 แก้บั๊กข้อ 2: เปลี่ยนคำสั่งเพื่อไม่ให้โดนบล็อกแท็บเด้ง
+                            window.location.href = LINKS[currentTarget]; 
+                        }, 1500);
                     }
                 })
                 .catch(() => {});
