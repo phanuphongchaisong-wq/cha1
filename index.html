@@ -181,7 +181,7 @@
 
     <div class="vip-panel active" id="panel-login">
         <div class="header">
-            <h1>ชามะนาวโรงอาหาร ?</h1>
+            <h1>ชามะนาวโรงอาหาร?</h1>
             <p></p>
         </div>
         <div class="input-group">
@@ -198,11 +198,11 @@
 
     <div class="vip-panel" id="panel-vectors">
         <div class="header">
-            <h1 style="color: var(--text-white);">เลือกเลยจร้า จะเอาอันไหน</h1>
-            <p>_________________</p>
+            <h1 style="color: var(--text-white);">เลือกเอาเลยจร้า</h1>
+            <p>—————————-</p>
         </div>
         
-        <buttn class="btn btn-fb" onclick="requestPayment('fb')">
+        <button class="btn btn-fb" onclick="requestPayment('fb')">
             <svg viewBox="0 0 320 512"><path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"/></svg>
             Facebook Profile
         </button>
@@ -215,8 +215,8 @@
 
     <div class="vip-panel" id="panel-payment">
         <div class="header" style="margin-bottom: 15px;">
-            <h1 style="color: var(--text-white);">โอนได้เลยจร้า</h1>
-            <p>แนบ สลีปด้านล่าง.</p>
+            <h1 style="color: var(--text-white);">โอนได้เลยยย</h1>
+            <p>แนบสลีปด้านล่าง</p>
         </div>
         
         <div class="amount-display">฿99.00</div>
@@ -227,12 +227,12 @@
 
         <div class="upload-wrapper">
             <input type="file" id="slip-upload" accept="image/*" style="display: none;" onchange="handleFileUpload(this)">
-            <label for="slip-upload" class="btn-upload">+ ATTACH PAYMENT SLIP</label>
+            <label for="slip-upload" class="btn-upload">แนบสลีป</label>
             <span id="slip-filename"></span>
         </div>
 
-        <button class="btn btn-gold" id="btn-verify" onclick="processPayment()">VERIFY PAYMENT</button>
-        <button class="btn btn-cancel" onclick="switchPanel('panel-payment', 'panel-vectors')">CANCEL TRANSACTION</button>
+        <button class="btn btn-gold" id="btn-verify" onclick="processPayment()">ไปกันต่ออออ</button>
+        <button class="btn btn-cancel" onclick="switchPanel('panel-payment', 'panel-vectors')">ไม่เอาละ</button>
         
         <p class="status-msg" id="payment-error">Please attach payment evidence.</p>
         <p class="verifying-text" id="verify-loader">SENDING EVIDENCE TO ADMIN...</p>
@@ -250,7 +250,7 @@
         </div>
 
         <button class="btn btn-gold" onclick="verifyApprovalPin()">UNLOCK PROFILE</button>
-        <p class="status-msg" id="approval-error">รหัสอนุมัติไม่ถูกจร้า</p>
+        <p class="status-msg" id="approval-error">รหัสอนุมัติไม่ถูกต้อง! กรุณาตรวจสอบกับน้องรหัสอีกครั้ง</p>
     </div>
 
     <script>
