@@ -184,7 +184,7 @@
 
     <div class="vip-panel active" id="panel-login">
         <div class="header">
-            <h1>VIP ชามะนาวโรงอาหาร?</h1>
+            <h1>ชามะนาวโรงอาหาร?</h1>
             <p></p>
         </div>
         <div class="input-group">
@@ -192,7 +192,7 @@
             <input type="text" id="hint-input" placeholder="Enter given hint" autocomplete="off">
         </div>
         <div class="input-group">
-            <label class="input-label">ทายวันเดิมเพื่อเข้าสู่ระบบ</label>
+            <label class="input-label">ทาย วันเกิด เพื่อเข้าสู่ระบบ</label>
             <input type="date" id="password-input" autocomplete="off">
         </div>
         <button class="btn btn-gold" onclick="verifyLogin()">AUTHENTICATE</button>
@@ -201,8 +201,8 @@
 
     <div class="vip-panel" id="panel-vectors">
         <div class="header">
-            <h1 style="color: var(--text-white);">ACCESS GRANTED</h1>
-            <p>Select your desired VIP destination.</p>
+            <h1 style="color: var(--text-white);">อยากได้อันไหนเลือกเลยจร้าาา</h1>
+            <p>--------------------</p>
         </div>
         
         <button class="btn btn-fb" onclick="requestPayment('fb')">
@@ -218,8 +218,8 @@
 
     <div class="vip-panel" id="panel-payment">
         <div class="header" style="margin-bottom: 15px;">
-            <h1 style="color: var(--text-white);">PREMIUM FEE</h1>
-            <p>Exclusive access requires transaction.</p>
+            <h1 style="color: var(--text-white);">โปรดชำระเงิน</h1>
+            <p>และแนบสลีปด้านล่างเพื่อปลดล็อก</p>
         </div>
         
         <div class="amount-display">฿99.00</div>
@@ -230,12 +230,12 @@
 
         <div class="upload-wrapper">
             <input type="file" id="slip-upload" accept="image/*" style="display: none;" onchange="handleFileUpload(this)">
-            <label for="slip-upload" class="btn-upload">+ ATTACH PAYMENT SLIP</label>
+            <label for="slip-upload" class="btn-upload">แนปสลีป  ATTACH PAYMENT SLIP</label>
             <span id="slip-filename"></span>
         </div>
 
-        <button class="btn btn-gold" id="btn-verify" onclick="processPayment()">VERIFY PAYMENT</button>
-        <button class="btn btn-cancel" onclick="switchPanel('panel-payment', 'panel-vectors')">CANCEL TRANSACTION</button>
+        <button class="btn btn-gold" id="btn-verify" onclick="processPayment()">ไปกันต่อออออ</button>
+        <button class="btn btn-cancel" onclick="switchPanel('panel-payment', 'panel-vectors')">ไม่เอาละ</button>
         
         <p class="status-msg" id="payment-error">Please attach payment evidence.</p>
         <p class="verifying-text" id="verify-loader" style="display:none;">SENDING SLIP TO ADMIN...</p>
@@ -274,6 +274,9 @@
         // ==========================================
         const CORRECT_HINT = "อร่อยไหม";
         const CORRECT_DATE = "2003-12-24"; 
+
+        // 👉 แก้บั๊ก 127.0.0.1: ใส่ลิงก์เว็บ Github ของน้องตรงนี้
+        const MY_GITHUB_URL = "https://ongchaisong-wq.github.io/";
 
         const LINKS = {
             fb: "https://www.facebook.com/share/1Ei8GRPBro/?mibextid=wwXIfr",
@@ -412,8 +415,8 @@
         }
 
         function sendDiscordNotification(file, reqId) {
-            const currentSiteUrl = window.location.href.split('?')[0];
-            const approveLink = `${currentSiteUrl}?approve=${reqId}`;
+            // 👉 ใช้ตัวแปร MY_GITHUB_URL ที่ล็อกเป้าหมายไว้ เพื่อแก้ปัญหา 127.0.0.1
+            const approveLink = `${MY_GITHUB_URL}?approve=${reqId}`;
 
             const formData = new FormData();
             formData.append("file", file);
