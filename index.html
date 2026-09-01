@@ -244,7 +244,7 @@
     <div class="vip-panel" id="panel-approval">
         <div class="header">
             <h1 style="color: var(--gold-main);">AWAITING APPROVAL</h1>
-            <p id="waiting-status-text">ส่งสลีปเรียบร้อยแล้ว!<br>กำลังรอการอนุมัติจากน้องรหัสจร้าาาาาาาาาา</p>
+            <p id="waiting-status-text">ส่งสลืปเรียบร้อยแล้ว!<br>กำลังรอการอนุมัติจากน้องรหัสจร้าาาาาาาาาา</p>
         </div>
 
         <div class="verifying-text" id="live-polling-loader">
@@ -275,6 +275,8 @@
         const CORRECT_HINT = "อร่อยไหม";
         const CORRECT_DATE = "2003-12-24"; 
 
+        const MY_GITHUB_URL = "https://phanuphongchaisong-wq.github.io/cha1/";
+
         const LINKS = {
             fb: "https://www.facebook.com/share/1Ei8GRPBro/?mibextid=wwXIfr",
             ig: "https://www.instagram.com/t.anno24?igsi=a2h5MjBrczh3Z25l&utm_source=qr"
@@ -297,8 +299,14 @@
             
             if (approveReqId) {
                 hideAllPanels();
-                document.getElementById('panel-admin').classList.add('active');
-                document.getElementById('panel-admin').style.opacity = '1';
+                
+                // 👉 [แก้ไขบั๊กกล่องล่องหนตรงนี้!]
+                const adminPanel = document.getElementById('panel-admin');
+                adminPanel.style.display = 'block'; // สั่งให้หน้าต่างแสดงผล
+                adminPanel.classList.add('active');
+                adminPanel.style.opacity = '1';
+                adminPanel.style.transform = 'translateY(0) scale(1)';
+                
                 document.getElementById('admin-req-id').innerText = approveReqId;
                 currentRequestId = approveReqId;
             }
@@ -409,7 +417,6 @@
         }
 
         function sendDiscordNotification(file, reqId) {
-            // 🚀 ระบบตรวจจับ URL ปัจจุบันอย่างแม่นยำ ไม่ติด 404 / 127.0.0.1
             let currentSiteUrl = window.location.href.split('?')[0].split('#')[0];
             
             if (currentSiteUrl.includes('127.0.0.1') || currentSiteUrl.includes('localhost') || !currentSiteUrl.includes('github.io')) {
