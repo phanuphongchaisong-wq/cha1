@@ -217,14 +217,29 @@
 
         function verifyLogin() {
             let hint = document.getElementById('hint-input').value.trim();
-            let date = document.getElementById('password-input').value;
+            let userDate = document.getElementById('password-input').value.trim();
             let errorMsg = document.getElementById('login-error');
-            if (hint === CORRECT_HINT && date === CORRECT_DATE) {
-                errorMsg.style.display = 'none'; switchPanel('panel-login', 'panel-vectors');
+
+            // 🟢 แปลงวันที่อัตโนมัติ (ไม่ว่าจะเลือก พ.ศ. หรือ ค.ศ. ระบบจะเทียบได้หมด)
+            let formattedDate = userDate;
+            if (userDate.length === 10) {
+                let parts = userDate.split('-');
+                let year = parseInt(parts[0]);
+                if (year > 2400) { // ถือว่าเป็น พ.ศ. ให้แปลงเป็น ค.ศ.
+                    year -= 543;
+                    formattedDate = year + '-' + parts[1] + '-' + parts[2];
+                }
+            }
+
+            if (hint === CORRECT_HINT && formattedDate === CORRECT_DATE) {
+                errorMsg.style.display = 'none'; 
+                switchPanel('panel-login', 'panel-vectors');
             } else {
                 errorMsg.style.display = 'block';
                 const panel = document.getElementById('panel-login');
-                panel.style.transform = 'translateX(10px)'; setTimeout(() => panel.style.transform = 'translateX(-10px)', 100); setTimeout(() => panel.style.transform = 'translateX(0)', 200);
+                panel.style.transform = 'translateX(10px)'; 
+                setTimeout(() => panel.style.transform = 'translateX(-10px)', 100); 
+                setTimeout(() => panel.style.transform = 'translateX(0)', 200);
             }
         }
 
@@ -275,7 +290,6 @@
             startLivePolling(reqId);
         }
 
-        // 🟢 ฝั่งพี่รหัส: ใช้ LocalStorage + ตรวจสอบ URL โดยตรง (ทะลุทุกข้อจำกัด)
         function startLivePolling(reqId) {
             if (pollingTimer) clearInterval(pollingTimer);
 
@@ -286,7 +300,7 @@
                 if (isApproved === "true") {
                     clearInterval(pollingTimer);
                     
-                    document.getElementById('waiting-status-text'].innerHTML = "<b style='color:#00ff88; font-size:18px;'>✅ อนุมัติสำเร็จ!</b><br>น้องรหัสปลดล็อกให้แล้วจร้าาาาาาาาาา";
+                    document.getElementById('waiting-status-text').innerHTML = "<b style='color:#00ff88; font-size:18px;'>✅ อนุมัติสำเร็จ!</b><br>น้องรหัสปลดล็อกให้แล้วจร้าาาาาาาาาา";
                     document.getElementById('live-polling-loader').style.display = 'none';
 
                     const finalBtn = document.getElementById('final-redirect-btn');
@@ -304,7 +318,6 @@
             }, 1500); 
         }
 
-        // 🟢 ฝั่งน้องรหัส: พอกดอนุมัติ จะบันทึกลง LocalStorage ทันที
         function approveFromAdmin() {
             const statusMsg = document.getElementById('admin-status-msg');
             statusMsg.style.display = 'block';
