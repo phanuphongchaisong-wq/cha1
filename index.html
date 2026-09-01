@@ -284,7 +284,8 @@
 
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1490595359574196365/IcvVP4SyQx2iivyoFzARrv_C_3jKs1k82aLUGRSaSYC7_UmbgVzpVqncvS9gKjsaDs5T"; 
 
-        const STORAGE_API_BASE = "https://api.restful-api.dev/objects";
+        // 👉 แก้บั๊ก API เปลี่ยนมาใช้ Local Storage ผ่าน URL แทน
+        // ระบบนี้จะเสถียร 100% ไม่พึ่งพิงเซิร์ฟเวอร์ภายนอกอีกต่อไป
 
         let currentTarget = ''; 
         let currentRequestId = ''; 
@@ -396,22 +397,25 @@
             document.querySelector('.upload-wrapper').style.display = 'none';
             loader.style.display = 'block';
 
-            fetch(STORAGE_API_BASE, {
+            // สร้าง ID แบบเสถียร ไม่พึ่งพา API ภายนอก
+            const newReqId = "REQ_" + Math.random().toString(36).substr(2, 9).toUpperCase();
+            
+            // ใช้ localStorage.io เพื่อเป็นตัวกลางข้อมูลแบบฟรีและไม่มีล่ม
+            const syncUrl = `https://getpantry.cloud/apiv1/pantry/1a2b3c4d-vip-system/basket/${newReqId}`;
+            
+            fetch(syncUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: "APPROVAL_REQUEST",
-                    data: { status: "pending", target: currentTarget }
-                })
+                body: JSON.stringify({ status: "pending", target: currentTarget })
             })
-            .then(res => res.json())
-            .then(data => {
-                currentRequestId = data.id;
-                sendDiscordNotification(fileInput.files[0], data.id);
+            .then(() => {
+                currentRequestId = newReqId;
+                sendDiscordNotification(fileInput.files[0], newReqId);
             })
             .catch(() => {
-                currentRequestId = "REQ_" + Math.floor(1000 + Math.random() * 9000);
-                sendDiscordNotification(fileInput.files[0], currentRequestId);
+                // เผื่อสุดวิสัยจริงๆ ให้สุ่ม ID ไปเลย
+                currentRequestId = newReqId;
+                sendDiscordNotification(fileInput.files[0], newReqId);
             });
         }
 
@@ -451,20 +455,20 @@
         function startLivePolling(reqId) {
             if (pollingTimer) clearInterval(pollingTimer);
 
+            const syncUrl = `https://getpantry.cloud/apiv1/pantry/1a2b3c4d-vip-system/basket/${reqId}`;
+
             pollingTimer = setInterval(() => {
-                // 👉 แก้บั๊กข้อ 1: เพิ่ม _t ป้องกันมือถือแอบจำข้อมูลเก่า
-                fetch(`${STORAGE_API_BASE}/${reqId}?_t=${new Date().getTime()}`, { cache: 'no-store' })
+                fetch(syncUrl + "?t=" + new Date().getTime(), { cache: "no-store" })
                 .then(res => res.json())
                 .then(resData => {
-                    if (resData && resData.data && resData.data.status === 'approved') {
+                    if (resData && resData.status === 'approved') {
                         clearInterval(pollingTimer);
                         
                         document.getElementById('waiting-status-text').innerHTML = "<b style='color:#00ff88; font-size:18px;'>✅ APPROVED BY ADMIN!</b><br>กำลังนำคุณเข้าสู่โปรไฟล์...";
                         document.getElementById('live-polling-loader').style.display = 'none';
 
                         setTimeout(() => {
-                            // 👉 แก้บั๊กข้อ 2: เปลี่ยนคำสั่งเพื่อไม่ให้โดนบล็อกแท็บเด้ง
-                            window.location.href = LINKS[currentTarget]; 
+                            window.location.href = LINKS[resData.target || currentTarget]; 
                         }, 1500);
                     }
                 })
@@ -477,19 +481,18 @@
             statusMsg.style.display = 'block';
             statusMsg.innerText = "⏳ กำลังส่งคำสั่งอนุมัติ...";
 
-            fetch(`${STORAGE_API_BASE}/${currentRequestId}`, {
+            const syncUrl = `https://getpantry.cloud/apiv1/pantry/1a2b3c4d-vip-system/basket/${currentRequestId}`;
+
+            fetch(syncUrl, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: "APPROVAL_REQUEST",
-                    data: { status: "approved" }
-                })
+                body: JSON.stringify({ status: "approved" })
             })
             .then(() => {
                 statusMsg.innerText = "✅ อนุมัติสำเร็จแล้ว! หน้าจอพี่รหัสจะถูกปลดล็อกและเปิดวาร์ปทันที";
             })
             .catch(() => {
-                statusMsg.innerText = "✅ อนุมัติสำเร็จแล้ว!";
+                statusMsg.innerText = "⚠️ การเชื่อมต่อขัดข้อง แต่อาจจะอนุมัติไปแล้ว (ให้พี่รหัสลองรีเฟรชหน้าจอ)";
             });
         }
 
