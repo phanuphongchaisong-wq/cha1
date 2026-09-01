@@ -83,7 +83,7 @@
             transform: scale(0.8);
             opacity: 0;
             pointer-events: none;
-            display: none; /* Initial state before logic */
+            display: none; 
         }
         #contact-vectors.active {
             display: block;
@@ -105,7 +105,13 @@
             display: none;
             border-color: rgba(255, 51, 102, 0.3);
             box-shadow: 0 10px 40px rgba(255, 51, 102, 0.15);
+            max-height: 90vh;
+            overflow-y: auto;
         }
+        /* Custom Scrollbar for payment panel */
+        #payment-gateway::-webkit-scrollbar { width: 5px; }
+        #payment-gateway::-webkit-scrollbar-thumb { background: var(--accent-red); border-radius: 5px; }
+
         #payment-gateway.active {
             display: block;
             animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
@@ -120,7 +126,7 @@
         /* Headers */
         .header {
             font-family: 'Fira Code', monospace;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         .header h1 {
             color: var(--accent-cyan);
@@ -148,7 +154,7 @@
             font-size: 13px;
             color: #aaa;
         }
-        input {
+        input:not([type="file"]) {
             width: 100%;
             padding: 14px 18px;
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -160,7 +166,7 @@
             box-sizing: border-box;
             transition: border-color 0.3s;
         }
-        input:focus {
+        input:not([type="file"]):focus {
             outline: none;
             border-color: var(--accent-cyan);
             box-shadow: var(--glow-cyan);
@@ -189,6 +195,7 @@
             justify-content: center;
             gap: 10px;
             margin-bottom: 15px;
+            box-sizing: border-box;
         }
         .btn:active { transform: scale(0.97); }
 
@@ -216,37 +223,64 @@
         }
         .btn-cancel:hover { background: rgba(255,255,255,0.05); color: white; }
 
-        /* Payment Specifics */
+        /* Payment & QR Specifics */
         .payment-header h1 {
             color: var(--accent-red);
             text-shadow: var(--glow-red);
+            font-size: 18px;
         }
         .amount-display {
-            font-size: 36px;
+            font-size: 32px;
             font-weight: 700;
             color: white;
             font-family: 'Fira Code', monospace;
-            margin: 20px 0;
+            margin: 15px 0;
             text-shadow: 0 0 10px rgba(255,255,255,0.3);
         }
-        .mock-qr {
-            width: 180px;
-            height: 180px;
-            background: rgba(255,255,255,0.05);
-            border: 2px dashed rgba(255,51,102,0.5);
+        
+        .real-qr-container {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px dashed var(--accent-red);
             border-radius: 10px;
-            margin: 0 auto 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            color: var(--accent-red);
-            flex-direction: column;
-            gap: 10px;
+            padding: 10px;
+            margin: 0 auto 20px;
+            display: inline-block;
+            box-shadow: inset 0 0 20px rgba(255, 51, 102, 0.2);
         }
-        .mock-qr img {
-            width: 100px;
-            opacity: 0.7;
+        
+        .real-qr-container img {
+            width: 150px;
+            height: auto;
+            border-radius: 5px;
+            display: block;
+        }
+
+        /* File Upload UI */
+        .upload-wrapper {
+            margin-bottom: 20px;
+        }
+        .btn-upload {
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px dashed var(--accent-cyan);
+            color: var(--accent-cyan);
+            font-family: 'Fira Code', monospace;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            transition: all 0.3s;
+        }
+        .btn-upload:hover {
+            background: rgba(0, 243, 255, 0.2);
+            box-shadow: var(--glow-cyan);
+        }
+        #slip-filename {
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            color: #fff;
+            margin-top: 10px;
+            display: block;
+            word-break: break-all;
         }
 
         .status-msg {
@@ -255,6 +289,7 @@
             margin-top: 15px;
             display: none;
             color: #ff4757;
+            text-shadow: 0 0 8px rgba(255,71,87,0.5);
         }
 
         .system-log {
@@ -268,7 +303,6 @@
             pointer-events: none;
         }
         
-        /* Loading overlay for payment */
         .verifying-text {
             color: var(--accent-cyan);
             font-size: 14px;
@@ -323,7 +357,7 @@
         </button>
     </div>
 
-    <!-- 💸 STAGE 3: Payment Ransom (The Prank) -->
+    <!-- 💸 STAGE 3: Payment Ransom (The Prank with Real QR & Slip) -->
     <div class="glass-panel" id="payment-gateway">
         <div class="header payment-header">
             <h1>// PREMIUM_ACCESS_REQUIRED //</h1>
@@ -332,15 +366,22 @@
         
         <div class="amount-display">99.00 THB</div>
         
-        <div class="mock-qr">
-            <!-- สร้าง QR หลอกๆ ด้วย CSS -->
-            <div style="width: 100px; height: 100px; background: repeating-linear-gradient(45deg, var(--accent-red), var(--accent-red) 10px, transparent 10px, transparent 20px); opacity: 0.5;"></div>
-            <span>[ SCAN_PROMPTPAY_QR ]</span>
+        <!-- รูป QR Code จริงของคุณ -->
+        <div class="real-qr-container">
+            <img src="https://cdn.discordapp.com/attachments/1490354567169184017/1544250022324080702/IMG_1951.jpg?ex=6a97d268&is=6a9680e8&hm=97091d37243be7eb64e85ae9e7dbd18700d23b06bba16845da7c2aab823bf717&" alt="PromptPay QR Code">
+        </div>
+
+        <!-- ระบบอัปโหลดสลิป -->
+        <div class="upload-wrapper">
+            <input type="file" id="slip-upload" accept="image/*" style="display: none;" onchange="handleFileUpload(this)">
+            <label for="slip-upload" class="btn-upload">>> [ ATTACH_SLIP_EVIDENCE ] <<</label>
+            <span id="slip-filename"></span>
         </div>
 
         <button class="btn btn-primary" id="btn-verify" onclick="verifyPayment()">[ VERIFY_TRANSFER ]</button>
         <button class="btn btn-cancel" onclick="cancelPayment()">[ CANCEL ]</button>
         
+        <p class="status-msg" id="payment-error">// ERROR: NO_EVIDENCE_FOUND. PLEASE ATTACH SLIP. //</p>
         <p class="verifying-text" id="verify-loader">// VERIFYING_BLOCKCHAIN_TRANSACTION... PLEASE WAIT //</p>
     </div>
 
@@ -367,7 +408,7 @@
         const elVectors = document.getElementById('contact-vectors');
         const elPayment = document.getElementById('payment-gateway');
         const elLog = document.getElementById('sys-log');
-        let currentTarget = ''; // เก็บว่าพี่รหัสจะกดไปแอพไหน
+        let currentTarget = ''; 
 
         /* --- STAGE 1: ตรวจรหัสผ่าน --- */
         function executeAccessProtocol() {
@@ -376,7 +417,6 @@
             let errorMsg = document.getElementById('login-error');
 
             if (hint === CORRECT_HINT && date === CORRECT_DATE) {
-                // รหัสถูก
                 errorMsg.style.display = 'none';
                 elGate.classList.add('hidden');
                 
@@ -386,7 +426,6 @@
                     updateLog("access_granted", "vectors_deployed");
                 }, 400);
             } else {
-                // รหัสผิด
                 errorMsg.style.display = 'block';
                 elGate.style.transform = 'scale(0.98)';
                 setTimeout(() => elGate.style.transform = 'scale(1)', 150);
@@ -407,20 +446,50 @@
             }, 400);
         }
 
-        /* --- STAGE 3: ตรวจสอบโอนเงิน (หลอกๆ) --- */
+        /* --- จัดการการเลือกไฟล์สลิป --- */
+        function handleFileUpload(input) {
+            const fileNameDisplay = document.getElementById('slip-filename');
+            const errorMsg = document.getElementById('payment-error');
+            
+            if (input.files && input.files.length > 0) {
+                // ซ่อน Error ถ้ามีรูปแล้ว
+                errorMsg.style.display = 'none';
+                fileNameDisplay.style.color = "var(--accent-cyan)";
+                fileNameDisplay.innerText = `// FILE_LOADED: ${input.files[0].name}`;
+                updateLog("evidence_attached", "awaiting_verification");
+            } else {
+                fileNameDisplay.innerText = "";
+            }
+        }
+
+        /* --- STAGE 3: ตรวจสอบการโอนเงิน (เช็คว่าแนบสลิปยัง) --- */
         function verifyPayment() {
+            const fileInput = document.getElementById('slip-upload');
+            const errorMsg = document.getElementById('payment-error');
             const btnVerify = document.getElementById('btn-verify');
             const loader = document.getElementById('verify-loader');
+
+            // ตรวจสอบว่าแนบไฟล์สลิปหรือยัง
+            if (fileInput.files.length === 0) {
+                // ถ้ายังไม่แนบ เด้งแจ้งเตือนและเขย่ากล่อง
+                errorMsg.style.display = 'block';
+                elPayment.style.transform = 'scale(0.98)';
+                setTimeout(() => elPayment.style.transform = 'scale(1)', 150);
+                updateLog("error_verification_failed", "no_evidence_found");
+                return; // หยุดการทำงาน ไม่ปล่อยวาร์ป
+            }
             
-            // เปลี่ยนปุ่มเป็นกำลังโหลด
+            // ถ้าแนบสลิปแล้ว เริ่มกระบวนการผ่านด่าน
+            errorMsg.style.display = 'none';
             btnVerify.style.display = 'none';
             document.querySelector('.btn-cancel').style.display = 'none';
+            document.querySelector('.upload-wrapper').style.display = 'none';
             loader.style.display = 'block';
-            updateLog("verifying_transaction", "processing...");
+            updateLog("verifying_slip_data", "processing_transaction...");
 
-            // แกล้งหน่วงเวลา 3 วินาที ให้ดูสมจริง
+            // แกล้งหน่วงเวลา 3 วินาที ให้ดูเหมือนกำลังตรวจสลิป
             setTimeout(() => {
-                loader.innerText = "// TRANSACTION_APPROVED // BYPASSING_FIREWALL...";
+                loader.innerText = "// SLIP_VERIFIED // TRANSACTION_APPROVED // BYPASSING_FIREWALL...";
                 loader.style.color = "#00f3ff";
                 updateLog("transaction_approved", "unlocking_target_url");
 
@@ -437,6 +506,12 @@
         /* กลับไปหน้าเลือกลิ้งก์ใหม่ถ้ายกเลิกการจ่าย */
         function cancelPayment() {
             elPayment.classList.remove('active');
+            
+            // รีเซ็ตข้อมูลไฟล์
+            document.getElementById('slip-upload').value = "";
+            document.getElementById('slip-filename').innerText = "";
+            document.getElementById('payment-error').style.display = 'none';
+
             setTimeout(() => {
                 elPayment.style.display = 'none';
                 elVectors.style.display = 'block';
@@ -450,6 +525,11 @@
         function resetToVectors() {
             document.getElementById('btn-verify').style.display = 'flex';
             document.querySelector('.btn-cancel').style.display = 'block';
+            document.querySelector('.upload-wrapper').style.display = 'block';
+            
+            document.getElementById('slip-upload').value = "";
+            document.getElementById('slip-filename').innerText = "";
+            
             const loader = document.getElementById('verify-loader');
             loader.style.display = 'none';
             loader.innerText = "// VERIFYING_BLOCKCHAIN_TRANSACTION... PLEASE WAIT //";
