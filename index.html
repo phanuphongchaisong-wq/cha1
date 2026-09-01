@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECURE_ACCESS_GATE // SYSTEM_ARMED</title>
+    <style>
+        /*
+         * =========================================
+         * 🎨 THEME & ESTHETICS (CSS)
+         * =========================================
+         */
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Prompt:wght@300;400;600&display=swap');
+
+        :root {
+            --bg-color: #0a0b1e;
+            --accent-cyan: #00f3ff;
+            --accent-purple: #9d00ff;
+            --text-main: #f0f0f0;
+            --text-muted: #666;
+            --glass-bg: rgba(10, 11, 30, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glow-cyan: 0 0 15px var(--accent-cyan);
+            --glow-purple: 0 0 15px var(--accent-purple);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Prompt', 'Fira Code', monospace;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Dynamic Particle Background (Using Canvas in JS) */
+        #bg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Glassmorphism Secure Gate Container */
+        .secure-gate-container {
+            background-color: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 50px 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            position: relative;
+            z-index: 10;
+        }
+
+        .secure-gate-container.unlocked {
+            transform: scale(1.1);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Header Section */
+        .header {
+            font-family: 'Fira Code', monospace;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: var(--accent-cyan);
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: var(--glow-cyan);
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 300;
+            margin-top: 0;
+        }
+
+        /* Input Fields */
+        .input-group {
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .input-label {
+            font-family: 'Fira Code', monospace;
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #aaa;
+            letter-spacing: 1px;
+        }
+
+        .input-field-wrapper {
+            position: relative;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            color: var(--accent-cyan);
+            font-family: 'Fira Code', monospace;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: var(--glow-cyan);
+        }
+
+        /* Stylized Date Input */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.5;
+            cursor: pointer;
+        }
+
+        /* Elegant Execute Button */
+        .execute-btn {
+            background: linear-gradient(135deg, var(--accent-purple) 0%, #d814ff 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            width: 100%;
+            text-transform: uppercase;
+            transition: transform 0.1s, box-shadow 0.3s, background-position 0.5s;
+            background-size: 200% 200%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .execute-btn:hover {
+            box-shadow: var(--glow-purple);
+            background-position: right center;
+        }
+
+        .execute-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Status & Error Messages */
+        .status-msg {
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error-msg {
+            color: #ff4757;
+            text-shadow: 0 0 10px #ff4757;
+        }
+
+        /*
+         * =========================================
+         * ✅ UNLOCKED STATE (AFTER SUCCESS)
+         * =========================================
+         */
+        .contact-vectors-container {
+            display: none;
+            animation: fadeIn 1s ease 0.5s forwards;
+            max-width: 600px;
+            width: 90%;
+            position: absolute;
+            z-index: 10;
+        }
+
+        .contact-card {
+            background-color: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .contact-header {
+            font-family: 'Fira Code', monospace;
+            margin-bottom: 30px;
+        }
+
+        .contact-header h1 {
+            color: var(--accent-cyan);
+            font-size: 24px;
+            text-shadow: var(--glow-cyan);
+            margin-bottom: 5px;
+        }
+
+        .contact-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .vector-btn {
+            text-decoration: none;
+            padding: 18px 25px;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Fira Code', monospace;
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            transition: transform 0.2s, box-shadow 0.3s;
+        }
+
+        .vector-btn:hover {
+            transform: scale(1.03);
+        }
+
+        .facebook-vector {
+            background: linear-gradient(135deg, #1877F2 0%, #3b5998 100%);
+            box-shadow: 0 4px 15px rgba(24, 119, 242, 0.3);
+        }
+
+        .facebook-vector:hover {
+            box-shadow: 0 4px 25px rgba(24, 119, 242, 0.6);
+        }
+
+        .instagram-vector {
+            background: linear-gradient(135deg, #f09433 0%, #cc2366 100%);
+            box-shadow: 0 4px 15px rgba(230, 104, 60, 0.3);
+        }
+
+        .instagram-vector:hover {
+            box-shadow: 0 4px 25px rgba(230, 104, 60, 0.6);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* For the animated log text */
+        .system-log {
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            color: #555;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            text-align: right;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🌌 Dynamic Particle Background -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- 🛡️ Secure Gate: The Password Screen -->
+    <div class="secure-gate-container" id="secure-gate">
+        <div class="header">
+            <h1>// SECURE ACCESS GATE //</h1>
+            <p>[AWAITING_DECRYPTION_KEYS]...</p>
+        }
+        </div>
+
+        <div class="input-group">
+            <label class="input-label" for="hint-input">[KEY_1] - HINT_DECODING_MATRIX</label>
+            <div class="input-field-wrapper">
+                <input type="text" id="hint-input" placeholder=">> ENTER_HINT_CODE" autocomplete="off">
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label" for="password-input">[KEY_2] - TEMPORAL_STAMP_VERIFICATION</label>
+            <div class="input-field-wrapper">
+                <input type="date" id="password-input" autocomplete="off">
+            </div>
+        </div>
+
+        <button class="execute-btn" onclick="executeAccessProtocol()">[ EXECUTE_ACCESS_PROTOCOL_03 ]</button>
+        <p class="status-msg error-msg" id="status-message">// ERROR: KEYS_MISMATCH // ACCESS_DENIED.</p>
+    </div>
+
+    <!-- ✅ Unlocked Content: Contact Vectors -->
+    <div class="contact-vectors-container" id="contact-vectors">
+        <div class="contact-card">
+            <div class="contact-header">
+                <h1>// ACCESS_GRANTED //</h1>
+                <p>Welcome, Senior Mentor. Target Acquired.</p>
+            }
+            </div>
+            
+            <div class="contact-list">
+                <a href="https://www.facebook.com/share/1Ei8GRPBro/?mibextid=wwXIfr" target="_blank" class="vector-btn facebook-vector">
+                    // [OPEN_FACEBOOK_VECTOR]
+                </a>
+                <a href="https://www.instagram.com/t.anno24?igsi=a2h5MjBrczh3Z25l&utm_source=qr" target="_blank" class="vector-btn instagram-vector">
+                    // [OPEN_INSTAGRAM_VECTOR]
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Decorative log text -->
+    <div class="system-log">
+        log: system_gate_initialized<br>
+        status: awaiting_input...
+    </div>
+
+    <script>
+        /*
+         * =========================================
+         * 🔧 JavaScript - Logic & Effects
+         * =========================================
+         */
+
+        // ==========================================
+        // 🔧 ตั้งค่ารหัสผ่านที่นี่
+        // ==========================================
+        const CORRECT_HINT = "ไม่แดกชามะนาว"; // **อย่าเปลี่ยน** คำใบ้ที่น้องให้มา
+        const CORRECT_DATE = "2003-12-24"; // **นี่คือวันเกิดที่คุณต้องตั้งค่า** รูปแบบ: ค.ศ.-เดือน-วัน (YYYY-MM-DD)
+
+        // Element selection
+        const gate = document.getElementById('secure-gate');
+        const vectors = document.getElementById('contact-vectors');
+        const statusMsg = document.getElementById('status-message');
+        const logText = document.querySelector('.system-log');
+
+        function executeAccessProtocol() {
+            // ดึงค่าที่พี่รหัสพิมพ์เข้ามา
+            let userHint = document.getElementById('hint-input').value.trim();
+            let userDate = document.getElementById('password-input').value;
+
+            // ตรวจสอบข้อมูลแบบเคร่งครัด
+            if (userHint === CORRECT_HINT && userDate === CORRECT_DATE) {
+                // ✅ สำเร็จ: เริ่มเอฟเฟกต์ปลดล็อก
+                gate.classList.add('unlocked'); // ซ่อนหน้าแรกแบบมีอนิเมชั่น
+                statusMsg.style.display = 'none';
+                
+                // โชว์หน้า Contact
+                setTimeout(() => {
+                    gate.style.display = 'none';
+                    vectors.style.display = 'block';
+                    logText.innerHTML = "log: access_granted<br>status: vectors_deployed";
+                }, 500);
+            } else {
+                // ❌ ล้มเหลว: แสดงข้อความ error และเขย่ากล่อง
+                statusMsg.style.display = 'block';
+                logText.innerHTML = "log: error_keys_mismatch<br>status: retry_awaited";
+                gate.style.animation = 'shake 0.3s ease-in-out';
+                setTimeout(() => gate.style.animation = '', 300);
+            }
+        }
+
+        // ==========================================
+        // 🌌 Dynamic Particle Background - JavaScript
+        // ==========================================
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            createParticles();
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(0, 243, 255, 0.4)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function createParticles() {
+            particles = [];
+            const numberOfParticles = (canvas.width * canvas.height) / 8000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        createParticles();
+        animate();
+    </script>
+
+</body>
+</html>
