@@ -290,8 +290,8 @@
 
         const DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/1490595359574196365/IcvVP4SyQx2iivyoFzARrv_C_3jKs1k82aLUGRSaSYC7_UmbgVzpVqncvS9gKjsaDs5T"; 
 
-        // 👉 แก้บั๊ก API เปลี่ยนมาใช้ RESTful-API.dev (ฟรี & ไม่ต้องสมัคร)
-        const STORAGE_API_BASE = "https://api.restful-api.dev/objects";
+        // 👉 แก้ไขปัญหา 405: เปลี่ยนเว็บฐานข้อมูลมาใช้ ExtendsClass (ฟรีและเสถียรกว่า)
+        const STORAGE_API_BASE = "https://json.extendsclass.com/bin";
 
         let currentTarget = ''; 
         let currentRequestId = ''; 
@@ -403,34 +403,29 @@
             document.querySelector('.upload-wrapper').style.display = 'none';
             loader.style.display = 'block';
 
-            // 🟢 สร้างคำขออนุมัติไปยังฐานข้อมูลที่เสถียร
+            // 🟢 สร้างคำขออนุมัติด้วยระบบฐานข้อมูลใหม่
             fetch(STORAGE_API_BASE, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: "VIP_APPROVAL_SYSTEM",
-                    data: { status: "pending", target: currentTarget }
-                })
+                body: JSON.stringify({ status: "pending", target: currentTarget })
             })
-            // ----- แก้ไขจุดนี้เพื่อดัก Error สาเหตุให้ชัดเจนขึ้น -----
             .then(res => {
                 if (!res.ok) throw new Error("HTTP Status " + res.status);
                 return res.json();
             })
             .then(data => {
+                // ExtendsClass จะส่งค่า id กลับมาให้เราแบบนี้ -> { "id": "xxxxxx" }
                 if (data && data.id) {
                     currentRequestId = data.id;
                     sendDiscordNotification(fileInput.files[0], data.id);
                 } else {
-                    throw new Error("Failed to get ID");
+                    throw new Error("Failed to get ID from database");
                 }
             })
             .catch((err) => {
-                // จะมีข้อความสาเหตุต่อท้าย เพื่อให้เรารู้ว่าพังจากอะไร
                 alert("ระบบขัดข้อง กรุณาลองใหม่อีกครั้ง\nสาเหตุ: " + err.message);
                 resetPaymentFormState();
             });
-            // ---------------------------------------------------
         }
 
         function sendDiscordNotification(file, reqId) {
@@ -470,11 +465,11 @@
             if (pollingTimer) clearInterval(pollingTimer);
 
             pollingTimer = setInterval(() => {
-                // 🟢 เช็กข้อมูลจากฐานข้อมูลว่าน้องกดอนุมัติหรือยัง
-                fetch(`${STORAGE_API_BASE}/${reqId}?_t=${new Date().getTime()}`, { cache: "no-store" })
+                // 🟢 ดึงข้อมูลจากฐานข้อมูลใหม่มาเช็กสถานะ
+                fetch(`${STORAGE_API_BASE}/${reqId}?_t=${new Date().getTime()}`)
                 .then(res => res.json())
                 .then(resData => {
-                    if (resData && resData.data && resData.data.status === 'approved') {
+                    if (resData && resData.status === 'approved') {
                         clearInterval(pollingTimer);
                         
                         // ถ้าน้องกดอนุมัติแล้ว จะแสดงข้อความสำเร็จ
@@ -484,7 +479,7 @@
                         // 🚀 โชว์ปุ่ม "ไปที่โปรไฟล์" ให้พี่รหัสกด
                         const finalBtn = document.getElementById('final-redirect-btn');
                         finalBtn.style.display = 'flex';
-                        finalBtn.href = LINKS[resData.data.target || currentTarget];
+                        finalBtn.href = LINKS[resData.target || currentTarget];
                     }
                 })
                 .catch(() => {});
@@ -496,14 +491,11 @@
             statusMsg.style.display = 'block';
             statusMsg.innerText = "⏳ กำลังส่งคำสั่งอนุมัติ...";
 
-            // 🟢 น้องรหัสกดอนุมัติ ส่งสถานะ 'approved' กลับไปที่ฐานข้อมูล
+            // 🟢 น้องรหัสกดอนุมัติ ส่งคำสั่ง PUT เพื่ออัปเดตสถานะในฐานข้อมูลใหม่
             fetch(`${STORAGE_API_BASE}/${currentRequestId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: "VIP_APPROVAL_SYSTEM",
-                    data: { status: "approved", target: currentTarget }
-                })
+                body: JSON.stringify({ status: "approved", target: currentTarget })
             })
             .then(res => {
                 if (res.ok) {
