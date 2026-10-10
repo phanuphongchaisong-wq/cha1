@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>e-Student Profile</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>e-Student : Sripatum University Chonburi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         * {
             box-sizing: border-box;
@@ -14,288 +17,1019 @@
 
         body {
             font-family: 'Sarabun', sans-serif;
-            background-color: #0b2e46;
-            background-image: radial-gradient(#14496b 1px, transparent 1px);
-            background-size: 10px 10px;
+            background-color: #092237;
+            /* พื้นหลังลายตารางคาร์บอนสีน้ำเงินเข้มเหมือนต้นฉบับ */
+            background-image: 
+                radial-gradient(#133c5e 1.2px, transparent 1.2px), 
+                radial-gradient(#0d2d47 1.2px, #092237 1.2px);
+            background-size: 8px 8px;
+            background-position: 0 0, 4px 4px;
             color: #333;
-            padding-bottom: 40px;
+            min-height: 100vh;
+            overflow-x: auto;
         }
 
-        /* ส่วนหัวเว็บไซต์ */
-        .navbar {
-            background-color: #072235;
-            padding: 15px 20px;
+        /* ส่วนหัวเว็บไซต์ด้านบนสุด */
+        .top-navbar {
+            background: linear-gradient(to bottom, #0d2b45, #071929);
+            border-bottom: 1px solid #1c4b70;
+            height: 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #0f3d5e;
+            padding: 0 18px;
+            color: #fff;
+            font-size: 13px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
         }
 
-        .navbar .title {
-            color: #d4a017;
-            font-size: 20px;
-            font-weight: 600;
+        .brand-title {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
         }
 
-        .navbar .menu-icon {
-            color: #ccc;
-            font-size: 24px;
+        .brand-e {
+            color: #e6a817;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .brand-uni {
+            color: #b8d4ec;
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        .top-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 12px;
+            color: #d0e2f2;
+        }
+
+        .top-links a, .top-links button {
+            color: #d0e2f2;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
             cursor: pointer;
+            background: none;
+            border: none;
+            font-family: 'Sarabun', sans-serif;
+            font-size: 12px;
+            transition: color 0.15s;
         }
 
-        /* กล่องเนื้อหาหลัก */
-        .main-wrapper {
+        .top-links a:hover, .top-links button:hover {
+            color: #ffc107;
+        }
+
+        /* โครงสร้างหลัก 2 คอลัมน์แบบ Desktop */
+        .portal-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px;
+            min-width: 1240px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* คอลัมน์ซ้าย: ข้อมูลนักศึกษา */
+        .left-sidebar {
+            width: 315px;
+            flex-shrink: 0;
             background-color: #ffffff;
-            margin: 15px;
-            padding: 12px;
-            border-radius: 6px;
+            padding: 10px;
+            border-radius: 3px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.35);
         }
 
-        .card-inner {
-            background-color: #f9f9fb;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            padding: 20px 15px;
+        .profile-inner-card {
+            background-color: #f5f5f7;
+            border: 1px solid #dcdce0;
+            border-radius: 4px;
+            padding: 14px 12px;
         }
 
-        /* ข้อมูลรหัสและชื่อ */
-        .student-header {
-            font-size: 18px;
+        .student-id-header {
+            font-size: 13.5px;
             color: #222;
-            margin-bottom: 18px;
-            line-height: 1.5;
+            line-height: 1.45;
+            margin-bottom: 12px;
+            font-weight: 500;
         }
 
-        /* รูปโปรไฟล์นักศึกษา */
-        .student-photo-container {
-            margin-bottom: 20px;
-            margin-left: 15px;
+        /* กรอบรูปนักศึกษาทรงวงรี */
+        .photo-frame-wrapper {
+            position: relative;
+            width: 96px;
+            height: 122px;
+            margin: 0 0 14px 12px;
         }
 
-        .student-photo-wrapper {
-            width: 115px;
-            height: 142px;
+        .student-oval-photo {
+            width: 96px;
+            height: 122px;
             border-radius: 50%;
-            border: 4px solid #b8cce4;
+            border: 3px solid #b8cce4;
             overflow: hidden;
-            background-color: #ddd;
+            background-color: #cbd5e1;
             cursor: pointer;
             position: relative;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
         }
 
-        .student-photo-wrapper img {
+        .student-oval-photo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            /* ปรับตำแหน่งให้ซูมช่วงใบหน้าและลำตัวด้านบนพอดีกรอบวงรี */
             object-position: center 15%;
             transform: scale(1.35);
+            transition: transform 0.2s ease;
         }
 
-        .upload-hint {
-            font-size: 11px;
-            color: #777;
-            margin-top: 5px;
-            text-align: center;
-            width: 115px;
+        .photo-overlay-badge {
+            position: absolute;
+            bottom: 0;
+            right: -4px;
+            background: #1a75ad;
+            color: white;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            border: 2px solid #fff;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
 
-        /* รายละเอียดข้อมูล */
-        .info-list {
-            font-size: 15px;
-            line-height: 1.8;
-            color: #444;
-            margin-bottom: 25px;
+        /* รายละเอียดประวัติ */
+        .bio-details {
+            font-size: 12.5px;
+            line-height: 1.65;
+            color: #333;
+            margin-bottom: 18px;
         }
 
-        .status-normal {
+        .text-status-red {
             color: #d92626;
             font-weight: 700;
         }
 
-        .religion-highlight {
+        .text-islam-green {
             color: #0d6832;
             font-weight: 700;
+            background-color: #e6f4ea;
+            padding: 1px 6px;
+            border-radius: 3px;
+            border: 1px solid #b7dfc2;
         }
 
-        .link-blue {
-            color: #2b6cb0;
+        .text-link-blue {
+            color: #1d6fa5;
             text-decoration: none;
         }
 
         /* กล่องอาจารย์ที่ปรึกษา */
-        .advisor-card {
+        .advisor-box {
             background-color: #eef5fc;
-            border: 1px solid #d8e6f3;
-            border-radius: 6px;
-            width: 195px;
-            padding: 15px 12px;
-            margin-bottom: 35px;
+            border: 1px solid #d5e4f2;
+            border-radius: 4px;
+            width: 145px;
+            padding: 12px 10px;
+            margin-bottom: 24px;
         }
 
-        .advisor-photo-wrapper {
-            width: 110px;
-            height: 130px;
+        .advisor-oval-photo {
+            width: 82px;
+            height: 100px;
             border-radius: 50%;
-            border: 3px solid #9bbce0;
+            border: 2.5px solid #9bbce0;
             overflow: hidden;
-            margin: 0 auto 12px auto;
-            background-color: #f4b6d2;
+            margin: 0 auto 8px auto;
+            background-color: #e8b4d0;
             cursor: pointer;
         }
 
-        .advisor-photo-wrapper img {
+        .advisor-oval-photo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
 
-        .advisor-info {
-            font-size: 15px;
+        .advisor-text {
+            font-size: 12px;
             color: #333;
-            line-height: 1.5;
+            line-height: 1.45;
         }
 
-        /* ส่วนท้ายข้อมูลติดต่อมหาวิทยาลัย */
-        .footer-contact {
-            font-size: 14px;
-            line-height: 1.6;
+        .uni-contact-footer {
+            font-size: 11.5px;
+            line-height: 1.55;
             color: #333;
-            border-top: 1px solid #eaeaea;
-            padding-top: 15px;
+            padding-top: 8px;
         }
 
-        .footer-contact .uni-name {
+        /* คอลัมน์ขวา: เนื้อหาหลัก */
+        .right-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* แถบปุ่มเมนูสีสันด้านบน */
+        .menu-grid-container {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .menu-row {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+        }
+
+        .menu-btn {
+            height: 36px;
+            border-radius: 2px;
+            color: #ffffff;
+            font-size: 11.5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8px;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 2px rgba(0,0,0,0.25);
+            transition: filter 0.15s, transform 0.1s;
+            line-height: 1.15;
+        }
+
+        .menu-btn:hover {
+            filter: brightness(1.12);
+        }
+
+        .menu-btn:active {
+            transform: translateY(1px);
+        }
+
+        .menu-btn-left {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow: hidden;
+        }
+
+        .menu-btn-left i {
+            font-size: 13px;
+            flex-shrink: 0;
+            opacity: 0.9;
+        }
+
+        .menu-btn-text {
+            font-weight: 400;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .menu-caret {
+            font-size: 9px;
+            opacity: 0.8;
+            margin-left: 3px;
+            flex-shrink: 0;
+        }
+
+        /* สีปุ่มตามต้นฉบับ */
+        .bg-m-blue { background-color: #1676b2; }
+        .bg-m-maroon { background-color: #7b113a; }
+        .bg-m-orange { background-color: #c85a17; }
+        .bg-m-green { background-color: #1b802c; }
+        .bg-m-red { background-color: #a61919; }
+        .bg-m-purple { background-color: #6b15b6; }
+        .bg-m-brown { background-color: #693805; }
+        .bg-m-cyan { background-color: #217fa0; }
+        .bg-m-magenta { background-color: #6d123f; }
+        .bg-m-amber { background-color: #b85314; }
+        .bg-m-darkgreen { background-color: #197a19; }
+        .bg-m-crimson { background-color: #b11818; }
+        .bg-m-violet { background-color: #5e15a6; }
+        .bg-m-darkbrown { background-color: #5a3106; }
+        .bg-m-steelblue { background-color: #1a6d94; }
+        .bg-m-wine { background-color: #630d25; }
+        .bg-m-burnt { background-color: #b54710; }
+
+        /* กล่องประกาศ 3 การ์ด */
+        .white-section-box {
+            background-color: #ffffff;
+            border-radius: 3px;
+            padding: 12px 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+        }
+
+        .announcement-grid {
+            display: flex;
+            justify-content: flex-start;
+            gap: 240px;
+            padding: 4px 6px;
+        }
+
+        .announce-card {
+            width: 145px;
+            border: 1px solid #e2e8f0;
+            border-radius: 3px;
+            background: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.15s;
+        }
+
+        .announce-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+        }
+
+        .announce-banner {
+            height: 76px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            padding: 6px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .announce-desc {
+            padding: 8px 8px 10px 8px;
+            font-size: 11px;
+            line-height: 1.35;
+            color: #333;
+            min-height: 54px;
+        }
+
+        /* ตารางค่าเทอมและรายวิชา */
+        .table-section-box {
+            background-color: #ffffff;
+            border-radius: 3px;
+            padding: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+        }
+
+        .section-blue-header {
+            background: linear-gradient(to bottom, #26557c, #1b3f5e);
+            color: #ffffff;
+            font-size: 12.5px;
             font-weight: 600;
+            padding: 7px 12px;
+            border-radius: 2px 2px 0 0;
+        }
+
+        .spu-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
             color: #222;
         }
 
-        /* เมนูด้านล่าง */
-        .bottom-menus {
-            margin: 0 15px;
+        .spu-table th {
+            background-color: #c7cdd4;
+            color: #222;
+            font-weight: 600;
+            padding: 6px 10px;
+            border-bottom: 1px solid #b0b8c1;
+            text-align: center;
         }
 
-        .menu-bar {
-            padding: 12px 15px;
-            color: white;
-            font-size: 15px;
+        .spu-table td {
+            padding: 6px 10px;
+            border-bottom: 1px solid #eceff2;
+        }
+
+        .spu-table tr:hover td {
+            background-color: #f8fafc;
+        }
+
+        .sub-gray-header {
+            background-color: #c7cdd4;
+            color: #222;
+            font-weight: 600;
+            font-size: 12px;
+            padding: 6px 10px;
+            border-top: 1px solid #b0b8c1;
+            border-bottom: 1px solid #b0b8c1;
+        }
+
+        .summary-row td {
+            background-color: #f4f5f7;
+            font-weight: 600;
+            padding: 6px 10px;
+            border-bottom: 1px solid #e2e5e9;
+        }
+
+        /* ส่วนตารางเรียนนักศึกษาด้านล่าง */
+        .schedule-tabs {
             display: flex;
+            gap: 3px;
+            margin-top: 8px;
+            padding: 0 6px;
+        }
+
+        .sched-tab {
+            background-color: #3174ad;
+            color: white;
+            font-size: 12px;
+            padding: 6px 14px;
+            border-radius: 3px 3px 0 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .sched-tab.inactive {
+            background-color: #255d8d;
+            opacity: 0.9;
+        }
+
+        .schedule-workspace {
+            margin: 0 6px 8px 6px;
+            background-color: #dfebf7;
+            border: 1px solid #bfd6ed;
+            min-height: 75px;
+            padding: 10px;
+            width: 65%;
+        }
+
+        .print-btn {
+            background: linear-gradient(to bottom, #ffffff, #e6e6e6);
+            border: 1px solid #b3b3b3;
+            border-radius: 2px;
+            padding: 3px 8px;
+            font-size: 11.5px;
+            color: #333;
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
-            border-radius: 4px;
-            margin-bottom: 4px;
+            gap: 5px;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
         }
 
-        .menu-bar.blue {
-            background-color: #1a6ea8;
+        .print-btn:hover {
+            background: #f0f0f0;
         }
 
-        .menu-bar.red {
-            background-color: #8c1d2b;
+        /* โหมดแก้ไขข้อความได้ทันที */
+        [contenteditable="true"] {
+            outline: 1px dashed #2196f3;
+            background-color: rgba(33, 150, 243, 0.06);
+            border-radius: 2px;
+            padding: 0 2px;
+        }
+
+        [contenteditable="true"]:focus {
+            outline: 2px solid #1976d2;
+            background-color: #fff;
         }
     </style>
 </head>
 <body>
 
-    <!-- แถบเมนูด้านบน -->
-    <div class="navbar">
-        <div class="title">e-Student : ระบบข้อมูลนักศึกษา</div>
-        <div class="menu-icon">&#9776;</div>
-    </div>
+    <header class="top-navbar">
+        <div class="brand-title">
+            <span class="brand-e">e-Student :</span>
+            <span class="brand-uni">Sripatum University Chonburi</span>
+        </div>
 
-    <!-- กล่องข้อมูลหลัก -->
-    <div class="main-wrapper">
-        <div class="card-inner">
+        <div class="top-links">
+            <button onclick="document.getElementById('upload-student').click()" title="คลิกเพื่ออัปโหลดรูปนักศึกษาของคุณ">
+                <i class="fa-solid fa-camera text-amber-400"></i> เปลี่ยนรูปนักศึกษา
+            </button>
+            <button id="toggle-edit-btn" onclick="toggleEditMode()">
+                <i class="fa-solid fa-pen-to-square text-emerald-400"></i> แก้ไขข้อมูลบนหน้าเว็บ
+            </button>
+            <a href="javascript:void(0)">
+                <i class="fa-solid fa-user"></i> แสดงแบบย่อ/ขยาย <i class="fa-solid fa-caret-down text-[10px]"></i>
+            </a>
+            <a href="javascript:void(0)">ติดต่อสอบถาม</a>
+            <a href="javascript:void(0)">ออกจากระบบ</a>
+        </div>
+    </header>
+
+    <main class="portal-container">
+        
+        <!-- ==================== LEFT SIDEBAR (STUDENT PROFILE) ==================== -->
+        <aside class="left-sidebar">
+            <div class="profile-inner-card">
+                
+                <!-- รหัสและชื่อนักศึกษา -->
+                <div class="student-id-header editable-area">
+                    <div>ID. 69702222</div>
+                    <div>นาย ภาณุพงษ์ ไชยสงค์</div>
+                </div>
+
+                <!-- กรอบรูปนักศึกษา (คลิกเพื่อเปลี่ยนรูปได้) -->
+                <div class="photo-frame-wrapper" title="คลิกเพื่อเลือกรูปภาพนักศึกษาจากเครื่อง">
+                    <label for="upload-student">
+                        <div class="student-oval-photo">
+                            <img id="student-photo-img" 
+                                 src="student.jpg" 
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'; createDefaultAvatar();" 
+                                 alt="รูปนักศึกษา">
+                        </div>
+                        <div class="photo-overlay-badge" title="คลิกอัปโหลดรูป">
+                            <i class="fa-solid fa-camera"></i>
+                        </div>
+                    </label>
+                    <input type="file" id="upload-student" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'student-photo-img')">
+                </div>
+
+                <!-- ข้อมูลประวัตินักศึกษา และ ข้อมูลศาสนาอิสลาม -->
+                <div class="bio-details editable-area">
+                    <div>ศาสนา : <span class="text-islam-green">อิสลาม (Islam)</span></div>
+                    <div>ชื่อทางศาสนา : อับดุลเลาะฮ์ (Abdullah)</div>
+                    <div>คณะ : บริหารธุรกิจ</div>
+                    <div>สาขาวิชา : การบริหารและการจัดการสมัยใหม่</div>
+                    <div>รอบ : เทียบโอนรอบปกติ</div>
+                    <div>สภาพ น.ศ. : <span class="text-status-red">ปกติ</span></div>
+                    <div>สภาพการเรียน : <span class="text-status-red">ปกติ</span></div>
+                    <div>ภาคเรียน : 1 / 2569</div>
+                    <div>เกรดเฉลี่ยสะสม : 0.00</div>
+                    <div>หน่วยกิตสะสม : 3</div>
+                    <div>ชมรม : ชมรมมุสลิมมหาวิทยาลัยศรีปทุม</div>
+                    <div>e-mail : phanuphongchaisong@gmail.com</div>
+                    <div>เบอร์โทร : <span class="text-link-blue">0659728104</span></div>
+                    <div>ประเภท น.ศ. : ทุนการศึกษาโควตาศรีปทุม ชลบุรี (10,000 ภาคละ 2,500)</div>
+                </div>
+
+                <!-- กล่องอาจารย์ที่ปรึกษา -->
+                <div class="advisor-box">
+                    <label for="upload-advisor" title="คลิกเพื่อเปลี่ยนรูปอาจารย์ที่ปรึกษา">
+                        <div class="advisor-oval-photo">
+                            <img id="advisor-photo-img" 
+                                 src="advisor.jpg" 
+                                 onerror="this.onerror=null; renderAdvisorPlaceholder();" 
+                                 alt="อาจารย์ที่ปรึกษา">
+                        </div>
+                    </label>
+                    <input type="file" id="upload-advisor" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'advisor-photo-img')">
+                    <div class="advisor-text editable-area">
+                        <div>อาจารย์ที่ปรึกษา</div>
+                        <div>อาจารย์ นิคม หมูหล้า</div>
+                    </div>
+                </div>
+
+                <!-- ข้อมูลติดต่อมหาวิทยาลัยด้านล่างซ้าย -->
+                <div class="uni-contact-footer editable-area">
+                    <div class="font-semibold text-gray-800">มหาวิทยาลัยศรีปทุม ชลบุรี</div>
+                    <div>โทรศัพท์ : <span class="text-link-blue">038-146-123</span></div>
+                    <div>โทรสาร : <span class="text-link-blue">038-146-011</span></div>
+                    <div>e-mail : <span class="text-link-blue">computer@chonburi.spu.ac.th</span></div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- ==================== RIGHT CONTENT AREA ==================== -->
+        <section class="right-content">
             
-            <div class="student-header">
-                <div>ID. 69702222</div>
-                <div>นาย ภาณุพงษ์ ไชยสงค์ (อับดุลเลาะฮ์)</div>
-            </div>
-
-            <!-- รูปนักศึกษา (คลิกที่รูปเพื่อเลือกรูปจากในเครื่องได้ทันที) -->
-            <div class="student-photo-container">
-                <label for="upload-student-photo">
-                    <div class="student-photo-wrapper" title="คลิกเพื่อเปลี่ยนรูปภาพ">
-                        <img id="student-img" src="student.jpg" onerror="this.src='https://via.placeholder.com/115x142?text=Click+to+Upload'" alt="รูปนักศึกษา">
+            <!-- 1. แถบปุ่มเมนูสีสัน 2 แถว -->
+            <div class="menu-grid-container">
+                <!-- แถวที่ 1 (10 ปุ่ม) -->
+                <div class="menu-row">
+                    <div class="menu-btn bg-m-blue">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-user"></i>
+                            <span class="menu-btn-text">ข้อมูลนักศึกษา</span>
+                        </div>
+                        <i class="fa-solid fa-caret-down menu-caret"></i>
                     </div>
-                </label>
-                <div class="upload-hint">(แตะที่รูปเพื่อเลือกรูปภาพ)</div>
-                <input type="file" id="upload-student-photo" accept="image/*" style="display: none;" onchange="previewImage(event, 'student-img')">
-            </div>
 
-            <!-- ข้อมูลการศึกษาและข้อมูลศาสนาอิสลาม -->
-            <div class="info-list">
-                <div>ศาสนา : <span class="religion-highlight">อิสลาม (Islam)</span></div>
-                <div>ชื่อทางศาสนา : อับดุลเลาะฮ์ (Abdullah)</div>
-                <div>วุฒิทางศาสนา : อิสลามศึกษาตอนปลาย (ซานาวีย์)</div>
-                <div>คณะ : บริหารธุรกิจและอิสลามศึกษา</div>
-                <div>สาขาวิชา : การบริหารและการจัดการสมัยใหม่ (ธุรกิจฮาลาล)</div>
-                <div>รอบ : เทียบโอนรอบปกติ</div>
-                <div>สภาพ น.ศ. : <span class="status-normal">ปกติ</span></div>
-                <div>สภาพการเรียน : <span class="status-normal">ปกติ</span></div>
-                <div>ภาคเรียน : 1 / 2569</div>
-                <div>เกรดเฉลี่ยสะสม : 0.00</div>
-                <div>หน่วยกิตสะสม : 3</div>
-                <div>สังกัดชมรม : ชมรมมุสลิมมหาวิทยาลัยศรีปทุม</div>
-                <div>e-mail : phanuphongchaisong@gmail.com</div>
-                <div>เบอร์โทร : <a href="tel:0659728104" class="link-blue">0659728104</a></div>
-                <div>ประเภท น.ศ. : ทุนการศึกษาโควตาศรีปทุม ชลบุรี (10,000 ภาคละ 2,500)</div>
-            </div>
-
-            <!-- ข้อมูลอาจารย์ที่ปรึกษา -->
-            <div class="advisor-card">
-                <label for="upload-advisor-photo">
-                    <div class="advisor-photo-wrapper" title="คลิกเพื่อเปลี่ยนรูปอาจารย์">
-                        <img id="advisor-img" src="advisor.jpg" onerror="this.src='https://via.placeholder.com/110x130?text=Advisor'" alt="รูปอาจารย์ที่ปรึกษา">
+                    <div class="menu-btn bg-m-maroon">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span class="menu-btn-text">ข้อมูลการศึกษา</span>
+                        </div>
+                        <i class="fa-solid fa-caret-down menu-caret"></i>
                     </div>
-                </label>
-                <input type="file" id="upload-advisor-photo" accept="image/*" style="display: none;" onchange="previewImage(event, 'advisor-img')">
-                <div class="advisor-info">
-                    <div>อาจารย์ที่ปรึกษา</div>
-                    <div>อาจารย์ นิคม หมูหล้า</div>
+
+                    <div class="menu-btn bg-m-orange">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-star"></i>
+                            <span class="menu-btn-text">ข้อมูลความประพฤติ</span>
+                        </div>
+                        <i class="fa-solid fa-caret-down menu-caret"></i>
+                    </div>
+
+                    <div class="menu-btn bg-m-green">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-book"></i>
+                            <span class="menu-btn-text">ผลสอบภาษาอังกฤษ</span>
+                        </div>
+                        <i class="fa-solid fa-caret-down menu-caret"></i>
+                    </div>
+
+                    <div class="menu-btn bg-m-red">
+                        <div class="menu-btn-left">
+                            <i class="fa-regular fa-calendar-check"></i>
+                            <span class="menu-btn-text">กิจกรรม</span>
+                        </div>
+                        <i class="fa-solid fa-caret-down menu-caret"></i>
+                    </div>
+
+                    <div class="menu-btn bg-m-purple">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-calendar-days"></i>
+                            <span class="menu-btn-text">ตารางเรียน/สอบ</span>
+                        </div>
+                        <i class="fa-solid fa-caret-down menu-caret"></i>
+                    </div>
+
+                    <div class="menu-btn bg-m-brown">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-pen"></i>
+                            <span class="menu-btn-text">ลงทะเบียนเรียน</span>
+                        </div>
+                        <i class="fa-solid fa-caret-down menu-caret"></i>
+                    </div>
+
+                    <div class="menu-btn bg-m-cyan">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-Sitemap fa-network-wired"></i>
+                            <span class="menu-btn-text">จองวิชาเรียนล่วงหน้า</span>
+                        </div>
+                        <i class="fa-solid fa-caret-down menu-caret"></i>
+                    </div>
+
+                    <div class="menu-btn bg-m-magenta">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-globe"></i>
+                            <span class="menu-btn-text">ระบบ SPUKC LMS (e-Learning)</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-btn bg-m-amber">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-users"></i>
+                            <span class="menu-btn-text">แบบประเมินอาจารย์/ทวนสอบ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- แถวที่ 2 (7 ปุ่ม) -->
+                <div class="menu-row">
+                    <div class="menu-btn bg-m-darkgreen">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-book-open"></i>
+                            <span class="menu-btn-text">คู่มือการลงทะเบียน</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-btn bg-m-crimson">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-calendar-week"></i>
+                            <span class="menu-btn-text">ตารางสอนอาจารย์</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-btn bg-m-violet">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-award"></i>
+                            <span class="menu-btn-text">The Professional</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-btn bg-m-darkbrown">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-envelope"></i>
+                            <span class="menu-btn-text">Web Mail</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-btn bg-m-steelblue">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-id-card"></i>
+                            <span class="menu-btn-text">ข้อมูลผู้ปกครอง</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-btn bg-m-wine">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-chart-pie"></i>
+                            <span class="menu-btn-text">รายงานผลการประเมินอาจารย์และสิ่งสนับสนุน</span>
+                        </div>
+                    </div>
+
+                    <div class="menu-btn bg-m-burnt">
+                        <div class="menu-btn-left">
+                            <i class="fa-solid fa-coins"></i>
+                            <span class="menu-btn-text">ข้อมูลการชำระเงิน</span>
+                        </div>
+                        <i class="fa-solid fa-caret-down menu-caret"></i>
+                    </div>
                 </div>
             </div>
 
-            <!-- ข้อมูลติดต่อสถาบัน -->
-            <div class="footer-contact">
-                <div class="uni-name">มหาวิทยาลัยศรีปทุม ชลบุรี</div>
-                <div>โทรศัพท์ : <span class="link-blue">038-146-123</span></div>
-                <div>โทรสาร : <span class="link-blue">038-146-011</span></div>
-                <div>e-mail : <a href="mailto:computer@chonburi.spu.ac.th" class="link-blue">computer@chonburi.spu.ac.th</a></div>
+            <!-- 2. กล่องการ์ดประกาศ 3 รายการ -->
+            <div class="white-section-box">
+                <div class="announcement-grid">
+                    
+                    <!-- การ์ดประกาศ 1 -->
+                    <div class="announce-card">
+                        <div class="announce-banner" style="background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);">
+                            <div class="flex justify-between items-center">
+                                <span class="bg-pink-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">SPU</span>
+                                <span class="text-[8px] text-slate-600 font-semibold">ตารางกำหนดการชำระเงิน</span>
+                            </div>
+                            <div class="bg-white/90 rounded px-1.5 py-1 text-center border border-red-200">
+                                <div class="text-[9px] text-red-600 font-bold">ภาค 1/2569</div>
+                                <div class="text-[7.5px] text-slate-700 leading-tight">(สำหรับนักศึกษาเทียบโอนปกติ)<br>จ่าย 7 - 11 ก.ค. 2569</div>
+                            </div>
+                        </div>
+                        <div class="announce-desc editable-area">
+                            ตารางกำหนดการชำระเงิน (สำหรับนักศึกษาเทียบโอนรอบปกติ)
+                        </div>
+                    </div>
+
+                    <!-- การ์ดประกาศ 2 -->
+                    <div class="announce-card">
+                        <div class="announce-banner" style="background: linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%);">
+                            <div class="flex justify-between items-center">
+                                <span class="text-[8.5px] text-blue-900 font-bold">ตารางกำหนดการ</span>
+                                <span class="bg-blue-700 text-white text-[8px] font-bold px-1 py-0.5 rounded">SPU</span>
+                            </div>
+                            <div class="bg-white/90 rounded px-1.5 py-1 text-center border border-blue-200">
+                                <div class="text-[8.5px] text-blue-800 font-bold">ลงทะเบียนวิชาเรียน ภาค 1/2569</div>
+                                <div class="text-[8px] text-orange-600 font-semibold">29 มิ.ย. - 3 ก.ค. 2569</div>
+                            </div>
+                        </div>
+                        <div class="announce-desc editable-area">
+                            ตารางกำหนดการลงทะเบียนวิชาเรียน ภาค 1/2569 วันที่ 29 มิ.ย. - 3 ก.ค. 2569
+                        </div>
+                    </div>
+
+                    <!-- การ์ดประกาศ 3 -->
+                    <div class="announce-card">
+                        <div class="announce-banner" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);">
+                            <div class="flex justify-between items-center">
+                                <span class="bg-amber-700 text-white text-[8px] font-bold px-1 py-0.5 rounded">SPU</span>
+                                <span class="text-[8px] text-amber-900 font-bold">การแต่งกายนักศึกษา</span>
+                            </div>
+                            <div class="bg-white/90 rounded px-1.5 py-1 flex items-center justify-around border border-amber-300">
+                                <i class="fa-solid fa-user-tie text-amber-800 text-lg"></i>
+                                <div class="text-[7.5px] text-slate-700 leading-tight text-left">ระเบียบชุดนักศึกษา<br>และชุดปฏิบัติการ</div>
+                            </div>
+                        </div>
+                        <div class="announce-desc editable-area">
+                            ตารางกำหนดการแต่งกายนักศึกษา
+                        </div>
+                    </div>
+
+                </div>
             </div>
 
-        </div>
-    </div>
+            <!-- 3. ตารางรายการค่าหน่วยกิตและค่าธรรมเนียมการศึกษา -->
+            <div class="table-section-box">
+                <div class="section-blue-header editable-area">
+                    รายการค่าหน่วยกิตและค่าธรรมเนียมการศึกษา ที่ยังไม่ได้ชำระ ภาค 1 / 2569
+                </div>
 
-    <!-- แถบเมนูด้านล่าง -->
-    <div class="bottom-menus">
-        <div class="menu-bar blue">
-            <span>&#128100;</span> ข้อมูลนักศึกษา
-        </div>
-        <div class="menu-bar red">
-            <span>&#127891;</span> ข้อมูลการศึกษา
-        </div>
-    </div>
+                <table class="spu-table editable-area">
+                    <thead>
+                        <tr>
+                            <th style="width: 14%; text-align: left;">รหัสวิชา</th>
+                            <th style="width: 38%; text-align: left;">ชื่อวิชา</th>
+                            <th style="width: 12%;">หน่วยกิต</th>
+                            <th style="width: 12%;">กลุ่มเรียนที่</th>
+                            <th style="width: 12%;">กลุ่มสอบที่</th>
+                            <th style="width: 12%; text-align: right;">จำนวนเงิน</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>BUS11167</td>
+                            <td>การจัดการธุรกิจสมัยใหม่</td>
+                            <td class="text-center">3</td>
+                            <td class="text-center">04</td>
+                            <td class="text-center"></td>
+                            <td class="text-right">4,800</td>
+                        </tr>
+                        <tr>
+                            <td>DBC11167</td>
+                            <td>โลกธุรกิจดิจิทัลและนวัตกรรมบริการ</td>
+                            <td class="text-center">3</td>
+                            <td class="text-center">03</td>
+                            <td class="text-center"></td>
+                            <td class="text-right">4,800</td>
+                        </tr>
+                        <tr>
+                            <td>DBC21667</td>
+                            <td>การตลาดและการบริหารลูกค้ายุคดิจิทัลอย่างยั่งยืน</td>
+                            <td class="text-center">3</td>
+                            <td class="text-center">04</td>
+                            <td class="text-center"></td>
+                            <td class="text-right">4,800</td>
+                        </tr>
+                        <tr>
+                            <td>MGT22167</td>
+                            <td>การปฏิบัติการธุรกิจบริการ</td>
+                            <td class="text-center">3</td>
+                            <td class="text-center">03</td>
+                            <td class="text-center"></td>
+                            <td class="text-right">4,800</td>
+                        </tr>
+                        <tr>
+                            <td>MGT22267</td>
+                            <td>การจัดการโครงการอย่างมืออาชีพ</td>
+                            <td class="text-center">3</td>
+                            <td class="text-center">02</td>
+                            <td class="text-center"></td>
+                            <td class="text-right">4,800</td>
+                        </tr>
+                        <tr>
+                            <td>MGT23267</td>
+                            <td>หลักการจัดการโลจิสติกส์และโซ่อุปทาน</td>
+                            <td class="text-center">3</td>
+                            <td class="text-center">09</td>
+                            <td class="text-center"></td>
+                            <td class="text-right">4,800</td>
+                        </tr>
+                        <tr class="summary-row">
+                            <td colspan="5" class="text-right">รวมค่าหน่วยกิต</td>
+                            <td class="text-right">28,800</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-    <!-- สคริปต์สำหรับอัปโหลดรูปจากเครื่องมาแสดงผลทันที -->
+                <div class="sub-gray-header editable-area">
+                    รายการค่าธรรมเนียมที่ยังไม่ได้ชำระ
+                </div>
+
+                <table class="spu-table editable-area">
+                    <tbody>
+                        <tr>
+                            <td style="width: 88%;">• ค่าประกันอุบัติเหตุ</td>
+                            <td style="width: 12%;" class="text-right">250</td>
+                        </tr>
+                        <tr>
+                            <td>• ค่าบำรุงการศึกษาภาคปกติ</td>
+                            <td class="text-right">7,000</td>
+                        </tr>
+                        <tr>
+                            <td>• ค่ากิจกรรมนักศึกษา</td>
+                            <td class="text-right">500</td>
+                        </tr>
+                        <tr>
+                            <td>• ค่าบริการคอมพิวเตอร์</td>
+                            <td class="text-right">2,800</td>
+                        </tr>
+                        <tr>
+                            <td>• ค่าบัตรนักศึกษา</td>
+                            <td class="text-right">200</td>
+                        </tr>
+                        <tr class="summary-row">
+                            <td class="text-right">รวมค่าธรรมเนียม</td>
+                            <td class="text-right">10,750</td>
+                        </tr>
+                        <tr class="summary-row">
+                            <td class="text-right">รวมทั้งหมด</td>
+                            <td class="text-right">39,550</td>
+                        </tr>
+                        <tr class="summary-row">
+                            <td class="text-right">หักทุนการศึกษาโควตาศรีปทุม ชลบุรี (10,000 ภาคละ 2,500)</td>
+                            <td class="text-right">2,500</td>
+                        </tr>
+                        <tr class="summary-row">
+                            <td class="text-right font-bold">รวมเงินที่ต้องชำระ</td>
+                            <td class="text-right font-bold">37,050</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 4. ตารางเรียนนักศึกษาด้านล่าง -->
+            <div class="table-section-box">
+                <div class="section-blue-header">
+                    ตารางเรียนนักศึกษา
+                </div>
+
+                <div class="schedule-tabs">
+                    <div class="sched-tab">ตารางเรียนนักศึกษา</div>
+                    <div class="sched-tab inactive">ตารางสอบนักศึกษา</div>
+                </div>
+
+                <div class="schedule-workspace">
+                    <button class="print-btn" onclick="window.print()">
+                        <i class="fa-solid fa-print text-sky-700"></i> พิมพ์
+                    </button>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
     <script>
-        function previewImage(event, targetId) {
+        // ฟังก์ชันอัปโหลดรูปภาพจากเครื่องมาแสดงในกรอบวงรีทันที
+        function handleImageUpload(event, imgElementId) {
             const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById(targetId).src = e.target.result;
-                    // ซ่อนข้อความแนะนำหลังจากอัปโหลดรูปแล้ว
-                    if (targetId === 'student-img') {
-                        const hint = document.querySelector('.upload-hint');
-                        if (hint) hint.style.display = 'none';
-                    }
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgEl = document.getElementById(imgElementId);
+                if (imgEl) {
+                    imgEl.src = e.target.result;
                 }
-                reader.readAsDataURL(file);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // สร้างรูปจำลองชุดนักศึกษาชายเริ่มต้น (กรณีไม่ได้วางไฟล์ student.jpg ไว้ในโฟลเดอร์)
+        function createDefaultAvatar() {
+            const svgStudent = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 150" width="100%" height="100%">
+                <rect width="120" height="150" fill="#9ca3af"/>
+                <!-- เสื้อเชิ้ตขาวชุดนักศึกษา -->
+                <path d="M15 150 C15 110, 105 110, 105 150 Z" fill="#ffffff"/>
+                <!-- ปกเสื้อและเนคไทสีกรมท่า -->
+                <polygon points="45,112 60,128 75,112 68,105 52,105" fill="#f3f4f6"/>
+                <polygon points="56,122 64,122 66,150 54,150" fill="#1e3a8a"/>
+                <!-- คอและใบหน้า -->
+                <rect x="51" y="88" width="18" height="22" fill="#e5b899"/>
+                <ellipse cx="60" cy="66" rx="24" ry="29" fill="#ecc3a5"/>
+                <!-- ทรงผมชาย -->
+                <path d="M35 62 C33 35, 87 35, 85 62 C80 48, 40 48, 35 62 Z" fill="#27272a"/>
+                <!-- ตา คิ้ว จมูก ปาก -->
+                <ellipse cx="51" cy="64" rx="2.5" ry="2" fill="#18181b"/>
+                <ellipse cx="69" cy="64" rx="2.5" ry="2" fill="#18181b"/>
+                <path d="M45 58 Q51 55 56 58" stroke="#27272a" stroke-width="2" fill="none"/>
+                <path d="M64 58 Q69 55 75 58" stroke="#27272a" stroke-width="2" fill="none"/>
+                <path d="M54 80 Q60 84 66 80" stroke="#9a5b4a" stroke-width="2" fill="none"/>
+            </svg>`;
+            const imgEl = document.getElementById('student-photo-img');
+            if (imgEl) {
+                imgEl.style.transform = 'scale(1.0)';
+                imgEl.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(svgStudent);
+            }
+        }
+
+        // สร้างรูปจำลองอาจารย์ที่ปรึกษาเริ่มต้น
+        function renderAdvisorPlaceholder() {
+            const svgAdvisor = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 145" width="100%" height="100%">
+                <rect width="120" height="145" fill="#e8b4d0"/>
+                <!-- สูทสีกรมท่า -->
+                <path d="M18 145 C18 105, 102 105, 102 145 Z" fill="#374151"/>
+                <polygon points="50,108 60,145 70,108" fill="#ffffff"/>
+                <rect x="52" y="85" width="16" height="20" fill="#f1c6ab"/>
+                <ellipse cx="60" cy="64" rx="22" ry="26" fill="#f5d0b8"/>
+                <path d="M37 60 C35 34, 85 34, 83 60 C77 45, 43 45, 37 60 Z" fill="#3f2e21"/>
+                <ellipse cx="52" cy="63" rx="2" ry="2" fill="#1f2937"/>
+                <ellipse cx="68" cy="63" rx="2" ry="2" fill="#1f2937"/>
+                <path d="M54 77 Q60 81 66 77" stroke="#b45309" stroke-width="2" fill="none"/>
+            </svg>`;
+            const advEl = document.getElementById('advisor-photo-img');
+            if (advEl) {
+                advEl.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(svgAdvisor);
+            }
+        }
+
+        // เมื่ออัปโหลดรูปจริง ให้ปรับสเกลซูมใบหน้าเหมือนรูปติดบัตร
+        document.getElementById('upload-student').addEventListener('change', function() {
+            const imgEl = document.getElementById('student-photo-img');
+            imgEl.style.objectFit = 'cover';
+            imgEl.style.objectPosition = 'center 15%';
+            imgEl.style.transform = 'scale(1.35)';
+        });
+
+        // เปิด/ปิด โหมดคลิกแก้ไขข้อความได้ทุกจุดบนหน้าเว็บ
+        let isEditMode = false;
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const editableBlocks = document.querySelectorAll('.editable-area');
+            const btn = document.getElementById('toggle-edit-btn');
+            
+            editableBlocks.forEach(el => {
+                el.setAttribute('contenteditable', isEditMode ? 'true' : 'false');
+            });
+
+            if (isEditMode) {
+                btn.innerHTML = '<i class="fa-solid fa-check text-amber-300"></i> บันทึกการแก้ไข';
+                btn.style.color = '#fde047';
+            } else {
+                btn.innerHTML = '<i class="fa-solid fa-pen-to-square text-emerald-400"></i> แก้ไขข้อมูลบนหน้าเว็บ';
+                btn.style.color = '#d0e2f2';
             }
         }
     </script>
-
 </body>
 </html>
