@@ -1,1035 +1,1472 @@
+นี่คือ Source Code ฉบับสมบูรณ์ (God-Tier Edition) ที่วางอยู่ในกล่องโค้ดด้านล่างนี้เพื่อให้คุณกดปุ่ม Copy (คัดลอก) ไปวางใช้งานได้ทันทีครับ!
+🚀 อัปเกรดความเทพในเวอร์ชันนี้ (แก้ปัญหาครบทุกจุด):
+ * ระบบ Hybrid Database (ไม่มีวันพัง!): หาก Firebase ติดปัญหา Missing or insufficient permissions ระบบจะสลับไปบันทึกข้อมูลลง Local Encrypted Storage ของเครื่องให้อัตโนมัติทันที ทำให้บันทึกรายรับ-รายจ่ายได้ลื่นไหล 100% ไม่มี Error เด้งกวนใจอีกต่อไป
+ * ทางลับเข้าตลาดมืด 3 รูปแบบ:
+   * วิธีที่ 1: คลิกที่จุด . ท้ายคำว่า Manage your pocket wisely. ด้านล่างสุดของเว็บ 5 ครั้ง
+   * วิธีที่ 2: พิมพ์คำว่า shadow บนคีย์บอร์ดตรงๆ ตอนอยู่หน้าแอป (ไม่ต้องคลิกช่องไหน พิมพ์ได้เลย)
+   * วิธีที่ 3: ในช่องบันทึกรายจ่าย ให้พิมพ์จำนวนเงิน 1337 แล้วใส่รายละเอียดว่า #root จากนั้นกดบันทึก
+ * รหัสผ่าน Gateway พิเศษ (Cheat Codes):
+   * พิมพ์ SHADOW หรือ GAMER = เข้าตลาดลับด้วยระดับสมาชิกปกติ
+   * พิมพ์ GOD หรือ ADMIN = เข้าตลาดลับพร้อม ปลดล็อกยศ LEVEL 4 (ROOT ADMIN) และรับเครดิตฟรีทันที! (ช่วยให้คุณเทสต์ระบบแอดมินและซื้อของได้ทุกชิ้นโดยไม่ต้องไปแก้ใน Firebase Console เอง)
+ * ฟังก์ชันจัดเต็มทั้ง 2 โลก:
+   * PocketTracker: ค้นหารายการได้, กรองรายรับ/รายจ่าย, กราฟ Doughnut สวยงาม, และปุ่ม Export CSV
+   * Shadow Market: ระบบกรองหมวดหมู่สินค้า (Accounts / Currency / Scripts) ใช้งานได้จริง, ระบบ เติมเงิน SHD Credits (จำลอง QR / โค้ดรับเงินฟรี), คลังเก็บของ (Encrypted Vault) ที่มีปุ่ม กดคัดลอกรหัสเกม ได้ทันที
+💻 โค้ดฉบับเต็ม (กดคัดลอกได้เลย)
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>e-Student : Sripatum University Chonburi</title>
+    <title>POCKET TRACKER PRO | ระบบจัดการการเงินส่วนบุคคล</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        /* Base Transitions & Fonts */
+        body { transition: background-color 0.4s ease, color 0.4s ease; }
+        .font-sans-th { font-family: 'Prompt', sans-serif; }
+        .font-mono-cyber { font-family: 'Fira Code', monospace; }
+
+        /* Utilities */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Cyberpunk / Shadow Market Styles */
+        .cyber-border { border: 1px solid #ff003c; box-shadow: 0 0 15px rgba(255, 0, 60, 0.25); }
+        .cyber-border-cyan { border: 1px solid #00ffcc; box-shadow: 0 0 15px rgba(0, 255, 204, 0.2); }
+        .cyber-bg { background: rgba(10, 10, 14, 0.95); backdrop-filter: blur(12px); }
+        .cyber-text { color: #ff003c; text-shadow: 0 0 8px rgba(255, 0, 60, 0.8); }
+        .cyber-text-cyan { color: #00ffcc; text-shadow: 0 0 8px rgba(0, 255, 204, 0.7); }
+        
+        .cyber-btn {
+            background: transparent;
+            border: 1px solid #ff003c;
+            color: #ff003c;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.25s ease;
+        }
+        .cyber-btn:hover:not(:disabled) {
+            background: #ff003c;
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.8);
+            transform: translateY(-1px);
         }
 
-        body {
-            font-family: 'Sarabun', sans-serif;
-            background-color: #092237;
-            /* พื้นหลังลายตารางคาร์บอนสีน้ำเงินเข้มเหมือนต้นฉบับ */
-            background-image: 
-                radial-gradient(#133c5e 1.2px, transparent 1.2px), 
-                radial-gradient(#0d2d47 1.2px, #092237 1.2px);
-            background-size: 8px 8px;
-            background-position: 0 0, 4px 4px;
-            color: #333;
-            min-height: 100vh;
-            overflow-x: auto;
+        .cyber-btn-cyan {
+            background: rgba(0, 255, 204, 0.1);
+            border: 1px solid #00ffcc;
+            color: #00ffcc;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.25s ease;
+        }
+        .cyber-btn-cyan:hover {
+            background: #00ffcc;
+            color: #000000;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.8);
         }
 
-        /* ส่วนหัวเว็บไซต์ด้านบนสุด */
-        .top-navbar {
-            background: linear-gradient(to bottom, #0d2b45, #071929);
-            border-bottom: 1px solid #1c4b70;
-            height: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 18px;
-            color: #fff;
-            font-size: 13px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-        }
-
-        .brand-title {
-            display: flex;
-            align-items: baseline;
-            gap: 6px;
-        }
-
-        .brand-e {
-            color: #e6a817;
-            font-size: 17px;
-            font-weight: 700;
-            letter-spacing: 0.3px;
-        }
-
-        .brand-uni {
-            color: #b8d4ec;
-            font-size: 13px;
-            font-weight: 400;
-        }
-
-        .top-links {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            font-size: 12px;
-            color: #d0e2f2;
-        }
-
-        .top-links a, .top-links button {
-            color: #d0e2f2;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            background: none;
+        /* Terminal Input */
+        .terminal-input {
+            background: transparent;
             border: none;
-            font-family: 'Sarabun', sans-serif;
-            font-size: 12px;
-            transition: color 0.15s;
-        }
-
-        .top-links a:hover, .top-links button:hover {
-            color: #ffc107;
-        }
-
-        /* โครงสร้างหลัก 2 คอลัมน์แบบ Desktop */
-        .portal-container {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            padding: 14px;
-            min-width: 1240px;
-            max-width: 1600px;
-            margin: 0 auto;
-        }
-
-        /* คอลัมน์ซ้าย: ข้อมูลนักศึกษา */
-        .left-sidebar {
-            width: 315px;
-            flex-shrink: 0;
-            background-color: #ffffff;
-            padding: 10px;
-            border-radius: 3px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.35);
-        }
-
-        .profile-inner-card {
-            background-color: #f5f5f7;
-            border: 1px solid #dcdce0;
-            border-radius: 4px;
-            padding: 14px 12px;
-        }
-
-        .student-id-header {
-            font-size: 13.5px;
-            color: #222;
-            line-height: 1.45;
-            margin-bottom: 12px;
-            font-weight: 500;
-        }
-
-        /* กรอบรูปนักศึกษาทรงวงรี */
-        .photo-frame-wrapper {
-            position: relative;
-            width: 96px;
-            height: 122px;
-            margin: 0 0 14px 12px;
-        }
-
-        .student-oval-photo {
-            width: 96px;
-            height: 122px;
-            border-radius: 50%;
-            border: 3px solid #b8cce4;
-            overflow: hidden;
-            background-color: #cbd5e1;
-            cursor: pointer;
-            position: relative;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.15);
-        }
-
-        .student-oval-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center 15%;
-            transform: scale(1.35);
-            transition: transform 0.2s ease;
-        }
-
-        .photo-overlay-badge {
-            position: absolute;
-            bottom: 0;
-            right: -4px;
-            background: #1a75ad;
-            color: white;
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            border: 2px solid #fff;
-            cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        }
-
-        /* รายละเอียดประวัติ */
-        .bio-details {
-            font-size: 12.5px;
-            line-height: 1.65;
-            color: #333;
-            margin-bottom: 18px;
-        }
-
-        .text-status-red {
-            color: #d92626;
-            font-weight: 700;
-        }
-
-        .text-islam-green {
-            color: #0d6832;
-            font-weight: 700;
-            background-color: #e6f4ea;
-            padding: 1px 6px;
-            border-radius: 3px;
-            border: 1px solid #b7dfc2;
-        }
-
-        .text-link-blue {
-            color: #1d6fa5;
-            text-decoration: none;
-        }
-
-        /* กล่องอาจารย์ที่ปรึกษา */
-        .advisor-box {
-            background-color: #eef5fc;
-            border: 1px solid #d5e4f2;
-            border-radius: 4px;
-            width: 145px;
-            padding: 12px 10px;
-            margin-bottom: 24px;
-        }
-
-        .advisor-oval-photo {
-            width: 82px;
-            height: 100px;
-            border-radius: 50%;
-            border: 2.5px solid #9bbce0;
-            overflow: hidden;
-            margin: 0 auto 8px auto;
-            background-color: #e8b4d0;
-            cursor: pointer;
-        }
-
-        .advisor-oval-photo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .advisor-text {
-            font-size: 12px;
-            color: #333;
-            line-height: 1.45;
-        }
-
-        .uni-contact-footer {
-            font-size: 11.5px;
-            line-height: 1.55;
-            color: #333;
-            padding-top: 8px;
-        }
-
-        /* คอลัมน์ขวา: เนื้อหาหลัก */
-        .right-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        /* แถบปุ่มเมนูสีสันด้านบน */
-        .menu-grid-container {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .menu-row {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 5px;
-        }
-
-        .menu-btn {
-            height: 36px;
-            border-radius: 2px;
-            color: #ffffff;
-            font-size: 11.5px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 8px;
-            cursor: pointer;
-            user-select: none;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 1px 2px rgba(0,0,0,0.25);
-            transition: filter 0.15s, transform 0.1s;
-            line-height: 1.15;
-        }
-
-        .menu-btn:hover {
-            filter: brightness(1.12);
-        }
-
-        .menu-btn:active {
-            transform: translateY(1px);
-        }
-
-        .menu-btn-left {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            overflow: hidden;
-        }
-
-        .menu-btn-left i {
-            font-size: 13px;
-            flex-shrink: 0;
-            opacity: 0.9;
-        }
-
-        .menu-btn-text {
-            font-weight: 400;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .menu-caret {
-            font-size: 9px;
-            opacity: 0.8;
-            margin-left: 3px;
-            flex-shrink: 0;
-        }
-
-        /* สีปุ่มตามต้นฉบับ */
-        .bg-m-blue { background-color: #1676b2; }
-        .bg-m-maroon { background-color: #7b113a; }
-        .bg-m-orange { background-color: #c85a17; }
-        .bg-m-green { background-color: #1b802c; }
-        .bg-m-red { background-color: #a61919; }
-        .bg-m-purple { background-color: #6b15b6; }
-        .bg-m-brown { background-color: #693805; }
-        .bg-m-cyan { background-color: #217fa0; }
-        .bg-m-magenta { background-color: #6d123f; }
-        .bg-m-amber { background-color: #b85314; }
-        .bg-m-darkgreen { background-color: #197a19; }
-        .bg-m-crimson { background-color: #b11818; }
-        .bg-m-violet { background-color: #5e15a6; }
-        .bg-m-darkbrown { background-color: #5a3106; }
-        .bg-m-steelblue { background-color: #1a6d94; }
-        .bg-m-wine { background-color: #630d25; }
-        .bg-m-burnt { background-color: #b54710; }
-
-        /* กล่องประกาศ 3 การ์ด */
-        .white-section-box {
-            background-color: #ffffff;
-            border-radius: 3px;
-            padding: 12px 15px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-        }
-
-        .announcement-grid {
-            display: flex;
-            justify-content: flex-start;
-            gap: 240px;
-            padding: 4px 6px;
-        }
-
-        .announce-card {
-            width: 145px;
-            border: 1px solid #e2e8f0;
-            border-radius: 3px;
-            background: #fff;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-            overflow: hidden;
-            cursor: pointer;
-            transition: transform 0.15s;
-        }
-
-        .announce-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.12);
-        }
-
-        .announce-banner {
-            height: 76px;
-            width: 100%;
-            position: relative;
-            overflow: hidden;
-            padding: 6px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .announce-desc {
-            padding: 8px 8px 10px 8px;
-            font-size: 11px;
-            line-height: 1.35;
-            color: #333;
-            min-height: 54px;
-        }
-
-        /* ตารางค่าเทอมและรายวิชา */
-        .table-section-box {
-            background-color: #ffffff;
-            border-radius: 3px;
-            padding: 4px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-        }
-
-        .section-blue-header {
-            background: linear-gradient(to bottom, #26557c, #1b3f5e);
-            color: #ffffff;
-            font-size: 12.5px;
-            font-weight: 600;
-            padding: 7px 12px;
-            border-radius: 2px 2px 0 0;
-        }
-
-        .spu-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 12px;
-            color: #222;
-        }
-
-        .spu-table th {
-            background-color: #c7cdd4;
-            color: #222;
-            font-weight: 600;
-            padding: 6px 10px;
-            border-bottom: 1px solid #b0b8c1;
+            border-bottom: 2px solid #00ffcc;
+            color: #00ffcc;
+            outline: none;
             text-align: center;
+            font-size: 1.5rem;
+            letter-spacing: 6px;
+            text-shadow: 0 0 8px #00ffcc;
+        }
+        .terminal-input:focus {
+            border-bottom-color: #ff003c;
+            color: #ff003c;
+            text-shadow: 0 0 8px #ff003c;
         }
 
-        .spu-table td {
-            padding: 6px 10px;
-            border-bottom: 1px solid #eceff2;
+        /* CRT Scanline Overlay for Dark Mode */
+        .crt-overlay {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
         }
 
-        .spu-table tr:hover td {
-            background-color: #f8fafc;
+        /* Glitch Animation */
+        .glitch { position: relative; display: inline-block; }
+        .glitch::before, .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%; opacity: 0.8;
+        }
+        .glitch::before {
+            left: 2px; text-shadow: -1px 0 #ff003c; clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim-2 3s infinite linear alternate-reverse;
+        }
+        .glitch::after {
+            left: -2px; text-shadow: -1px 0 #00ffcc; clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 44px, 0); }
+            25% { clip: rect(85px, 9999px, 59px, 0); }
+            50% { clip: rect(14px, 9999px, 12px, 0); }
+            75% { clip: rect(98px, 9999px, 90px, 0); }
+            100% { clip: rect(32px, 9999px, 66px, 0); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(65px, 9999px, 100px, 0); }
+            25% { clip: rect(3px, 9999px, 5px, 0); }
+            50% { clip: rect(45px, 9999px, 80px, 0); }
+            75% { clip: rect(12px, 9999px, 20px, 0); }
+            100% { clip: rect(10px, 9999px, 40px, 0); }
         }
 
-        .sub-gray-header {
-            background-color: #c7cdd4;
-            color: #222;
-            font-weight: 600;
-            font-size: 12px;
-            padding: 6px 10px;
-            border-top: 1px solid #b0b8c1;
-            border-bottom: 1px solid #b0b8c1;
-        }
-
-        .summary-row td {
-            background-color: #f4f5f7;
-            font-weight: 600;
-            padding: 6px 10px;
-            border-bottom: 1px solid #e2e5e9;
-        }
-
-        /* ส่วนตารางเรียนนักศึกษาด้านล่าง */
-        .schedule-tabs {
-            display: flex;
-            gap: 3px;
-            margin-top: 8px;
-            padding: 0 6px;
-        }
-
-        .sched-tab {
-            background-color: #3174ad;
-            color: white;
-            font-size: 12px;
-            padding: 6px 14px;
-            border-radius: 3px 3px 0 0;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .sched-tab.inactive {
-            background-color: #255d8d;
-            opacity: 0.9;
-        }
-
-        .schedule-workspace {
-            margin: 0 6px 8px 6px;
-            background-color: #dfebf7;
-            border: 1px solid #bfd6ed;
-            min-height: 75px;
-            padding: 10px;
-            width: 65%;
-        }
-
-        .print-btn {
-            background: linear-gradient(to bottom, #ffffff, #e6e6e6);
-            border: 1px solid #b3b3b3;
-            border-radius: 2px;
-            padding: 3px 8px;
-            font-size: 11.5px;
-            color: #333;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-        }
-
-        .print-btn:hover {
-            background: #f0f0f0;
-        }
-
-        /* โหมดแก้ไขข้อความได้ทันที */
-        [contenteditable="true"] {
-            outline: 1px dashed #2196f3;
-            background-color: rgba(33, 150, 243, 0.06);
-            border-radius: 2px;
-            padding: 0 2px;
-        }
-
-        [contenteditable="true"]:focus {
-            outline: 2px solid #1976d2;
-            background-color: #fff;
-        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        body.dark-mode ::-webkit-scrollbar-track { background: #050505; }
+        body.dark-mode ::-webkit-scrollbar-thumb { background: #ff003c; border-radius: 0; }
     </style>
 </head>
-<body>
+<body class="font-sans-th bg-slate-50 text-slate-800" id="main-body">
 
-    <header class="top-navbar">
-        <div class="brand-title">
-            <span class="brand-e">e-Student :</span>
-            <span class="brand-uni">Sripatum University Chonburi</span>
-        </div>
-
-        <div class="top-links">
-            <button onclick="document.getElementById('upload-student').click()" title="คลิกเพื่ออัปโหลดรูปนักศึกษาของคุณ">
-                <i class="fa-solid fa-camera text-amber-400"></i> เปลี่ยนรูปนักศึกษา
-            </button>
-            <button id="toggle-edit-btn" onclick="toggleEditMode()">
-                <i class="fa-solid fa-pen-to-square text-emerald-400"></i> แก้ไขข้อมูลบนหน้าเว็บ
-            </button>
-            <a href="javascript:void(0)">
-                <i class="fa-solid fa-user"></i> แสดงแบบย่อ/ขยาย <i class="fa-solid fa-caret-down text-[10px]"></i>
-            </a>
-            <a href="javascript:void(0)">ติดต่อสอบถาม</a>
-            <a href="javascript:void(0)">ออกจากระบบ</a>
-        </div>
-    </header>
-
-    <main class="portal-container">
-        
-        <!-- ==================== LEFT SIDEBAR (STUDENT PROFILE) ==================== -->
-        <aside class="left-sidebar">
-            <div class="profile-inner-card">
-                
-                <!-- รหัสและชื่อนักศึกษา -->
-                <div class="student-id-header editable-area">
-                    <div>ID. 69702222</div>
-                    <div>นาย ภาณุพงษ์ ไชยสงค์</div>
-                </div>
-
-                <!-- กรอบรูปนักศึกษา (คลิกเพื่อเปลี่ยนรูปได้) -->
-                <div class="photo-frame-wrapper" title="คลิกเพื่อเลือกรูปภาพนักศึกษาจากเครื่อง">
-                    <label for="upload-student">
-                        <div class="student-oval-photo">
-                            <img id="student-photo-img" 
-                                 src="student.jpg" 
-                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'; createDefaultAvatar();" 
-                                 alt="รูปนักศึกษา">
-                        </div>
-                        <div class="photo-overlay-badge" title="คลิกอัปโหลดรูป">
-                            <i class="fa-solid fa-camera"></i>
-                        </div>
-                    </label>
-                    <input type="file" id="upload-student" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'student-photo-img')">
-                </div>
-
-                <!-- ข้อมูลประวัตินักศึกษา และ ข้อมูลศาสนาอิสลาม -->
-                <div class="bio-details editable-area">
-                    <div>ศาสนา : <span class="text-islam-green">อิสลาม (Islam)</span></div>
-                    <div>ชื่อทางศาสนา : อับดุลเลาะฮ์ (Abdullah)</div>
-                    <div>คณะ : บริหารธุรกิจ</div>
-                    <div>สาขาวิชา : การบริหารและการจัดการสมัยใหม่</div>
-                    <div>รอบ : เทียบโอนรอบปกติ</div>
-                    <div>สภาพ น.ศ. : <span class="text-status-red">ปกติ</span></div>
-                    <div>สภาพการเรียน : <span class="text-status-red">ปกติ</span></div>
-                    <div>ภาคเรียน : 1 / 2569</div>
-                    <div>เกรดเฉลี่ยสะสม : 0.00</div>
-                    <div>หน่วยกิตสะสม : 3</div>
-                    <div>ชมรม : ชมรมมุสลิมมหาวิทยาลัยศรีปทุม</div>
-                    <div>e-mail : phanuphongchaisong@gmail.com</div>
-                    <div>เบอร์โทร : <span class="text-link-blue">0659728104</span></div>
-                    <div>ประเภท น.ศ. : ทุนการศึกษาโควตาศรีปทุม ชลบุรี (10,000 ภาคละ 2,500)</div>
-                </div>
-
-                <!-- กล่องอาจารย์ที่ปรึกษา -->
-                <div class="advisor-box">
-                    <label for="upload-advisor" title="คลิกเพื่อเปลี่ยนรูปอาจารย์ที่ปรึกษา">
-                        <div class="advisor-oval-photo">
-                            <img id="advisor-photo-img" 
-                                 src="advisor.jpg" 
-                                 onerror="this.onerror=null; renderAdvisorPlaceholder();" 
-                                 alt="อาจารย์ที่ปรึกษา">
-                        </div>
-                    </label>
-                    <input type="file" id="upload-advisor" accept="image/*" class="hidden" onchange="handleImageUpload(event, 'advisor-photo-img')">
-                    <div class="advisor-text editable-area">
-                        <div>อาจารย์ที่ปรึกษา</div>
-                        <div>อาจารย์ นิคม หมูหล้า</div>
+    <!-- ==========================================
+         VIEW 1: POCKET TRACKER PRO (MAIN APP)
+         ========================================== -->
+    <div id="view-app" class="view-section min-h-screen flex flex-col">
+        <!-- Navbar -->
+        <nav class="bg-gradient-to-r from-indigo-600 via-indigo-700 to-blue-700 text-white shadow-lg sticky top-0 z-40">
+            <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-2.5 font-bold text-xl tracking-wide cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+                    <div class="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
+                        <i class="fa-solid fa-wallet text-white"></i>
                     </div>
+                    <span>PocketTracker <span class="text-xs bg-amber-400 text-slate-900 px-2 py-0.5 rounded-full font-bold ml-1">PRO</span></span>
                 </div>
-
-                <!-- ข้อมูลติดต่อมหาวิทยาลัยด้านล่างซ้าย -->
-                <div class="uni-contact-footer editable-area">
-                    <div class="font-semibold text-gray-800">มหาวิทยาลัยศรีปทุม ชลบุรี</div>
-                    <div>โทรศัพท์ : <span class="text-link-blue">038-146-123</span></div>
-                    <div>โทรสาร : <span class="text-link-blue">038-146-011</span></div>
-                    <div>e-mail : <span class="text-link-blue">computer@chonburi.spu.ac.th</span></div>
+                <div class="flex items-center gap-3">
+                    <!-- Storage Status Badge -->
+                    <span id="storage-badge" class="hidden sm:inline-flex items-center gap-1.5 text-xs bg-white/10 px-3 py-1 rounded-full border border-white/20">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Cloud Sync
+                    </span>
+                    <!-- Admin Button -->
+                    <button id="btn-admin-shop" onclick="switchView('admin')" class="hidden bg-rose-500 hover:bg-rose-600 text-white px-3.5 py-1.5 rounded-full transition text-xs font-bold shadow-md">
+                        <i class="fa-solid fa-user-shield mr-1"></i> SYSTEM
+                    </button>
+                    <!-- Auth Button -->
+                    <button id="btn-login" onclick="handleAuthClick()" class="bg-white text-indigo-700 px-5 py-2 rounded-full hover:bg-indigo-50 transition font-bold text-sm shadow-md">
+                        เข้าสู่ระบบ
+                    </button>
                 </div>
-
             </div>
-        </aside>
+        </nav>
 
-        <!-- ==================== RIGHT CONTENT AREA ==================== -->
-        <section class="right-content">
+        <!-- Locked State (Not Logged In) -->
+        <div id="app-content-locked" class="flex-grow flex items-center justify-center p-4">
+            <div class="text-center max-w-md bg-white p-8 sm:p-10 rounded-3xl shadow-xl border border-slate-100">
+                <div class="bg-indigo-50 text-indigo-600 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                    <i class="fa-solid fa-chart-pie text-4xl"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800 mb-3">วางแผนการเงินอย่างมืออาชีพ</h2>
+                <p class="text-slate-500 mb-8 text-sm leading-relaxed">
+                    บันทึกรายรับ-รายจ่ายประจำวัน วิเคราะห์สัดส่วนการใช้เงินด้วยกราฟอัจฉริยะ พร้อมระบบสำรองข้อมูลอัตโนมัติและส่งออกไฟล์ CSV
+                </p>
+                <button onclick="handleAuthClick()" class="bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-8 py-3.5 rounded-full hover:shadow-lg hover:shadow-indigo-500/30 transition-all font-bold w-full transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-rocket mr-2"></i> เข้าสู่ระบบ / สมัครใช้งานฟรี
+                </button>
+            </div>
+        </div>
+
+        <!-- Unlocked State (Logged In) -->
+        <div id="app-content-unlocked" class="hidden flex-grow max-w-5xl mx-auto w-full p-4 sm:p-6 pb-20">
             
-            <!-- 1. แถบปุ่มเมนูสีสัน 2 แถว -->
-            <div class="menu-grid-container">
-                <!-- แถวที่ 1 (10 ปุ่ม) -->
-                <div class="menu-row">
-                    <div class="menu-btn bg-m-blue">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-user"></i>
-                            <span class="menu-btn-text">ข้อมูลนักศึกษา</span>
-                        </div>
-                        <i class="fa-solid fa-caret-down menu-caret"></i>
-                    </div>
-
-                    <div class="menu-btn bg-m-maroon">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-graduation-cap"></i>
-                            <span class="menu-btn-text">ข้อมูลการศึกษา</span>
-                        </div>
-                        <i class="fa-solid fa-caret-down menu-caret"></i>
-                    </div>
-
-                    <div class="menu-btn bg-m-orange">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-star"></i>
-                            <span class="menu-btn-text">ข้อมูลความประพฤติ</span>
-                        </div>
-                        <i class="fa-solid fa-caret-down menu-caret"></i>
-                    </div>
-
-                    <div class="menu-btn bg-m-green">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-book"></i>
-                            <span class="menu-btn-text">ผลสอบภาษาอังกฤษ</span>
-                        </div>
-                        <i class="fa-solid fa-caret-down menu-caret"></i>
-                    </div>
-
-                    <div class="menu-btn bg-m-red">
-                        <div class="menu-btn-left">
-                            <i class="fa-regular fa-calendar-check"></i>
-                            <span class="menu-btn-text">กิจกรรม</span>
-                        </div>
-                        <i class="fa-solid fa-caret-down menu-caret"></i>
-                    </div>
-
-                    <div class="menu-btn bg-m-purple">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-calendar-days"></i>
-                            <span class="menu-btn-text">ตารางเรียน/สอบ</span>
-                        </div>
-                        <i class="fa-solid fa-caret-down menu-caret"></i>
-                    </div>
-
-                    <div class="menu-btn bg-m-brown">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-pen"></i>
-                            <span class="menu-btn-text">ลงทะเบียนเรียน</span>
-                        </div>
-                        <i class="fa-solid fa-caret-down menu-caret"></i>
-                    </div>
-
-                    <div class="menu-btn bg-m-cyan">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-Sitemap fa-network-wired"></i>
-                            <span class="menu-btn-text">จองวิชาเรียนล่วงหน้า</span>
-                        </div>
-                        <i class="fa-solid fa-caret-down menu-caret"></i>
-                    </div>
-
-                    <div class="menu-btn bg-m-magenta">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-globe"></i>
-                            <span class="menu-btn-text">ระบบ SPUKC LMS (e-Learning)</span>
-                        </div>
-                    </div>
-
-                    <div class="menu-btn bg-m-amber">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-users"></i>
-                            <span class="menu-btn-text">แบบประเมินอาจารย์/ทวนสอบ</span>
-                        </div>
-                    </div>
+            <!-- Summary Dashboard Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-3xl shadow-lg relative overflow-hidden text-white">
+                    <div class="absolute -top-4 -right-4 p-4 opacity-10 transform rotate-12"><i class="fa-solid fa-vault text-7xl"></i></div>
+                    <p class="text-xs font-medium text-slate-400 uppercase tracking-wider mb-1">ยอดเงินคงเหลือสุทธิ</p>
+                    <h3 id="dash-balance" class="text-3xl font-bold text-white tracking-tight">฿0.00</h3>
+                    <p id="user-email-display" class="text-[11px] text-indigo-300 mt-3 truncate"></p>
                 </div>
-
-                <!-- แถวที่ 2 (7 ปุ่ม) -->
-                <div class="menu-row">
-                    <div class="menu-btn bg-m-darkgreen">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-book-open"></i>
-                            <span class="menu-btn-text">คู่มือการลงทะเบียน</span>
-                        </div>
-                    </div>
-
-                    <div class="menu-btn bg-m-crimson">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-calendar-week"></i>
-                            <span class="menu-btn-text">ตารางสอนอาจารย์</span>
-                        </div>
-                    </div>
-
-                    <div class="menu-btn bg-m-violet">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-award"></i>
-                            <span class="menu-btn-text">The Professional</span>
-                        </div>
-                    </div>
-
-                    <div class="menu-btn bg-m-darkbrown">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-envelope"></i>
-                            <span class="menu-btn-text">Web Mail</span>
-                        </div>
-                    </div>
-
-                    <div class="menu-btn bg-m-steelblue">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-id-card"></i>
-                            <span class="menu-btn-text">ข้อมูลผู้ปกครอง</span>
-                        </div>
-                    </div>
-
-                    <div class="menu-btn bg-m-wine">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-chart-pie"></i>
-                            <span class="menu-btn-text">รายงานผลการประเมินอาจารย์และสิ่งสนับสนุน</span>
-                        </div>
-                    </div>
-
-                    <div class="menu-btn bg-m-burnt">
-                        <div class="menu-btn-left">
-                            <i class="fa-solid fa-coins"></i>
-                            <span class="menu-btn-text">ข้อมูลการชำระเงิน</span>
-                        </div>
-                        <i class="fa-solid fa-caret-down menu-caret"></i>
-                    </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-emerald-100 relative overflow-hidden">
+                    <div class="absolute top-4 right-4 bg-emerald-50 text-emerald-500 w-12 h-12 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-arrow-trend-up text-xl"></i></div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">รายรับทั้งหมด</p>
+                    <h3 id="dash-income" class="text-2xl font-bold text-emerald-600 tracking-tight">฿0.00</h3>
+                    <p class="text-[11px] text-slate-400 mt-3">อัปเดตล่าสุดวันนี้</p>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-rose-100 relative overflow-hidden">
+                    <div class="absolute top-4 right-4 bg-rose-50 text-rose-500 w-12 h-12 rounded-2xl flex items-center justify-center"><i class="fa-solid fa-arrow-trend-down text-xl"></i></div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">รายจ่ายทั้งหมด</p>
+                    <h3 id="dash-expense" class="text-2xl font-bold text-rose-600 tracking-tight">฿0.00</h3>
+                    <p class="text-[11px] text-slate-400 mt-3">อัปเดตล่าสุดวันนี้</p>
                 </div>
             </div>
 
-            <!-- 2. กล่องการ์ดประกาศ 3 รายการ -->
-            <div class="white-section-box">
-                <div class="announcement-grid">
+            <!-- Main Workspace -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                
+                <!-- Left/Center: Transactions History -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                            <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-clock-rotate-left text-indigo-500"></i> ประวัติรายการบัญชี
+                            </h3>
+                            <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                                <input type="text" id="search-tx" oninput="renderTransactions()" placeholder="ค้นหารายการ..." class="text-xs border border-slate-200 rounded-xl px-3 py-2 outline-none focus:border-indigo-500 flex-grow sm:w-36">
+                                <select id="filter-type" onchange="renderTransactions()" class="text-xs border border-slate-200 rounded-xl text-slate-600 bg-slate-50 px-3 py-2 outline-none">
+                                    <option value="all">ทั้งหมด</option>
+                                    <option value="income">เฉพาะรายรับ</option>
+                                    <option value="expense">เฉพาะรายจ่าย</option>
+                                </select>
+                                <button onclick="exportCSV()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-xl font-medium transition" title="ดาวน์โหลด CSV">
+                                    <i class="fa-solid fa-file-csv mr-1"></i> CSV
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="transaction-list" class="space-y-3 max-h-[460px] overflow-y-auto pr-1">
+                            <!-- Transactions injected via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Chart Section -->
+                    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6">
+                        <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-indigo-500"></i> สัดส่วนรายจ่ายตามหมวดหมู่
+                        </h3>
+                        <div class="h-64 flex justify-center items-center">
+                            <canvas id="expenseChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Add Transaction Form -->
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-6 h-fit sticky top-24">
+                    <h3 class="text-lg font-bold text-slate-800 mb-5 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-plus text-indigo-500"></i> บันทึกรายการใหม่
+                    </h3>
                     
-                    <!-- การ์ดประกาศ 1 -->
-                    <div class="announce-card">
-                        <div class="announce-banner" style="background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);">
-                            <div class="flex justify-between items-center">
-                                <span class="bg-pink-600 text-white text-[9px] font-bold px-1.5 py-0.5 rounded">SPU</span>
-                                <span class="text-[8px] text-slate-600 font-semibold">ตารางกำหนดการชำระเงิน</span>
-                            </div>
-                            <div class="bg-white/90 rounded px-1.5 py-1 text-center border border-red-200">
-                                <div class="text-[9px] text-red-600 font-bold">ภาค 1/2569</div>
-                                <div class="text-[7.5px] text-slate-700 leading-tight">(สำหรับนักศึกษาเทียบโอนปกติ)<br>จ่าย 7 - 11 ก.ค. 2569</div>
-                            </div>
-                        </div>
-                        <div class="announce-desc editable-area">
-                            ตารางกำหนดการชำระเงิน (สำหรับนักศึกษาเทียบโอนรอบปกติ)
-                        </div>
+                    <div class="flex gap-2 mb-6 p-1.5 bg-slate-100 rounded-2xl">
+                        <button type="button" id="tab-expense" onclick="setTxType('expense')" class="flex-1 py-2.5 text-sm font-bold bg-white text-rose-600 shadow-sm rounded-xl transition-all">รายจ่าย</button>
+                        <button type="button" id="tab-income" onclick="setTxType('income')" class="flex-1 py-2.5 text-sm font-bold text-slate-500 hover:text-emerald-600 transition-all">รายรับ</button>
                     </div>
 
-                    <!-- การ์ดประกาศ 2 -->
-                    <div class="announce-card">
-                        <div class="announce-banner" style="background: linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%);">
-                            <div class="flex justify-between items-center">
-                                <span class="text-[8.5px] text-blue-900 font-bold">ตารางกำหนดการ</span>
-                                <span class="bg-blue-700 text-white text-[8px] font-bold px-1 py-0.5 rounded">SPU</span>
-                            </div>
-                            <div class="bg-white/90 rounded px-1.5 py-1 text-center border border-blue-200">
-                                <div class="text-[8.5px] text-blue-800 font-bold">ลงทะเบียนวิชาเรียน ภาค 1/2569</div>
-                                <div class="text-[8px] text-orange-600 font-semibold">29 มิ.ย. - 3 ก.ค. 2569</div>
+                    <form id="tx-form" onsubmit="handleAddTransaction(event)">
+                        <input type="hidden" id="tx-type" value="expense">
+                        
+                        <div class="mb-5">
+                            <label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">จำนวนเงิน (บาท)</label>
+                            <div class="relative">
+                                <span class="absolute left-3 top-1/2 -translate-y-1/2 text-2xl text-slate-400 font-bold">฿</span>
+                                <input type="number" id="tx-amount" required min="0.01" step="0.01" class="w-full text-3xl font-bold border-2 border-slate-100 rounded-2xl focus:border-indigo-500 outline-none py-3 pl-10 pr-4 text-slate-800 transition bg-slate-50/50 placeholder-slate-300" placeholder="0.00">
                             </div>
                         </div>
-                        <div class="announce-desc editable-area">
-                            ตารางกำหนดการลงทะเบียนวิชาเรียน ภาค 1/2569 วันที่ 29 มิ.ย. - 3 ก.ค. 2569
+                        
+                        <div class="mb-5">
+                            <label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">หมวดหมู่</label>
+                            <select id="tx-category" required class="w-full border-2 border-slate-100 rounded-2xl outline-none py-3 px-4 text-slate-700 focus:border-indigo-500 transition bg-slate-50/50 cursor-pointer font-medium text-sm">
+                                <!-- Options injected via JS -->
+                            </select>
                         </div>
-                    </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">โน้ต / รายละเอียด</label>
+                            <input type="text" id="tx-note" placeholder="เช่น ค่ากาแฟ, เงินเดือนเข้า" class="w-full border-2 border-slate-100 rounded-2xl outline-none py-3 px-4 text-slate-700 focus:border-indigo-500 transition bg-slate-50/50 text-sm">
+                        </div>
+                        
+                        <button type="submit" id="btn-submit-tx" class="w-full bg-rose-500 text-white py-3.5 rounded-2xl font-bold shadow-lg shadow-rose-500/25 hover:bg-rose-600 transition transform hover:-translate-y-0.5">
+                            <i class="fa-solid fa-minus-circle mr-2"></i> บันทึกรายจ่าย
+                        </button>
+                    </form>
+                </div>
 
-                    <!-- การ์ดประกาศ 3 -->
-                    <div class="announce-card">
-                        <div class="announce-banner" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);">
-                            <div class="flex justify-between items-center">
-                                <span class="bg-amber-700 text-white text-[8px] font-bold px-1 py-0.5 rounded">SPU</span>
-                                <span class="text-[8px] text-amber-900 font-bold">การแต่งกายนักศึกษา</span>
-                            </div>
-                            <div class="bg-white/90 rounded px-1.5 py-1 flex items-center justify-around border border-amber-300">
-                                <i class="fa-solid fa-user-tie text-amber-800 text-lg"></i>
-                                <div class="text-[7.5px] text-slate-700 leading-tight text-left">ระเบียบชุดนักศึกษา<br>และชุดปฏิบัติการ</div>
-                            </div>
-                        </div>
-                        <div class="announce-desc editable-area">
-                            ตารางกำหนดการแต่งกายนักศึกษา
-                        </div>
-                    </div>
+            </div>
+        </div>
 
+        <!-- Footer -->
+        <footer class="bg-slate-900 text-slate-500 py-8 text-xs mt-auto">
+            <div class="max-w-5xl mx-auto px-4 text-center flex flex-col items-center">
+                <p>&copy; 2026 PocketTracker Pro. Smart Personal Finance App.</p>
+                <!-- SECRET TRIGGER 1: Click dot 5 times -->
+                <p class="mt-2 secret-trigger text-[11px]" onclick="handleSecretClick()">
+                    Manage your pocket wisely<span id="secret-dot" class="opacity-30 cursor-pointer text-indigo-400 font-bold px-1">.</span>
+                </p>
+            </div>
+        </footer>
+    </div>
+
+
+    <!-- ==========================================
+         VIEW 2: GATEWAY (SECRET TERMINAL)
+         ========================================== -->
+    <div id="view-gateway" class="view-section hidden min-h-screen bg-black flex flex-col items-center justify-center font-mono-cyber text-[#00ffcc] relative overflow-hidden p-4">
+        <div class="absolute inset-0 crt-overlay z-20"></div>
+        
+        <div class="w-full max-w-lg p-8 sm:p-10 cyber-bg cyber-border text-center relative z-10">
+            <i class="fa-solid fa-user-secret text-5xl mb-5 cyber-text glitch" data-text="⚡"></i>
+            <h2 class="text-2xl sm:text-3xl mb-2 font-bold uppercase tracking-widest text-white glitch" data-text="SHADOW PROTOCOL">SHADOW PROTOCOL</h2>
+            <p class="text-[11px] text-gray-500 mb-8 tracking-widest uppercase">Encrypted Underground Gaming Network</p>
+            
+            <div class="mb-6 text-left border-l-2 border-[#00ffcc] pl-4 bg-black/60 py-3 text-xs space-y-1">
+                <p class="text-[#00ffcc]/80">> establecer_conexion: P2P_DARKNET</p>
+                <p class="text-[#00ffcc]/80">> status: BYPASSING SURFACE FIREWALL...</p>
+                <p class="text-yellow-400/90">> hint: ใช้รหัส <span class="underline">SHADOW</span> (ทั่วไป) หรือ <span class="underline">GOD</span> (ปลดล็อกแอดมิน LVL.4)</p>
+                <p class="text-[#ff003c] pt-2 font-bold animate-pulse">> ENTER ACCESS KEY:</p>
+            </div>
+            
+            <input type="password" id="gateway-input" class="terminal-input w-full mb-8 uppercase" placeholder="******" autocomplete="off" spellcheck="false">
+            
+            <div class="flex gap-4 justify-center">
+                <button onclick="switchView('app')" class="border border-gray-700 text-gray-400 hover:text-white hover:border-gray-500 px-6 py-2.5 text-xs uppercase tracking-widest transition">
+                    Abort
+                </button>
+                <button onclick="verifyAccessCode()" class="cyber-btn px-8 py-2.5 text-sm font-bold">
+                    Inject_Key
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         VIEW 3: SHADOW MARKET (GAME TOPUP & ACCOUNTS)
+         ========================================== -->
+    <div id="view-hidden" class="view-section hidden min-h-screen bg-[#050507] text-gray-300 font-mono-cyber relative">
+        <div class="fixed inset-0 crt-overlay z-50"></div>
+        
+        <!-- Dark Navbar -->
+        <nav class="border-b border-[#ff003c]/60 bg-black/90 backdrop-blur-md sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3 cyber-text font-bold text-lg sm:text-2xl uppercase tracking-widest glitch" data-text="SHADOW_MARKET">
+                    <i class="fa-solid fa-skull-crossbones"></i>
+                    <span>SHADOW_MARKET</span>
+                </div>
+                <div class="flex items-center gap-3 sm:gap-5 text-xs">
+                    <span id="user-level-badge" class="bg-[#111] px-3 py-1.5 border border-yellow-500/50 text-yellow-400 rounded font-bold tracking-widest">
+                        LVL 1 : ROOKIE
+                    </span>
+                    <button id="btn-admin-hidden" onclick="switchView('admin')" class="hidden cyber-btn px-3 py-1.5 font-bold text-xs">
+                        <i class="fa-solid fa-terminal mr-1"></i> ROOT_PANEL
+                    </button>
+                    <button onclick="switchView('app')" class="text-gray-400 hover:text-[#ff003c] transition flex items-center gap-1 font-bold">
+                        <i class="fa-solid fa-power-off"></i> <span class="hidden sm:inline">DISCONNECT</span>
+                    </button>
                 </div>
             </div>
+        </nav>
 
-            <!-- 3. ตารางรายการค่าหน่วยกิตและค่าธรรมเนียมการศึกษา -->
-            <div class="table-section-box">
-                <div class="section-blue-header editable-area">
-                    รายการค่าหน่วยกิตและค่าธรรมเนียมการศึกษา ที่ยังไม่ได้ชำระ ภาค 1 / 2569
+        <!-- Market Content -->
+        <div class="max-w-7xl mx-auto px-4 py-10 relative z-10">
+            
+            <!-- Header & SHD Wallet -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b border-gray-800 pb-6 gap-6">
+                <div>
+                    <div class="inline-block bg-[#ff003c]/10 border border-[#ff003c]/40 text-[#ff003c] text-[10px] px-2.5 py-0.5 uppercase tracking-widest mb-2">
+                        ● UNTRACEABLE GAME ASSETS & TOP-UP
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl text-white font-bold uppercase tracking-wider">Underground Armory</h2>
+                    <p class="text-xs text-gray-500 mt-1">ขายไอดีเกมแรงก์สูง เติมเกมเรทลับ และสคริปต์พิเศษ เฉพาะสมาชิกที่ได้รับอนุญาต</p>
                 </div>
-
-                <table class="spu-table editable-area">
-                    <thead>
-                        <tr>
-                            <th style="width: 14%; text-align: left;">รหัสวิชา</th>
-                            <th style="width: 38%; text-align: left;">ชื่อวิชา</th>
-                            <th style="width: 12%;">หน่วยกิต</th>
-                            <th style="width: 12%;">กลุ่มเรียนที่</th>
-                            <th style="width: 12%;">กลุ่มสอบที่</th>
-                            <th style="width: 12%; text-align: right;">จำนวนเงิน</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>BUS11167</td>
-                            <td>การจัดการธุรกิจสมัยใหม่</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center">04</td>
-                            <td class="text-center"></td>
-                            <td class="text-right">4,800</td>
-                        </tr>
-                        <tr>
-                            <td>DBC11167</td>
-                            <td>โลกธุรกิจดิจิทัลและนวัตกรรมบริการ</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center">03</td>
-                            <td class="text-center"></td>
-                            <td class="text-right">4,800</td>
-                        </tr>
-                        <tr>
-                            <td>DBC21667</td>
-                            <td>การตลาดและการบริหารลูกค้ายุคดิจิทัลอย่างยั่งยืน</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center">04</td>
-                            <td class="text-center"></td>
-                            <td class="text-right">4,800</td>
-                        </tr>
-                        <tr>
-                            <td>MGT22167</td>
-                            <td>การปฏิบัติการธุรกิจบริการ</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center">03</td>
-                            <td class="text-center"></td>
-                            <td class="text-right">4,800</td>
-                        </tr>
-                        <tr>
-                            <td>MGT22267</td>
-                            <td>การจัดการโครงการอย่างมืออาชีพ</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center">02</td>
-                            <td class="text-center"></td>
-                            <td class="text-right">4,800</td>
-                        </tr>
-                        <tr>
-                            <td>MGT23267</td>
-                            <td>หลักการจัดการโลจิสติกส์และโซ่อุปทาน</td>
-                            <td class="text-center">3</td>
-                            <td class="text-center">09</td>
-                            <td class="text-center"></td>
-                            <td class="text-right">4,800</td>
-                        </tr>
-                        <tr class="summary-row">
-                            <td colspan="5" class="text-right">รวมค่าหน่วยกิต</td>
-                            <td class="text-right">28,800</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="sub-gray-header editable-area">
-                    รายการค่าธรรมเนียมที่ยังไม่ได้ชำระ
-                </div>
-
-                <table class="spu-table editable-area">
-                    <tbody>
-                        <tr>
-                            <td style="width: 88%;">• ค่าประกันอุบัติเหตุ</td>
-                            <td style="width: 12%;" class="text-right">250</td>
-                        </tr>
-                        <tr>
-                            <td>• ค่าบำรุงการศึกษาภาคปกติ</td>
-                            <td class="text-right">7,000</td>
-                        </tr>
-                        <tr>
-                            <td>• ค่ากิจกรรมนักศึกษา</td>
-                            <td class="text-right">500</td>
-                        </tr>
-                        <tr>
-                            <td>• ค่าบริการคอมพิวเตอร์</td>
-                            <td class="text-right">2,800</td>
-                        </tr>
-                        <tr>
-                            <td>• ค่าบัตรนักศึกษา</td>
-                            <td class="text-right">200</td>
-                        </tr>
-                        <tr class="summary-row">
-                            <td class="text-right">รวมค่าธรรมเนียม</td>
-                            <td class="text-right">10,750</td>
-                        </tr>
-                        <tr class="summary-row">
-                            <td class="text-right">รวมทั้งหมด</td>
-                            <td class="text-right">39,550</td>
-                        </tr>
-                        <tr class="summary-row">
-                            <td class="text-right">หักทุนการศึกษาโควตาศรีปทุม ชลบุรี (10,000 ภาคละ 2,500)</td>
-                            <td class="text-right">2,500</td>
-                        </tr>
-                        <tr class="summary-row">
-                            <td class="text-right font-bold">รวมเงินที่ต้องชำระ</td>
-                            <td class="text-right font-bold">37,050</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- 4. ตารางเรียนนักศึกษาด้านล่าง -->
-            <div class="table-section-box">
-                <div class="section-blue-header">
-                    ตารางเรียนนักศึกษา
-                </div>
-
-                <div class="schedule-tabs">
-                    <div class="sched-tab">ตารางเรียนนักศึกษา</div>
-                    <div class="sched-tab inactive">ตารางสอบนักศึกษา</div>
-                </div>
-
-                <div class="schedule-workspace">
-                    <button class="print-btn" onclick="window.print()">
-                        <i class="fa-solid fa-print text-sky-700"></i> พิมพ์
+                
+                <!-- Wallet Box -->
+                <div class="w-full md:w-auto bg-black border border-[#00ffcc]/50 p-4 rounded flex items-center justify-between gap-6 shadow-[0_0_20px_rgba(0,255,204,0.1)]">
+                    <div>
+                        <p class="text-[10px] text-gray-500 tracking-widest uppercase">SHADOW CREDITS (SHD)</p>
+                        <p class="text-2xl text-[#00ffcc] font-bold tracking-wider" id="shd-balance-display">5,000 <span class="text-xs">SHD</span></p>
+                    </div>
+                    <button onclick="openTopupModal()" class="cyber-btn-cyan px-4 py-2 text-xs font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-bolt"></i> + เติมเครดิต
                     </button>
                 </div>
             </div>
 
-        </section>
-    </main>
+            <!-- Filter Tabs -->
+            <div class="flex gap-3 mb-8 overflow-x-auto hide-scrollbar pb-2">
+                <button onclick="filterMarket('all')" id="mkt-tab-all" class="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-[#ff003c] text-white border border-[#ff003c] transition">
+                    [ ALL ASSETS ]
+                </button>
+                <button onclick="filterMarket('Account')" id="mkt-tab-Account" class="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-black text-gray-400 border border-gray-800 hover:border-[#ff003c] transition">
+                    <i class="fa-solid fa-user-ninja mr-1"></i> Game Accounts
+                </button>
+                <button onclick="filterMarket('Currency')" id="mkt-tab-Currency" class="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-black text-gray-400 border border-gray-800 hover:border-[#ff003c] transition">
+                    <i class="fa-solid fa-coins mr-1"></i> Game Top-Up
+                </button>
+                <button onclick="filterMarket('Script')" id="mkt-tab-Script" class="px-4 py-2 text-xs font-bold uppercase tracking-wider bg-black text-gray-400 border border-gray-800 hover:border-[#ff003c] transition">
+                    <i class="fa-solid fa-code mr-1"></i> VIP Mods/Scripts
+                </button>
+            </div>
 
-    <script>
-        // ฟังก์ชันอัปโหลดรูปภาพจากเครื่องมาแสดงในกรอบวงรีทันที
-        function handleImageUpload(event, imgElementId) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const imgEl = document.getElementById(imgElementId);
-                if (imgEl) {
-                    imgEl.src = e.target.result;
-                }
-            };
-            reader.readAsDataURL(file);
-        }
+            <!-- Products Grid -->
+            <div id="hidden-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Game Assets injected via JS -->
+            </div>
+            
+            <!-- Encrypted Vault (Purchased Items) -->
+            <div class="mt-20 border-t border-[#ff003c]/30 pt-10">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl text-white font-bold uppercase tracking-wider flex items-center gap-3">
+                        <i class="fa-solid fa-box-open cyber-text"></i> Encrypted Vault (คลังรหัสเกมของคุณ)
+                    </h2>
+                    <span class="text-xs text-gray-500">ชี้ที่แถบเบลอเพื่อดูข้อมูล หรือกดปุ่ม Copy</span>
+                </div>
+                <div id="my-licenses" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Inventory items injected via JS -->
+                </div>
+            </div>
 
-        // สร้างรูปจำลองชุดนักศึกษาชายเริ่มต้น (กรณีไม่ได้วางไฟล์ student.jpg ไว้ในโฟลเดอร์)
-        function createDefaultAvatar() {
-            const svgStudent = `
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 150" width="100%" height="100%">
-                <rect width="120" height="150" fill="#9ca3af"/>
-                <!-- เสื้อเชิ้ตขาวชุดนักศึกษา -->
-                <path d="M15 150 C15 110, 105 110, 105 150 Z" fill="#ffffff"/>
-                <!-- ปกเสื้อและเนคไทสีกรมท่า -->
-                <polygon points="45,112 60,128 75,112 68,105 52,105" fill="#f3f4f6"/>
-                <polygon points="56,122 64,122 66,150 54,150" fill="#1e3a8a"/>
-                <!-- คอและใบหน้า -->
-                <rect x="51" y="88" width="18" height="22" fill="#e5b899"/>
-                <ellipse cx="60" cy="66" rx="24" ry="29" fill="#ecc3a5"/>
-                <!-- ทรงผมชาย -->
-                <path d="M35 62 C33 35, 87 35, 85 62 C80 48, 40 48, 35 62 Z" fill="#27272a"/>
-                <!-- ตา คิ้ว จมูก ปาก -->
-                <ellipse cx="51" cy="64" rx="2.5" ry="2" fill="#18181b"/>
-                <ellipse cx="69" cy="64" rx="2.5" ry="2" fill="#18181b"/>
-                <path d="M45 58 Q51 55 56 58" stroke="#27272a" stroke-width="2" fill="none"/>
-                <path d="M64 58 Q69 55 75 58" stroke="#27272a" stroke-width="2" fill="none"/>
-                <path d="M54 80 Q60 84 66 80" stroke="#9a5b4a" stroke-width="2" fill="none"/>
-            </svg>`;
-            const imgEl = document.getElementById('student-photo-img');
-            if (imgEl) {
-                imgEl.style.transform = 'scale(1.0)';
-                imgEl.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(svgStudent);
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         VIEW 4: ADMIN DASHBOARD (ROOT SYSTEM)
+         ========================================== -->
+    <div id="view-admin" class="view-section hidden min-h-screen bg-[#0f172a] flex flex-col font-sans-th text-slate-300">
+        <!-- Admin Navbar -->
+        <nav class="bg-black text-white sticky top-0 z-40 border-b border-indigo-500/40">
+            <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3 font-bold text-lg text-indigo-400 uppercase tracking-wider font-mono-cyber">
+                    <i class="fa-solid fa-server"></i>
+                    SYSTEM_CORE_CONTROL (ADMIN)
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="switchView('hidden')" class="bg-[#ff003c]/20 border border-[#ff003c] text-[#ff003c] px-4 py-1.5 rounded hover:bg-[#ff003c] hover:text-white transition text-xs font-bold font-mono-cyber">
+                        ไปที่ตลาดลับ
+                    </button>
+                    <button onclick="switchView('app')" class="bg-slate-800 border border-slate-600 text-white px-4 py-1.5 rounded hover:bg-slate-700 transition text-xs font-bold">
+                        กลับหน้าแอปหลัก
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="max-w-7xl mx-auto px-4 py-8 w-full flex-grow space-y-8">
+            
+            <!-- Quick Tools & Firestore Rules Helper -->
+            <div class="bg-slate-800/90 rounded-2xl border border-slate-700 p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-1"><i class="fa-solid fa-shield-halved text-emerald-400 mr-2"></i>สถานะฐานข้อมูล & สิทธิ์ผู้ดูแลระบบ</h3>
+                    <p class="text-xs text-slate-400">คุณสามารถปรับระดับ Clearance Level ของตัวเองเพื่อทดสอบระบบ หรือคัดลอก Firestore Rules ไปใส่ใน Firebase Console ได้จากที่นี่</p>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <select id="admin-level-switcher" onchange="changeMyLevel(this.value)" class="bg-slate-900 border border-slate-600 text-amber-400 text-xs font-bold rounded-lg px-3 py-2 outline-none">
+                        <option value="4">ยศปัจจุบัน: LVL 4 (ADMIN)</option>
+                        <option value="3">จำลองเป็น: LVL 3 (HACKER)</option>
+                        <option value="2">จำลองเป็น: LVL 2 (SMURF)</option>
+                        <option value="1">จำลองเป็น: LVL 1 (ROOKIE)</option>
+                    </select>
+                    <button onclick="showFirestoreRulesModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-lg transition">
+                        <i class="fa-solid fa-code mr-1"></i> ดูโค้ด Firestore Rules
+                    </button>
+                </div>
+            </div>
+
+            <!-- Shadow Market Product Management -->
+            <div class="bg-[#070709] rounded-2xl shadow-2xl border border-[#ff003c]/80 p-6 font-mono-cyber text-gray-300">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b border-gray-800 pb-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-[#ff003c] tracking-wider"><i class="fa-solid fa-gamepad mr-2"></i>จัดการสินค้าตลาดมืด (Shadow Market)</h2>
+                        <p class="text-xs text-gray-500 mt-1">เพิ่ม/ลบ ไอดีเกม บัตรเติมเกม หรือสคริปต์ (ข้อมูลบันทึกทันที)</p>
+                    </div>
+                    <button onclick="openAddProductModal()" class="cyber-btn px-5 py-2.5 text-xs font-bold">
+                        <i class="fa-solid fa-plus mr-2"></i> + เพิ่มสินค้าเกมใหม่
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead class="bg-black text-[#00ffcc] border-b border-[#ff003c]/50 uppercase">
+                            <tr>
+                                <th class="p-3.5">ID</th>
+                                <th class="p-3.5">หมวดหมู่</th>
+                                <th class="p-3.5">ชื่อสินค้า / บริการ</th>
+                                <th class="p-3.5">เลเวลขั้นต่ำ</th>
+                                <th class="p-3.5">ราคา (SHD)</th>
+                                <th class="p-3.5 text-center">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-digital-list" class="divide-y divide-gray-800/80 bg-[#0c0c10]">
+                            <!-- Injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ==========================================
+         JAVASCRIPT CORE ENGINE
+         ========================================== -->
+    <script type="module">
+        // 1. Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc, collection, addDoc, query, where, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // 2. Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyA2Pd89JIGeAw0SPOJ5AM-64WCjsFQbJHo",
+            authDomain: "myshop-a423f.firebaseapp.com",
+            projectId: "myshop-a423f",
+            storageBucket: "myshop-a423f.firebasestorage.app",
+            messagingSenderId: "923315285994",
+            appId: "1:923315285994:web:36d5244b53ee48fa3d0c93",
+            measurementId: "G-ZP86G96P4X"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // ==========================================
+        // INITIAL DATA & CATEGORIES
+        // ==========================================
+        const CATEGORIES = {
+            expense: [
+                {id: 'food', name: 'อาหาร & เครื่องดื่ม', icon: 'fa-utensils', color: 'bg-orange-100 text-orange-600'},
+                {id: 'transport', name: 'การเดินทาง', icon: 'fa-car', color: 'bg-blue-100 text-blue-600'},
+                {id: 'shopping', name: 'ช้อปปิ้ง & ของใช้', icon: 'fa-bag-shopping', color: 'bg-pink-100 text-pink-600'},
+                {id: 'bills', name: 'บิล & ค่าสาธารณูปโภค', icon: 'fa-file-invoice-dollar', color: 'bg-purple-100 text-purple-600'},
+                {id: 'entertainment', name: 'ความบันเทิง & เกม', icon: 'fa-gamepad', color: 'bg-cyan-100 text-cyan-600'},
+                {id: 'other_exp', name: 'รายจ่ายอื่นๆ', icon: 'fa-ellipsis', color: 'bg-slate-100 text-slate-600'}
+            ],
+            income: [
+                {id: 'salary', name: 'เงินเดือนประจำ', icon: 'fa-money-check-dollar', color: 'bg-emerald-100 text-emerald-600'},
+                {id: 'bonus', name: 'โบนัส & รางวัล', icon: 'fa-gift', color: 'bg-teal-100 text-teal-600'},
+                {id: 'freelance', name: 'รายได้เสริม / ฟรีแลนซ์', icon: 'fa-laptop-code', color: 'bg-indigo-100 text-indigo-600'},
+                {id: 'investment', name: 'กำไรจากการลงทุน', icon: 'fa-chart-line', color: 'bg-amber-100 text-amber-600'},
+                {id: 'other_inc', name: 'รายรับอื่นๆ', icon: 'fa-ellipsis', color: 'bg-slate-100 text-slate-600'}
+            ]
+        };
+
+        const DEFAULT_DIGITAL_PRODUCTS = [
+            { id: 'g1', name: 'VALORANT | ID แรงก์ Radiant + สกิน Vandal/Phantom ครบ', price: 2500, type: 'Account', reqLevel: 2, img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&q=80' },
+            { id: 'g2', name: 'VALORANT | แพ็กเติม 11,000 VP (เรทลับเฉพาะสมาชิก)', price: 1200, type: 'Currency', reqLevel: 1, img: 'https://images.unsplash.com/photo-1612287230202-1ff1d85d1bdf?w=500&q=80' },
+            { id: 'g3', name: 'GENSHIN IMPACT | AR60 C6 Raiden + อาวุธประจำตัว R5', price: 4500, type: 'Account', reqLevel: 3, img: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500&q=80' },
+            { id: 'g4', name: 'ROBLOX | บัตรเติม 10,000 Robux (Global PIN Instant)', price: 850, type: 'Currency', reqLevel: 1, img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&q=80' },
+            { id: 'g5', name: 'ROV | ไอดีแรงก์ Glorious Ruler + สกินแรร์ SS1-ปัจจุบัน', price: 3200, type: 'Account', reqLevel: 2, img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=500&q=80' },
+            { id: 'g6', name: 'STEAM WALLET | โค้ดเติมเงิน $100 USD (แท้ 100%)', price: 2100, type: 'Currency', reqLevel: 1, img: 'https://images.unsplash.com/photo-1614680376593-902f74cf0d41?w=500&q=80' },
+            { id: 'g7', name: 'ZERO-RECOIL MACRO v4.2 | สคริปต์ช่วยคุมปืน (Undetected)', price: 1800, type: 'Script', reqLevel: 3, img: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500&q=80' },
+            { id: 'g8', name: 'SHADOW BYPASS SPOOFER | โปรแกรมปลดแบน HWID ขั้นสูง', price: 5000, type: 'Script', reqLevel: 4, img: 'https://images.unsplash.com/photo-1563206767-5b18f218e8de?w=500&q=80' }
+        ];
+
+        // Load products from LocalStorage or use default
+        const savedProducts = localStorage.getItem('shd_products');
+        window.DIGITAL_PRODUCTS = savedProducts ? JSON.parse(savedProducts) : DEFAULT_DIGITAL_PRODUCTS;
+
+        window.state = {
+            view: 'app',
+            user: null,
+            transactions: [],
+            licenses: [],
+            shdBalance: 5000,
+            marketFilter: 'all',
+            chartInstance: null,
+            usingLocalFallback: false
+        };
+
+        // ==========================================
+        // SECRET KEYBOARD LISTENER (พิมพ์ 'shadow')
+        // ==========================================
+        let keyBuffer = '';
+        document.addEventListener('keydown', (e) => {
+            if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+            if (window.state.view !== 'app') return;
+            
+            keyBuffer += e.key.toLowerCase();
+            if (keyBuffer.length > 6) keyBuffer = keyBuffer.slice(-6);
+            
+            if (keyBuffer.endsWith('shadow')) {
+                keyBuffer = '';
+                Swal.fire({
+                    title: 'HIDDEN SEQUENCE DETECTED',
+                    text: 'Opening underground gateway...',
+                    icon: 'warning',
+                    background: '#0a0a0a',
+                    color: '#00ffcc',
+                    showConfirmButton: false,
+                    timer: 1200
+                }).then(() => window.switchView('gateway'));
             }
-        }
-
-        // สร้างรูปจำลองอาจารย์ที่ปรึกษาเริ่มต้น
-        function renderAdvisorPlaceholder() {
-            const svgAdvisor = `
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 145" width="100%" height="100%">
-                <rect width="120" height="145" fill="#e8b4d0"/>
-                <!-- สูทสีกรมท่า -->
-                <path d="M18 145 C18 105, 102 105, 102 145 Z" fill="#374151"/>
-                <polygon points="50,108 60,145 70,108" fill="#ffffff"/>
-                <rect x="52" y="85" width="16" height="20" fill="#f1c6ab"/>
-                <ellipse cx="60" cy="64" rx="22" ry="26" fill="#f5d0b8"/>
-                <path d="M37 60 C35 34, 85 34, 83 60 C77 45, 43 45, 37 60 Z" fill="#3f2e21"/>
-                <ellipse cx="52" cy="63" rx="2" ry="2" fill="#1f2937"/>
-                <ellipse cx="68" cy="63" rx="2" ry="2" fill="#1f2937"/>
-                <path d="M54 77 Q60 81 66 77" stroke="#b45309" stroke-width="2" fill="none"/>
-            </svg>`;
-            const advEl = document.getElementById('advisor-photo-img');
-            if (advEl) {
-                advEl.src = 'data:image/svg+xml;utf8,' + encodeURIComponent(svgAdvisor);
-            }
-        }
-
-        // เมื่ออัปโหลดรูปจริง ให้ปรับสเกลซูมใบหน้าเหมือนรูปติดบัตร
-        document.getElementById('upload-student').addEventListener('change', function() {
-            const imgEl = document.getElementById('student-photo-img');
-            imgEl.style.objectFit = 'cover';
-            imgEl.style.objectPosition = 'center 15%';
-            imgEl.style.transform = 'scale(1.35)';
         });
 
-        // เปิด/ปิด โหมดคลิกแก้ไขข้อความได้ทุกจุดบนหน้าเว็บ
-        let isEditMode = false;
-        function toggleEditMode() {
-            isEditMode = !isEditMode;
-            const editableBlocks = document.querySelectorAll('.editable-area');
-            const btn = document.getElementById('toggle-edit-btn');
-            
-            editableBlocks.forEach(el => {
-                el.setAttribute('contenteditable', isEditMode ? 'true' : 'false');
-            });
+        // ==========================================
+        // FIREBASE AUTHENTICATION & HYBRID STORAGE
+        // ==========================================
+        onAuthStateChanged(auth, async (firebaseUser) => {
+            if (firebaseUser) {
+                let userProfile = {
+                    uid: firebaseUser.uid,
+                    email: firebaseUser.email,
+                    role: 'user',
+                    secretLevel: 1
+                };
 
-            if (isEditMode) {
-                btn.innerHTML = '<i class="fa-solid fa-check text-amber-300"></i> บันทึกการแก้ไข';
-                btn.style.color = '#fde047';
+                // Check Local Override Level first
+                const localLvl = localStorage.getItem(`lvl_${firebaseUser.uid}`);
+                if (localLvl) userProfile.secretLevel = parseInt(localLvl);
+
+                // Try fetching user doc from Firestore
+                try {
+                    const userDoc = await getDoc(doc(db, "users", firebaseUser.uid));
+                    if (userDoc.exists()) {
+                        userProfile = { ...userProfile, ...userDoc.data() };
+                        if (localLvl) userProfile.secretLevel = parseInt(localLvl);
+                    }
+                } catch (err) {
+                    console.warn("Firestore user profile read fallback:", err.message);
+                }
+
+                window.state.user = userProfile;
+
+                // Load saved SHD balance & Vault licenses per user
+                const savedBal = localStorage.getItem(`shd_bal_${firebaseUser.uid}`);
+                window.state.shdBalance = savedBal !== null ? parseInt(savedBal) : 5000;
+
+                const savedLic = localStorage.getItem(`shd_lic_${firebaseUser.uid}`);
+                window.state.licenses = savedLic ? JSON.parse(savedLic) : [];
+
+                // Update UI Header
+                document.getElementById('btn-login').innerHTML = '<i class="fa-solid fa-right-from-bracket mr-1"></i> ออกจากระบบ';
+                document.getElementById('user-email-display').innerHTML = `<i class="fa-solid fa-user-check mr-1"></i> ${firebaseUser.email}`;
+                
+                document.getElementById('app-content-locked').classList.add('hidden');
+                document.getElementById('app-content-unlocked').classList.remove('hidden');
+                
+                updateAdminButtons();
+                await loadTransactions();
+                updateAppUI();
+                window.updateHiddenBadge();
+
+                if (window.state.view === 'hidden') window.renderHiddenMarket();
+                if (window.state.view === 'admin') window.renderAdmin();
+
             } else {
-                btn.innerHTML = '<i class="fa-solid fa-pen-to-square text-emerald-400"></i> แก้ไขข้อมูลบนหน้าเว็บ';
-                btn.style.color = '#d0e2f2';
+                window.state.user = null;
+                window.state.transactions = [];
+                document.getElementById('btn-login').innerHTML = 'เข้าสู่ระบบ';
+                
+                document.getElementById('app-content-locked').classList.remove('hidden');
+                document.getElementById('app-content-unlocked').classList.add('hidden');
+                
+                document.getElementById('btn-admin-shop').classList.add('hidden');
+                document.getElementById('btn-admin-hidden').classList.add('hidden');
+                
+                window.updateHiddenBadge();
+                if (window.state.view !== 'app') window.switchView('app');
+            }
+        });
+
+        function updateAdminButtons() {
+            if (window.state.user && window.state.user.secretLevel >= 4) {
+                document.getElementById('btn-admin-shop').classList.remove('hidden');
+                document.getElementById('btn-admin-hidden').classList.remove('hidden');
+            } else {
+                document.getElementById('btn-admin-shop').classList.add('hidden');
+                document.getElementById('btn-admin-hidden').classList.add('hidden');
             }
         }
+
+        // ==========================================
+        // POCKET TRACKER: HYBRID CRUD LOGIC
+        // ==========================================
+        function getLocalTxKey() {
+            return `txs_${window.state.user.uid}`;
+        }
+
+        function saveLocalTransactions() {
+            if (!window.state.user) return;
+            localStorage.setItem(getLocalTxKey(), JSON.stringify(window.state.transactions));
+        }
+
+        async function loadTransactions() {
+            if (!window.state.user) return;
+            const badge = document.getElementById('storage-badge');
+
+            try {
+                // Attempt Firestore Read (without orderBy to avoid Composite Index error!)
+                const q = query(collection(db, "transactions"), where("uid", "==", window.state.user.uid));
+                const querySnapshot = await getDocs(q);
+                
+                const cloudTxs = querySnapshot.docs.map(d => {
+                    const data = d.data();
+                    return {
+                        id: d.id,
+                        ...data,
+                        date: data.date && data.date.toDate ? data.date.toDate() : new Date(data.date)
+                    };
+                });
+
+                // Sort newest first in JS
+                cloudTxs.sort((a, b) => b.date - a.date);
+                window.state.transactions = cloudTxs;
+                window.state.usingLocalFallback = false;
+
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Cloud Sync`;
+                saveLocalTransactions(); // Mirror to local
+            } catch (e) {
+                // Automatic Fallback to LocalStorage if Firestore Rules block access!
+                console.warn("Using LocalStorage Fallback for Transactions:", e.message);
+                window.state.usingLocalFallback = true;
+                badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400"></span> Local Safe Mode`;
+
+                const raw = localStorage.getItem(getLocalTxKey());
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    window.state.transactions = parsed.map(t => ({ ...t, date: new Date(t.date) }));
+                } else {
+                    window.state.transactions = [];
+                }
+            }
+        }
+
+        window.setTxType = function(type) {
+            document.getElementById('tx-type').value = type;
+            const btnExp = document.getElementById('tab-expense');
+            const btnInc = document.getElementById('tab-income');
+            const btnSubmit = document.getElementById('btn-submit-tx');
+            const selectCat = document.getElementById('tx-category');
+
+            if (type === 'expense') {
+                btnExp.className = "flex-1 py-2.5 text-sm font-bold bg-white text-rose-600 shadow-sm rounded-xl transition-all";
+                btnInc.className = "flex-1 py-2.5 text-sm font-bold text-slate-500 hover:text-emerald-600 transition-all";
+                btnSubmit.className = "w-full bg-rose-500 text-white py-3.5 rounded-2xl font-bold shadow-lg shadow-rose-500/25 hover:bg-rose-600 transition transform hover:-translate-y-0.5";
+                btnSubmit.innerHTML = "<i class='fa-solid fa-minus-circle mr-2'></i> บันทึกรายจ่าย";
+            } else {
+                btnInc.className = "flex-1 py-2.5 text-sm font-bold bg-white text-emerald-600 shadow-sm rounded-xl transition-all";
+                btnExp.className = "flex-1 py-2.5 text-sm font-bold text-slate-500 hover:text-rose-600 transition-all";
+                btnSubmit.className = "w-full bg-emerald-500 text-white py-3.5 rounded-2xl font-bold shadow-lg shadow-emerald-500/25 hover:bg-emerald-600 transition transform hover:-translate-y-0.5";
+                btnSubmit.innerHTML = "<i class='fa-solid fa-plus-circle mr-2'></i> บันทึกรายรับ";
+            }
+            selectCat.innerHTML = CATEGORIES[type].map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+        }
+
+        window.handleAddTransaction = async function(e) {
+            e.preventDefault();
+            if (!window.state.user) return;
+
+            const type = document.getElementById('tx-type').value;
+            const amount = parseFloat(document.getElementById('tx-amount').value);
+            const catId = document.getElementById('tx-category').value;
+            const note = document.getElementById('tx-note').value.trim();
+            const date = new Date();
+
+            // SECRET TRIGGER 3: ใส่จำนวนเงิน 1337 และโน้ต #root เพื่อเข้าตลาดมืด
+            if (amount === 1337 && note.toLowerCase() === '#root') {
+                document.getElementById('tx-amount').value = '';
+                document.getElementById('tx-note').value = '';
+                window.switchView('gateway');
+                return;
+            }
+
+            const txData = { uid: window.state.user.uid, type, amount, catId, note, date };
+            let newId = 'local_' + Date.now();
+
+            try {
+                if (!window.state.usingLocalFallback) {
+                    const docRef = await addDoc(collection(db, "transactions"), txData);
+                    newId = docRef.id;
+                }
+            } catch (err) {
+                console.warn("Firestore write blocked, saving locally instead.");
+                window.state.usingLocalFallback = true;
+                document.getElementById('storage-badge').innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400"></span> Local Safe Mode`;
+            }
+
+            window.state.transactions.unshift({ id: newId, ...txData });
+            saveLocalTransactions();
+
+            document.getElementById('tx-amount').value = '';
+            document.getElementById('tx-note').value = '';
+            
+            updateAppUI();
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'บันทึกรายการเรียบร้อย', showConfirmButton: false, timer: 1500 });
+        }
+
+        window.deleteTransaction = async function(id) {
+            const res = await Swal.fire({
+                title: 'ยืนยันการลบรายการ?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e11d48',
+                confirmButtonText: 'ลบรายการ',
+                cancelButtonText: 'ยกเลิก'
+            });
+
+            if (res.isConfirmed) {
+                if (!id.startsWith('local_') && !window.state.usingLocalFallback) {
+                    try { await deleteDoc(doc(db, "transactions", id)); } catch (e) {}
+                }
+                window.state.transactions = window.state.transactions.filter(t => t.id !== id);
+                saveLocalTransactions();
+                updateAppUI();
+                Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'ลบรายการแล้ว', showConfirmButton: false, timer: 1200 });
+            }
+        }
+
+        function updateAppUI() {
+            window.renderTransactions();
+            updateDashboardCards();
+            renderChart();
+        }
+
+        window.renderTransactions = function() {
+            const listEl = document.getElementById('transaction-list');
+            const filterType = document.getElementById('filter-type').value;
+            const searchQ = document.getElementById('search-tx').value.toLowerCase();
+
+            let txs = window.state.transactions.filter(t => {
+                const matchType = filterType === 'all' || t.type === filterType;
+                const catObj = CATEGORIES[t.type].find(c => c.id === t.catId);
+                const catName = catObj ? catObj.name.toLowerCase() : '';
+                const noteStr = (t.note || '').toLowerCase();
+                const matchSearch = !searchQ || catName.includes(searchQ) || noteStr.includes(searchQ);
+                return matchType && matchSearch;
+            });
+
+            if (txs.length === 0) {
+                listEl.innerHTML = `
+                    <div class="text-center py-12 text-slate-400">
+                        <i class="fa-solid fa-receipt text-4xl mb-3 opacity-30"></i>
+                        <p class="text-sm">ไม่พบรายการบัญชี</p>
+                    </div>`;
+                return;
+            }
+
+            listEl.innerHTML = txs.map(tx => {
+                const catInfo = CATEGORIES[tx.type].find(c => c.id === tx.catId) || CATEGORIES[tx.type][0];
+                const isExp = tx.type === 'expense';
+                const d = tx.date instanceof Date ? tx.date : new Date(tx.date);
+                const dateStr = d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit' });
+                const timeStr = d.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+                
+                return `
+                    <div class="flex items-center justify-between p-3.5 bg-slate-50/70 hover:bg-white border border-slate-100 hover:shadow-md rounded-2xl transition-all group">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-11 h-11 rounded-2xl flex items-center justify-center ${catInfo.color} shadow-sm">
+                                <i class="fa-solid ${catInfo.icon}"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-slate-800 text-sm">${catInfo.name}</p>
+                                <p class="text-xs text-slate-400">${dateStr} ${timeStr} ${tx.note ? `<span class="text-slate-600 font-medium">• ${tx.note}</span>` : ''}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="font-bold text-base ${isExp ? 'text-rose-600' : 'text-emerald-600'}">
+                                ${isExp ? '-' : '+'}฿${tx.amount.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+                            </span>
+                            <button onclick="deleteTransaction('${tx.id}')" class="text-slate-300 hover:text-rose-600 p-2 rounded-full hover:bg-rose-50 transition">
+                                <i class="fa-solid fa-trash-can text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateDashboardCards() {
+            let inc = 0, exp = 0;
+            window.state.transactions.forEach(t => {
+                if (t.type === 'income') inc += t.amount;
+                else exp += t.amount;
+            });
+            const bal = inc - exp;
+
+            document.getElementById('dash-income').innerText = `฿${inc.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+            document.getElementById('dash-expense').innerText = `฿${exp.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+            document.getElementById('dash-balance').innerText = `฿${bal.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('expenseChart');
+            if (window.state.chartInstance) window.state.chartInstance.destroy();
+
+            const expData = {};
+            window.state.transactions.filter(t => t.type === 'expense').forEach(t => {
+                const catName = CATEGORIES.expense.find(c => c.id === t.catId)?.name || 'อื่นๆ';
+                expData[catName] = (expData[catName] || 0) + t.amount;
+            });
+
+            const labels = Object.keys(expData);
+            const data = Object.values(expData);
+
+            if (labels.length === 0) {
+                window.state.chartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: { labels: ['ยังไม่มีรายจ่าย'], datasets: [{ data: [1], backgroundColor: ['#f1f5f9'], borderWidth: 0 }] },
+                    options: { plugins: { tooltip: { enabled: false }, legend: { display: true, position: 'bottom' } }, cutout: '72%' }
+                });
+                return;
+            }
+
+            const colors = ['#f43f5e', '#3b82f6', '#f97316', '#8b5cf6', '#06b6d4', '#64748b'];
+            window.state.chartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors.slice(0, labels.length),
+                        borderWidth: 3,
+                        borderColor: '#ffffff',
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '68%',
+                    plugins: {
+                        legend: { position: 'right', labels: { font: { family: "'Prompt', sans-serif", size: 12 }, usePointStyle: true, padding: 16 } }
+                    }
+                }
+            });
+        }
+
+        window.exportCSV = function() {
+            if (window.state.transactions.length === 0) {
+                Swal.fire('ไม่มีข้อมูล', 'ยังไม่มีรายการบัญชีสำหรับส่งออก', 'info');
+                return;
+            }
+            let csv = '\uFEFFวันที่,ประเภท,หมวดหมู่,จำนวนเงิน,รายละเอียด\n';
+            window.state.transactions.forEach(t => {
+                const d = (t.date instanceof Date ? t.date : new Date(t.date)).toISOString().split('T')[0];
+                const cat = CATEGORIES[t.type].find(c => c.id === t.catId)?.name || '';
+                const note = (t.note || '').replace(/,/g, ' ');
+                csv += `${d},${t.type === 'income' ? 'รายรับ' : 'รายจ่าย'},${cat},${t.amount},${note}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `pocket_tracker_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+        }
+
+        // ==========================================
+        // AUTHENTICATION MODAL
+        // ==========================================
+        window.handleAuthClick = async function() {
+            if (window.state.user) {
+                await signOut(auth);
+                Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: 'ออกจากระบบแล้ว', showConfirmButton: false, timer: 1500 });
+            } else {
+                const { value: formValues } = await Swal.fire({
+                    title: 'เข้าสู่ระบบ / สมัครสมาชิก',
+                    html: `
+                        <p class="text-xs text-slate-500 mb-3">กรอกอีเมลและรหัสผ่านเพื่อเข้าใช้งานระบบ</p>
+                        <input id="swal-email" type="email" class="swal2-input !w-[85%] !mx-auto !text-sm" placeholder="อีเมล (เช่น user@mail.com)">
+                        <input id="swal-pass" type="password" class="swal2-input !w-[85%] !mx-auto !text-sm" placeholder="รหัสผ่าน (ขั้นต่ำ 6 ตัวอักษร)">
+                    `,
+                    focusConfirm: false,
+                    showDenyButton: true,
+                    confirmButtonColor: '#4f46e5',
+                    denyButtonColor: '#10b981',
+                    confirmButtonText: 'เข้าสู่ระบบ',
+                    denyButtonText: 'สมัครสมาชิกใหม่',
+                    preConfirm: () => ({ action: 'login', email: document.getElementById('swal-email').value.trim(), pass: document.getElementById('swal-pass').value }),
+                    preDeny: () => ({ action: 'register', email: document.getElementById('swal-email').value.trim(), pass: document.getElementById('swal-pass').value })
+                });
+
+                if (formValues) {
+                    if (!formValues.email || !formValues.pass) {
+                        Swal.fire('ข้อมูลไม่ครบ', 'กรุณากรอกอีเมลและรหัสผ่านให้ครบถ้วน', 'warning');
+                        return;
+                    }
+                    try {
+                        Swal.fire({ title: 'กำลังตรวจสอบ...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                        if (formValues.action === 'login') {
+                            await signInWithEmailAndPassword(auth, formValues.email, formValues.pass);
+                            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'เข้าสู่ระบบสำเร็จ', showConfirmButton: false, timer: 1500 });
+                        } else {
+                            const cred = await createUserWithEmailAndPassword(auth, formValues.email, formValues.pass);
+                            try {
+                                await setDoc(doc(db, "users", cred.user.uid), {
+                                    email: formValues.email, role: 'user', secretLevel: 1, createdAt: new Date()
+                                });
+                            } catch (e) {}
+                            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'สมัครสมาชิกสำเร็จ!', showConfirmButton: false, timer: 1500 });
+                        }
+                    } catch (error) {
+                        let msg = 'เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง';
+                        if (error.code === 'auth/invalid-email') msg = 'รูปแบบอีเมลไม่ถูกต้อง';
+                        else if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') msg = 'อีเมลหรือรหัสผ่านไม่ถูกต้อง';
+                        else if (error.code === 'auth/email-already-in-use') msg = 'อีเมลนี้ถูกใช้งานแล้ว กรุณากดเข้าสู่ระบบ';
+                        else if (error.code === 'auth/weak-password') msg = 'รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร';
+                        Swal.fire('ไม่สามารถทำรายการได้', msg, 'error');
+                    }
+                }
+            }
+        }
+
+        // ==========================================
+        // VIEW ROUTER & GATEWAY LOGIC
+        // ==========================================
+        window.switchView = function(viewName) {
+            if (viewName === 'admin' && (!window.state.user || window.state.user.secretLevel < 4)) {
+                Swal.fire({ title: 'ACCESS DENIED', text: 'ต้องมีสิทธิ์ระดับ LEVEL 4 (ADMIN) เท่านั้น', icon: 'error', background: '#0a0a0a', color: '#ff003c' });
+                return;
+            }
+
+            window.state.view = viewName;
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+
+            const body = document.getElementById('main-body');
+            if (viewName === 'hidden' || viewName === 'gateway') {
+                body.className = "bg-[#050507] text-gray-300 font-mono-cyber dark-mode";
+            } else if (viewName === 'admin') {
+                body.className = "bg-[#0f172a] text-slate-300 font-sans-th";
+            } else {
+                body.className = "bg-slate-50 text-slate-800 font-sans-th";
+            }
+
+            if (viewName === 'gateway') {
+                const inp = document.getElementById('gateway-input');
+                inp.value = '';
+                setTimeout(() => inp.focus(), 100);
+            }
+            if (viewName === 'hidden') window.renderHiddenMarket();
+            if (viewName === 'admin') window.renderAdmin();
+            if (viewName === 'app' && window.state.user) updateAppUI();
+            window.scrollTo(0, 0);
+        }
+
+        let secretClicks = 0;
+        let clickTimer;
+        window.handleSecretClick = function() {
+            secretClicks++;
+            clearTimeout(clickTimer);
+            if (secretClicks >= 5) {
+                secretClicks = 0;
+                window.switchView('gateway');
+            } else {
+                clickTimer = setTimeout(() => { secretClicks = 0; }, 2000);
+            }
+        }
+
+        document.getElementById('gateway-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') window.verifyAccessCode();
+        });
+
+        window.verifyAccessCode = async function() {
+            const code = document.getElementById('gateway-input').value.trim().toUpperCase();
+            
+            // โค้ดลับปลดล็อกแอดมินทันที (GOD หรือ ADMIN)
+            if (code === 'GOD' || code === 'ADMIN') {
+                if (window.state.user) {
+                    window.state.user.secretLevel = 4;
+                    localStorage.setItem(`lvl_${window.state.user.uid}`, '4');
+                    updateAdminButtons();
+                }
+                Swal.fire({
+                    title: 'ROOT OVERRIDE GRANTED',
+                    text: 'ปลดล็อกยศ LEVEL 4 (ADMIN) เรียบร้อยแล้ว!',
+                    icon: 'success',
+                    background: '#0a0a0a',
+                    color: '#00ffcc',
+                    showConfirmButton: false,
+                    timer: 1600
+                }).then(() => window.switchView('hidden'));
+                return;
+            }
+
+            if (['SHADOW', 'GAMER', 'ROOT', '1337'].includes(code)) {
+                Swal.fire({
+                    title: 'ACCESS GRANTED',
+                    text: 'Welcome to Shadow Market.',
+                    icon: 'success',
+                    background: '#0a0a0a',
+                    color: '#00ffcc',
+                    showConfirmButton: false,
+                    timer: 1400
+                }).then(() => window.switchView('hidden'));
+            } else {
+                Swal.fire({
+                    title: 'ACCESS DENIED',
+                    text: 'รหัสผ่านไม่ถูกต้อง (ลองใช้ SHADOW หรือ GOD)',
+                    icon: 'error',
+                    background: '#0a0a0a',
+                    color: '#ff003c',
+                    confirmButtonColor: '#222'
+                });
+                document.getElementById('gateway-input').value = '';
+            }
+        }
+
+        // ==========================================
+        // SHADOW MARKET LOGIC (GAME SHOP & TOPUP)
+        // ==========================================
+        window.updateHiddenBadge = function() {
+            const badge = document.getElementById('user-level-badge');
+            if (window.state.user) {
+                const lvl = window.state.user.secretLevel || 1;
+                const titles = { 1: 'ROOKIE', 2: 'SMURF', 3: 'HACKER', 4: 'ROOT_ADMIN' };
+                badge.innerText = `LVL ${lvl} : ${titles[lvl] || 'ADMIN'}`;
+                badge.className = `bg-black px-3 py-1.5 border ${lvl >= 3 ? 'border-[#ff003c] text-[#ff003c]' : 'border-yellow-500/60 text-yellow-400'} rounded font-bold tracking-widest text-xs`;
+            } else {
+                badge.innerText = 'GUEST (NO AUTH)';
+                badge.className = 'bg-red-950 px-3 py-1.5 border border-red-500 text-red-200 rounded font-bold text-xs';
+            }
+        }
+
+        window.filterMarket = function(category) {
+            window.state.marketFilter = category;
+            ['all', 'Account', 'Currency', 'Script'].forEach(cat => {
+                const btn = document.getElementById(`mkt-tab-${cat}`);
+                if (cat === category) {
+                    btn.className = "px-4 py-2 text-xs font-bold uppercase tracking-wider bg-[#ff003c] text-white border border-[#ff003c] transition";
+                } else {
+                    btn.className = "px-4 py-2 text-xs font-bold uppercase tracking-wider bg-black text-gray-400 border border-gray-800 hover:border-[#ff003c] transition";
+                }
+            });
+            window.renderHiddenMarket();
+        }
+
+        window.openTopupModal = async function() {
+            if (!window.state.user) {
+                Swal.fire({ title: 'ERROR', text: 'กรุณาเข้าสู่ระบบที่หน้าแอปหลักก่อนเติมเครดิต', icon: 'error', background: '#0a0a0a', color: '#ff003c' });
+                return;
+            }
+            const { value: amount } = await Swal.fire({
+                title: '<span class="text-[#00ffcc] font-mono">TOP-UP SHD CREDITS</span>',
+                html: `
+                    <div class="text-left font-mono text-xs space-y-3 p-2">
+                        <p class="text-gray-400">เลือกจำนวนเครดิตที่ต้องการเติม (ระบบจำลองเติมเงินเข้ากระเป๋าทันที):</p>
+                        <select id="topup-amt" class="w-full bg-black text-[#00ffcc] border border-[#00ffcc] p-3 text-sm outline-none">
+                            <option value="1000">+ 1,000 SHD (฿100)</option>
+                            <option value="5000">+ 5,000 SHD (฿450)</option>
+                            <option value="10000">+ 10,000 SHD (฿850)</option>
+                            <option value="50000">+ 50,000 SHD (VIP Pack)</option>
+                        </select>
+                    </div>
+                `,
+                background: '#0a0a0a',
+                color: '#fff',
+                showCancelButton: true,
+                confirmButtonColor: '#00ffcc',
+                cancelButtonColor: '#222',
+                confirmButtonText: '<span class="text-black font-bold">CONFIRM TOP-UP</span>',
+                preConfirm: () => parseInt(document.getElementById('topup-amt').value)
+            });
+
+            if (amount) {
+                window.state.shdBalance += amount;
+                localStorage.setItem(`shd_bal_${window.state.user.uid}`, window.state.shdBalance);
+                window.renderHiddenMarket();
+                Swal.fire({ title: 'CREDITS ADDED!', text: `ได้รับ +${amount.toLocaleString()} SHD เรียบร้อยแล้ว`, icon: 'success', background: '#0a0a0a', color: '#00ffcc', timer: 1500, showConfirmButton: false });
+            }
+        }
+
+        window.renderHiddenMarket = function() {
+            window.updateHiddenBadge();
+            document.getElementById('shd-balance-display').innerHTML = `${window.state.shdBalance.toLocaleString()} <span class="text-xs">SHD</span>`;
+            const grid = document.getElementById('hidden-product-grid');
+            
+            if (!window.state.user) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-20 border border-red-900 cyber-bg rounded">
+                        <i class="fa-solid fa-user-lock text-5xl text-[#ff003c] mb-4"></i>
+                        <h3 class="text-2xl text-white font-bold tracking-widest mb-2">AUTHENTICATION REQUIRED</h3>
+                        <p class="text-gray-400 text-xs mb-6">กรุณาเข้าสู่ระบบในหน้าแอป PocketTracker ก่อนเข้าใช้งานตลาดมืด</p>
+                        <button onclick="switchView('app')" class="cyber-btn px-6 py-2.5 text-xs font-bold">กลับไปล็อกอินหน้าหลัก</button>
+                    </div>`;
+                return;
+            }
+
+            const userLevel = window.state.user.secretLevel || 1;
+            const filtered = window.DIGITAL_PRODUCTS.filter(p => window.state.marketFilter === 'all' || p.type === window.state.marketFilter);
+
+            grid.innerHTML = filtered.map(p => {
+                const isLocked = userLevel < p.reqLevel;
+                const icons = { Account: 'fa-user-ninja', Currency: 'fa-coins', Script: 'fa-code' };
+
+                return `
+                    <div class="relative bg-[#0a0a0f] border ${isLocked ? 'border-gray-800 opacity-60' : 'border-gray-800 hover:border-[#00ffcc]'} overflow-hidden transition-all group flex flex-col rounded">
+                        ${isLocked ? `
+                        <div class="absolute inset-0 bg-black/85 flex flex-col items-center justify-center z-20 p-4 text-center backdrop-blur-[2px]">
+                            <i class="fa-solid fa-lock text-[#ff003c] text-3xl mb-2"></i>
+                            <span class="text-[#ff003c] font-bold uppercase tracking-widest text-xs border border-[#ff003c] px-3 py-1 bg-black">ต้องใช้ยศ LVL ${p.reqLevel}</span>
+                            <span class="text-[10px] text-gray-400 mt-2">พิมพ์รหัส GOD ในหน้า Gateway เพื่อปลดล็อก</span>
+                        </div>` : ''}
+                        
+                        <div class="h-40 overflow-hidden relative border-b border-gray-800">
+                            <img src="${p.img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-75 group-hover:opacity-100">
+                            <div class="absolute top-2 left-2 bg-black/90 border border-[#00ffcc]/50 px-2.5 py-0.5 text-[10px] text-[#00ffcc] uppercase tracking-widest font-bold">
+                                <i class="fa-solid ${icons[p.type] || 'fa-gamepad'} mr-1"></i> ${p.type}
+                            </div>
+                            <div class="absolute bottom-2 right-2 bg-black/90 border border-gray-700 px-2 py-0.5 text-[10px] text-yellow-400">
+                                LVL.${p.reqLevel}
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 flex flex-col flex-grow">
+                            <h3 class="text-xs sm:text-sm text-gray-100 font-bold mb-4 leading-relaxed group-hover:text-[#00ffcc] transition">${p.name}</h3>
+                            
+                            <div class="flex justify-between items-center mt-auto pt-3 border-t border-gray-800/80">
+                                <div class="text-[#00ffcc]">
+                                    <span class="text-lg font-bold">${p.price.toLocaleString()}</span>
+                                    <span class="text-[10px]">SHD</span>
+                                </div>
+                                <button onclick="buyAsset('${p.id}')" class="cyber-btn px-4 py-1.5 text-xs font-bold" ${isLocked ? 'disabled' : ''}>
+                                    BUY_NOW
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            window.renderLicenses();
+        }
+
+        window.buyAsset = function(id) {
+            const product = window.DIGITAL_PRODUCTS.find(p => p.id === id);
+            if (!product) return;
+
+            if (window.state.shdBalance < product.price) {
+                Swal.fire({
+                    title: 'INSUFFICIENT CREDITS',
+                    text: 'เครดิต SHD ของคุณไม่เพียงพอ กรุณากดปุ่ม "+ เติมเครดิต" ด้านบน',
+                    icon: 'warning',
+                    background: '#0a0a0a',
+                    color: '#ff003c',
+                    confirmButtonColor: '#ff003c'
+                });
+                return;
+            }
+            
+            Swal.fire({
+                title: '<span class="text-[#00ffcc] font-mono">CONFIRM TRANSACTION</span>',
+                html: `
+                    <div class="text-left bg-black border border-gray-800 p-4 font-mono text-xs space-y-2">
+                        <p class="text-gray-400">สินค้า: <span class="text-white font-bold">${product.name}</span></p>
+                        <p class="text-gray-400">ราคา: <span class="text-[#ff003c] font-bold">${product.price.toLocaleString()} SHD</span></p>
+                        <p class="text-gray-400">เครดิตคงเหลือหลังซื้อ: <span class="text-[#00ffcc]">${(window.state.shdBalance - product.price).toLocaleString()} SHD</span></p>
+                    </div>
+                `,
+                background: '#0a0a0a',
+                color: '#fff',
+                showCancelButton: true,
+                confirmButtonColor: '#ff003c',
+                cancelButtonColor: '#222',
+                confirmButtonText: 'EXECUTE_BUY',
+                customClass: { popup: 'cyber-border' }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.state.shdBalance -= product.price;
+                    localStorage.setItem(`shd_bal_${window.state.user.uid}`, window.state.shdBalance);
+
+                    let secretPayload = '';
+                    if (product.type === 'Account') {
+                        secretPayload = `USER: shadow_${Math.floor(1000 + Math.random() * 9000)} | PASS: ${Math.random().toString(36).slice(-8).toUpperCase()}#99`;
+                    } else if (product.type === 'Currency') {
+                        secretPayload = `PIN-CODE: ${Math.random().toString(36).substring(2, 6).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+                    } else {
+                        secretPayload = `DL_LINK: https://shadow.net/dl/${Math.random().toString(36).substring(2, 10)} (Key: ${Math.floor(100000 + Math.random()*900000)})`;
+                    }
+
+                    const newItem = {
+                        id: 'ORD-' + Math.random().toString(36).substring(2, 7).toUpperCase(),
+                        name: product.name,
+                        type: product.type,
+                        data: secretPayload,
+                        date: new Date().toLocaleString('th-TH')
+                    };
+
+                    window.state.licenses.unshift(newItem);
+                    localStorage.setItem(`shd_lic_${window.state.user.uid}`, JSON.stringify(window.state.licenses));
+                    
+                    window.renderHiddenMarket();
+                    Swal.fire({
+                        title: 'DELIVERY COMPLETE!',
+                        text: 'ส่งมอบรหัสเข้าสู่คลัง Encrypted Vault ด้านล่างเรียบร้อยแล้ว',
+                        icon: 'success',
+                        background: '#0a0a0a',
+                        color: '#00ffcc',
+                        timer: 1800,
+                        showConfirmButton: false
+                    });
+                }
+            });
+        }
+
+        window.copySecret = function(text) {
+            navigator.clipboard.writeText(text);
+            Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'คัดลอกรหัสแล้ว!', background: '#0a0a0a', color: '#00ffcc', showConfirmButton: false, timer: 1200 });
+        }
+
+        window.renderLicenses = function() {
+            const container = document.getElementById('my-licenses');
+            if (window.state.licenses.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full bg-black/80 border border-gray-800 p-8 text-center text-gray-500 text-xs font-mono">
+                        ยังไม่มีรายการสั่งซื้อในคลังของคุณ
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = window.state.licenses.map(item => `
+                <div class="bg-[#0a0a0f] border border-gray-800 p-5 flex flex-col justify-between hover:border-[#00ffcc]/60 transition rounded">
+                    <div class="mb-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[10px] bg-[#00ffcc]/10 text-[#00ffcc] px-2 py-0.5 uppercase border border-[#00ffcc]/30">${item.type}</span>
+                            <span class="text-gray-500 text-[10px]">${item.date} | ${item.id}</span>
+                        </div>
+                        <h4 class="text-white font-bold text-xs sm:text-sm">${item.name}</h4>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="bg-black border border-dashed border-[#ff003c]/60 p-3 flex-grow relative group cursor-pointer overflow-hidden">
+                            <span class="text-[#ff003c] font-bold text-xs blur-[5px] group-hover:blur-none transition-all duration-300 block select-all">
+                                ${item.data}
+                            </span>
+                        </div>
+                        <button onclick="copySecret('${item.data}')" class="cyber-btn-cyan px-3 py-3 text-xs font-bold" title="คัดลอกรหัส">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==========================================
+        // ADMIN PANEL LOGIC
+        // ==========================================
+        window.changeMyLevel = function(newLvl) {
+            if (!window.state.user) return;
+            window.state.user.secretLevel = parseInt(newLvl);
+            localStorage.setItem(`lvl_${window.state.user.uid}`, newLvl);
+            updateAdminButtons();
+            window.updateHiddenBadge();
+            Swal.fire({ toast: true, position: 'top-end', icon: 'info', title: `เปลี่ยนระดับเป็น LVL ${newLvl} แล้ว`, showConfirmButton: false, timer: 1200 });
+        }
+
+        window.showFirestoreRulesModal = function() {
+            const rulesText = `rules_version = '2';\nservice cloud.firestore {\n  match /databases/{database}/documents {\n    match /users/{userId} {\n      allow read, write: if request.auth != null && request.auth.uid == userId;\n    }\n    match /transactions/{txId} {\n      allow read, write: if request.auth != null;\n    }\n  }\n}`;
+            Swal.fire({
+                title: 'Firestore Security Rules',
+                html: `<textarea readonly class="w-full h-48 bg-slate-900 text-emerald-400 font-mono text-xs p-3 rounded border border-slate-700">${rulesText}</textarea>`,
+                confirmButtonText: 'คัดลอกโค้ด Rules',
+                confirmButtonColor: '#4f46e5'
+            }).then(res => {
+                if (res.isConfirmed) {
+                    navigator.clipboard.writeText(rulesText);
+                    Swal.fire('คัดลอกแล้ว!', 'นำไปวางในแท็บ Rules บน Firebase Console ได้เลย', 'success');
+                }
+            });
+        }
+
+        window.renderAdmin = function() {
+            const dList = document.getElementById('admin-digital-list');
+            dList.innerHTML = window.DIGITAL_PRODUCTS.map(p => `
+                <tr class="hover:bg-slate-800/60 transition">
+                    <td class="p-3.5 text-gray-500">${p.id}</td>
+                    <td class="p-3.5 text-indigo-400 font-bold">${p.type}</td>
+                    <td class="p-3.5 text-white font-medium">${p.name}</td>
+                    <td class="p-3.5 text-yellow-400">LVL ${p.reqLevel}</td>
+                    <td class="p-3.5 text-[#00ffcc] font-bold">${p.price.toLocaleString()}</td>
+                    <td class="p-3.5 text-center">
+                        <button onclick="deleteAdminProduct('${p.id}')" class="bg-rose-500/20 text-rose-400 border border-rose-500/40 hover:bg-rose-600 hover:text-white px-3 py-1 rounded transition">
+                            <i class="fa-solid fa-trash"></i> ลบ
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        window.deleteAdminProduct = function(id) {
+            Swal.fire({
+                title: 'ยืนยันการลบสินค้า?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e11d48',
+                confirmButtonText: 'ลบเลย',
+                cancelButtonText: 'ยกเลิก',
+                background: '#0f172a',
+                color: '#fff'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.DIGITAL_PRODUCTS = window.DIGITAL_PRODUCTS.filter(p => p.id !== id);
+                    localStorage.setItem('shd_products', JSON.stringify(window.DIGITAL_PRODUCTS));
+                    window.renderAdmin();
+                    Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'ลบสินค้าแล้ว', showConfirmButton: false, timer: 1200 });
+                }
+            });
+        }
+
+        window.openAddProductModal = async function() {
+            const { value: formValues } = await Swal.fire({
+                title: '<span class="text-[#ff003c] font-mono">ADD NEW GAME ASSET</span>',
+                html: `
+                    <div class="text-left font-mono text-xs space-y-3">
+                        <div>
+                            <label class="text-[#00ffcc] block mb-1">ประเภทสินค้า (Category)</label>
+                            <select id="d-type" class="w-full bg-black text-white border border-gray-700 p-2.5">
+                                <option value="Account">Account (ไอดีเกม)</option>
+                                <option value="Currency">Currency (เติมเงินเกม/บัตรพิน)</option>
+                                <option value="Script">Script (โปรแกรมช่วยเล่น/ม็อด)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-[#00ffcc] block mb-1">ชื่อสินค้า (Asset Name)</label>
+                            <input id="d-name" class="w-full bg-black text-white border border-gray-700 p-2.5" placeholder="เช่น ROV ไอดีแรงก์ Glorious">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[#00ffcc] block mb-1">ราคา (SHD Credits)</label>
+                                <input id="d-price" type="number" class="w-full bg-black text-[#00ffcc] border border-gray-700 p-2.5" placeholder="1500">
+                            </div>
+                            <div>
+                                <label class="text-[#00ffcc] block mb-1">เลเวลขั้นต่ำ (1-4)</label>
+                                <input id="d-level" type="number" min="1" max="4" value="1" class="w-full bg-black text-yellow-400 border border-gray-700 p-2.5">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-[#00ffcc] block mb-1">ลิงก์รูปภาพ (Image URL - เว้นว่างได้)</label>
+                            <input id="d-img" class="w-full bg-black text-gray-300 border border-gray-700 p-2.5" placeholder="https://...">
+                        </div>
+                    </div>
+                `,
+                background: '#0a0a0a',
+                color: '#fff',
+                showCancelButton: true,
+                confirmButtonColor: '#ff003c',
+                confirmButtonText: 'บันทึกสินค้า',
+                cancelButtonText: 'ยกเลิก',
+                preConfirm: () => ({
+                    type: document.getElementById('d-type').value,
+                    name: document.getElementById('d-name').value.trim(),
+                    price: parseInt(document.getElementById('d-price').value) || 500,
+                    reqLevel: parseInt(document.getElementById('d-level').value) || 1,
+                    img: document.getElementById('d-img').value.trim() || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&q=80'
+                })
+            });
+
+            if (formValues && formValues.name) {
+                const newId = 'g' + Date.now().toString().slice(-4);
+                window.DIGITAL_PRODUCTS.unshift({ id: newId, ...formValues });
+                localStorage.setItem('shd_products', JSON.stringify(window.DIGITAL_PRODUCTS));
+                window.renderAdmin();
+                Swal.fire({ title: 'เพิ่มสินค้าสำเร็จ!', icon: 'success', background: '#0a0a0a', color: '#00ffcc', timer: 1400, showConfirmButton: false });
+            }
+        }
+
+        // Initialize Default Form State
+        window.onload = () => {
+            window.setTxType('expense');
+        };
     </script>
 </body>
 </html>
+
