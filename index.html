@@ -14,7 +14,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        body { transition: background-color 0.4s ease, color 0.4s ease; }
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+        .swal2-popup {
+            max-width: 95vw !important;
+            box-sizing: border-box !important;
+        }
         .font-sans-th { font-family: 'Prompt', sans-serif; }
         .font-mono-cyber { font-family: 'Fira Code', monospace; }
 
@@ -150,74 +158,80 @@
     <!-- ==========================================
          VIEW 1: SURFACE SITE - VIBRANT GAME TOP-UP STORE (ISOLATED DATA & FUNCTIONS)
          ========================================== -->
-    <div id="view-app" class="view-section min-h-screen flex flex-col">
-        <!-- Colorful Top Navbar -->
-        <nav class="bg-white/85 backdrop-blur-md border-b border-rose-200/80 text-slate-800 sticky top-0 z-40 shadow-sm">
-            <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-                <div class="flex items-center gap-3 font-bold text-xl cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-                    <div class="bg-gradient-to-tr from-rose-500 via-fuchsia-500 to-indigo-500 p-2.5 rounded-2xl text-white shadow-lg shadow-rose-500/30">
-                        <i class="fa-solid fa-gamepad"></i>
+    <div id="view-app" class="view-section min-h-screen flex flex-col w-full overflow-x-hidden">
+        <!-- Responsive Top Navbar (Fits Mobile & PC cleanly) -->
+        <nav class="bg-white/95 backdrop-blur-md border-b border-rose-200/80 text-slate-800 sticky top-0 z-40 shadow-sm w-full">
+            <div class="max-w-6xl mx-auto px-3 sm:px-4 py-2.5 flex flex-col gap-2">
+                <!-- Row 1: Logo + Primary Auth / Desktop Actions -->
+                <div class="flex items-center justify-between gap-2 w-full">
+                    <div class="flex items-center gap-2 sm:gap-3 font-bold text-base sm:text-xl cursor-pointer shrink-0" onclick="closeSurfaceAdminPage(); window.scrollTo({top:0, behavior:'smooth'})">
+                        <div class="bg-gradient-to-tr from-rose-500 via-fuchsia-500 to-indigo-500 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl text-white shadow-md shadow-rose-500/25 shrink-0">
+                            <i class="fa-solid fa-gamepad text-sm sm:text-base"></i>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="tracking-wide bg-gradient-to-r from-rose-600 via-fuchsia-600 to-indigo-600 bg-clip-text text-transparent font-extrabold whitespace-nowrap">VALO-SHOP</span>
+                            <span class="text-[9px] sm:text-[10px] bg-gradient-to-r from-amber-400 to-orange-500 text-white px-2 py-0.5 rounded-full font-bold shadow-sm whitespace-nowrap">OFFICIAL</span>
+                        </div>
                     </div>
-                    <span class="tracking-wide bg-gradient-to-r from-rose-600 via-fuchsia-600 to-indigo-600 bg-clip-text text-transparent font-extrabold">VALO-SHOP <span class="text-[10px] bg-gradient-to-r from-amber-400 to-orange-500 text-white px-2.5 py-0.5 rounded-full font-bold ml-1 shadow-sm">OFFICIAL</span></span>
-                </div>
 
-                <div class="flex items-center gap-2 sm:gap-3">
-                    <!-- Points Badge (Calculated ONLY from Surface Game Top-Up orders) -->
-                    <button id="user-points-badge" onclick="openSurfaceProfileModal()" class="hidden sm:inline-flex items-center gap-1.5 text-xs bg-amber-50 hover:bg-amber-100 text-amber-700 px-3.5 py-1.5 rounded-full border border-amber-300 font-bold transition shadow-sm">
-                        <i class="fa-solid fa-star text-amber-500"></i> แต้มเติมเกม: <b id="user-points-val">0</b> P
-                    </button>
-                    <!-- Surface Inbox Button (Receives Invite Access Code & System Messages) -->
-                    <button id="btn-inbox" onclick="openSurfaceInboxModal()" class="hidden relative bg-rose-50 hover:bg-rose-100 text-rose-700 px-3.5 py-1.5 rounded-full border border-rose-200 transition text-xs font-bold shadow-sm">
-                        <i class="fa-solid fa-envelope mr-1"></i> กล่องข้อความ
-                        <span id="inbox-unread-badge" class="hidden ml-1 bg-rose-600 text-white text-[10px] px-1.5 py-0.2 rounded-full font-extrabold animate-pulse">0</span>
-                    </button>
-                    <!-- Surface Profile Button (No Hidden Market Info) -->
-                    <button id="btn-profile" onclick="openSurfaceProfileModal()" class="hidden bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-3.5 py-1.5 rounded-full border border-indigo-200 transition text-xs font-bold shadow-sm">
-                        <i class="fa-solid fa-user mr-1"></i> โปรไฟล์ของคุณ
-                    </button>
-                    <!-- Surface Admin Button (Manages ONLY Surface Game Top-Up) -->
-                    <button id="btn-admin-shop" onclick="openSurfaceAdminDashboard()" class="hidden bg-gradient-to-r from-fuchsia-600 to-indigo-600 hover:from-fuchsia-700 hover:to-indigo-700 text-white px-3.5 py-1.5 rounded-full transition text-xs font-bold shadow-md shadow-indigo-500/20">
-                        <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> จัดการร้านเติมเกม
-                    </button>
-                    <!-- Auth Button -->
-                    <button id="btn-login" onclick="handleAuthClick()" class="bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white px-4 py-2 rounded-full transition font-bold text-xs shadow-md shadow-rose-500/25">
-                        เข้าสู่ระบบ
-                    </button>
+                    <!-- Action Buttons: Scrollable horizontally on very small screens, never squashed vertically -->
+                    <div class="flex items-center gap-1.5 sm:gap-2 overflow-x-auto hide-scrollbar max-w-full py-0.5">
+                        <!-- Points Badge -->
+                        <button id="user-points-badge" onclick="openSurfaceProfileModal()" class="hidden inline-flex items-center gap-1 text-[11px] sm:text-xs bg-amber-50 hover:bg-amber-100 text-amber-700 px-2.5 sm:px-3.5 py-1.5 rounded-full border border-amber-300 font-bold transition shadow-sm whitespace-nowrap shrink-0">
+                            <i class="fa-solid fa-star text-amber-500"></i> <span class="hidden md:inline">แต้มเติมเกม:</span> <b id="user-points-val">0</b> P
+                        </button>
+                        <!-- Surface Inbox Button -->
+                        <button id="btn-inbox" onclick="openSurfaceInboxModal()" class="hidden relative inline-flex items-center gap-1 bg-rose-50 hover:bg-rose-100 text-rose-700 px-2.5 sm:px-3.5 py-1.5 rounded-full border border-rose-200 transition text-[11px] sm:text-xs font-bold shadow-sm whitespace-nowrap shrink-0">
+                            <i class="fa-solid fa-envelope"></i> <span>กล่องข้อความ</span>
+                            <span id="inbox-unread-badge" class="hidden bg-rose-600 text-white text-[10px] px-1.5 py-0.2 rounded-full font-extrabold animate-pulse">0</span>
+                        </button>
+                        <!-- Surface Profile Button -->
+                        <button id="btn-profile" onclick="openSurfaceProfileModal()" class="hidden inline-flex items-center gap-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-2.5 sm:px-3.5 py-1.5 rounded-full border border-indigo-200 transition text-[11px] sm:text-xs font-bold shadow-sm whitespace-nowrap shrink-0">
+                            <i class="fa-solid fa-user"></i> <span class="hidden sm:inline">โปรไฟล์ของคุณ</span><span class="sm:hidden">โปรไฟล์</span>
+                        </button>
+                        <!-- Surface Admin Button -->
+                        <button id="btn-admin-shop" onclick="openSurfaceAdminDashboard()" class="hidden inline-flex items-center gap-1 bg-gradient-to-r from-fuchsia-600 to-indigo-600 hover:from-fuchsia-700 hover:to-indigo-700 text-white px-2.5 sm:px-3.5 py-1.5 rounded-full transition text-[11px] sm:text-xs font-bold shadow-sm whitespace-nowrap shrink-0">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> จัดการร้านเติมเกม
+                        </button>
+                        <!-- Auth Button -->
+                        <button id="btn-login" onclick="handleAuthClick()" class="inline-flex items-center justify-center bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white px-3 sm:px-4 py-1.5 rounded-full transition font-bold text-[11px] sm:text-xs shadow-sm whitespace-nowrap shrink-0">
+                            เข้าสู่ระบบ
+                        </button>
+                    </div>
                 </div>
             </div>
         </nav>
 
         <!-- Bright & Playful Hero Section -->
-        <div class="relative overflow-hidden bg-gradient-to-br from-rose-500 via-fuchsia-600 to-indigo-600 py-14 px-4 text-white shadow-xl">
+        <div id="surface-hero-banner" class="relative overflow-hidden bg-gradient-to-br from-rose-500 via-fuchsia-600 to-indigo-600 py-10 sm:py-14 px-4 text-white shadow-xl w-full">
             <!-- Decorative blobs -->
-            <div class="absolute -top-20 -left-20 w-72 h-72 bg-amber-300/30 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-cyan-300/30 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -top-20 -left-20 w-64 h-64 bg-amber-300/30 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-20 -right-20 w-72 h-72 bg-cyan-300/30 rounded-full blur-3xl pointer-events-none"></div>
 
             <div class="max-w-6xl mx-auto text-center relative z-10">
-                <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold bg-white/20 text-white backdrop-blur-md border border-white/30 mb-5 shadow-sm">
-                    <span class="w-2.5 h-2.5 rounded-full bg-amber-300 animate-ping"></span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-amber-300 -ml-4"></span>
-                    บริการเติมเกมออนไลน์ รวดเร็ว ปลอดภัย ดำเนินการภายใน 5-15 นาที
+                <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold bg-white/20 text-white backdrop-blur-md border border-white/30 mb-4 shadow-sm max-w-full">
+                    <span class="w-2 h-2 rounded-full bg-amber-300 animate-ping shrink-0"></span>
+                    <span class="truncate">บริการเติมเกมออนไลน์ รวดเร็ว ปลอดภัย ภายใน 5-15 นาที</span>
                 </span>
-                <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4 drop-shadow-md">
+                <h1 class="text-2xl sm:text-5xl font-extrabold text-white tracking-tight mb-3 sm:mb-4 drop-shadow-md leading-tight">
                     บริการรับเติมเกมออนไลน์ <span class="text-amber-300 underline decoration-wavy decoration-amber-300/60">& บัตรดิจิทัล</span>
                 </h1>
-                <p class="text-rose-100 text-sm sm:text-base max-w-2xl mx-auto mb-8 font-medium">
+                <p class="text-rose-100 text-xs sm:text-base max-w-2xl mx-auto mb-6 sm:mb-8 font-medium leading-relaxed px-2">
                     เลือกแพ็กเกจเกมโปรดของคุณ ใช้เพียง UID ไม่ต้องใช้รหัสผ่านเกม เช็กสถานะเรียลไทม์ พร้อมรับแต้มสะสมแลกส่วนลดสุดพิเศษ!
                 </p>
-                <div class="flex flex-wrap justify-center gap-3.5">
-                    <button onclick="document.getElementById('topup-catalog').scrollIntoView({behavior:'smooth'})" class="bg-amber-400 hover:bg-amber-300 text-slate-900 px-7 py-3 rounded-full text-sm font-extrabold shadow-lg shadow-amber-500/30 transition transform hover:-translate-y-0.5">
-                        <i class="fa-solid fa-bolt mr-2"></i> เลือกเกมที่ต้องการเติมเลย!
+                <div class="flex flex-col sm:flex-row justify-center gap-3 px-2 max-w-md sm:max-w-none mx-auto">
+                    <button onclick="closeSurfaceAdminPage(); document.getElementById('topup-catalog').scrollIntoView({behavior:'smooth'})" class="w-full sm:w-auto bg-amber-400 hover:bg-amber-300 text-slate-900 px-6 py-3 rounded-full text-xs sm:text-sm font-extrabold shadow-lg shadow-amber-500/30 transition">
+                        <i class="fa-solid fa-bolt mr-1.5"></i> เลือกเกมที่ต้องการเติมเลย!
                     </button>
-                    <button onclick="openSurfaceHistoryModal()" class="bg-white/20 hover:bg-white/30 text-white backdrop-blur-md px-6 py-3 rounded-full text-sm font-bold border border-white/40 transition">
-                        <i class="fa-solid fa-receipt mr-2"></i> ประวัติ & สถานะการเติมเกม
+                    <button onclick="openSurfaceHistoryModal()" class="w-full sm:w-auto bg-white/20 hover:bg-white/30 text-white backdrop-blur-md px-6 py-3 rounded-full text-xs sm:text-sm font-bold border border-white/40 transition">
+                        <i class="fa-solid fa-receipt mr-1.5"></i> ประวัติ & สถานะการเติมเกม
                     </button>
                 </div>
             </div>
         </div>
-
         <!-- Games Catalog -->
-        <div id="topup-catalog" class="max-w-6xl mx-auto w-full px-4 py-10 flex-grow">
+        <div id="topup-catalog" class="max-w-6xl mx-auto w-full px-3 sm:px-4 py-6 sm:py-10 flex-grow">
+            <div id="surface-store-main-view">
             <!-- Search, Filter & Sort Bar -->
             <div class="bg-white/90 backdrop-blur-md border-2 border-indigo-100 rounded-3xl p-4 mb-8 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 shadow-md">
                 <div class="flex items-center gap-2 flex-wrap">
@@ -264,10 +278,18 @@
                 <!-- Injected via JS -->
             </div>
 
+            </div><!-- End #surface-store-main-view -->
+
             <!-- ==========================================================
-                 SURFACE ADMIN DASHBOARD (จัดการเฉพาะหน้าเติมเกมแยกอิสระ 100%)
+                 SURFACE ADMIN DASHBOARD (หน้าจัดการร้านเติมเกมแยกหน้าชัดเจน)
                  ========================================================== -->
-            <div id="surface-admin-dashboard" class="hidden mt-16 pt-10 border-t-2 border-indigo-200">
+            <div id="surface-admin-dashboard" class="hidden">
+                <div class="mb-4 flex items-center justify-between">
+                    <button onclick="closeSurfaceAdminPage()" class="inline-flex items-center gap-2 bg-white hover:bg-rose-50 text-rose-600 border-2 border-rose-200 px-4 py-2 rounded-2xl text-xs font-extrabold shadow-sm transition">
+                        <i class="fa-solid fa-arrow-left"></i> กลับหน้าร้านเติมเกม
+                    </button>
+                    <span class="text-xs text-slate-500 font-semibold">โหมดผู้ดูแลระบบเติมเกม</span>
+                </div>
                 <div class="bg-white border-2 border-indigo-200 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-200 pb-5">
                         <div>
@@ -467,177 +489,174 @@
 
 
     <!-- ==========================================
-         VIEW 3: SHADOW MARKET (CLEAN, INTUITIVE DARK TACTICAL THEME)
+         VIEW 3: SHADOW MARKET (MULTI-PAGE ARCHITECTURE, RESPONSIVE FOR MOBILE & PC)
          ========================================== -->
-    <div id="view-hidden" class="view-section hidden min-h-screen bg-[#050507] text-gray-200 font-sans-th relative">
+    <div id="view-hidden" class="view-section hidden min-h-screen bg-[#050507] text-gray-200 font-sans-th relative pb-24 md:pb-12 w-full overflow-x-hidden">
         <div class="fixed inset-0 crt-overlay z-50"></div>
 
-        <!-- Clean Dark Tactical Top Navbar -->
-        <nav class="border-b border-gray-800 bg-[#08090f]/95 backdrop-blur-md sticky top-0 z-40 shadow-lg">
-            <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
-                <div class="flex items-center gap-3 cursor-pointer" onclick="switchHiddenSection('all'); window.scrollTo({top:0, behavior:'smooth'})">
-                    <div class="w-10 h-10 rounded-xl bg-[#ff003c]/15 border border-[#ff003c] flex items-center justify-center text-[#ff003c] shadow-[0_0_12px_rgba(255,0,60,0.3)]">
-                        <i class="fa-solid fa-person-rifle text-lg"></i>
+        <!-- Clean Dark Tactical Top Navbar (Fits Mobile & PC without overflow) -->
+        <nav class="border-b border-gray-800 bg-[#08090f]/95 backdrop-blur-md sticky top-0 z-40 shadow-lg w-full">
+            <div class="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 flex items-center justify-between gap-2">
+                <!-- Brand Logo (Clicks go to Shop Page) -->
+                <div class="flex items-center gap-2 sm:gap-3 cursor-pointer min-w-0" onclick="switchHiddenSection('shop')">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#ff003c]/15 border border-[#ff003c] flex items-center justify-center text-[#ff003c] shadow-[0_0_12px_rgba(255,0,60,0.3)] shrink-0">
+                        <i class="fa-solid fa-person-rifle text-sm sm:text-lg"></i>
                     </div>
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span class="font-mono-cyber font-bold text-base sm:text-xl text-white tracking-wider">TACTICAL_ARMORY</span>
-                            <span class="hidden md:inline-block text-[10px] bg-[#00ffcc]/10 text-[#00ffcc] border border-[#00ffcc]/40 px-2 py-0.5 rounded-full font-mono-cyber">INVITE ONLY</span>
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-1.5">
+                            <span class="font-mono-cyber font-bold text-sm sm:text-xl text-white tracking-wider truncate">TACTICAL_ARMORY</span>
+                            <span id="user-level-badge" class="bg-[#11131c] px-2 py-0.5 border border-yellow-500/50 text-yellow-400 rounded text-[10px] font-mono-cyber font-bold whitespace-nowrap shrink-0">
+                                LVL 1
+                            </span>
                         </div>
-                        <p class="text-[10px] text-gray-400 hidden sm:block">ศูนย์รวมบีบีกัน คัสตอม และอะไหล่เกรดสนามแข่งขัน</p>
+                        <p class="text-[10px] text-gray-400 hidden sm:block truncate">คลังอาวุธบีบีกันและชุดแต่งสำหรับผู้ได้รับเชิญ</p>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-2 text-xs">
-                    <span id="user-level-badge" class="bg-[#11131c] px-3 py-1.5 border border-yellow-500/50 text-yellow-400 rounded-lg font-mono-cyber font-bold tracking-wider hidden sm:inline-block">
-                        LVL 1 : RECRUIT
-                    </span>
-                    <!-- Armory Member Profile Button -->
-                    <button onclick="openArmoryProfileModal()" class="bg-[#11131c] hover:bg-gray-800 text-[#00ffcc] border border-[#00ffcc]/40 px-3 py-2 rounded-lg font-bold text-xs flex items-center gap-1.5 transition">
-                        <i class="fa-solid fa-id-badge"></i>
-                        <span class="hidden md:inline">โปรไฟล์ของคุณ</span>
+                <!-- Right Action Controls (Compact & Responsive) -->
+                <div class="flex items-center gap-1.5 sm:gap-2 text-xs shrink-0">
+                    <!-- Quick Wallet Page Button -->
+                    <button onclick="switchHiddenSection('wallet')" class="bg-[#0d1518] hover:bg-[#112226] text-[#00ffcc] border border-[#00ffcc]/50 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl font-mono-cyber font-bold text-[11px] sm:text-xs flex items-center gap-1.5 transition whitespace-nowrap">
+                        <i class="fa-solid fa-wallet"></i>
+                        <span id="shd-balance-display">0 <span class="text-[10px]">CR</span></span>
                     </button>
+
                     <!-- Tactical Cart Button -->
-                    <button onclick="openHiddenCartModal()" class="cyber-btn-cyan px-3.5 py-2 rounded-lg font-bold text-xs flex items-center gap-1.5 relative">
+                    <button onclick="openHiddenCartModal()" class="cyber-btn-cyan px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 relative whitespace-nowrap">
                         <i class="fa-solid fa-cart-shopping"></i>
-                        <span class="hidden md:inline">ตะกร้าปืน</span>
+                        <span class="hidden lg:inline">ตะกร้าปืน</span>
                         <span id="hidden-cart-badge" class="bg-[#ff003c] text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold font-mono-cyber">0</span>
                     </button>
-                    <!-- Quick Jump to Order Statuses -->
-                    <button onclick="switchHiddenSection('orders')" class="bg-[#11131c] hover:bg-gray-800 text-gray-200 border border-gray-700 px-3 py-2 rounded-lg font-bold text-xs flex items-center gap-1.5 transition">
-                        <i class="fa-solid fa-truck-fast text-[#00ffcc]"></i>
-                        <span class="hidden md:inline">สถานะสั่งปืน</span>
-                        <span id="hidden-order-count-badge" class="text-[#00ffcc] font-mono-cyber font-bold">(0)</span>
+
+                    <!-- Armory Member Profile Button -->
+                    <button onclick="openArmoryProfileModal()" class="bg-[#11131c] hover:bg-gray-800 text-gray-200 border border-gray-700 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl font-bold text-xs flex items-center gap-1.5 transition whitespace-nowrap" title="โปรไฟล์และรหัสเชิญของคุณ">
+                        <i class="fa-solid fa-id-badge text-[#00ffcc]"></i>
+                        <span class="hidden xl:inline">โปรไฟล์ของคุณ</span>
                     </button>
-                    <!-- Armory Admin Button -->
-                    <button id="btn-admin-hidden" onclick="openInlineArmoryAdminDashboard()" class="hidden cyber-btn bg-[#ff003c]/20 px-3 py-2 rounded-lg font-bold text-xs flex items-center gap-1.5">
-                        <i class="fa-solid fa-user-shield"></i>
-                        <span class="hidden sm:inline">จัดการคลังปืน</span>
+
+                    <!-- Lock & Exit Button -->
+                    <button onclick="lockAndExitArmory()" class="bg-gray-900 hover:bg-rose-950/80 text-gray-300 hover:text-[#ff003c] border border-gray-800 hover:border-[#ff003c]/50 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl transition flex items-center gap-1 font-bold whitespace-nowrap" title="ล็อกคลังปืนและกลับหน้าเติมเกม">
+                        <i class="fa-solid fa-lock text-[#ff003c]"></i> <span class="hidden sm:inline">LOCK & EXIT</span>
                     </button>
-                    <button onclick="lockAndExitArmory()" class="bg-gray-900 hover:bg-rose-950/80 text-gray-300 hover:text-[#ff003c] border border-gray-800 hover:border-[#ff003c]/50 px-3 py-2 rounded-lg transition flex items-center gap-1.5 font-bold" title="ล็อกคลังปืนและกลับหน้าเติมเกม">
-                        <i class="fa-solid fa-lock"></i> <span class="hidden sm:inline">LOCK & EXIT</span>
-                    </button>
+                </div>
+            </div>
+
+            <!-- PC / Tablet Top Page Navigation Bar (Separate Pages - Click to navigate) -->
+            <div class="border-t border-gray-800/80 bg-[#0b0d14]">
+                <div class="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex items-center justify-between gap-2 overflow-x-auto hide-scrollbar">
+                    <div class="flex items-center gap-1.5 sm:gap-2">
+                        <!-- Hidden compatibility button for validator -->
+                        <button onclick="switchHiddenSection('shop')" id="hid-nav-all" class="hidden">หน้าหลักคลังปืน (แสดงทั้งหมด)</button>
+
+                        <button onclick="switchHiddenSection('shop')" id="hid-nav-shop" class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold bg-[#ff003c] text-white shadow-[0_0_15px_rgba(255,0,60,0.3)] transition flex items-center gap-1.5 whitespace-nowrap">
+                            <i class="fa-solid fa-store"></i> เลือกซื้อปืน & อะไหล่
+                        </button>
+                        <button onclick="switchHiddenSection('wallet')" id="hid-nav-wallet" class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-gray-800/70 transition flex items-center gap-1.5 whitespace-nowrap">
+                            <i class="fa-solid fa-coins text-[#00ffcc]"></i> สถานะเติมเครดิต (<span id="my-pay-count">0</span>)
+                        </button>
+                        <button onclick="switchHiddenSection('tools')" id="hid-nav-tools" class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-gray-800/70 transition flex items-center gap-1.5 whitespace-nowrap">
+                            <i class="fa-solid fa-screwdriver-wrench text-amber-400"></i> เปรียบเทียบสเปก & คำนวณ FPS
+                            <span id="nav-compare-badge" class="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.2 rounded-full text-[10px] font-mono-cyber">0/3</span>
+                        </button>
+                        <button onclick="switchHiddenSection('orders')" id="hid-nav-orders" class="px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-gray-800/70 transition flex items-center gap-1.5 whitespace-nowrap">
+                            <i class="fa-solid fa-truck-fast text-sky-400"></i> สถานะสั่งปืน <span id="hidden-order-count-badge" class="text-[#00ffcc] font-mono-cyber font-bold">(0)</span>
+                        </button>
+                        <button onclick="switchHiddenSection('admin')" id="hid-nav-admin" class="hidden px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold text-rose-300 hover:text-white bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/30 transition flex items-center gap-1.5 whitespace-nowrap">
+                            <i class="fa-solid fa-user-shield"></i> แดชบอร์ดแอดมิน & ส่งคำเชิญ
+                        </button>
+                        <!-- Keep #btn-admin-hidden for compatibility -->
+                        <button id="btn-admin-hidden" onclick="openInlineArmoryAdminDashboard()" class="hidden">จัดการคลังปืน</button>
+                    </div>
+                    <div class="hidden xl:flex items-center gap-2 text-[11px] text-gray-400 whitespace-nowrap shrink-0">
+                        <i class="fa-solid fa-ticket text-[#00ffcc]"></i>
+                        <span>โค้ดส่วนลด: <b class="text-white font-mono-cyber select-all">TACTICAL10</b> (-10%) | <b class="text-white font-mono-cyber select-all">ARMORY200</b> (-200 CR)</span>
+                    </div>
                 </div>
             </div>
         </nav>
 
-        <!-- Main Workspace Container -->
-        <div class="max-w-7xl mx-auto px-4 py-8 relative z-10">
+        <!-- Mobile Bottom Navigation Bar (Fixed at bottom on phones for 1-tap page switching) -->
+        <div class="md:hidden fixed bottom-0 left-0 right-0 bg-[#08090f]/95 backdrop-blur-md border-t border-gray-800 z-40 px-1 py-1.5 flex items-center justify-around shadow-[0_-8px_20px_rgba(0,0,0,0.6)]">
+            <button onclick="switchHiddenSection('shop')" id="mob-nav-shop" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-[#ff003c] font-bold text-[10px] transition">
+                <i class="fa-solid fa-gun text-sm mb-0.5"></i>
+                <span>ร้านค้าปืน</span>
+            </button>
+            <button onclick="switchHiddenSection('wallet')" id="mob-nav-wallet" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-gray-400 font-semibold text-[10px] transition">
+                <i class="fa-solid fa-wallet text-sm mb-0.5"></i>
+                <span>เติมเครดิต</span>
+            </button>
+            <button onclick="switchHiddenSection('tools')" id="mob-nav-tools" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-gray-400 font-semibold text-[10px] transition relative">
+                <i class="fa-solid fa-scale-balanced text-sm mb-0.5"></i>
+                <span>จัดเซ็ต/FPS</span>
+            </button>
+            <button onclick="switchHiddenSection('orders')" id="mob-nav-orders" class="flex flex-col items-center justify-center py-1 px-2 rounded-xl text-gray-400 font-semibold text-[10px] transition">
+                <i class="fa-solid fa-box-archive text-sm mb-0.5"></i>
+                <span>คำสั่งซื้อ</span>
+            </button>
+            <button onclick="switchHiddenSection('admin')" id="mob-nav-admin" class="hidden flex flex-col items-center justify-center py-1 px-2 rounded-xl text-rose-400 font-semibold text-[10px] transition">
+                <i class="fa-solid fa-user-shield text-sm mb-0.5"></i>
+                <span>แอดมิน</span>
+            </button>
+        </div>
 
-            <!-- Clean Overview Header & Wallet Bar -->
-            <div class="bg-gradient-to-r from-[#0c0e17] via-[#101320] to-[#0a1417] border border-gray-800 rounded-2xl p-5 sm:p-6 mb-6 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 shadow-xl">
-                <div class="space-y-1.5">
-                    <div class="inline-flex items-center gap-2 bg-[#00ffcc]/10 border border-[#00ffcc]/30 text-[#00ffcc] text-[11px] px-3 py-1 rounded-full font-semibold">
-                        <span class="w-2 h-2 rounded-full bg-[#00ffcc] animate-ping"></span>
-                        <span class="w-2 h-2 rounded-full bg-[#00ffcc] -ml-4"></span>
-                        ระบบคลังอาวุธบีบีกันและชุดแต่งสำหรับสมาชิกที่ได้รับเชิญ
-                    </div>
-                    <h2 class="text-2xl sm:text-3xl text-white font-extrabold tracking-wide">
-                        Custom BB-Gun & Tactical Workshop
-                    </h2>
-                    <p class="text-xs sm:text-sm text-gray-400">
-                        เลือกชมสินค้า ดูสเปกเชิงลึก เปรียบเทียบรุ่นปืน คำนวณความเร็วลูกกระสุน (FPS) และสั่งซื้อพร้อมบริการจูนจากช่างผู้เชี่ยวชาญ
-                    </p>
-                </div>
-
-                <!-- Clean Wallet Card -->
-                <div class="w-full lg:w-auto bg-black/90 border border-[#00ffcc]/40 p-4 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-[0_0_25px_rgba(0,255,204,0.08)]">
-                    <div class="pr-2">
-                        <p class="text-[10px] text-gray-400 uppercase tracking-wider font-mono-cyber">เครดิตคลังปืนของคุณ (ARMORY CREDITS)</p>
-                        <p class="text-2xl text-[#00ffcc] font-bold font-mono-cyber mt-0.5" id="shd-balance-display">0 <span class="text-xs">CR</span></p>
-                    </div>
-                    <div class="flex flex-wrap gap-2 w-full sm:w-auto">
-                        <button onclick="openArmoryTopupModal()" class="flex-1 sm:flex-initial cyber-btn-cyan px-4 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
-                            <i class="fa-solid fa-plus-circle"></i> + แจ้งเติมเครดิตปืน
-                        </button>
-                        <button onclick="openArmoryPaymentsModal()" class="flex-1 sm:flex-initial bg-[#12141f] hover:bg-gray-800 text-gray-200 border border-gray-700 px-3.5 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition">
-                            <i class="fa-solid fa-clock-rotate-left text-amber-400"></i> สถานะเติมเครดิต (<span id="my-pay-count">0</span>)
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Easy Section Sub-Navigation Bar -->
-            <div class="bg-[#0b0d14] border border-gray-800 rounded-2xl p-2 mb-6 flex flex-wrap items-center justify-between gap-2 shadow-md">
-                <div class="flex flex-wrap items-center gap-1.5">
-                    <button onclick="switchHiddenSection('all')" id="hid-nav-all" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#ff003c] text-white shadow-[0_0_15px_rgba(255,0,60,0.3)] transition flex items-center gap-2">
-                        <i class="fa-solid fa-layer-group"></i> หน้าหลักคลังปืน (แสดงทั้งหมด)
-                    </button>
-                    <button onclick="switchHiddenSection('shop')" id="hid-nav-shop" class="px-4 py-2.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-gray-800/70 transition flex items-center gap-2">
-                        <i class="fa-solid fa-gun text-[#00ffcc]"></i> เลือกซื้อปืน & อะไหล่
-                    </button>
-                    <button onclick="switchHiddenSection('tools')" id="hid-nav-tools" class="px-4 py-2.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-gray-800/70 transition flex items-center gap-2">
-                        <i class="fa-solid fa-scale-balanced text-amber-400"></i> เปรียบเทียบสเปก & คำนวณ FPS
-                        <span id="nav-compare-badge" class="bg-amber-500/20 text-amber-300 border border-amber-500/40 px-1.5 py-0.2 rounded-full text-[10px] font-mono-cyber">0/3</span>
-                    </button>
-                    <button onclick="switchHiddenSection('orders')" id="hid-nav-orders" class="px-4 py-2.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-gray-800/70 transition flex items-center gap-2">
-                        <i class="fa-solid fa-box-archive text-sky-400"></i> ติดตามคำสั่งซื้อ & ใบรับรอง QC
-                    </button>
-                    <button onclick="switchHiddenSection('admin')" id="hid-nav-admin" class="hidden px-4 py-2.5 rounded-xl text-xs font-bold text-rose-300 hover:text-white bg-rose-950/40 hover:bg-rose-900/60 border border-rose-500/30 transition flex items-center gap-2">
-                        <i class="fa-solid fa-user-shield"></i> แดชบอร์ดแอดมิน & ส่งคำเชิญ
-                    </button>
-                </div>
-                <div class="hidden xl:flex items-center gap-2 text-[11px] text-gray-400 pr-2">
-                    <i class="fa-solid fa-ticket text-[#00ffcc]"></i>
-                    <span>โค้ดส่วนลดคลังปืน: <b class="text-white font-mono-cyber select-all">TACTICAL10</b> (ลด 10%) | <b class="text-white font-mono-cyber select-all">ARMORY200</b> (ลด 200 CR)</span>
-                </div>
-            </div>
-
-            <!-- ARMORY ADMIN QUICK ACTION TOOLBAR -->
-            <div id="admin-quick-toolbar" class="hidden mb-6 p-4 bg-gradient-to-r from-[#1a070d] via-[#0f111a] to-[#071719] border border-[#ff003c]/70 rounded-2xl shadow-lg">
-                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-[#ff003c]/20 border border-[#ff003c] flex items-center justify-center text-[#ff003c] text-lg">
-                            <i class="fa-solid fa-user-shield"></i>
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-xs font-bold text-[#ff003c] uppercase tracking-wider font-mono-cyber">ARMORY COMMANDER MODE</span>
-                                <span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold">โหมดผู้ดูแลตลาดลับ</span>
-                            </div>
-                            <p class="text-xs text-gray-300 mt-0.5">ส่งคำเชิญลูกค้าเข้าตลาดลับ (สุ่มรหัสเข้ากล่องข้อความหน้าเติมเกม) จัดการปืน อะไหล่ และคำสั่งซื้อทั้งหมด</p>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap gap-2 w-full lg:w-auto">
-                        <button onclick="openArmoryAdminProductModal(null)" class="cyber-btn bg-[#ff003c] text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5">
-                            <i class="fa-solid fa-plus"></i> เพิ่มปืน BB-Gun / อะไหล่
-                        </button>
-                        <button onclick="openInlineArmoryAdminDashboard('users')" class="bg-[#12141f] hover:bg-gray-800 text-amber-300 border border-amber-500/50 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-envelope-open-text"></i> จัดการเลเวล & รหัสเข้าคลัง
-                        </button>
-                        <button onclick="openInlineArmoryAdminDashboard('orders')" class="bg-[#12141f] hover:bg-gray-800 text-sky-300 border border-sky-500/50 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-boxes-stacked"></i> จัดการออเดอร์ปืน
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <!-- Main Workspace Container (Displays ONLY the active page!) -->
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 py-5 sm:py-8 relative z-10">
 
             <!-- ==========================================
-                 SECTION 1: SHOP CATALOG (#hidden-shop-section)
+                 PAGE 1: SHOP CATALOG (#hidden-shop-section) - DEFAULT LANDING PAGE
                  ========================================== -->
-            <div id="hidden-shop-section" class="space-y-6">
+            <div id="hidden-shop-section" class="space-y-5 sm:space-y-6">
+                <!-- Compact Shop Welcome & Quick Action Header -->
+                <div class="bg-gradient-to-r from-[#0c0e17] via-[#101320] to-[#0a1417] border border-gray-800 rounded-2xl p-4 sm:p-6 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 shadow-xl">
+                    <div class="space-y-1">
+                        <div class="inline-flex items-center gap-2 bg-[#00ffcc]/10 border border-[#00ffcc]/30 text-[#00ffcc] text-[10px] sm:text-[11px] px-3 py-0.5 rounded-full font-semibold">
+                            <span class="w-2 h-2 rounded-full bg-[#00ffcc] animate-ping"></span>
+                            <span>หน้าร้านคลังอาวุธบีบีกัน & อะไหล่แต่ง (สำหรับผู้ได้รับเชิญ)</span>
+                        </div>
+                        <h2 class="text-xl sm:text-3xl text-white font-extrabold tracking-wide">
+                            เลือกซื้อปืน BB-Gun & อะไหล่คัสตอม
+                        </h2>
+                        <p class="text-xs text-gray-400">
+                            กดที่รูปสินค้าเพื่อดูสเปกเชิงลึกและเลือกออปชันจูนจากช่าง หรือกดปุ่มเมนูด้านบนเพื่อไปหน้าเปรียบเทียบสเปกและหน้าคำสั่งซื้อ
+                        </p>
+                    </div>
+
+                    <!-- Quick Page Jump Cards -->
+                    <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 w-full lg:w-auto">
+                        <button onclick="switchHiddenSection('wallet')" class=" cyber-btn-cyan px-3.5 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 whitespace-nowrap">
+                            <i class="fa-solid fa-plus-circle"></i> + แจ้งเติมเครดิตปืน
+                        </button>
+                        <button onclick="switchHiddenSection('tools')" class="bg-[#12141f] hover:bg-gray-800 text-amber-300 border border-amber-500/40 px-3.5 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition whitespace-nowrap">
+                            <i class="fa-solid fa-screwdriver-wrench"></i> จัดเซ็ตปืน / คำนวณ FPS
+                        </button>
+                        <button onclick="switchHiddenSection('orders')" class="col-span-2 sm:col-span-1 bg-[#12141f] hover:bg-gray-800 text-sky-300 border border-sky-500/40 px-3.5 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition whitespace-nowrap">
+                            <i class="fa-solid fa-truck-fast"></i> ติดตามคำสั่งซื้อ & ใบรับรอง QC
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Filter, Wishlist, Search & Sort Bar -->
-                <div class="bg-[#0b0d14] border border-gray-800 rounded-2xl p-4 flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-4">
+                <div class="bg-[#0b0d14] border border-gray-800 rounded-2xl p-3.5 sm:p-4 flex flex-col lg:flex-row justify-between items-stretch lg:items-center gap-3.5">
                     <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
-                        <button onclick="filterMarket('all')" id="mkt-tab-all" class="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#ff003c] text-white border border-[#ff003c] transition whitespace-nowrap">
+                        <button onclick="filterMarket('all')" id="mkt-tab-all" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-[#ff003c] text-white border border-[#ff003c] transition whitespace-nowrap shrink-0">
                             [ ALL ARMORY ]
                         </button>
-                        <button onclick="filterMarket('BB-Gun')" id="mkt-tab-BB-Gun" class="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-black text-gray-300 border border-gray-800 hover:border-[#ff003c] transition whitespace-nowrap">
+                        <button onclick="filterMarket('BB-Gun')" id="mkt-tab-BB-Gun" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-black text-gray-300 border border-gray-800 hover:border-[#ff003c] transition whitespace-nowrap shrink-0">
                             <i class="fa-solid fa-gun mr-1 text-[#00ffcc]"></i> ตัวปืน BB-Gun
                         </button>
-                        <button onclick="filterMarket('Parts')" id="mkt-tab-Parts" class="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-black text-gray-300 border border-gray-800 hover:border-[#ff003c] transition whitespace-nowrap">
+                        <button onclick="filterMarket('Parts')" id="mkt-tab-Parts" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-black text-gray-300 border border-gray-800 hover:border-[#ff003c] transition whitespace-nowrap shrink-0">
                             <i class="fa-solid fa-gears mr-1 text-amber-400"></i> อะไหล่ภายใน
                         </button>
-                        <button onclick="filterMarket('Accessories')" id="mkt-tab-Accessories" class="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-black text-gray-300 border border-gray-800 hover:border-[#ff003c] transition whitespace-nowrap">
+                        <button onclick="filterMarket('Accessories')" id="mkt-tab-Accessories" class="px-3.5 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-black text-gray-300 border border-gray-800 hover:border-[#ff003c] transition whitespace-nowrap shrink-0">
                             <i class="fa-solid fa-bullseye mr-1 text-sky-400"></i> อุปกรณ์แต่ง/สโคป
                         </button>
-                        <button onclick="filterMarket('Wishlist')" id="mkt-tab-Wishlist" class="px-4 py-2 rounded-xl text-xs font-bold tracking-wider bg-black text-rose-300 border border-rose-500/40 hover:border-rose-500 transition whitespace-nowrap flex items-center gap-1.5">
+                        <button onclick="filterMarket('Wishlist')" id="mkt-tab-Wishlist" class="px-3.5 py-2 rounded-xl text-xs font-bold tracking-wider bg-black text-rose-300 border border-rose-500/40 hover:border-rose-500 transition whitespace-nowrap flex items-center gap-1.5 shrink-0">
                             <i class="fa-solid fa-heart text-rose-500"></i> รายการโปรด (<span id="wishlist-count-badge">0</span>)
                         </button>
                     </div>
 
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <div class="relative flex-grow sm:w-64">
+                    <div class="flex flex-col sm:flex-row gap-2.5">
+                        <div class="relative flex-grow sm:w-60">
                             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
                             <input type="text" id="hidden-search" oninput="renderHiddenMarket()" placeholder="ค้นหาชื่อปืน / รหัส / สเปก..." class="w-full bg-black border border-gray-800 focus:border-[#00ffcc] rounded-xl pl-9 pr-3 py-2 text-xs text-[#00ffcc] outline-none">
                         </div>
@@ -650,42 +669,185 @@
                     </div>
                 </div>
 
-                <!-- Active Comparison Bar -->
+                <!-- Active Comparison Floating Banner (Prompts user to click to go to the Compare Page) -->
                 <div id="compare-floating-bar" class="hidden bg-[#0d131a] border border-[#00ffcc]/60 rounded-2xl p-3.5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-lg">
-                    <div class="flex items-center gap-3 flex-wrap">
+                    <div class="flex items-center gap-2.5 flex-wrap">
                         <span class="text-xs font-bold text-[#00ffcc] flex items-center gap-1.5">
-                            <i class="fa-solid fa-scale-balanced"></i> รายการที่เลือกเปรียบเทียบสเปก (<span id="compare-bar-count">0</span>/3):
+                            <i class="fa-solid fa-scale-balanced"></i> เลือกเปรียบเทียบแล้ว (<span id="compare-bar-count">0</span>/3):
                         </span>
-                        <div id="compare-bar-pills" class="flex flex-wrap gap-2"></div>
+                        <div id="compare-bar-pills" class="flex flex-wrap gap-1.5"></div>
                     </div>
                     <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                        <button onclick="clearArmoryCompare()" class="px-3 py-1.5 rounded-lg bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white text-xs border border-gray-700">
+                        <button onclick="clearArmoryCompare()" class="px-3 py-1.5 rounded-lg bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white text-xs border border-gray-700 whitespace-nowrap">
                             ล้างรายการ
                         </button>
-                        <button onclick="switchHiddenSection('tools')" class="cyber-btn-cyan px-4 py-1.5 rounded-lg text-xs font-bold">
+                        <button onclick="switchHiddenSection('tools')" class="cyber-btn-cyan px-4 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap">
                             เปิดตารางเปรียบเทียบสเปก →
                         </button>
                     </div>
                 </div>
 
                 <!-- BBGun Products Grid -->
-                <div id="hidden-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div id="hidden-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                     <!-- BB-Gun Assets injected via JS -->
                 </div>
             </div>
 
             <!-- ==========================================
-                 SECTION 2: TACTICAL TOOLS - COMPARE SPECS & FPS CALCULATOR (#tactical-tools-section)
+                 PAGE 2: DEDICATED WALLET & CREDIT TOP-UP PAGE (#tactical-wallet-section)
                  ========================================== -->
-            <div id="tactical-tools-section" class="mt-14 pt-10 border-t border-gray-800/90 space-y-8">
+            <div id="tactical-wallet-section" class="hidden space-y-6">
+                <!-- Page Header with Back to Shop Button -->
+                <div class="bg-[#0b0d14] border border-gray-800 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div>
+                        <button onclick="switchHiddenSection('shop')" class="inline-flex items-center gap-1.5 text-xs text-[#00ffcc] hover:underline font-bold mb-1.5">
+                            <i class="fa-solid fa-arrow-left"></i> กลับหน้าร้านเลือกซื้อปืน
+                        </button>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-wallet text-[#00ffcc]"></i> กระเป๋าเครดิตคลังปืน & แจ้งโอนเติมเครดิต (Armory Credits)
+                        </h2>
+                        <p class="text-xs text-gray-400 mt-0.5">เติมเครดิต CR สำหรับใช้สั่งซื้อปืนบีบีกัน อะไหล่แต่ง และบริการช่าง (1 CR = 1 บาท)</p>
+                    </div>
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <button onclick="openArmoryTopupModal()" class="flex-1 sm:flex-initial cyber-btn-cyan px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap">
+                            <i class="fa-solid fa-plus"></i> แจ้งเติมเครดิต (ป๊อปอัปด่วน)
+                        </button>
+                        <button onclick="openArmoryPaymentsModal()" class="flex-1 sm:flex-initial bg-gray-900 hover:bg-gray-800 text-gray-200 border border-gray-700 px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap">
+                            สถานะเติมเครดิต
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- Left: Balance & Direct Top-Up Form (5 cols) -->
+                    <div class="lg:col-span-5 space-y-5">
+                        <div class="bg-gradient-to-br from-[#0b191d] via-[#0b0e17] to-[#170910] border border-[#00ffcc]/50 rounded-2xl p-5 shadow-lg">
+                            <span class="text-[10px] font-mono-cyber uppercase tracking-widest text-[#00ffcc]">CURRENT ARMORY BALANCE</span>
+                            <div class="text-3xl sm:text-4xl font-extrabold text-white font-mono-cyber mt-1" id="wallet-page-balance">0 CR</div>
+                            <p class="text-xs text-gray-400 mt-2">เครดิตคลังปืนใช้ชำระค่าปืนและอุปกรณ์แต่งได้ทันทีโดยไม่ต้องรอตรวจสลิปในแต่ละออเดอร์</p>
+                        </div>
+
+                        <div class="bg-[#0b0d14] border border-gray-800 rounded-2xl p-5 space-y-4">
+                            <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-gray-800 pb-2.5">
+                                <i class="fa-solid fa-building-columns text-[#00ffcc]"></i> แบบฟอร์มแจ้งโอนเติมเครดิตคลังปืน
+                            </h3>
+                            <div class="p-3.5 bg-black border border-gray-800 rounded-xl space-y-1.5 text-xs">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-gray-400">ธนาคารกสิกรไทย (K-Bank):</span>
+                                    <button onclick="copySecret('099-888-7766')" class="text-[11px] text-[#00ffcc] hover:underline font-bold"><i class="fa-regular fa-copy"></i> คัดลอกเลขบัญชี</button>
+                                </div>
+                                <p class="text-sm font-mono-cyber font-bold text-white select-all">099-888-7766 (TACTICAL ARMORY TH)</p>
+                                <p class="text-[11px] text-gray-500">โอนเงินตามจำนวนแพ็กเกจด้านล่าง แล้วกรอกเลขอ้างอิงสลิปเพื่อรับเครดิต</p>
+                            </div>
+
+                            <div class="space-y-3 text-xs">
+                                <div>
+                                    <label class="block text-gray-300 font-bold mb-1">1. เลือกจำนวนเครดิตที่ต้องการเติม</label>
+                                    <select id="page-topup-amt" class="w-full bg-black border border-gray-700 rounded-xl p-2.5 text-[#00ffcc] font-mono-cyber font-bold outline-none focus:border-[#00ffcc]">
+                                        <option value="1000">1,000 CR (โอน ฿1,000)</option>
+                                        <option value="3000">3,000 CR (โอน ฿3,000)</option>
+                                        <option value="5000">5,000 CR (โอน ฿5,000)</option>
+                                        <option value="10000">10,000 CR (โอน ฿10,000)</option>
+                                        <option value="20000">20,000 CR (โอน ฿20,000)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-gray-300 font-bold mb-1">2. เลขอ้างอิงสลิปโอนเงิน / วัน-เวลาโอน *</label>
+                                    <input id="page-topup-ref" class="w-full bg-black border border-gray-700 rounded-xl p-2.5 text-white outline-none focus:border-[#00ffcc]" placeholder="เช่น สลิปเลขท้าย 9842 โอนเวลา 14:20">
+                                </div>
+                                <button onclick="submitPageArmoryTopup()" class="w-full cyber-btn-cyan py-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-paper-plane"></i> ส่งข้อมูลแจ้งเติมเครดิตคลังปืน
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Credit Top-Up History Table (7 cols) -->
+                    <div class="lg:col-span-7 bg-[#0b0d14] border border-gray-800 rounded-2xl p-5 flex flex-col">
+                        <div class="flex items-center justify-between border-b border-gray-800 pb-3 mb-4">
+                            <div>
+                                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                                    <i class="fa-solid fa-clock-rotate-left text-amber-400"></i> ประวัติการแจ้งเติมเครดิตของคุณ
+                                </h3>
+                                <p class="text-xs text-gray-400">รายการแจ้งโอนเงินจะถูกตรวจสอบและเติมเข้ากระเป๋าอัตโนมัติเมื่อแอดมินอนุมัติ</p>
+                            </div>
+                        </div>
+                        <div id="wallet-page-history-list" class="space-y-2.5 max-h-[460px] overflow-y-auto pr-1">
+                            <!-- Injected via renderWalletPage() -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==========================================
+                 PAGE 3: TACTICAL TOOLS - CUSTOM LOADOUT BUILDER, COMPARE SPECS & FPS CALCULATOR (#tactical-tools-section)
+                 ========================================== -->
+            <div id="tactical-tools-section" class="hidden space-y-6">
+                <!-- Page Header with Back to Shop Button -->
+                <div class="bg-[#0b0d14] border border-gray-800 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                    <div>
+                        <button onclick="switchHiddenSection('shop')" class="inline-flex items-center gap-1.5 text-xs text-[#00ffcc] hover:underline font-bold mb-1.5">
+                            <i class="fa-solid fa-arrow-left"></i> กลับหน้าร้านเลือกซื้อปืน
+                        </button>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-screwdriver-wrench text-amber-400"></i> ศูนย์จัดเซ็ตแต่งปืน, เปรียบเทียบสเปก & คำนวณความเร็ว FPS
+                        </h2>
+                        <p class="text-xs text-gray-400 mt-0.5">จำลองการจัดเซ็ตปืนคู่กับอะไหล่แต่ง เปรียบเทียบสเปกปืนแต่ละรุ่น และคำนวณพลังงานลูกกระสุนก่อนตัดสินใจสั่งซื้อ</p>
+                    </div>
+                </div>
+
+                <!-- NEW FEATURE: Custom Gun Loadout Builder (จัดเซ็ตปืน + อะไหล่ + สโคป คำนวณงบและหยิบลงตะกร้าในคลิกเดียว) -->
+                <div class="bg-gradient-to-r from-[#0d131f] via-[#0b0d14] to-[#140b12] border border-[#00ffcc]/40 rounded-2xl p-5 sm:p-6 space-y-4 shadow-lg">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-gray-800 pb-3">
+                        <div>
+                            <span class="text-[10px] text-[#00ffcc] font-mono-cyber uppercase tracking-widest">● CUSTOM TACTICAL LOADOUT BUILDER</span>
+                            <h3 class="text-base sm:text-lg font-bold text-white mt-0.5">
+                                <i class="fa-solid fa-cubes text-[#00ffcc] mr-1"></i> ระบบจัดเซ็ตปืนคัสตอมพร้อมชุดแต่ง (Custom Set Estimator)
+                            </h3>
+                        </div>
+                        <span class="text-xs text-gray-400">เลือกจับคู่ตัวปืน + อะไหล่ภายใน + อุปกรณ์เสริม เพื่อดูราคารวมและสั่งซื้อยกเซ็ต</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                        <div class="bg-black/80 border border-gray-800 p-3.5 rounded-xl space-y-1.5">
+                            <label class="block text-[#00ffcc] font-bold"><i class="fa-solid fa-gun mr-1"></i> 1. เลือกตัวปืนหลัก (BB-Gun)</label>
+                            <select id="loadout-gun" onchange="calculateCustomLoadout()" class="w-full bg-[#0b0d14] border border-gray-700 rounded-lg p-2.5 text-white outline-none focus:border-[#00ffcc]"></select>
+                        </div>
+                        <div class="bg-black/80 border border-gray-800 p-3.5 rounded-xl space-y-1.5">
+                            <label class="block text-amber-400 font-bold"><i class="fa-solid fa-gears mr-1"></i> 2. เลือกอะไหล่อัปเกรดภายใน (Parts)</label>
+                            <select id="loadout-part" onchange="calculateCustomLoadout()" class="w-full bg-[#0b0d14] border border-gray-700 rounded-lg p-2.5 text-white outline-none focus:border-amber-400"></select>
+                        </div>
+                        <div class="bg-black/80 border border-gray-800 p-3.5 rounded-xl space-y-1.5">
+                            <label class="block text-sky-400 font-bold"><i class="fa-solid fa-bullseye mr-1"></i> 3. เลือกกล้องเล็ง / อุปกรณ์เสริม</label>
+                            <select id="loadout-acc" onchange="calculateCustomLoadout()" class="w-full bg-[#0b0d14] border border-gray-700 rounded-lg p-2.5 text-white outline-none focus:border-sky-400"></select>
+                        </div>
+                    </div>
+
+                    <div class="bg-black border border-gray-800 rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="space-y-1 text-xs">
+                            <p class="text-gray-400">สรุปเซ็ตที่เลือก: <b id="loadout-summary-text" class="text-white">-</b></p>
+                            <p class="text-gray-400">ระดับสมาชิกขั้นต่ำที่ต้องใช้: <span id="loadout-req-lvl" class="text-yellow-400 font-mono-cyber font-bold">LVL.1</span></p>
+                        </div>
+                        <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
+                            <div class="text-right">
+                                <span class="text-[10px] text-gray-400 block">งบประมาณรวมทั้งเซ็ต</span>
+                                <span id="loadout-total-price" class="text-xl font-extrabold text-[#00ffcc] font-mono-cyber">0 CR</span>
+                            </div>
+                            <button onclick="addCustomLoadoutToCart()" class="cyber-btn bg-[#ff003c] text-white px-5 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap">
+                                <i class="fa-solid fa-cart-plus mr-1"></i> หยิบทั้งเซ็ตใส่ตะกร้า
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     <!-- Tool 1: Side-by-Side Gun Spec Comparison (7 cols) -->
-                    <div class="lg:col-span-7 bg-[#0b0d14] border border-gray-800 rounded-2xl p-5 sm:p-6 flex flex-col justify-between">
+                    <div class="lg:col-span-7 bg-[#0b0d14] border border-gray-800 rounded-2xl p-4 sm:p-6 flex flex-col justify-between">
                         <div>
                             <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-gray-800">
                                 <div>
                                     <span class="text-[10px] text-amber-400 font-mono-cyber uppercase tracking-widest">● TACTICAL SPEC COMPARISON</span>
-                                    <h3 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2 mt-0.5">
+                                    <h3 class="text-base sm:text-xl font-bold text-white flex items-center gap-2 mt-0.5">
                                         <i class="fa-solid fa-scale-balanced text-amber-400"></i> ตารางเปรียบเทียบสเปกปืนและอุปกรณ์ (สูงสุด 3 รุ่น)
                                     </h3>
                                 </div>
@@ -700,13 +862,13 @@
                     </div>
 
                     <!-- Tool 2: FPS, Joule & Effective Range Calculator (5 cols) -->
-                    <div class="lg:col-span-5 bg-[#0b0d14] border border-gray-800 rounded-2xl p-5 sm:p-6">
+                    <div class="lg:col-span-5 bg-[#0b0d14] border border-gray-800 rounded-2xl p-4 sm:p-6">
                         <div class="mb-4 pb-3 border-b border-gray-800">
                             <span class="text-[10px] text-[#00ffcc] font-mono-cyber uppercase tracking-widest">● BALLISTICS & FIELD LIMIT CALCULATOR</span>
-                            <h3 class="text-lg sm:text-xl font-bold text-white flex items-center gap-2 mt-0.5">
+                            <h3 class="text-base sm:text-xl font-bold text-white flex items-center gap-2 mt-0.5">
                                 <i class="fa-solid fa-gauge-high text-[#00ffcc]"></i> เครื่องคำนวณความเร็ว FPS & พลังงาน (Joule)
                             </h3>
-                            <p class="text-xs text-gray-400 mt-1">ช่วยคำนวณความเร็วลูกกระสุนจริงเมื่อเปลี่ยนน้ำหนักลูกสูบ/ลูกบีบี และเช็กเกณฑ์สนามแข่งขัน</p>
+                            <p class="text-xs text-gray-400 mt-1">ช่วยคำนวณความเร็วลูกกระสุนจริงเมื่อเปลี่ยนน้ำหนักลูกบีบี และเช็กเกณฑ์สนามแข่งขัน</p>
                         </div>
 
                         <div class="space-y-4 text-xs">
@@ -743,17 +905,17 @@
                                 <div class="grid grid-cols-3 gap-2 text-center">
                                     <div class="p-2.5 bg-[#0e111a] rounded-lg border border-gray-800">
                                         <span class="text-[10px] text-gray-400 block">ความเร็วลูกจริง</span>
-                                        <span id="calc-res-fps" class="text-base sm:text-lg font-extrabold text-[#00ffcc] font-mono-cyber">331 FPS</span>
+                                        <span id="calc-res-fps" class="text-sm sm:text-lg font-extrabold text-[#00ffcc] font-mono-cyber">331 FPS</span>
                                         <span id="calc-res-ms" class="text-[10px] text-gray-500 block font-mono-cyber">(100.9 m/s)</span>
                                     </div>
                                     <div class="p-2.5 bg-[#0e111a] rounded-lg border border-gray-800">
                                         <span class="text-[10px] text-gray-400 block">พลังงานจลน์</span>
-                                        <span id="calc-res-joule" class="text-base sm:text-lg font-extrabold text-amber-400 font-mono-cyber">1.27 J</span>
+                                        <span id="calc-res-joule" class="text-sm sm:text-lg font-extrabold text-amber-400 font-mono-cyber">1.27 J</span>
                                         <span class="text-[10px] text-gray-500 block">Joules</span>
                                     </div>
                                     <div class="p-2.5 bg-[#0e111a] rounded-lg border border-gray-800">
                                         <span class="text-[10px] text-gray-400 block">ระยะหวังผล</span>
-                                        <span id="calc-res-range" class="text-base sm:text-lg font-extrabold text-white font-mono-cyber">45 - 55 ม.</span>
+                                        <span id="calc-res-range" class="text-sm sm:text-lg font-extrabold text-white font-mono-cyber">45 - 55 ม.</span>
                                         <span class="text-[10px] text-gray-500 block">ท่อรีด + ยางฮอป</span>
                                     </div>
                                 </div>
@@ -767,111 +929,144 @@
             </div>
 
             <!-- ==========================================
-                 SECTION 3: TACTICAL LOCKER & ORDER TRACKING (#tactical-locker-section)
+                 PAGE 4: TACTICAL LOCKER & ORDER TRACKING (#tactical-locker-section)
                  ========================================== -->
-            <div id="tactical-locker-section" class="mt-14 border-t border-gray-800 pt-10">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 gap-4">
+            <div id="tactical-locker-section" class="hidden space-y-6">
+                <!-- Page Header with Back to Shop Button -->
+                <div class="bg-[#0b0d14] border border-gray-800 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
-                        <div class="inline-block bg-[#00ffcc]/10 border border-[#00ffcc]/40 text-[#00ffcc] text-[10px] px-2.5 py-0.5 rounded-full uppercase tracking-widest mb-2 font-mono-cyber">
-                            ● REAL-TIME ARMORY SHIPMENT & QC TRACKING
-                        </div>
-                        <h2 class="text-2xl sm:text-3xl text-white font-bold tracking-wide flex items-center gap-3">
-                            <i class="fa-solid fa-box-archive cyber-text"></i> สถานะคำสั่งซื้อปืน & ใบรับรอง QC ของฉัน
+                        <button onclick="switchHiddenSection('shop')" class="inline-flex items-center gap-1.5 text-xs text-[#00ffcc] hover:underline font-bold mb-1.5">
+                            <i class="fa-solid fa-arrow-left"></i> กลับหน้าร้านเลือกซื้อปืน
+                        </button>
+                        <h2 class="text-xl sm:text-2xl text-white font-bold tracking-wide flex items-center gap-2.5">
+                            <i class="fa-solid fa-box-archive cyber-text"></i> ติดตามสถานะคำสั่งซื้อปืน & ใบรับรอง QC ของฉัน
                         </h2>
-                        <p class="text-xs text-gray-400 mt-1">ติดตามสถานะการสั่งซื้อปืนและอะไหล่แบบเรียลไทม์ แจ้งชำระเงิน ดูผลทดสอบความเร็วปืน (QC) พิมพ์ใบเสร็จ หรือตรวจสอบเลขพัสดุ</p>
+                        <p class="text-xs text-gray-400 mt-0.5">ตรวจสอบสถานะการประกอบปืน แจ้งชำระเงิน ดูผลทดสอบความเร็วปืน (QC) พิมพ์ใบเสร็จ และเช็กระยะประกันงานช่าง</p>
                     </div>
                     <div class="w-full md:w-64">
-                        <input type="text" id="locker-order-search" oninput="renderLicenses()" placeholder="ค้นหาเลขที่คำสั่งซื้อ #ARM..." class="w-full bg-black border border-gray-800 focus:border-[#00ffcc] rounded-xl px-3.5 py-2 text-xs text-[#00ffcc] outline-none">
+                        <input type="text" id="locker-order-search" oninput="renderLicenses()" placeholder="ค้นหาเลขที่คำสั่งซื้อ #ARM..." class="w-full bg-black border border-gray-800 focus:border-[#00ffcc] rounded-xl px-3.5 py-2.5 text-xs text-[#00ffcc] outline-none">
                     </div>
                 </div>
 
                 <!-- Status Filter Summary Pills -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 mb-8">
-                    <button onclick="filterLockerStatus('all')" id="lkr-tab-all" class="p-3.5 bg-[#ff003c]/20 border border-[#ff003c] rounded-xl text-left transition">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+                    <button onclick="filterLockerStatus('all')" id="lkr-tab-all" class="p-3 bg-[#ff003c]/20 border border-[#ff003c] rounded-xl text-left transition">
                         <p class="text-[11px] text-gray-300 font-semibold">ทั้งหมด</p>
-                        <p id="lkr-cnt-all" class="text-xl font-bold text-white mt-0.5 font-mono-cyber">0</p>
+                        <p id="lkr-cnt-all" class="text-lg sm:text-xl font-bold text-white mt-0.5 font-mono-cyber">0</p>
                     </button>
-                    <button onclick="filterLockerStatus('pending_payment')" id="lkr-tab-pending_payment" class="p-3.5 bg-[#0b0d14] border border-gray-800 hover:border-amber-500/60 rounded-xl text-left transition">
+                    <button onclick="filterLockerStatus('pending_payment')" id="lkr-tab-pending_payment" class="p-3 bg-[#0b0d14] border border-gray-800 hover:border-amber-500/60 rounded-xl text-left transition">
                         <p class="text-[11px] text-amber-400 font-semibold">1. รอชำระเงิน</p>
-                        <p id="lkr-cnt-pending_payment" class="text-xl font-bold text-amber-300 mt-0.5 font-mono-cyber">0</p>
+                        <p id="lkr-cnt-pending_payment" class="text-lg sm:text-xl font-bold text-amber-300 mt-0.5 font-mono-cyber">0</p>
                     </button>
-                    <button onclick="filterLockerStatus('paid_verifying')" id="lkr-tab-paid_verifying" class="p-3.5 bg-[#0b0d14] border border-gray-800 hover:border-sky-500/60 rounded-xl text-left transition">
+                    <button onclick="filterLockerStatus('paid_verifying')" id="lkr-tab-paid_verifying" class="p-3 bg-[#0b0d14] border border-gray-800 hover:border-sky-500/60 rounded-xl text-left transition">
                         <p class="text-[11px] text-sky-400 font-semibold">2. รอตรวจสอบสลิป</p>
-                        <p id="lkr-cnt-paid_verifying" class="text-xl font-bold text-sky-300 mt-0.5 font-mono-cyber">0</p>
+                        <p id="lkr-cnt-paid_verifying" class="text-lg sm:text-xl font-bold text-sky-300 mt-0.5 font-mono-cyber">0</p>
                     </button>
-                    <button onclick="filterLockerStatus('processing')" id="lkr-tab-processing" class="p-3.5 bg-[#0b0d14] border border-gray-800 hover:border-indigo-500/60 rounded-xl text-left transition">
+                    <button onclick="filterLockerStatus('processing')" id="lkr-tab-processing" class="p-3 bg-[#0b0d14] border border-gray-800 hover:border-indigo-500/60 rounded-xl text-left transition">
                         <p class="text-[11px] text-indigo-400 font-semibold">3. กำลังประกอบ/QC</p>
-                        <p id="lkr-cnt-processing" class="text-xl font-bold text-indigo-300 mt-0.5 font-mono-cyber">0</p>
+                        <p id="lkr-cnt-processing" class="text-lg sm:text-xl font-bold text-indigo-300 mt-0.5 font-mono-cyber">0</p>
                     </button>
-                    <button onclick="filterLockerStatus('completed')" id="lkr-tab-completed" class="p-3.5 bg-[#0b0d14] border border-gray-800 hover:border-emerald-500/60 rounded-xl text-left transition">
+                    <button onclick="filterLockerStatus('completed')" id="lkr-tab-completed" class="p-3 bg-[#0b0d14] border border-gray-800 hover:border-emerald-500/60 rounded-xl text-left transition">
                         <p class="text-[11px] text-emerald-400 font-semibold">4. จัดส่งสำเร็จ</p>
-                        <p id="lkr-cnt-completed" class="text-xl font-bold text-emerald-300 mt-0.5 font-mono-cyber">0</p>
+                        <p id="lkr-cnt-completed" class="text-lg sm:text-xl font-bold text-emerald-300 mt-0.5 font-mono-cyber">0</p>
                     </button>
-                    <button onclick="filterLockerStatus('cancelled')" id="lkr-tab-cancelled" class="p-3.5 bg-[#0b0d14] border border-gray-800 hover:border-rose-500/60 rounded-xl text-left transition">
+                    <button onclick="filterLockerStatus('cancelled')" id="lkr-tab-cancelled" class="p-3 bg-[#0b0d14] border border-gray-800 hover:border-rose-500/60 rounded-xl text-left transition">
                         <p class="text-[11px] text-rose-400 font-semibold">ยกเลิก/คืนเงิน</p>
-                        <p id="lkr-cnt-cancelled" class="text-xl font-bold text-rose-300 mt-0.5 font-mono-cyber">0</p>
+                        <p id="lkr-cnt-cancelled" class="text-lg sm:text-xl font-bold text-rose-300 mt-0.5 font-mono-cyber">0</p>
                     </button>
                 </div>
 
                 <!-- Orders List Grid -->
-                <div id="my-licenses" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div id="my-licenses" class="grid grid-cols-1 lg:grid-cols-2 gap-5">
                     <!-- Orders injected via JS -->
                 </div>
             </div>
 
             <!-- ==========================================================
-                 SECTION 4: INLINE ARMORY ADMIN DASHBOARD (WITH INVITE SYSTEM)
+                 PAGE 5: DEDICATED ARMORY ADMIN DASHBOARD PAGE (#tactical-admin-dashboard)
                  ========================================================== -->
-            <div id="tactical-admin-dashboard" class="hidden mt-16 pt-10 border-t-2 border-[#ff003c] font-sans-th">
-                <div class="bg-[#090b12] border border-[#ff003c]/80 rounded-2xl p-6 sm:p-8 shadow-[0_0_40px_rgba(255,0,60,0.12)] space-y-8">
+            <div id="tactical-admin-dashboard" class="hidden font-sans-th space-y-6">
+                <!-- Admin Quick Toolbar (Shown inside the dedicated Admin Page) -->
+                <div id="admin-quick-toolbar" class="p-4 bg-gradient-to-r from-[#1a070d] via-[#0f111a] to-[#071719] border border-[#ff003c]/70 rounded-2xl shadow-lg">
+                    <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-[#ff003c]/20 border border-[#ff003c] flex items-center justify-center text-[#ff003c] text-lg shrink-0">
+                                <i class="fa-solid fa-user-shield"></i>
+                            </div>
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span class="text-xs font-bold text-[#ff003c] uppercase tracking-wider font-mono-cyber">ARMORY COMMANDER MODE</span>
+                                    <span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold">หน้าจัดการระบบตลาดลับ</span>
+                                </div>
+                                <p class="text-xs text-gray-300 mt-0.5">ส่งคำเชิญลูกค้าเข้าตลาดลับ (สุ่มรหัสเข้ากล่องข้อความหน้าเติมเกม) จัดการปืน อะไหล่ และคำสั่งซื้อทั้งหมด</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-2 w-full lg:w-auto">
+                            <button onclick="switchHiddenSection('shop')" class="bg-gray-900 hover:bg-gray-800 text-[#00ffcc] border border-[#00ffcc]/40 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-arrow-left"></i> กลับหน้าร้านปืน
+                            </button>
+                            <button onclick="openArmoryAdminProductModal(null)" class="cyber-btn bg-[#ff003c] text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5">
+                                <i class="fa-solid fa-plus"></i> เพิ่มปืน BB-Gun / อะไหล่
+                            </button>
+                            <button onclick="openInlineArmoryAdminDashboard('users')" class="bg-[#12141f] hover:bg-gray-800 text-amber-300 border border-amber-500/50 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-envelope-open-text"></i> จัดการเลเวล & รหัสเข้าคลัง
+                            </button>
+                            <button onclick="openInlineArmoryAdminDashboard('orders')" class="bg-[#12141f] hover:bg-gray-800 text-sky-300 border border-sky-500/50 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-boxes-stacked"></i> จัดการออเดอร์ปืน
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#090b12] border border-[#ff003c]/80 rounded-2xl p-4 sm:p-8 shadow-[0_0_40px_rgba(255,0,60,0.12)] space-y-6">
 
                     <!-- Armory Admin Header -->
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-800 pb-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-800 pb-5">
                         <div>
                             <div class="inline-flex items-center gap-2 bg-[#ff003c]/20 border border-[#ff003c] text-[#ff003c] text-[10px] px-3 py-0.5 rounded-full font-mono-cyber uppercase tracking-widest mb-2">
                                 <i class="fa-solid fa-shield-halved"></i> ARMORY COMMAND CENTER (INVITE & INVENTORY SYSTEM)
                             </div>
-                            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-wide flex items-center gap-3 font-mono-cyber">
+                            <h2 class="text-xl sm:text-3xl font-extrabold text-white tracking-wide flex items-center gap-3 font-mono-cyber">
                                 <i class="fa-solid fa-terminal text-[#00ffcc]"></i> TACTICAL ARMORY ADMIN DASHBOARD
                             </h2>
                             <p class="text-xs text-gray-400 mt-1">ส่งคำเชิญเข้าตลาดลับ (สุ่มรหัสส่งเข้ากล่องข้อความหน้าเติมเกม), จัดการระดับสมาชิก, เพิ่ม/แก้ไขปืนและสเปก, อนุมัติเครดิต CR และจัดการคำสั่งซื้อปืน</p>
                         </div>
-                        <div class="flex flex-wrap gap-2">
-                            <button onclick="loadArmoryAdminData()" class="bg-black hover:bg-gray-900 text-[#00ffcc] border border-[#00ffcc]/50 px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5">
+                        <div class="flex flex-wrap gap-2 w-full md:w-auto">
+                            <button onclick="loadArmoryAdminData()" class="flex-1 md:flex-initial bg-black hover:bg-gray-900 text-[#00ffcc] border border-[#00ffcc]/50 px-4 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5">
                                 <i class="fa-solid fa-rotate"></i> รีเฟรชข้อมูลคลังปืน
                             </button>
-                            <button onclick="openArmoryAdminProductModal(null)" class="cyber-btn bg-[#ff003c] text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5">
+                            <button onclick="openArmoryAdminProductModal(null)" class="flex-1 md:flex-initial cyber-btn bg-[#ff003c] text-white px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
                                 <i class="fa-solid fa-plus"></i> เพิ่มปืน / อะไหล่ใหม่
                             </button>
                         </div>
                     </div>
 
                     <!-- Armory Summary Metrics (5 Cards - Armory Only) -->
-                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-                        <div class="bg-black/90 border border-gray-800 p-4 rounded-xl">
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+                        <div class="bg-black/90 border border-gray-800 p-3.5 sm:p-4 rounded-xl">
                             <p class="text-[11px] text-gray-400">ยอดขายปืนวันนี้ (สำเร็จ)</p>
-                            <h3 id="adm-stat-today" class="text-xl font-bold text-emerald-400 mt-1 font-mono-cyber">0 CR</h3>
+                            <h3 id="adm-stat-today" class="text-lg sm:text-xl font-bold text-emerald-400 mt-1 font-mono-cyber">0 CR</h3>
                         </div>
-                        <div class="bg-black/90 border border-gray-800 p-4 rounded-xl">
+                        <div class="bg-black/90 border border-gray-800 p-3.5 sm:p-4 rounded-xl">
                             <p class="text-[11px] text-gray-400">ยอดขายคลังปืนรวม</p>
-                            <h3 id="adm-stat-hidden-sales" class="text-xl font-bold text-[#00ffcc] mt-1 font-mono-cyber">0 CR</h3>
+                            <h3 id="adm-stat-hidden-sales" class="text-lg sm:text-xl font-bold text-[#00ffcc] mt-1 font-mono-cyber">0 CR</h3>
                         </div>
-                        <div class="bg-black/90 border border-gray-800 p-4 rounded-xl">
+                        <div class="bg-black/90 border border-gray-800 p-3.5 sm:p-4 rounded-xl">
                             <p class="text-[11px] text-gray-400">ออเดอร์ปืนรอตรวจสอบ/QC</p>
-                            <h3 id="adm-stat-pending" class="text-xl font-bold text-amber-400 mt-1 font-mono-cyber">0 รายการ</h3>
+                            <h3 id="adm-stat-pending" class="text-lg sm:text-xl font-bold text-amber-400 mt-1 font-mono-cyber">0 รายการ</h3>
                         </div>
-                        <div class="bg-black/90 border border-gray-800 p-4 rounded-xl">
+                        <div class="bg-black/90 border border-gray-800 p-3.5 sm:p-4 rounded-xl">
                             <p class="text-[11px] text-gray-400">ส่งปืนสำเร็จ / ยกเลิก</p>
-                            <h3 id="adm-stat-comp-cancel" class="text-xl font-bold text-white mt-1 font-mono-cyber">0 / 0</h3>
+                            <h3 id="adm-stat-comp-cancel" class="text-lg sm:text-xl font-bold text-white mt-1 font-mono-cyber">0 / 0</h3>
                         </div>
-                        <div class="bg-black/90 border border-gray-800 p-4 rounded-xl">
+                        <div class="col-span-2 md:col-span-1 bg-black/90 border border-gray-800 p-3.5 sm:p-4 rounded-xl">
                             <p class="text-[11px] text-gray-400">สมาชิกทั้งหมด / ได้รับเชิญ</p>
-                            <h3 id="adm-stat-users" class="text-xl font-bold text-indigo-400 mt-1 font-mono-cyber">0 บัญชี</h3>
+                            <h3 id="adm-stat-users" class="text-lg sm:text-xl font-bold text-indigo-400 mt-1 font-mono-cyber">0 บัญชี</h3>
                         </div>
                     </div>
 
                     <!-- Armory Admin Navigation Tabs -->
-                    <div class="flex gap-2 overflow-x-auto border-b border-gray-800 pb-3">
+                    <div class="flex gap-2 overflow-x-auto hide-scrollbar border-b border-gray-800 pb-3">
                         <button onclick="switchArmoryAdminTab('users')" id="adm-tab-users" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#ff003c] text-white transition whitespace-nowrap">
                             <i class="fa-solid fa-envelope-open-text mr-1.5"></i> 1. จัดการระดับลูกค้า & รหัสเข้าคลัง
                         </button>
@@ -890,7 +1085,7 @@
                     </div>
 
                     <!-- TAB 1: ARMORY INVITE SYSTEM & CLEARANCE LEVEL MANAGEMENT -->
-                    <div id="adm-panel-users" class="adm-panel bg-black/90 rounded-xl border border-gray-800 p-5 space-y-6">
+                    <div id="adm-panel-users" class="adm-panel bg-black/90 rounded-xl border border-gray-800 p-4 sm:p-5 space-y-6">
                         <!-- Quick Invite Panel -->
                         <div class="bg-gradient-to-r from-[#0d191b] via-[#0d111a] to-[#170b12] border border-[#00ffcc]/50 rounded-2xl p-4 sm:p-5">
                             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
@@ -898,13 +1093,13 @@
                                     <span class="text-[10px] font-mono-cyber uppercase tracking-widest text-[#00ffcc] bg-[#00ffcc]/10 px-2.5 py-0.5 rounded-full border border-[#00ffcc]/30">
                                         INVITE-ONLY GENERATOR
                                     </span>
-                                    <h4 class="text-base font-bold text-white mt-1.5 flex items-center gap-2">
+                                    <h4 class="text-sm sm:text-base font-bold text-white mt-1.5 flex items-center gap-2">
                                         <i class="fa-solid fa-paper-plane text-[#00ffcc]"></i> ส่งคำเชิญลูกค้าเข้าสู่ตลาดลับ (สุ่มรหัสผ่านไปยังกล่องข้อความหน้าเติมเกม)
                                     </h4>
                                     <p class="text-xs text-gray-400 mt-0.5">เลือกรายชื่อลูกค้าที่ต้องการเชิญ ระบบจะสุ่มรหัส <span class="font-mono-cyber text-[#00ffcc]">INV-XXXXXX</span> ที่ไม่ซ้ำกันและส่งเข้ากล่องข้อความของลูกค้าในหน้าเติมเกมทันที</p>
                                 </div>
                                 <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full lg:w-auto">
-                                    <select id="adm-quick-invite-uid" class="bg-black border border-gray-700 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-[#00ffcc] min-w-[220px]">
+                                    <select id="adm-quick-invite-uid" class="bg-black border border-gray-700 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-[#00ffcc] min-w-0 sm:min-w-[220px]">
                                         <option value="">-- เลือกบัญชีลูกค้าที่ต้องการเชิญ --</option>
                                     </select>
                                     <select id="adm-quick-invite-lvl" class="bg-black border border-yellow-500/40 rounded-xl px-3 py-2.5 text-xs text-yellow-400 font-bold outline-none">
@@ -921,7 +1116,7 @@
 
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                             <div>
-                                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                                     <i class="fa-solid fa-user-check text-[#00ffcc]"></i> รายชื่อสมาชิก & สถานะคำเชิญเข้าตลาดลับ
                                 </h3>
                                 <p class="text-xs text-gray-400">เฉพาะสมาชิกที่สถานะเป็น "ได้รับเชิญแล้ว" เท่านั้นที่จะมีรหัสผ่านสำหรับปลดล็อกหน้าทางเข้าตลาดลับได้</p>
@@ -929,7 +1124,7 @@
                             <input type="text" id="adm-user-search" oninput="renderArmoryAdminUsers()" placeholder="ค้นหาอีเมล / ชื่อ / รหัสเชิญ..." class="w-full sm:w-64 bg-[#0a0a0f] border border-gray-700 rounded-xl px-3.5 py-2 text-xs text-white outline-none focus:border-[#00ffcc]">
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs border-collapse">
+                            <table class="w-full text-left text-xs border-collapse min-w-[680px]">
                                 <thead class="bg-[#0c0c14] text-gray-400 border-b border-gray-800 uppercase">
                                     <tr>
                                         <th class="p-3">สมาชิก (อีเมล / UID)</th>
@@ -947,10 +1142,10 @@
                     </div>
 
                     <!-- TAB 2: ARMORY PRODUCTS & SPECS MANAGEMENT (ONLY HIDDEN MARKET) -->
-                    <div id="adm-panel-products" class="adm-panel hidden bg-black/90 rounded-xl border border-gray-800 p-5">
+                    <div id="adm-panel-products" class="adm-panel hidden bg-black/90 rounded-xl border border-gray-800 p-4 sm:p-5">
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                             <div>
-                                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                                     <i class="fa-solid fa-gun text-[#ff003c]"></i> จัดการคลังปืน BB-Gun อะไหล่ และสเปกทางเทคนิค
                                 </h3>
                                 <p class="text-xs text-gray-400">แสดงและจัดการเฉพาะสินค้าในคลังปืน BB-Gun เท่านั้น (แยกออกจากหน้าร้านเติมเกม)</p>
@@ -965,7 +1160,7 @@
                             </div>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs border-collapse">
+                            <table class="w-full text-left text-xs border-collapse min-w-[640px]">
                                 <thead class="bg-[#0c0c14] text-gray-400 border-b border-gray-800 uppercase">
                                     <tr>
                                         <th class="p-3">รูป / รหัสปืน</th>
@@ -983,13 +1178,13 @@
                     </div>
 
                     <!-- TAB 3: ARMORY ORDERS MANAGEMENT (ONLY HIDDEN MARKET ORDERS) -->
-                    <div id="adm-panel-orders" class="adm-panel hidden bg-black/90 rounded-xl border border-gray-800 p-5">
+                    <div id="adm-panel-orders" class="adm-panel hidden bg-black/90 rounded-xl border border-gray-800 p-4 sm:p-5">
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
                             <div>
-                                <h3 class="text-lg font-bold text-white">จัดการคำสั่งซื้อปืนและอุปกรณ์แต่ง (เฉพาะออเดอร์คลังปืน #ARM)</h3>
+                                <h3 class="text-base sm:text-lg font-bold text-white">จัดการคำสั่งซื้อปืนและอุปกรณ์แต่ง (เฉพาะออเดอร์คลังปืน #ARM)</h3>
                                 <p class="text-xs text-gray-400">ตรวจสอบสลิป บันทึกผลทดสอบ FPS (QC) และใส่เลขพัสดุจัดส่งปืนให้ลูกค้า</p>
                             </div>
-                            <div class="flex gap-2 w-full sm:w-auto">
+                            <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
                                 <input type="text" id="adm-order-search" oninput="renderArmoryAdminOrders()" placeholder="ค้นหารหัส #ARM / อีเมล..." class="bg-[#0a0a0f] border border-gray-700 rounded-xl px-3 py-1.5 text-xs text-white outline-none">
                                 <select id="adm-order-status" onchange="renderArmoryAdminOrders()" class="bg-[#0a0a0f] border border-gray-700 rounded-xl px-3 py-1.5 text-xs text-gray-300 outline-none">
                                     <option value="all">ทุกสถานะ</option>
@@ -1002,7 +1197,7 @@
                             </div>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs border-collapse">
+                            <table class="w-full text-left text-xs border-collapse min-w-[640px]">
                                 <thead class="bg-[#0c0c14] text-gray-400 border-b border-gray-800 uppercase">
                                     <tr>
                                         <th class="p-3">Order ID / เวลา</th>
@@ -1019,13 +1214,13 @@
                     </div>
 
                     <!-- TAB 4: WALLET PAYMENTS VERIFICATION -->
-                    <div id="adm-panel-payments" class="adm-panel hidden bg-black/90 rounded-xl border border-gray-800 p-5">
+                    <div id="adm-panel-payments" class="adm-panel hidden bg-black/90 rounded-xl border border-gray-800 p-4 sm:p-5">
                         <div class="mb-6">
-                            <h3 class="text-lg font-bold text-white">ตรวจสอบรายการแจ้งโอนเติมเครดิตคลังปืน (Armory Credits)</h3>
+                            <h3 class="text-base sm:text-lg font-bold text-white">ตรวจสอบรายการแจ้งโอนเติมเครดิตคลังปืน (Armory Credits)</h3>
                             <p class="text-xs text-gray-400">กดปุ่ม "อนุมัติเครดิต" เพื่อเติมเครดิต CR เข้ากระเป๋าสมาชิกอัตโนมัติ</p>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs border-collapse">
+                            <table class="w-full text-left text-xs border-collapse min-w-[600px]">
                                 <thead class="bg-[#0c0c14] text-gray-400 border-b border-gray-800 uppercase">
                                     <tr>
                                         <th class="p-3">Payment ID / เวลา</th>
@@ -1042,12 +1237,12 @@
                     </div>
 
                     <!-- TAB 5: ADMIN LOGS -->
-                    <div id="adm-panel-logs" class="adm-panel hidden bg-black/90 rounded-xl border border-gray-800 p-5">
+                    <div id="adm-panel-logs" class="adm-panel hidden bg-black/90 rounded-xl border border-gray-800 p-4 sm:p-5">
                         <div class="mb-6">
-                            <h3 class="text-lg font-bold text-white">บันทึกกิจกรรมผู้ดูแลระบบ (Audit Logs)</h3>
+                            <h3 class="text-base sm:text-lg font-bold text-white">บันทึกกิจกรรมผู้ดูแลระบบ (Audit Logs)</h3>
                         </div>
                         <div class="overflow-x-auto max-h-96">
-                            <table class="w-full text-left text-xs border-collapse">
+                            <table class="w-full text-left text-xs border-collapse min-w-[560px]">
                                 <thead class="bg-[#0c0c14] text-gray-400 border-b border-gray-800 uppercase sticky top-0">
                                     <tr>
                                         <th class="p-3">วัน-เวลา</th>
@@ -1296,7 +1491,7 @@
         // ==========================================
         window.state = {
             view: 'app',
-            hiddenSection: 'all',
+            hiddenSection: 'shop',
             user: null,
             armoryUnlocked: false, // STRICT FLAG: Must pass invite-only gateway password before entering 'hidden'
             // Separated Product Lists
@@ -1520,13 +1715,16 @@
             const toolbar = document.getElementById('admin-quick-toolbar');
             const armDash = document.getElementById('tactical-admin-dashboard');
 
+            const mobNavAdm = document.getElementById('mob-nav-admin');
             if (admin) {
                 shopBtn?.classList.remove('hidden');
                 hidBtn?.classList.remove('hidden');
                 hidNavAdm?.classList.remove('hidden');
-                toolbar?.classList.remove('hidden');
-                if (window.state.hiddenSection === 'all' || window.state.hiddenSection === 'admin') {
+                mobNavAdm?.classList.remove('hidden');
+                if (window.state.hiddenSection === 'admin') {
                     armDash?.classList.remove('hidden');
+                } else {
+                    armDash?.classList.add('hidden');
                 }
                 window.loadSurfaceAdminData();
                 if (window.state.armoryUnlocked) {
@@ -1537,8 +1735,11 @@
                 surfDash?.classList.add('hidden');
                 hidBtn?.classList.add('hidden');
                 hidNavAdm?.classList.add('hidden');
-                toolbar?.classList.add('hidden');
+                mobNavAdm?.classList.add('hidden');
                 armDash?.classList.add('hidden');
+                if (window.state.hiddenSection === 'admin') {
+                    window.switchHiddenSection('shop');
+                }
             }
         }
 
@@ -1607,7 +1808,9 @@
             window.state.unsubWallet = onSnapshot(doc(db, "wallets", uid), (docSnap) => {
                 window.state.walletBalance = docSnap.exists() ? (Number(docSnap.data().balance) || 0) : 0;
                 const balEl = document.getElementById('shd-balance-display');
-                if (balEl) balEl.innerHTML = `${window.state.walletBalance.toLocaleString()} <span class="text-xs">CR</span>`;
+                if (balEl) balEl.innerHTML = `${window.state.walletBalance.toLocaleString()} <span class="text-[10px]">CR</span>`;
+                const pageBalEl = document.getElementById('wallet-page-balance');
+                if (pageBalEl) pageBalEl.innerText = `${window.state.walletBalance.toLocaleString()} CR`;
             }, () => {});
 
             // 2. Listen to Armory Credit Top-Up Requests
@@ -1619,6 +1822,9 @@
                 window.state.myPayments = pays;
                 const cntEl = document.getElementById('my-pay-count');
                 if (cntEl) cntEl.innerText = pays.length;
+                if (window.state.view === 'hidden' && window.state.armoryUnlocked) {
+                    window.renderWalletPage();
+                }
             }, () => {});
 
             // 3. Listen to User's Orders and separate Surface vs Armory
@@ -2154,11 +2360,19 @@
                 Swal.fire('เฉพาะแอดมิน', 'เฉพาะผู้ดูแลระบบเท่านั้นที่จัดการร้านเติมเกมได้', 'error');
                 return;
             }
+            document.getElementById('surface-store-main-view')?.classList.add('hidden');
+            document.getElementById('surface-hero-banner')?.classList.add('hidden');
             const dash = document.getElementById('surface-admin-dashboard');
             dash?.classList.remove('hidden');
             window.loadSurfaceAdminData();
-            setTimeout(() => dash?.scrollIntoView({ behavior: 'smooth' }), 100);
-        }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.closeSurfaceAdminPage = function() {
+            document.getElementById('surface-admin-dashboard')?.classList.add('hidden');
+            document.getElementById('surface-hero-banner')?.classList.remove('hidden');
+            document.getElementById('surface-store-main-view')?.classList.remove('hidden');
+        };
 
         window.switchSurfaceAdminTab = function(tab) {
             document.querySelectorAll('.surf-adm-panel').forEach(el => el.classList.add('hidden'));
@@ -2536,45 +2750,200 @@
             };
         }
 
-        // Section Switcher inside Hidden Market for clean, uncluttered navigation
+        // Strict Multi-Page Router inside Hidden Market (Displays ONLY 1 dedicated page at a time!)
         window.switchHiddenSection = function(sec) {
-            window.state.hiddenSection = sec;
-            const shopEl = document.getElementById('hidden-shop-section');
-            const toolsEl = document.getElementById('tactical-tools-section');
-            const ordersEl = document.getElementById('tactical-locker-section');
-            const adminEl = document.getElementById('tactical-admin-dashboard');
-
             const isAdmin = isUserAdmin();
+            if (!sec || sec === 'all') sec = 'shop';
+            if (sec === 'admin' && !isAdmin) sec = 'shop';
 
-            if (sec === 'all') {
-                shopEl?.classList.remove('hidden');
-                toolsEl?.classList.remove('hidden');
-                ordersEl?.classList.remove('hidden');
-                if (isAdmin) adminEl?.classList.remove('hidden');
-            } else {
-                shopEl?.classList.toggle('hidden', sec !== 'shop');
-                toolsEl?.classList.toggle('hidden', sec !== 'tools');
-                ordersEl?.classList.toggle('hidden', sec !== 'orders');
-                if (isAdmin) {
-                    adminEl?.classList.toggle('hidden', sec !== 'admin');
-                }
-            }
+            window.state.hiddenSection = sec;
 
-            ['all', 'shop', 'tools', 'orders', 'admin'].forEach(k => {
-                const btn = document.getElementById(`hid-nav-${k}`);
-                if (!btn) return;
-                if (k === 'admin' && !isAdmin) return;
-                if (k === sec) {
-                    btn.className = "px-4 py-2.5 rounded-xl text-xs font-bold bg-[#ff003c] text-white shadow-[0_0_15px_rgba(255,0,60,0.3)] transition flex items-center gap-2";
-                } else {
-                    btn.className = "px-4 py-2.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-gray-800/70 transition flex items-center gap-2";
+            const pages = {
+                shop: document.getElementById('hidden-shop-section'),
+                wallet: document.getElementById('tactical-wallet-section'),
+                tools: document.getElementById('tactical-tools-section'),
+                orders: document.getElementById('tactical-locker-section'),
+                admin: document.getElementById('tactical-admin-dashboard')
+            };
+
+            Object.keys(pages).forEach(k => {
+                if (pages[k]) {
+                    pages[k].classList.toggle('hidden', k !== sec);
                 }
             });
 
-            if (sec === 'tools') {
+            // Update Desktop Top Page Tabs
+            ['shop', 'wallet', 'tools', 'orders', 'admin'].forEach(k => {
+                const btn = document.getElementById(`hid-nav-${k}`);
+                if (btn) {
+                    if (k === 'admin' && !isAdmin) {
+                        btn.classList.add('hidden');
+                    } else if (k === sec) {
+                        btn.className = "px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold bg-[#ff003c] text-white shadow-[0_0_15px_rgba(255,0,60,0.3)] transition flex items-center gap-1.5 whitespace-nowrap";
+                    } else {
+                        btn.className = "px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold text-gray-300 hover:text-white hover:bg-gray-800/70 transition flex items-center gap-1.5 whitespace-nowrap";
+                    }
+                }
+                // Update Mobile Bottom Nav Bar
+                const mobBtn = document.getElementById(`mob-nav-${k}`);
+                if (mobBtn) {
+                    if (k === 'admin' && !isAdmin) {
+                        mobBtn.classList.add('hidden');
+                    } else if (k === sec) {
+                        mobBtn.className = "flex flex-col items-center justify-center py-1 px-2 rounded-xl text-[#00ffcc] bg-[#00ffcc]/10 font-bold text-[10px] transition";
+                    } else {
+                        mobBtn.className = "flex flex-col items-center justify-center py-1 px-2 rounded-xl text-gray-400 font-semibold text-[10px] transition";
+                    }
+                }
+            });
+
+            if (sec === 'wallet') {
+                window.renderWalletPage();
+            } else if (sec === 'tools') {
+                window.populateLoadoutBuilder();
                 window.renderArmoryCompareTable();
                 window.calculateBallistics();
+            } else if (sec === 'orders') {
+                window.renderLicenses();
+            } else if (sec === 'admin' && isAdmin) {
+                window.loadArmoryAdminData();
             }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // Dedicated Wallet Page Renderer & Direct Form Submission
+        window.renderWalletPage = function() {
+            const balEl = document.getElementById('wallet-page-balance');
+            if (balEl) balEl.innerText = `${window.state.walletBalance.toLocaleString()} CR`;
+
+            const listEl = document.getElementById('wallet-page-history-list');
+            if (!listEl) return;
+            const pays = window.state.myPayments || [];
+            if (pays.length === 0) {
+                listEl.innerHTML = `<div class="p-10 bg-black/60 border border-dashed border-gray-800 rounded-xl text-center text-gray-500 text-xs">ยังไม่มีประวัติการแจ้งโอนเติมเครดิตคลังปืน</div>`;
+                return;
+            }
+            listEl.innerHTML = pays.map(p => {
+                const st = STATUS_LABELS[p.status] || { text: p.status, cls: 'border-gray-700 text-gray-400' };
+                const dStr = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleString('th-TH') : '';
+                return `
+                    <div class="p-3.5 bg-black border border-gray-800 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+                        <div class="space-y-0.5">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[#00ffcc] font-mono-cyber font-bold">#${p.paymentNo}</span>
+                                <span class="text-gray-500 text-[10px]">${dStr}</span>
+                            </div>
+                            <p class="text-gray-300">อ้างอิงสลิป: <span class="text-amber-300">${p.transferRef}</span></p>
+                        </div>
+                        <div class="flex sm:flex-col items-center sm:items-end justify-between gap-1">
+                            <span class="text-white font-bold text-sm font-mono-cyber">+${Number(p.amount).toLocaleString()} CR</span>
+                            <span class="px-2.5 py-0.5 rounded-full border text-[10px] font-bold ${st.cls}">${st.text}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        };
+
+        window.submitPageArmoryTopup = async function() {
+            if (!window.state.armoryUnlocked || !window.state.user) return;
+            const amount = parseInt(document.getElementById('page-topup-amt')?.value || '1000');
+            const ref = (document.getElementById('page-topup-ref')?.value || '').trim();
+            if (!ref) {
+                Swal.fire({ title: 'กรุณากรอกข้อมูลสลิป', text: 'โปรดระบุเลขอ้างอิงสลิปหรือเวลาโอนเงิน', icon: 'warning', background: '#0a0a0a', color: '#ff003c' });
+                return;
+            }
+            try {
+                const paymentNo = 'PAY-' + Date.now().toString().slice(-6);
+                await addDoc(collection(db, "payments"), {
+                    paymentNo,
+                    uid: window.state.user.uid,
+                    userEmail: window.state.user.email,
+                    amount,
+                    transferRef: ref,
+                    status: 'paid_verifying',
+                    adminNote: 'รอแอดมินคลังปืนตรวจสอบยอดโอน',
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                });
+                document.getElementById('page-topup-ref').value = '';
+                Swal.fire({
+                    title: 'ส่งคำขอเติมเครดิตปืนแล้ว!',
+                    text: `รหัสอ้างอิง #${paymentNo} รอแอดมินคลังปืนอนุมัติ`,
+                    icon: 'success',
+                    background: '#0a0a0a',
+                    color: '#00ffcc'
+                });
+            } catch (e) {
+                Swal.fire('Error', e.message, 'error');
+            }
+        };
+
+        // Custom Gun Loadout Builder Functions (จัดเซ็ตปืน + อะไหล่ + อุปกรณ์เสริม)
+        window.populateLoadoutBuilder = function() {
+            const gunSel = document.getElementById('loadout-gun');
+            const partSel = document.getElementById('loadout-part');
+            const accSel = document.getElementById('loadout-acc');
+            if (!gunSel || !partSel || !accSel) return;
+
+            const guns = (window.state.armoryProducts || []).filter(p => p.category === 'BB-Gun' && p.isActive !== false);
+            const parts = (window.state.armoryProducts || []).filter(p => p.category === 'Parts' && p.isActive !== false);
+            const accs = (window.state.armoryProducts || []).filter(p => p.category === 'Accessories' && p.isActive !== false);
+
+            gunSel.innerHTML = guns.map(g => `<option value="${g.id}">${g.name} (${Number(g.price).toLocaleString()} CR)</option>`).join('');
+            partSel.innerHTML = `<option value="">-- ไม่เลือกอะไหล่เสริม --</option>` + parts.map(p => `<option value="${p.id}">${p.name} (+${Number(p.price).toLocaleString()} CR)</option>`).join('');
+            accSel.innerHTML = `<option value="">-- ไม่เลือกกล้องเล็ง/อุปกรณ์ --</option>` + accs.map(a => `<option value="${a.id}">${a.name} (+${Number(a.price).toLocaleString()} CR)</option>`).join('');
+
+            if (parts.length > 0) partSel.value = parts[0].id;
+            if (accs.length > 0) accSel.value = accs[0].id;
+            window.calculateCustomLoadout();
+        };
+
+        window.calculateCustomLoadout = function() {
+            const gunId = document.getElementById('loadout-gun')?.value;
+            const partId = document.getElementById('loadout-part')?.value;
+            const accId = document.getElementById('loadout-acc')?.value;
+
+            const chosen = [gunId, partId, accId]
+                .map(id => window.state.armoryProducts.find(p => p.id === id))
+                .filter(Boolean);
+
+            const total = chosen.reduce((s, p) => s + Number(p.price || 0), 0);
+            const maxLvl = chosen.reduce((m, p) => Math.max(m, Number(p.reqLevel || 1)), 1);
+
+            const sumEl = document.getElementById('loadout-summary-text');
+            const lvlEl = document.getElementById('loadout-req-lvl');
+            const prcEl = document.getElementById('loadout-total-price');
+
+            if (sumEl) sumEl.innerText = chosen.length ? `${chosen.length} รายการ (${chosen.map(c => c.name).join(' + ')})` : '-';
+            if (lvlEl) lvlEl.innerText = `LVL.${maxLvl}`;
+            if (prcEl) prcEl.innerText = `${total.toLocaleString()} CR`;
+        };
+
+        window.addCustomLoadoutToCart = function() {
+            if (!window.state.armoryUnlocked) return;
+            const gunId = document.getElementById('loadout-gun')?.value;
+            const partId = document.getElementById('loadout-part')?.value;
+            const accId = document.getElementById('loadout-acc')?.value;
+
+            const chosen = [gunId, partId, accId]
+                .map(id => window.state.armoryProducts.find(p => p.id === id))
+                .filter(Boolean);
+
+            if (chosen.length === 0) return;
+            const userLevel = window.state.user?.secretLevel || 1;
+            const maxLvl = chosen.reduce((m, p) => Math.max(m, Number(p.reqLevel || 1)), 1);
+
+            if (!isUserAdmin() && userLevel < maxLvl) {
+                Swal.fire({ title: 'ระดับสมาชิกไม่เพียงพอ', text: `เซ็ตนี้มีสินค้าสำหรับสมาชิก LVL.${maxLvl} ขึ้นไป (ปัจจุบันคุณคือ LVL.${userLevel})`, icon: 'warning', background: '#0a0a0a', color: '#ff003c' });
+                return;
+            }
+
+            chosen.forEach(p => {
+                const addons = WORKSHOP_ADDONS[p.category] || WORKSHOP_ADDONS['BB-Gun'];
+                window.addItemToHiddenCart(p, 1, addons[0].name, 0);
+            });
+            window.openHiddenCartModal();
         };
 
         // Wishlist (รายการโปรด) Functions
@@ -2814,7 +3183,7 @@
                 const lvl = window.state.user.secretLevel || 1;
                 const titles = { 1: 'RECRUIT', 2: 'OPERATOR', 3: 'VETERAN', 4: 'COMMANDER' };
                 badge.innerText = `LVL ${lvl} : ${titles[lvl] || 'COMMANDER'}`;
-                badge.className = `bg-[#11131c] px-3 py-1.5 border ${lvl >= 3 ? 'border-[#ff003c] text-[#ff003c]' : 'border-yellow-500/60 text-yellow-400'} rounded-lg font-mono-cyber font-bold tracking-wider text-xs hidden sm:inline-block`;
+                badge.className = `bg-[#11131c] px-2 py-0.5 border ${lvl >= 3 ? 'border-[#ff003c] text-[#ff003c]' : 'border-yellow-500/60 text-yellow-400'} rounded text-[10px] font-mono-cyber font-bold whitespace-nowrap shrink-0`;
             }
         }
 
@@ -3569,10 +3938,10 @@
 
                     Swal.fire({
                         title: 'บันทึกคำสั่งซื้อปืนสำเร็จ!',
-                        text: `ใบสั่งซื้อ #${orderNo} ถูกเพิ่มลงใน Tactical Locker ด้านล่างแล้ว`,
+                        text: `ใบสั่งซื้อ #${orderNo} ถูกบันทึกเรียบร้อย กำลังพาไปหน้าติดตามคำสั่งซื้อ...`,
                         icon: 'success', background: '#0a0a0a', color: '#00ffcc', confirmButtonColor: '#ff003c'
                     }).then(() => {
-                        document.getElementById('tactical-locker-section')?.scrollIntoView({ behavior: 'smooth' });
+                        window.switchHiddenSection('orders');
                     });
                 } catch (e) {
                     Swal.fire('Error', e.message, 'error');
@@ -3866,9 +4235,12 @@
             if (viewName === 'hidden' && window.state.armoryUnlocked) {
                 updateAdminButtons();
                 populateCalculatorPresets();
+                window.populateLoadoutBuilder();
                 window.calculateBallistics();
                 window.renderHiddenMarket();
                 window.renderArmoryCompareTable();
+                window.renderWalletPage();
+                window.switchHiddenSection(window.state.hiddenSection || 'shop');
             }
             if (viewName === 'app') {
                 window.renderSurfaceGames();
@@ -4035,11 +4407,8 @@
                 Swal.fire({ title: 'ACCESS DENIED', text: 'เฉพาะผู้ดูแลระบบคลังปืน (Admin LVL.4) เท่านั้น', icon: 'error', background: '#0a0a0a', color: '#ff003c' });
                 return;
             }
-            updateAdminButtons();
+            window.switchHiddenSection('admin');
             if (tabName) window.switchArmoryAdminTab(tabName);
-            setTimeout(() => {
-                document.getElementById('tactical-admin-dashboard')?.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
         }
 
         window.switchArmoryAdminTab = function(tabName) {
