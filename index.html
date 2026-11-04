@@ -439,47 +439,28 @@
 
 
     <!-- ==========================================
-         VIEW 2: GATEWAY (INVITE-ONLY PASSWORD TERMINAL FOR GUN ARMORY)
+         VIEW 2: GATEWAY (CLEAN NORMAL VERIFICATION PAGE - NO HINTS OF SECRET SITE)
          ========================================== -->
-    <div id="view-gateway" class="view-section hidden min-h-screen bg-[#050507] flex flex-col items-center justify-center font-sans-th text-[#00ffcc] relative overflow-hidden p-4">
-        <div class="absolute inset-0 crt-overlay z-20"></div>
-
-        <div class="w-full max-w-lg p-8 sm:p-10 bg-[#0b0d14] cyber-border rounded-2xl text-center relative z-10 shadow-2xl">
-            <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-[#ff003c]/15 border border-[#ff003c]/50 flex items-center justify-center text-[#ff003c] text-3xl shadow-[0_0_20px_rgba(255,0,60,0.25)]">
-                <i class="fa-solid fa-shield-halved"></i>
+    <div id="view-gateway" class="view-section hidden min-h-screen surface-gradient-bg flex flex-col items-center justify-center font-sans-th text-slate-800 p-4">
+        <div class="w-full max-w-md p-6 sm:p-8 bg-white border border-slate-200 rounded-2xl text-center shadow-sm">
+            <div class="w-12 h-12 mx-auto mb-3 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 text-xl">
+                <i class="fa-solid fa-key"></i>
             </div>
-            <span class="inline-block px-3 py-0.5 rounded-full bg-[#00ffcc]/10 border border-[#00ffcc]/40 text-[#00ffcc] text-[11px] font-bold tracking-wider uppercase mb-2">
-                สำหรับสมาชิกที่ได้รับเชิญ
-            </span>
-            <h2 class="text-2xl sm:text-3xl mb-1 font-extrabold tracking-wide text-white">ยืนยันรหัสผ่านเข้าหน้าร้าน</h2>
-            <p class="text-xs text-gray-400 mb-6">แผนกจำหน่ายปืนบีบีกันและอุปกรณ์แต่ง — สงวนสิทธิ์เฉพาะสมาชิกที่ได้รับเชิญ</p>
+            <h2 class="text-lg sm:text-xl mb-1 font-bold text-slate-900">กรอกรหัสของคุณ</h2>
+            <p class="text-xs text-slate-500 mb-5">กรุณาระบุรหัสประจำบัญชีเพื่อดำเนินการต่อ</p>
 
-            <div class="mb-6 text-left border-l-4 border-[#00ffcc] pl-4 pr-3 bg-black/80 py-3.5 rounded-r-xl text-xs space-y-2 border border-gray-800/80">
-                <p class="text-[#00ffcc] font-bold flex items-center gap-2">
-                    <i class="fa-solid fa-lock"></i> การเข้าใช้งาน:
-                </p>
-                <p class="text-gray-300 leading-relaxed">
-                    1. สงวนสิทธิ์เฉพาะสมาชิกที่ได้รับคำเชิญจากผู้ดูแลระบบเท่านั้น
-                </p>
-                <p class="text-gray-300 leading-relaxed">
-                    2. เมื่อคุณได้รับคำเชิญ รหัสผ่าน (<span class="font-mono-cyber text-[#00ffcc]">INV-XXXXXX</span>) จะถูกส่งไปยังเมนู <b class="text-white">"กล่องข้อความ"</b> ด้านบนของหน้าร้านเติมเกม
-                </p>
-                <div id="gateway-user-status" class="pt-2 border-t border-gray-800 text-[11px] text-amber-300 font-medium">
-                    กรุณากรอกรหัสเชิญของคุณเพื่อเข้าสู่หน้าร้าน
-                </div>
+            <div id="gateway-user-status" class="hidden"></div>
+
+            <div class="mb-6">
+                <input type="password" id="gateway-input" class="w-full bg-slate-50 border border-slate-300 focus:border-slate-800 focus:bg-white rounded-xl py-3 px-4 text-center text-base font-mono font-bold text-slate-900 uppercase tracking-widest outline-none transition" placeholder="INV-XXXXXX" autocomplete="off" spellcheck="false">
             </div>
 
-            <div class="mb-7">
-                <label class="block text-[11px] text-gray-400 tracking-wider mb-2">กรอกรหัสเชิญของคุณ</label>
-                <input type="password" id="gateway-input" class="terminal-input w-full py-2 uppercase font-mono-cyber" placeholder="INV-XXXXXX" autocomplete="off" spellcheck="false">
-            </div>
-
-            <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                <button onclick="switchView('app')" class="border border-gray-700 bg-gray-900/60 text-gray-300 hover:text-white hover:border-gray-500 px-6 py-3 rounded-xl text-xs font-bold transition">
-                    กลับหน้าร้านเติมเกม
+            <div class="flex flex-col sm:flex-row gap-2.5 justify-center">
+                <button onclick="switchView('app')" class="border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 px-5 py-2.5 rounded-xl text-xs font-semibold transition">
+                    ย้อนกลับ
                 </button>
-                <button onclick="verifyAccessCode()" class="cyber-btn bg-[#ff003c]/15 px-8 py-3 rounded-xl text-sm font-bold">
-                    เข้าสู่หน้าร้าน
+                <button onclick="verifyAccessCode()" class="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-xl text-xs font-semibold transition shadow-sm">
+                    ตกลง
                 </button>
             </div>
         </div>
@@ -1596,6 +1577,24 @@
                         let accessCode = (isInvited && data.accessCode) ? data.accessCode : null;
                         let inboxList = Array.isArray(data.inbox) ? [...data.inbox] : [];
 
+                        // Clean any legacy inbox wording on load so old messages never mention secret stores or hints
+                        let hadDirtyInbox = false;
+                        inboxList = inboxList.map(m => {
+                            if (m.type === 'armory_invite') {
+                                if (m.title !== 'รหัสประจำบัญชีของคุณ' || m.body !== '') hadDirtyInbox = true;
+                                return { ...m, title: 'รหัสประจำบัญชีของคุณ', body: '', sender: 'VALO-SHOP' };
+                            }
+                            let t = m.title || 'ข้อความแจ้งเตือน';
+                            let b = m.body || '';
+                            if (t.includes('ตลาดลับ') || t.includes('Tactical')) { t = 'ข้อความแจ้งเตือน'; hadDirtyInbox = true; }
+                            if (b.includes('ตลาดลับ') || b.includes('คำเชิญ')) {
+                                b = b.replace(/\s*\(หากคุณได้รับคำเชิญ.*?\)/g, '');
+                                if (b.includes('ตลาดลับ')) b = 'รหัสเดิมของบัญชีนี้ถูกยกเลิกแล้ว';
+                                hadDirtyInbox = true;
+                            }
+                            return { ...m, title: t, body: b, sender: 'VALO-SHOP' };
+                        });
+
                         // If user is Admin, ensure they automatically have an active Invite Code in their Surface Inbox so Admin can always enter
                         if (isAdminRole && (!isInvited || !accessCode || !accessCode.startsWith('INV-'))) {
                             accessCode = generateRandomInviteCode();
@@ -1603,10 +1602,10 @@
                             const admInviteMsg = {
                                 id: 'MSG-ADM-' + Date.now(),
                                 type: 'armory_invite',
-                                title: 'รหัสผ่านเข้าสู่ตลาดลับสำหรับผู้ดูแลระบบ (Admin Invite Code)',
-                                body: 'บัญชีของคุณมีสิทธิ์ระดับผู้ดูแลระบบ นี่คือรหัสผ่านสุ่มเฉพาะตัวสำหรับปลดล็อกหน้าทางเข้าตลาดลับ (Tactical Armory)',
+                                title: 'รหัสประจำบัญชีของคุณ',
+                                body: '',
                                 accessCode: accessCode,
-                                sender: 'System Security',
+                                sender: 'VALO-SHOP',
                                 isRead: false,
                                 createdAtMs: Date.now(),
                                 createdAtText: new Date().toLocaleString('th-TH')
@@ -1616,6 +1615,8 @@
                         } else if (!isAdminRole && !isInvited && data.accessCode) {
                             // Clear legacy non-invited TAC-* codes so only invited users have a valid code
                             await setDoc(userRef, { isInvited: false, accessCode: null }, { merge: true });
+                        } else if (hadDirtyInbox) {
+                            await setDoc(userRef, { inbox: inboxList }, { merge: true });
                         }
 
                         userProfile = {
@@ -1634,7 +1635,7 @@
                             id: 'MSG-WELCOME-' + Date.now(),
                             type: 'welcome',
                             title: 'ยินดีต้อนรับสู่ VALO-SHOP ศูนย์บริการเติมเกมออนไลน์',
-                            body: 'ขอบคุณที่สมัครสมาชิกกับเรา คุณสามารถเลือกเติมเกมด้วย UID และสะสมแต้มเพื่อรับส่วนลดพิเศษได้ทันที (หากคุณได้รับคำเชิญพิเศษจากแอดมิน รหัสผ่านจะถูกส่งเข้ามาในกล่องข้อความนี้)',
+                            body: 'ขอบคุณที่สมัครสมาชิกกับเรา คุณสามารถเลือกเติมเกมด้วย UID พร้อมตรวจสอบสถานะคำสั่งซื้อและสะสมคะแนนได้ทันที',
                             sender: 'VALO-SHOP Official',
                             isRead: false,
                             createdAtMs: Date.now(),
@@ -1788,17 +1789,17 @@
                         toast: true,
                         position: 'top-end',
                         icon: 'info',
-                        title: 'คุณได้รับข้อความคำเชิญใหม่!',
-                        text: 'ตรวจสอบรหัสเข้าตลาดลับได้ที่ปุ่ม "กล่องข้อความ"',
+                        title: 'คุณมีข้อความใหม่',
+                        text: 'ตรวจสอบรายละเอียดได้ที่เมนู "กล่องข้อความ"',
                         showConfirmButton: false,
-                        timer: 4500
+                        timer: 4000
                     });
                 }
 
                 // If invite was revoked while user is inside hidden market, lock and exit immediately
                 if (!newInvited && !isAdminRole && window.state.view === 'hidden') {
                     window.lockAndExitArmory();
-                    Swal.fire('สิทธิ์การเข้าถึงถูกยกเลิก', 'คำเชิญเข้าสู่ตลาดลับของบัญชีนี้ถูกยกเลิกโดยผู้ดูแลระบบ', 'warning');
+                    Swal.fire('ไม่สามารถเข้าใช้งานได้', 'สิทธิ์การใช้งานของคุณถูกเปลี่ยนแปลง', 'warning');
                 }
             }, () => {});
 
@@ -1896,20 +1897,57 @@
             const u = window.state.user;
             let inbox = Array.isArray(u.inbox) ? [...u.inbox] : [];
 
-            // Ensure that if user isInvited and has an accessCode, there is always an invite card visible in their inbox
+            // Ensure that if user isInvited and has an accessCode, there is always a code card visible in their inbox
             if (u.isInvited && u.accessCode && !inbox.some(m => m.type === 'armory_invite' && m.accessCode === u.accessCode)) {
                 inbox.unshift({
                     id: 'MSG-INV-' + Date.now(),
                     type: 'armory_invite',
-                    title: 'คุณได้รับคำเชิญพิเศษเข้าสู่ตลาดลับ (Tactical Armory)',
-                    body: 'ผู้ดูแลระบบได้อนุมัติสิทธิ์การเข้าถึงตลาดลับให้บัญชีของคุณแล้ว กรุณาคัดลอกรหัสผ่านเฉพาะตัวด้านล่างเพื่อใช้ปลดล็อกหน้าทางเข้า',
+                    title: 'รหัสประจำบัญชีของคุณ',
+                    body: 'รหัสอ้างอิงสำหรับบัญชีของคุณ',
                     accessCode: u.accessCode,
-                    sender: 'Tactical Admin',
+                    sender: 'VALO-SHOP',
                     isRead: false,
                     createdAtMs: Date.now(),
                     createdAtText: new Date().toLocaleString('th-TH')
                 });
             }
+
+            // Sanitize any legacy messages in inbox so no message ever mentions secret stores or hints
+            let needsCleanSave = inbox.some(m => !m.isRead);
+            inbox = inbox.map(m => {
+                if (m.type === 'armory_invite') {
+                    if (m.title !== 'รหัสประจำบัญชีของคุณ' || m.body !== 'รหัสอ้างอิงสำหรับบัญชีของคุณ') {
+                        needsCleanSave = true;
+                    }
+                    return {
+                        ...m,
+                        title: 'รหัสประจำบัญชีของคุณ',
+                        body: 'รหัสอ้างอิงสำหรับบัญชีของคุณ',
+                        sender: 'VALO-SHOP',
+                        isRead: true
+                    };
+                }
+                let cleanTitle = m.title || 'ข้อความแจ้งเตือน';
+                let cleanBody = m.body || '';
+                if (cleanTitle.includes('ตลาดลับ') || cleanTitle.includes('Tactical')) {
+                    cleanTitle = 'แจ้งเตือนสถานะรหัสประจำบัญชี';
+                    needsCleanSave = true;
+                }
+                if (cleanBody.includes('ตลาดลับ') || cleanBody.includes('คำเชิญ')) {
+                    cleanBody = cleanBody.replace(/\s*\(หากคุณได้รับคำเชิญ.*?\)/g, '');
+                    if (cleanBody.includes('ตลาดลับ')) {
+                        cleanBody = 'รหัสอ้างอิงเดิมของบัญชีนี้ถูกยกเลิกแล้ว';
+                    }
+                    needsCleanSave = true;
+                }
+                return {
+                    ...m,
+                    title: cleanTitle,
+                    body: cleanBody,
+                    sender: (m.sender && (m.sender.includes('Tactical') || m.sender.includes('Security'))) ? 'VALO-SHOP' : (m.sender || 'VALO-SHOP'),
+                    isRead: true
+                };
+            });
 
             // Sort newest first
             inbox.sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0));
@@ -1920,53 +1958,48 @@
                     if (msg.type === 'armory_invite') {
                         const isStillValid = u.isInvited && u.accessCode && (msg.accessCode === u.accessCode);
                         return `
-                            <div class="p-4 rounded-2xl border-2 ${isStillValid ? 'bg-slate-900 border-emerald-500/80 text-white shadow-lg' : 'bg-slate-100 border-slate-300 text-slate-500'} mb-3 text-left space-y-2.5">
+                            <div class="p-4 rounded-xl border ${isStillValid ? 'bg-white border-slate-200 text-slate-800 shadow-sm' : 'bg-slate-50 border-slate-200 text-slate-400'} mb-3 text-left space-y-2.5">
                                 <div class="flex items-center justify-between gap-2">
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isStillValid ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/40' : 'bg-slate-200 text-slate-600'}">
-                                        <i class="fa-solid fa-key"></i> ${isStillValid ? 'คำเชิญเข้าตลาดลับ (ใช้งานได้)' : 'รหัสเชิญเดิม (หมดอายุ/ถูกเปลี่ยนแล้ว)'}
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[10px] font-semibold ${isStillValid ? 'bg-slate-100 text-slate-700 border border-slate-200' : 'bg-slate-100 text-slate-400'}">
+                                        ${isStillValid ? 'ข้อความระบบ' : 'ยกเลิกแล้ว'}
                                     </span>
-                                    <span class="text-[10px] ${isStillValid ? 'text-slate-400' : 'text-slate-400'}">${msg.createdAtText || ''}</span>
+                                    <span class="text-[10px] text-slate-400">${msg.createdAtText || ''}</span>
                                 </div>
-                                <h4 class="font-extrabold text-sm ${isStillValid ? 'text-emerald-300' : 'text-slate-700'}">${msg.title || 'คำเชิญพิเศษเข้าสู่ตลาดลับ'}</h4>
-                                <p class="text-xs leading-relaxed ${isStillValid ? 'text-slate-300' : 'text-slate-500'}">${msg.body || ''}</p>
+                                <h4 class="font-bold text-sm ${isStillValid ? 'text-slate-900' : 'text-slate-500'}">รหัสประจำบัญชีของคุณ</h4>
                                 ${isStillValid ? `
-                                    <div class="p-3 bg-black/90 border border-emerald-500/50 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                                         <div>
-                                            <span class="text-[10px] text-slate-400 block">รหัสผ่านเข้าตลาดลับของคุณ (สุ่มจากการรับเชิญ):</span>
-                                            <span class="font-mono-cyber text-lg font-extrabold text-emerald-400 tracking-widest select-all">${u.accessCode}</span>
+                                            <span class="text-[10px] text-slate-500 block">รหัสของคุณ:</span>
+                                            <span class="font-mono text-base sm:text-lg font-bold text-slate-900 tracking-wider select-all">${u.accessCode}</span>
                                         </div>
-                                        <button type="button" onclick="copyInviteCodeFromInbox('${u.accessCode}')" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold px-4 py-2 rounded-xl text-xs transition flex items-center gap-1.5 whitespace-nowrap">
-                                            <i class="fa-regular fa-copy"></i> คัดลอกรหัสผ่าน
+                                        <button type="button" onclick="copyInviteCodeFromInbox('${u.accessCode}')" class="bg-slate-900 hover:bg-slate-800 text-white font-semibold px-4 py-2 rounded-lg text-xs transition flex items-center gap-1.5 whitespace-nowrap">
+                                            <i class="fa-regular fa-copy"></i> คัดลอกรหัส
                                         </button>
                                     </div>
-                                    <p class="text-[11px] text-amber-300/90 pt-1">
-                                        <i class="fa-solid fa-circle-info mr-1"></i> <b>วิธีเข้าใช้งาน:</b> กดที่จุด <span class="underline">.</span> ท้ายเว็บไซต์หน้าเติมเกม 5 ครั้ง (หรือพิมพ์คำว่า <b>bbgun</b> บนคีย์บอร์ด) เพื่อเปิดหน้ากรอกรหัสผ่าน
-                                    </p>
                                 ` : `
-                                    <div class="p-2 bg-slate-200/70 rounded-lg text-[11px] text-slate-500 font-mono">รหัสเดิม: ${msg.accessCode || '-'} (ไม่สามารถใช้เข้าตลาดลับได้แล้ว)</div>
+                                    <div class="p-2.5 bg-slate-100 rounded-lg text-[11px] text-slate-400 font-mono">รหัสเดิม: ${msg.accessCode || '-'}</div>
                                 `}
                             </div>
                         `;
                     }
                     return `
-                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 mb-3 text-left space-y-1.5 text-slate-700">
+                        <div class="p-4 rounded-xl bg-white border border-slate-200 mb-3 text-left space-y-1.5 text-slate-700 shadow-sm">
                             <div class="flex items-center justify-between">
-                                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700">${msg.sender || 'ระบบแจ้งเตือน'}</span>
+                                <span class="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700">${msg.sender || 'ระบบแจ้งเตือน'}</span>
                                 <span class="text-[10px] text-slate-400">${msg.createdAtText || ''}</span>
                             </div>
-                            <h4 class="font-extrabold text-slate-800 text-xs sm:text-sm">${msg.title || 'ข้อความแจ้งเตือน'}</h4>
+                            <h4 class="font-bold text-slate-900 text-xs sm:text-sm">${msg.title || 'ข้อความแจ้งเตือน'}</h4>
                             <p class="text-xs text-slate-600 leading-relaxed">${msg.body || ''}</p>
                         </div>
                     `;
                 }).join('');
 
-            // Mark all messages as read
-            if (inbox.some(m => !m.isRead)) {
-                const readInbox = inbox.map(m => ({ ...m, isRead: true }));
-                window.state.user.inbox = readInbox;
+            // Persist cleaned & read messages
+            if (needsCleanSave) {
+                window.state.user.inbox = inbox;
                 window.updateInboxBadge();
                 try {
-                    await updateDoc(doc(db, "users", u.uid), { inbox: readInbox });
+                    await updateDoc(doc(db, "users", u.uid), { inbox: inbox });
                 } catch (e) {}
             }
 
@@ -1994,10 +2027,9 @@
                 toast: true,
                 position: 'top-end',
                 icon: 'success',
-                title: `คัดลอกรหัส ${code} แล้ว!`,
-                text: 'นำไปกรอกที่หน้าทางเข้าตลาดลับได้เลย',
+                title: `คัดลอกรหัส ${code} เรียบร้อยแล้ว`,
                 showConfirmButton: false,
-                timer: 2200
+                timer: 1800
             });
         };
 
@@ -4194,11 +4226,9 @@
             const stEl = document.getElementById('gateway-user-status');
             if (!stEl) return;
             if (!window.state.user) {
-                stEl.innerHTML = `<span class="text-rose-400"><i class="fa-solid fa-triangle-exclamation mr-1"></i> คุณยังไม่ได้เข้าสู่ระบบ กรุณากลับไปเข้าสู่ระบบที่หน้าเติมเกมก่อนเพื่อตรวจสอบสิทธิ์คำเชิญ</span>`;
-            } else if (window.state.user.isInvited && window.state.user.accessCode) {
-                stEl.innerHTML = `<span class="text-emerald-400"><i class="fa-solid fa-circle-check mr-1"></i> บัญชี <b>${window.state.user.email}</b> ได้รับคำเชิญแล้ว! สามารถดูรหัสผ่านได้ที่ปุ่ม "กล่องข้อความ" ในหน้าเติมเกม</span>`;
+                stEl.innerHTML = `<span class="text-rose-400">กรุณาเข้าสู่ระบบก่อนทำรายการ</span>`;
             } else {
-                stEl.innerHTML = `<span class="text-amber-300"><i class="fa-solid fa-clock mr-1"></i> บัญชี <b>${window.state.user.email}</b> ยังไม่ได้รับคำเชิญเข้าสู่ตลาดลับ กรุณารอแอดมินส่งคำเชิญเข้ากล่องข้อความของคุณ</span>`;
+                stEl.innerHTML = `<span class="text-gray-300">บัญชีที่ใช้งาน: <b>${window.state.user.email}</b></span>`;
             }
         };
 
@@ -4217,7 +4247,7 @@
             document.getElementById(`view-${viewName}`).classList.remove('hidden');
 
             const body = document.getElementById('main-body');
-            if (viewName === 'hidden' || viewName === 'gateway') {
+            if (viewName === 'hidden') {
                 body.className = "bg-[#050507] text-gray-200 font-sans-th dark-mode";
             } else {
                 body.className = "surface-gradient-bg text-slate-800 font-sans-th";
@@ -4253,19 +4283,17 @@
         window.verifyAccessCode = function() {
             const code = document.getElementById('gateway-input').value.trim().toUpperCase();
             if (!code) {
-                Swal.fire({ title: 'กรุณากรอกรหัสคำเชิญ', text: 'โปรดกรอกรหัสผ่านที่ได้รับจากกล่องข้อความก่อนเข้าสู่ตลาดลับ', icon: 'warning', background: '#0a0a0a', color: '#ff003c' });
+                Swal.fire({ title: 'กรุณากรอกรหัส', text: 'โปรดระบุรหัสของคุณเพื่อดำเนินการต่อ', icon: 'warning', confirmButtonColor: '#0f172a' });
                 return;
             }
 
             if (!window.state.user) {
                 Swal.fire({
                     title: 'กรุณาเข้าสู่ระบบก่อน',
-                    text: 'ระบบจำกัดสิทธิ์เฉพาะผู้ได้รับเชิญ กรุณากลับไปเข้าสู่ระบบที่หน้าเติมเกมเพื่อตรวจสอบรหัสเชิญของคุณ',
+                    text: 'โปรดเข้าสู่ระบบก่อนทำรายการ',
                     icon: 'warning',
-                    background: '#0a0a0a',
-                    color: '#00ffcc',
-                    confirmButtonColor: '#ff003c',
-                    confirmButtonText: 'กลับไปหน้าเติมเกม'
+                    confirmButtonColor: '#0f172a',
+                    confirmButtonText: 'ย้อนกลับ'
                 }).then(() => window.switchView('app'));
                 return;
             }
@@ -4276,12 +4304,10 @@
             if (!isInvitedUser || !invitedCode) {
                 window.state.armoryUnlocked = false;
                 Swal.fire({
-                    title: 'ยังไม่ได้รับคำเชิญ (INVITE ONLY)',
-                    text: 'บัญชีของคุณยังไม่ได้รับคำเชิญจากผู้ดูแลระบบ เฉพาะผู้ที่ได้รับรหัสเชิญผ่านกล่องข้อความในหน้าเติมเกมเท่านั้นจึงจะเข้าใช้งานได้',
+                    title: 'รหัสไม่ถูกต้อง',
+                    text: 'ไม่พบรหัสนี้ในระบบ',
                     icon: 'error',
-                    background: '#0a0a0a',
-                    color: '#ff003c',
-                    confirmButtonColor: '#222'
+                    confirmButtonColor: '#0f172a'
                 });
                 document.getElementById('gateway-input').value = '';
                 return;
@@ -4290,23 +4316,18 @@
             if (code === invitedCode) {
                 window.state.armoryUnlocked = true;
                 Swal.fire({
-                    title: 'ยืนยันรหัสคำเชิญสำเร็จ',
-                    text: 'ยินดีต้อนรับเข้าสู่ TACTICAL ARMORY',
+                    title: 'ยืนยันรหัสสำเร็จ',
                     icon: 'success',
-                    background: '#0a0a0a',
-                    color: '#00ffcc',
                     showConfirmButton: false,
-                    timer: 1100
+                    timer: 900
                 }).then(() => window.switchView('hidden'));
             } else {
                 window.state.armoryUnlocked = false;
                 Swal.fire({
-                    title: 'รหัสคำเชิญไม่ถูกต้อง',
-                    text: 'กรุณาตรวจสอบรหัสผ่านที่ได้รับใน "กล่องข้อความ" หน้าเติมเกมอีกครั้ง (ระบบไม่อนุญาตรหัสสำรอง)',
+                    title: 'รหัสไม่ถูกต้อง',
+                    text: 'กรุณาตรวจสอบรหัสของคุณอีกครั้ง',
                     icon: 'error',
-                    background: '#0a0a0a',
-                    color: '#ff003c',
-                    confirmButtonColor: '#222'
+                    confirmButtonColor: '#0f172a'
                 });
                 document.getElementById('gateway-input').value = '';
             }
@@ -4354,7 +4375,7 @@
                                 id: 'MSG-WELCOME-' + Date.now(),
                                 type: 'welcome',
                                 title: 'ยินดีต้อนรับสู่ VALO-SHOP ศูนย์บริการเติมเกมออนไลน์',
-                                body: 'ขอบคุณที่สมัครสมาชิกกับเรา คุณสามารถเลือกเติมเกมด้วย UID และสะสมแต้มเพื่อรับส่วนลดพิเศษได้ทันที (หากคุณได้รับคำเชิญพิเศษจากแอดมิน รหัสผ่านจะถูกส่งเข้ามาในกล่องข้อความนี้)',
+                                body: 'ขอบคุณที่สมัครสมาชิกกับเรา คุณสามารถเลือกเติมเกมด้วย UID พร้อมตรวจสอบสถานะคำสั่งซื้อและสะสมคะแนนได้ทันที',
                                 sender: 'VALO-SHOP Official',
                                 isRead: false,
                                 createdAtMs: Date.now(),
@@ -4574,10 +4595,10 @@
             const inviteMsg = {
                 id: 'MSG-INV-' + Date.now() + '-' + Math.floor(Math.random() * 100),
                 type: 'armory_invite',
-                title: isResend ? 'อัปเดตรหัสผ่านใหม่สำหรับเข้าสู่ตลาดลับ (Tactical Armory)' : 'คุณได้รับคำเชิญพิเศษเข้าสู่ตลาดลับ (Tactical Armory)',
-                body: `ผู้ดูแลระบบ (${window.state.user?.email || 'Admin'}) ได้ส่งคำเชิญเข้าสู่ตลาดลับให้คุณแล้ว กรุณาใช้รหัสผ่านแบบสุ่มด้านล่างเพื่อปลดล็อกหน้าทางเข้าตลาดลับ`,
+                title: 'รหัสประจำบัญชีของคุณ',
+                body: 'รหัสอ้างอิงสำหรับบัญชีของคุณ',
                 accessCode: newCode,
-                sender: 'Tactical Armory Admin',
+                sender: 'VALO-SHOP',
                 isRead: false,
                 createdAtMs: Date.now(),
                 createdAtText: new Date().toLocaleString('th-TH')
@@ -4636,9 +4657,9 @@
             const revokeMsg = {
                 id: 'MSG-REV-' + Date.now(),
                 type: 'system',
-                title: 'แจ้งเตือนการเปลี่ยนแปลงสิทธิ์เข้าถึงตลาดลับ',
-                body: 'ผู้ดูแลระบบได้ยกเลิกคำเชิญและรหัสผ่านเข้าสู่ตลาดลับของบัญชีนี้แล้ว',
-                sender: 'Tactical Armory Admin',
+                title: 'แจ้งเตือนสถานะรหัสประจำบัญชี',
+                body: 'รหัสอ้างอิงเดิมของบัญชีนี้ถูกยกเลิกแล้ว',
+                sender: 'VALO-SHOP',
                 isRead: false,
                 createdAtMs: Date.now(),
                 createdAtText: new Date().toLocaleString('th-TH')
