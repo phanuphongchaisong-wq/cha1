@@ -137,25 +137,6 @@
     <!-- VIEW 1: SURFACE STORE (TANTOPUP24 - หน้าร้านรับเติมเกมปกติ)                -->
     <!-- ===================================================================== -->
     <div id="view-app" class="min-h-screen flex flex-col bg-[#f8fafc] text-slate-800">
-        <!-- Subtle Top Utility Strip -->
-        <div class="bg-slate-950 text-slate-300 text-[11px] py-2 px-4 border-b border-slate-800/80">
-            <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-                <div class="flex items-center gap-2 text-slate-300">
-                    <span class="relative flex h-2 w-2">
-                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
-                    </span>
-                    <span>ระบบอัตโนมัติพร้อมให้บริการ 24 ชม. • เติมไวเฉลี่ย 10 วินาที</span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <span id="surface-current-user-label" class="text-slate-300 font-medium truncate max-w-[230px] sm:max-w-none">บัญชี: phanuphongchaisong@gmail.com (ผู้ดูแลระบบ)</span>
-                    <button type="button" onclick="openSurfaceAccountModal()" class="px-2.5 py-0.5 rounded-full bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-medium transition">
-                        สลับบัญชี
-                    </button>
-                </div>
-            </div>
-        </div>
-
         <!-- Surface Header -->
         <header class="bg-white/90 backdrop-blur-lg sticky top-0 z-30 border-b border-slate-200/80">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
@@ -179,14 +160,14 @@
                     <!-- Reward Points -->
                     <button type="button" onclick="openSurfacePointsModal()" class="px-3 py-2 rounded-xl bg-amber-50/90 hover:bg-amber-100 border border-amber-200/80 text-amber-900 text-xs font-semibold flex items-center gap-1.5 transition">
                         <i class="fa-solid fa-coins text-amber-500"></i>
-                        <span id="user-points-display">150 P</span>
+                        <span id="user-points-display">0 P</span>
                     </button>
 
                     <!-- Inbox Button -->
                     <button type="button" id="btn-surface-inbox" onclick="openSurfaceInboxModal()" class="relative px-3 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-medium flex items-center gap-1.5 transition border border-slate-200 shadow-2xs">
                         <i class="fa-regular fa-envelope text-slate-500"></i>
                         <span class="hidden sm:inline">กล่องข้อความ</span>
-                        <span id="surface-inbox-badge" class="w-2 h-2 rounded-full bg-rose-500"></span>
+                        <span id="surface-inbox-badge" class="hidden w-2 h-2 rounded-full bg-rose-500"></span>
                     </button>
 
                     <!-- Surface Order History -->
@@ -197,10 +178,31 @@
                     </button>
 
                     <!-- Surface Admin Button -->
-                    <button type="button" id="btn-admin-surface" onclick="openSurfaceAdminModal()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 text-xs font-medium flex items-center gap-1.5 transition shadow-sm">
+                    <button type="button" id="btn-admin-surface" onclick="openSurfaceAdminModal()" class="hidden px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 text-xs font-medium flex items-center gap-1.5 transition shadow-sm">
                         <i class="fa-solid fa-sliders"></i>
                         <span class="hidden md:inline">จัดการร้าน</span>
                     </button>
+
+                    <!-- Auth Buttons (Guest) -->
+                    <div id="auth-buttons-guest" class="flex items-center gap-1.5">
+                        <button type="button" onclick="openLoginModal()" class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold border border-slate-200 transition">
+                            เข้าสู่ระบบ
+                        </button>
+                        <button type="button" onclick="openRegisterModal()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 text-xs font-semibold transition shadow-sm">
+                            สมัครสมาชิก
+                        </button>
+                    </div>
+
+                    <!-- Logged-in User Pill -->
+                    <div id="auth-user-pill" class="hidden flex items-center gap-1.5">
+                        <button type="button" onclick="openAccountInfoModal()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold flex items-center gap-1.5 transition border border-slate-200">
+                            <i class="fa-regular fa-circle-user text-slate-600"></i>
+                            <span id="header-user-name" class="max-w-[110px] sm:max-w-[160px] truncate">สมาชิก</span>
+                        </button>
+                        <button type="button" onclick="logoutSurfaceUser()" title="ออกจากระบบ" class="px-2.5 py-2 rounded-xl bg-white hover:bg-rose-50 text-slate-500 hover:text-rose-600 text-xs border border-slate-200 transition">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </header>
@@ -1267,11 +1269,30 @@
 
         function getInitialState() {
             const defaultState = {
+                registeredUsers: [
+                    {
+                        email: 'phanuphongchaisong@gmail.com',
+                        password: '123456',
+                        name: 'คุณภานุพงศ์',
+                        role: 'admin',
+                        points: 150,
+                        walletCr: 15000
+                    },
+                    {
+                        email: 'vip.shooter@gmail.com',
+                        password: '123456',
+                        name: 'คุณธนกร',
+                        role: 'member',
+                        points: 120,
+                        walletCr: 8000
+                    }
+                ],
                 currentUser: {
-                    email: 'phanuphongchaisong@gmail.com',
-                    name: 'คุณภานุพงศ์ (ผู้ดูแลระบบ)',
-                    role: 'admin',
-                    points: 150,
+                    isLoggedIn: false,
+                    email: '',
+                    name: 'ผู้เยี่ยมชม',
+                    role: 'guest',
+                    points: 0,
                     walletCr: 15000
                 },
                 surfaceCategory: 'all',
@@ -1355,6 +1376,7 @@
                 if (raw) {
                     const parsed = JSON.parse(raw);
                     return Object.assign({}, defaultState, parsed, {
+                        registeredUsers: (parsed.registeredUsers && parsed.registeredUsers.length) ? parsed.registeredUsers : defaultState.registeredUsers,
                         currentUser: Object.assign({}, defaultState.currentUser, parsed.currentUser || {}),
                         hiddenProducts: (parsed.hiddenProducts && parsed.hiddenProducts.length) ? parsed.hiddenProducts : DEFAULT_HIDDEN_PRODUCTS,
                         surfaceGames: (parsed.surfaceGames && parsed.surfaceGames.length) ? parsed.surfaceGames : DEFAULT_SURFACE_GAMES,
@@ -1415,10 +1437,17 @@
         // =====================================================================
         function renderSurfaceStore() {
             const user = window.state.currentUser;
-            const userLabel = document.getElementById('surface-current-user-label');
-            if (userLabel) {
-                userLabel.textContent = `บัญชี: ${user.email} (${user.role === 'admin' ? 'ผู้ดูแลระบบ' : 'สมาชิก'})`;
+            const isLoggedIn = Boolean(user && user.isLoggedIn);
+
+            const guestBtns = document.getElementById('auth-buttons-guest');
+            const userPill = document.getElementById('auth-user-pill');
+            const userNameEl = document.getElementById('header-user-name');
+            if (guestBtns) guestBtns.classList.toggle('hidden', isLoggedIn);
+            if (userPill) userPill.classList.toggle('hidden', !isLoggedIn);
+            if (userNameEl && isLoggedIn) {
+                userNameEl.textContent = user.name || user.email;
             }
+
             const pointsEl = document.getElementById('user-points-display');
             if (pointsEl) pointsEl.textContent = `${Number(user.points || 0).toLocaleString()} P`;
 
@@ -1427,12 +1456,12 @@
 
             const adminBtn = document.getElementById('btn-admin-surface');
             if (adminBtn) {
-                adminBtn.classList.toggle('hidden', user.role !== 'admin');
+                adminBtn.classList.toggle('hidden', !(isLoggedIn && user.role === 'admin'));
             }
 
-            const myInvite = window.state.hiddenInvites.find(
-                i => i.active && i.email.toLowerCase() === user.email.toLowerCase()
-            );
+            const myInvite = isLoggedIn ? window.state.hiddenInvites.find(
+                i => i.active && i.email.toLowerCase() === (user.email || '').toLowerCase()
+            ) : null;
             const inboxBadge = document.getElementById('surface-inbox-badge');
             if (inboxBadge) {
                 inboxBadge.classList.toggle('hidden', !myInvite);
@@ -1616,8 +1645,12 @@
 
         window.openSurfaceInboxModal = function() {
             const user = window.state.currentUser;
+            if (!user.isLoggedIn) {
+                openLoginModal();
+                return;
+            }
             const myInvites = window.state.hiddenInvites.filter(
-                i => i.active && i.email.toLowerCase() === user.email.toLowerCase()
+                i => i.active && i.email.toLowerCase() === (user.email || '').toLowerCase()
             );
 
             const messagesHtml = myInvites.length ? myInvites.map(inv => `
@@ -1708,49 +1741,188 @@
             });
         };
 
-        window.openSurfaceAccountModal = function() {
+        window.openLoginModal = function() {
             Swal.fire({
-                title: '<span class="text-lg font-bold text-slate-900">สลับบัญชีผู้ใช้ / ทดสอบสิทธิ์</span>',
+                title: '<span class="text-lg font-bold text-slate-900">เข้าสู่ระบบ TANTOPUP24</span>',
                 html: `
-                    <div class="space-y-3 text-left text-xs pt-2">
-                        <p class="text-slate-500">คุณสามารถสลับบัญชีเพื่อทดสอบมุมมองแอดมิน หรือมุมมองลูกค้าที่ได้รับเชิญได้ทันที:</p>
-                        <button type="button" onclick="switchUserAccount('phanuphongchaisong@gmail.com', 'คุณภานุพงศ์ (ผู้ดูแลระบบ)', 'admin')" class="w-full p-3 rounded-xl border border-slate-300 hover:border-slate-900 bg-slate-50 text-left flex items-center justify-between">
-                            <div>
-                                <div class="font-bold text-slate-900">phanuphongchaisong@gmail.com</div>
-                                <div class="text-slate-500">ระดับผู้ดูแลระบบ (มีรหัส INV-ZF5YKX ในกล่องข้อความ)</div>
-                            </div>
-                            <span class="px-2 py-0.5 rounded bg-slate-900 text-amber-400 text-[10px] font-bold">ADMIN</span>
-                        </button>
-                        <button type="button" onclick="switchUserAccount('vip.shooter@gmail.com', 'คุณธนกร (สมาชิกได้รับเชิญ)', 'member')" class="w-full p-3 rounded-xl border border-slate-300 hover:border-slate-900 bg-slate-50 text-left flex items-center justify-between">
-                            <div>
-                                <div class="font-bold text-slate-900">vip.shooter@gmail.com</div>
-                                <div class="text-slate-500">สมาชิกที่ได้รับเชิญ (มีรหัส INV-88K9P2 ในกล่องข้อความ)</div>
-                            </div>
-                            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold">INVITED</span>
-                        </button>
-                        <button type="button" onclick="switchUserAccount('guest.player@gmail.com', 'ลูกค้าทั่วไป (ไม่ได้รับเชิญ)', 'guest')" class="w-full p-3 rounded-xl border border-slate-300 hover:border-slate-900 bg-slate-50 text-left flex items-center justify-between">
-                            <div>
-                                <div class="font-bold text-slate-900">guest.player@gmail.com</div>
-                                <div class="text-slate-500">ลูกค้าเติมเกมทั่วไป (ไม่มีรหัสในกล่องข้อความ)</div>
-                            </div>
-                            <span class="px-2 py-0.5 rounded bg-slate-200 text-slate-700 text-[10px] font-bold">GENERAL</span>
-                        </button>
+                    <div class="text-left space-y-3.5 text-xs pt-2">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">อีเมล</label>
+                            <input id="login-email" type="email" placeholder="name@example.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-slate-900">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">รหัสผ่าน</label>
+                            <input id="login-password" type="password" placeholder="กรอกรหัสผ่านของคุณ" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-slate-900">
+                        </div>
+                        <div class="text-center text-slate-500 pt-1">
+                            ยังไม่มีบัญชีใช่ไหม? <button type="button" onclick="openRegisterModal()" class="text-slate-900 font-semibold underline">สมัครสมาชิกที่นี่</button>
+                        </div>
                     </div>
                 `,
-                showConfirmButton: false,
-                showCloseButton: true
+                showCancelButton: true,
+                confirmButtonText: 'เข้าสู่ระบบ',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#0f172a',
+                preConfirm: () => {
+                    const email = document.getElementById('login-email').value.trim().toLowerCase();
+                    const password = document.getElementById('login-password').value;
+                    if (!email || !password) {
+                        Swal.showValidationMessage('กรุณากรอกอีเมลและรหัสผ่าน');
+                        return false;
+                    }
+                    const found = (window.state.registeredUsers || []).find(
+                        u => u.email.toLowerCase() === email && u.password === password
+                    );
+                    if (!found) {
+                        Swal.showValidationMessage('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+                        return false;
+                    }
+                    return found;
+                }
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    const u = res.value;
+                    window.state.currentUser = {
+                        isLoggedIn: true,
+                        email: u.email,
+                        name: u.name,
+                        role: u.role || 'member',
+                        points: u.points || 0,
+                        walletCr: u.walletCr || 0
+                    };
+                    saveState();
+                    renderSurfaceStore();
+                    renderHiddenStoreAll();
+                    showToast(`ยินดีต้อนรับ ${u.name}`);
+                }
             });
         };
 
-        window.switchUserAccount = function(email, name, role) {
-            window.state.currentUser.email = email;
-            window.state.currentUser.name = name;
-            window.state.currentUser.role = role;
+        window.openRegisterModal = function() {
+            Swal.fire({
+                title: '<span class="text-lg font-bold text-slate-900">สมัครสมาชิก TANTOPUP24</span>',
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">ชื่อผู้ใช้งาน</label>
+                            <input id="reg-name" type="text" placeholder="เช่น คุณต้น" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-slate-900">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">อีเมล</label>
+                            <input id="reg-email" type="email" placeholder="name@example.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-slate-900">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">รหัสผ่าน</label>
+                            <input id="reg-password" type="password" placeholder="อย่างน้อย 6 ตัวอักษร" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-slate-900">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">ยืนยันรหัสผ่าน</label>
+                            <input id="reg-confirm" type="password" placeholder="กรอกรหัสผ่านอีกครั้ง" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-slate-900">
+                        </div>
+                        <div class="text-center text-slate-500 pt-1">
+                            มีบัญชีอยู่แล้ว? <button type="button" onclick="openLoginModal()" class="text-slate-900 font-semibold underline">เข้าสู่ระบบ</button>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'สมัครสมาชิก',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#0f172a',
+                preConfirm: () => {
+                    const name = document.getElementById('reg-name').value.trim();
+                    const email = document.getElementById('reg-email').value.trim().toLowerCase();
+                    const password = document.getElementById('reg-password').value;
+                    const confirm = document.getElementById('reg-confirm').value;
+                    if (!name || !email || !password) {
+                        Swal.showValidationMessage('กรุณากรอกข้อมูลให้ครบทุกช่อง');
+                        return false;
+                    }
+                    if (password.length < 6) {
+                        Swal.showValidationMessage('รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร');
+                        return false;
+                    }
+                    if (password !== confirm) {
+                        Swal.showValidationMessage('รหัสผ่านทั้งสองช่องไม่ตรงกัน');
+                        return false;
+                    }
+                    const exists = (window.state.registeredUsers || []).some(u => u.email.toLowerCase() === email);
+                    if (exists) {
+                        Swal.showValidationMessage('อีเมลนี้ถูกใช้งานแล้ว');
+                        return false;
+                    }
+                    return { name, email, password };
+                }
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    const newUser = {
+                        email: res.value.email,
+                        password: res.value.password,
+                        name: res.value.name,
+                        role: 'member',
+                        points: 50,
+                        walletCr: 0
+                    };
+                    window.state.registeredUsers = window.state.registeredUsers || [];
+                    window.state.registeredUsers.push(newUser);
+                    window.state.currentUser = {
+                        isLoggedIn: true,
+                        email: newUser.email,
+                        name: newUser.name,
+                        role: newUser.role,
+                        points: newUser.points,
+                        walletCr: newUser.walletCr
+                    };
+                    saveState();
+                    renderSurfaceStore();
+                    renderHiddenStoreAll();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'สมัครสมาชิกสำเร็จ!',
+                        text: `ยินดีต้อนรับ ${newUser.name} คุณได้รับแต้มต้อนรับ +50 P`,
+                        confirmButtonColor: '#0f172a'
+                    });
+                }
+            });
+        };
+
+        window.openAccountInfoModal = function() {
+            const u = window.state.currentUser;
+            Swal.fire({
+                title: '<span class="text-lg font-bold text-slate-900">ข้อมูลบัญชีของคุณ</span>',
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
+                            <div>ชื่อผู้ใช้: <b class="text-slate-900">${u.name}</b></div>
+                            <div>อีเมล: <b class="text-slate-900">${u.email}</b></div>
+                            <div>แต้มสะสม: <b class="text-amber-600">${Number(u.points || 0).toLocaleString()} P</b></div>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'ปิดหน้าต่าง',
+                cancelButtonText: 'ออกจากระบบ',
+                confirmButtonColor: '#0f172a',
+                cancelButtonColor: '#e11d48'
+            }).then(res => {
+                if (res.dismiss === Swal.DismissReason.cancel) {
+                    logoutSurfaceUser();
+                }
+            });
+        };
+
+        window.logoutSurfaceUser = function() {
+            window.state.currentUser = {
+                isLoggedIn: false,
+                email: '',
+                name: 'ผู้เยี่ยมชม',
+                role: 'guest',
+                points: 0,
+                walletCr: window.state.currentUser.walletCr || 15000
+            };
             saveState();
-            if (window.Swal) Swal.close();
             renderSurfaceStore();
             renderHiddenStoreAll();
-            showToast(`สลับเป็นบัญชี ${email} แล้ว`);
+            showToast('ออกจากระบบเรียบร้อยแล้ว', 'info');
         };
 
         window.openSurfaceAdminModal = function() {
