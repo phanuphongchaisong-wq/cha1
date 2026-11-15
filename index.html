@@ -157,33 +157,36 @@
 
                 <!-- Right Controls -->
                 <div class="flex items-center flex-wrap gap-2">
-                    <!-- Reward Points -->
-                    <button type="button" onclick="openSurfacePointsModal()" class="px-3 py-2 rounded-xl bg-amber-50/90 hover:bg-amber-100 border border-amber-200/80 text-amber-900 text-xs font-semibold flex items-center gap-1.5 transition">
-                        <i class="fa-solid fa-coins text-amber-500"></i>
-                        <span id="user-points-display">0 P</span>
-                    </button>
+                    <!-- Personal Controls (Visible ONLY when logged in) -->
+                    <div id="surface-user-actions" class="hidden flex items-center flex-wrap gap-2">
+                        <!-- Reward Points -->
+                        <button type="button" onclick="openSurfacePointsModal()" class="px-3 py-2 rounded-xl bg-amber-50/90 hover:bg-amber-100 border border-amber-200/80 text-amber-900 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-coins text-amber-500"></i>
+                            <span id="user-points-display">0 P</span>
+                        </button>
 
-                    <!-- Inbox Button -->
-                    <button type="button" id="btn-surface-inbox" onclick="openSurfaceInboxModal()" class="relative px-3 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-medium flex items-center gap-1.5 transition border border-slate-200 shadow-2xs">
-                        <i class="fa-regular fa-envelope text-slate-500"></i>
-                        <span class="hidden sm:inline">กล่องข้อความ</span>
-                        <span id="surface-inbox-badge" class="hidden w-2 h-2 rounded-full bg-rose-500"></span>
-                    </button>
+                        <!-- Inbox Button -->
+                        <button type="button" id="btn-surface-inbox" onclick="openSurfaceInboxModal()" class="relative px-3 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-medium flex items-center gap-1.5 transition border border-slate-200 shadow-2xs">
+                            <i class="fa-regular fa-envelope text-slate-500"></i>
+                            <span class="hidden sm:inline">กล่องข้อความ</span>
+                            <span id="surface-inbox-badge" class="hidden w-2 h-2 rounded-full bg-rose-500"></span>
+                        </button>
 
-                    <!-- Surface Order History -->
-                    <button type="button" onclick="openSurfaceHistoryModal()" class="px-3 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-medium flex items-center gap-1.5 transition border border-slate-200">
-                        <i class="fa-solid fa-clock-rotate-left text-slate-500"></i>
-                        <span class="hidden sm:inline">ประวัติการเติม</span>
-                        <span id="surface-order-count-badge" class="px-1.5 py-0.2 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold">0</span>
-                    </button>
+                        <!-- Surface Order History -->
+                        <button type="button" onclick="openSurfaceHistoryModal()" class="px-3 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-medium flex items-center gap-1.5 transition border border-slate-200">
+                            <i class="fa-solid fa-clock-rotate-left text-slate-500"></i>
+                            <span class="hidden sm:inline">ประวัติการเติม</span>
+                            <span id="surface-order-count-badge" class="px-1.5 py-0.2 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold">0</span>
+                        </button>
 
-                    <!-- Surface Admin Button -->
-                    <button type="button" id="btn-admin-surface" onclick="openSurfaceAdminModal()" class="hidden px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 text-xs font-medium flex items-center gap-1.5 transition shadow-sm">
-                        <i class="fa-solid fa-sliders"></i>
-                        <span class="hidden md:inline">จัดการร้าน</span>
-                    </button>
+                        <!-- Surface Admin Button -->
+                        <button type="button" id="btn-admin-surface" onclick="openSurfaceAdminModal()" class="hidden px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 text-xs font-medium flex items-center gap-1.5 transition shadow-sm">
+                            <i class="fa-solid fa-sliders"></i>
+                            <span class="hidden md:inline">จัดการร้าน</span>
+                        </button>
+                    </div>
 
-                    <!-- Auth Buttons (Guest) -->
+                    <!-- Auth Buttons (Shown when NOT logged in) -->
                     <div id="auth-buttons-guest" class="flex items-center gap-1.5">
                         <button type="button" onclick="openLoginModal()" class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-semibold border border-slate-200 transition">
                             เข้าสู่ระบบ
@@ -193,7 +196,7 @@
                         </button>
                     </div>
 
-                    <!-- Logged-in User Pill -->
+                    <!-- Logged-in User Pill (Shown ONLY when logged in) -->
                     <div id="auth-user-pill" class="hidden flex items-center gap-1.5">
                         <button type="button" onclick="openAccountInfoModal()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold flex items-center gap-1.5 transition border border-slate-200">
                             <i class="fa-regular fa-circle-user text-slate-600"></i>
@@ -207,8 +210,8 @@
             </div>
         </header>
 
-        <!-- Hero Banner -->
-        <section class="surface-hero-bg text-white py-10 sm:py-12 px-4 sm:px-6 border-b border-slate-800/80">
+        <!-- Hero Banner (Shown ONLY when logged in; guests see pure game & price catalog) -->
+        <section id="surface-hero-section" class="hidden surface-hero-bg text-white py-10 sm:py-12 px-4 sm:px-6 border-b border-slate-800/80">
             <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
                 <div class="max-w-2xl space-y-4">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/25 text-amber-300 text-xs font-medium">
@@ -226,7 +229,7 @@
                             <span>เลือกเกมที่ต้องการเติม</span>
                             <i class="fa-solid fa-arrow-down text-xs"></i>
                         </a>
-                        <button type="button" onclick="openSurfaceHistoryModal()" class="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white font-medium text-sm border border-white/15 transition">
+                        <button type="button" id="hero-history-btn" onclick="openSurfaceHistoryModal()" class="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white font-medium text-sm border border-white/15 transition">
                             ตรวจสอบสถานะรายการ
                         </button>
                     </div>
@@ -235,9 +238,9 @@
                 <!-- Sleek Trust & Reward Summary Card -->
                 <div class="w-full lg:w-[390px] bg-white/[0.04] backdrop-blur-md border border-white/10 rounded-2xl p-5 space-y-4 shadow-2xl">
                     <div class="flex items-center justify-between border-b border-white/10 pb-3">
-                        <span class="text-xs text-slate-300 font-medium">ภาพรวมระบบเติมเงิน</span>
+                        <span class="text-xs text-slate-300 font-medium">สถานะบัญชีของคุณ</span>
                         <span class="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span> ทำงานปกติทุกเกม
+                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span> พร้อมทำรายการ
                         </span>
                     </div>
                     <div class="grid grid-cols-3 gap-2.5 text-center">
@@ -266,8 +269,8 @@
         <main id="surface-catalog-anchor" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900">รายการเกมและบัตรเติมเงินยอดนิยม</h2>
-                    <p class="text-xs text-slate-500 mt-0.5">คลิกที่การ์ดเกมเพื่อระบุ UID และเลือกแพ็กเกจที่ต้องการ</p>
+                    <h2 class="text-xl font-bold text-slate-900">รายการเกมและบัตรเติมเงิน</h2>
+                    <p id="surface-catalog-subtitle" class="text-xs text-slate-500 mt-0.5">คลิกที่การ์ดเกมเพื่อดูรายการแพ็กเกจและราคาทั้งหมด</p>
                 </div>
 
                 <!-- Surface Filters & Search -->
@@ -971,7 +974,7 @@
     <!-- COMPLETE APPLICATION JAVASCRIPT (100% INTERACTIVE & PERSISTENT)       -->
     <!-- ===================================================================== -->
     <script>
-        const STORAGE_KEY = 'VALO_PHANTOM_ARMORY_STATE_V5';
+        const STORAGE_KEY = 'VALO_PHANTOM_ARMORY_STATE_V6';
 
         const DEFAULT_SURFACE_GAMES = [
             {
@@ -1291,27 +1294,12 @@
                     name: 'ผู้เยี่ยมชม',
                     role: 'guest',
                     points: 0,
-                    walletCr: 15000
+                    walletCr: 0
                 },
                 surfaceCategory: 'all',
                 surfaceSearch: '',
                 surfaceGames: DEFAULT_SURFACE_GAMES,
-                surfaceOrders: [
-                    {
-                        id: 'TOP-892041',
-                        buyerEmail: 'phanuphongchaisong@gmail.com',
-                        gameTitle: 'VALORANT (Riot ID)',
-                        packageName: '1,000 VP',
-                        targetId: 'PHANTOM#TH1',
-                        price: 275,
-                        discountBaht: 0,
-                        pointsEarned: 30,
-                        paymentMethod: 'PromptPay QR',
-                        pinCode: '',
-                        date: 'วันนี้ 10:15 น.',
-                        status: 'สำเร็จเรียบร้อย'
-                    }
-                ],
+                surfaceOrders: [],
                 supportTickets: [],
                 hiddenActiveTab: 'shop',
                 hiddenCategory: 'all',
@@ -1322,7 +1310,7 @@
                 bundleDiscountPct: 0,
                 hiddenProducts: DEFAULT_HIDDEN_PRODUCTS,
                 hiddenFavorites: [],
-                hiddenCompare: ['arm-gun-01', 'arm-gun-02'],
+                hiddenCompare: [],
                 hiddenCart: [],
                 hiddenInvites: [
                     {
@@ -1342,38 +1330,8 @@
                         active: true
                     }
                 ],
-                hiddenTopups: [
-                    {
-                        id: 'CR-90124',
-                        email: 'phanuphongchaisong@gmail.com',
-                        amount: 15000,
-                        ref: 'SLIP-INIT-15000',
-                        date: 'วันนี้ 09:00 น.',
-                        status: 'อนุมัติแล้ว'
-                    }
-                ],
-                myArmoryOrders: [
-                    {
-                        id: 'ARM-774109',
-                        buyerEmail: 'phanuphongchaisong@gmail.com',
-                        items: [
-                            {
-                                name: 'Phantom M4A1 MK18 MOD-1 GBB (Full Metal Blowback)',
-                                qty: 1,
-                                price: 9800,
-                                services: ['บริการชิมเกียร์ + ตั้งระยะ AOE + ทาจาระบีเกรดแข่งขัน']
-                            }
-                        ],
-                        totalCr: 10250,
-                        discountCr: 0,
-                        paymentMethod: 'หักเครดิตคลังแสง (CR Wallet)',
-                        statusStep: 3,
-                        statusText: 'ตรวจสอบ QC & Chronograph ผ่านแล้ว',
-                        trackingCode: 'TH-DISC-8849201TH',
-                        chronoShots: [419.4, 420.8, 419.9, 421.1, 420.2],
-                        createdAt: 'วันนี้ 11:20 น.'
-                    }
-                ]
+                hiddenTopups: [],
+                myArmoryOrders: []
             };
 
             try {
@@ -1468,9 +1426,20 @@
 
             const guestBtns = document.getElementById('auth-buttons-guest');
             const userPill = document.getElementById('auth-user-pill');
+            const userActions = document.getElementById('surface-user-actions');
+            const heroSection = document.getElementById('surface-hero-section');
+            const subtitleEl = document.getElementById('surface-catalog-subtitle');
             const userNameEl = document.getElementById('header-user-name');
+
             if (guestBtns) guestBtns.classList.toggle('hidden', isLoggedIn);
             if (userPill) userPill.classList.toggle('hidden', !isLoggedIn);
+            if (userActions) userActions.classList.toggle('hidden', !isLoggedIn);
+            if (heroSection) heroSection.classList.toggle('hidden', !isLoggedIn);
+            if (subtitleEl) {
+                subtitleEl.textContent = isLoggedIn
+                    ? 'คลิกที่การ์ดเกมเพื่อระบุ UID และเลือกแพ็กเกจที่ต้องการเติม'
+                    : 'คลิกที่การ์ดเกมเพื่อดูรายการแพ็กเกจและราคาทั้งหมด (เข้าสู่ระบบเพื่อสั่งซื้อ)';
+            }
             if (userNameEl && isLoggedIn) {
                 userNameEl.textContent = user.name || user.email;
             }
@@ -1478,9 +1447,11 @@
             const pointsEl = document.getElementById('user-points-display');
             if (pointsEl) pointsEl.textContent = `${Number(user.points || 0).toLocaleString()} P`;
 
-            const visibleOrders = isLoggedIn && user.role !== 'admin'
-                ? window.state.surfaceOrders.filter(o => !o.buyerEmail || o.buyerEmail.toLowerCase() === user.email.toLowerCase())
-                : window.state.surfaceOrders;
+            const visibleOrders = isLoggedIn
+                ? (user.role === 'admin'
+                    ? window.state.surfaceOrders
+                    : window.state.surfaceOrders.filter(o => o.buyerEmail && o.buyerEmail.toLowerCase() === user.email.toLowerCase()))
+                : [];
 
             const orderBadge = document.getElementById('surface-order-count-badge');
             if (orderBadge) orderBadge.textContent = visibleOrders.length;
@@ -1535,8 +1506,17 @@
 
             grid.innerHTML = filtered.map(g => {
                 const minPrice = Math.min(...g.packages.map(p => p.price));
+                const maxPrice = Math.max(...g.packages.map(p => p.price));
                 const pkgCount = g.packages.length;
-                const noteText = g.deliveryNote || 'เติมตรงเข้าไอดีอัตโนมัติ';
+                const actionLabel = isLoggedIn ? 'เติมเงิน' : 'ดูราคาแพ็กเกจ';
+
+                const previewPills = g.packages.slice(0, 3).map(p => `
+                    <div class="flex items-center justify-between text-[11px] py-1 px-2.5 rounded-lg bg-slate-50 border border-slate-100">
+                        <span class="text-slate-700 truncate pr-2">${p.name}</span>
+                        <span class="font-bold text-slate-900 shrink-0">฿${p.price.toLocaleString()}</span>
+                    </div>
+                `).join('');
+
                 return `
                     <div onclick="openSurfaceTopupModal('${g.id}')" class="surface-card rounded-2xl overflow-hidden flex flex-col justify-between cursor-pointer group">
                         <div>
@@ -1557,22 +1537,21 @@
                             </div>
                             <div class="p-4 pb-3 space-y-2">
                                 <div class="flex items-center justify-between text-xs">
-                                    <span class="text-slate-500 flex items-center gap-1.5">
-                                        <i class="fa-solid fa-layer-group text-slate-400 text-[11px]"></i> ${pkgCount} แพ็กเกจ
-                                    </span>
-                                    <span class="text-[11px] text-emerald-600 font-medium flex items-center gap-1">
-                                        <i class="fa-solid fa-bolt text-amber-500"></i> ${noteText}
-                                    </span>
+                                    <span class="text-slate-500 font-medium">${pkgCount} แพ็กเกจ</span>
+                                    <span class="text-[11px] text-slate-500">฿${minPrice.toLocaleString()} - ฿${maxPrice.toLocaleString()}</span>
+                                </div>
+                                <div class="space-y-1 pt-0.5">
+                                    ${previewPills}
                                 </div>
                             </div>
                         </div>
                         <div class="px-4 pb-4 pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
                             <div>
-                                <div class="text-[10px] text-slate-400">เริ่มต้นเพียง</div>
+                                <div class="text-[10px] text-slate-400">เริ่มต้น</div>
                                 <div class="font-bold text-slate-900 text-base leading-tight">฿${minPrice.toLocaleString()}</div>
                             </div>
-                            <button type="button" onclick="event.stopPropagation(); openSurfaceTopupModal('${g.id}')" class="px-4 py-2 rounded-xl bg-slate-900 group-hover:bg-amber-400 text-white group-hover:text-slate-950 font-semibold text-xs transition flex items-center gap-1.5">
-                                <span>เติมเงิน</span>
+                            <button type="button" onclick="event.stopPropagation(); openSurfaceTopupModal('${g.id}')" class="px-3.5 py-2 rounded-xl bg-slate-900 group-hover:bg-amber-400 text-white group-hover:text-slate-950 font-semibold text-xs transition flex items-center gap-1.5">
+                                <span>${actionLabel}</span>
                                 <i class="fa-solid fa-chevron-right text-[10px]"></i>
                             </button>
                         </div>
@@ -1596,6 +1575,41 @@
             const game = window.state.surfaceGames.find(g => g.id === gameId);
             if (!game) return;
 
+            const isLoggedIn = Boolean(window.state.currentUser && window.state.currentUser.isLoggedIn);
+
+            // Guest Mode: Show pure package & price list only
+            if (!isLoggedIn) {
+                const priceListHtml = game.packages.map(p => `
+                    <div class="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-slate-50">
+                        <span class="text-xs font-bold text-slate-900">${p.name}</span>
+                        <span class="font-bold text-sm text-slate-900">฿${p.price.toLocaleString()}</span>
+                    </div>
+                `).join('');
+
+                Swal.fire({
+                    title: `<span class="text-lg font-bold text-slate-900">${game.title}</span>`,
+                    html: `
+                        <div class="text-left space-y-3.5 pt-2">
+                            <div class="text-xs font-semibold text-slate-600">รายการแพ็กเกจและราคา:</div>
+                            <div class="space-y-2 max-h-64 overflow-y-auto pr-1">${priceListHtml}</div>
+                            <div class="p-3 rounded-xl bg-slate-100 border border-slate-200 text-xs text-slate-600 text-center">
+                                กรุณาเข้าสู่ระบบหรือสมัครสมาชิกเพื่อทำรายการสั่งซื้อ
+                            </div>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'เข้าสู่ระบบ',
+                    cancelButtonText: 'ปิดหน้าต่าง',
+                    confirmButtonColor: '#0f172a'
+                }).then(res => {
+                    if (res.isConfirmed) {
+                        openLoginModal();
+                    }
+                });
+                return;
+            }
+
+            // Logged-in Mode: Full Top-Up & Points Redemption Flow
             const userPoints = Number(window.state.currentUser.points || 0);
             const maxRedeemableUnits = Math.floor(userPoints / 100);
             const isCard = game.category === 'card';
@@ -1634,7 +1648,7 @@
                     <div class="text-left space-y-3.5 pt-2">
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">${isCard ? 'อีเมลหรือเบอร์โทรสำหรับรับรหัสบัตร' : 'ระบุ UID / ชื่อบัญชีในเกมของคุณ'}</label>
-                            <input id="swal-surf-uid" type="text" value="${isCard && window.state.currentUser.isLoggedIn ? window.state.currentUser.email : ''}" placeholder="${isCard ? 'เช่น name@example.com' : 'เช่น 584920194 หรือ Player#TH1'}" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-slate-900">
+                            <input id="swal-surf-uid" type="text" value="${isCard ? window.state.currentUser.email : ''}" placeholder="${isCard ? 'เช่น name@example.com' : 'เช่น 584920194 หรือ Player#TH1'}" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-slate-900">
                         </div>
                         <div class="space-y-2">
                             <label class="block text-xs font-semibold text-slate-700">เลือกแพ็กเกจที่ต้องการ</label>
@@ -1688,7 +1702,7 @@
 
                     const newOrder = {
                         id: 'TOP-' + Math.floor(100000 + Math.random() * 900000),
-                        buyerEmail: window.state.currentUser.isLoggedIn ? window.state.currentUser.email : 'guest',
+                        buyerEmail: window.state.currentUser.email,
                         gameTitle: game.title,
                         packageName: pkg.name,
                         targetId: res.value.uid,
@@ -1788,9 +1802,13 @@
 
         window.openSurfaceHistoryModal = function() {
             const user = window.state.currentUser;
-            const list = user.isLoggedIn && user.role !== 'admin'
-                ? window.state.surfaceOrders.filter(o => !o.buyerEmail || o.buyerEmail.toLowerCase() === user.email.toLowerCase())
-                : window.state.surfaceOrders;
+            if (!user.isLoggedIn) {
+                openLoginModal();
+                return;
+            }
+            const list = user.role === 'admin'
+                ? window.state.surfaceOrders
+                : window.state.surfaceOrders.filter(o => o.buyerEmail && o.buyerEmail.toLowerCase() === user.email.toLowerCase());
 
             const rows = list.map(o => `
                 <div class="p-3 rounded-xl border border-slate-200 bg-slate-50 space-y-1.5 text-left text-xs">
@@ -1823,6 +1841,10 @@
         };
 
         window.openSurfacePointsModal = function() {
+            if (!window.state.currentUser.isLoggedIn) {
+                openLoginModal();
+                return;
+            }
             const pts = Number(window.state.currentUser.points || 0);
             Swal.fire({
                 title: '<span class="text-lg font-bold text-slate-900">แต้มสะสม TANTOPUP24 Reward</span>',
@@ -2020,7 +2042,7 @@
                 name: 'ผู้เยี่ยมชม',
                 role: 'guest',
                 points: 0,
-                walletCr: 15000
+                walletCr: 0
             };
             saveState();
             renderSurfaceStore();
@@ -2328,7 +2350,6 @@
             }
 
             window.state.activeSessionCode = matchedInvite.code;
-            // Sync user identity if entering via invite code while logged out
             if (!window.state.currentUser.isLoggedIn && matchedInvite.email) {
                 const reg = (window.state.registeredUsers || []).find(u => u.email.toLowerCase() === matchedInvite.email.toLowerCase());
                 if (reg) {
@@ -2912,7 +2933,7 @@
                         <div class="space-y-2.5">
                             <div>
                                 <label class="block text-slate-300 font-semibold mb-1">ชื่อ-ที่อยู่จัดส่ง (จัดส่งแบบพัสดุปกปิดชื่อสินค้า 100%)</label>
-                                <input id="swal-checkout-addr" type="text" value="${window.state.currentUser.name || 'สมาชิก'} • กรุงเทพมหานคร (จัดส่งด่วนปกปิดรายการสินค้า)" class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs">
+                                <input id="swal-checkout-addr" type="text" placeholder="ระบุชื่อผู้รับ เบอร์โทร และที่อยู่จัดส่งพัสดุ" value="${window.state.currentUser.isLoggedIn ? window.state.currentUser.name : ''}" class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs">
                             </div>
                             <div>
                                 <label class="block text-slate-300 font-semibold mb-1">วิธีชำระเงิน</label>
@@ -2996,7 +3017,6 @@
                 window.state.currentUser.walletCr -= netTotal;
             }
 
-            // Deduct real product stock
             window.state.hiddenCart.forEach(c => {
                 const prod = window.state.hiddenProducts.find(p => p.id === c.productId);
                 if (prod) {
@@ -3107,6 +3127,11 @@
         function renderHiddenWalletSection() {
             const listEl = document.getElementById('wallet-history-list');
             if (!listEl) return;
+
+            if (!window.state.hiddenTopups.length) {
+                listEl.innerHTML = `<div class="p-6 rounded-xl bg-slate-950/60 border border-slate-800 text-center text-xs text-slate-500">ยังไม่มีประวัติธุรกรรมเครดิต</div>`;
+                return;
+            }
 
             listEl.innerHTML = window.state.hiddenTopups.map(t => `
                 <div class="p-3.5 rounded-xl bg-slate-950/90 border border-slate-800 flex items-center justify-between gap-2 text-xs">
@@ -3737,7 +3762,7 @@
 
             const topupList = document.getElementById('admin-topup-list');
             if (topupList) {
-                topupList.innerHTML = window.state.hiddenTopups.map(t => `
+                topupList.innerHTML = window.state.hiddenTopups.length ? window.state.hiddenTopups.map(t => `
                     <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between gap-2 text-xs">
                         <div>
                             <div class="font-bold text-white font-mono-cyber">${t.id} • +${t.amount.toLocaleString()} CR</div>
@@ -3752,12 +3777,12 @@
                             `}
                         </div>
                     </div>
-                `).join('');
+                `).join('') : `<div class="p-6 rounded-xl bg-slate-950/60 border border-slate-800 text-center text-xs text-slate-500">ยังไม่มีรายการแจ้งเติมเครดิต</div>`;
             }
 
             const orderList = document.getElementById('admin-order-list');
             if (orderList) {
-                orderList.innerHTML = window.state.myArmoryOrders.map(o => `
+                orderList.innerHTML = window.state.myArmoryOrders.length ? window.state.myArmoryOrders.map(o => `
                     <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs">
                         <div class="flex items-center justify-between">
                             <span class="font-mono-cyber font-bold text-rose-400">${o.id}</span>
@@ -3771,7 +3796,7 @@
                             </button>
                         </div>
                     </div>
-                `).join('');
+                `).join('') : `<div class="p-6 rounded-xl bg-slate-950/60 border border-slate-800 text-center text-xs text-slate-500">ยังไม่มีคำสั่งซื้อในคลังแสง</div>`;
             }
 
             const prodList = document.getElementById('admin-product-list');
