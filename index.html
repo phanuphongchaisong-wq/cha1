@@ -3,71 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TANTOPUP24 | ศูนย์บริการรับเติมเกม & บัตรดิจิทัล</title>
+    <title>TANTOPUP24 | ศูนย์บริการเติมเกม & บัตรดิจิทัล</title>
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
     <!-- SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
     <!-- FontAwesome -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Prompt:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         html, body {
             max-width: 100vw;
             overflow-x: hidden;
-            transition: background-color 0.4s ease, color 0.4s ease;
-            font-family: 'Prompt', sans-serif;
+            transition: background-color 0.35s ease, color 0.35s ease;
+            font-family: 'Prompt', 'Inter', sans-serif;
+            scroll-behavior: smooth;
         }
-        .font-sans-th { font-family: 'Prompt', sans-serif; }
+        .font-sans-th { font-family: 'Prompt', 'Inter', sans-serif; }
         .font-mono-cyber { font-family: 'Fira Code', monospace; }
 
         .swal2-popup {
             max-width: 95vw !important;
-            font-family: 'Prompt', sans-serif !important;
-            border-radius: 1rem !important;
+            font-family: 'Prompt', 'Inter', sans-serif !important;
+            border-radius: 1.25rem !important;
         }
 
-        /* Surface Store Luxury Theme */
-        .surface-luxury-bg {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #0f172a 100%);
+        /* Surface Store Modern Editorial Theme */
+        .surface-hero-bg {
+            background-color: #0b1120;
+            background-image:
+                radial-gradient(circle at 12% 20%, rgba(245, 158, 11, 0.14) 0%, transparent 45%),
+                radial-gradient(circle at 88% 75%, rgba(56, 189, 248, 0.12) 0%, transparent 45%),
+                linear-gradient(145deg, #0b1120 0%, #131c31 55%, #0f172a 100%);
         }
         .surface-card {
             background: #ffffff;
             border: 1px solid #e2e8f0;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, border-color 0.25s ease;
         }
         .surface-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 16px 32px -10px rgba(15, 23, 42, 0.12);
+            box-shadow: 0 20px 36px -14px rgba(15, 23, 42, 0.12), 0 4px 12px -4px rgba(15, 23, 42, 0.05);
             border-color: #cbd5e1;
         }
+        .surface-banner-pattern {
+            background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
 
-        /* Hidden Store: Mysterious & Futuristic Phantom Cyber-Ops Theme */
+        /* Hidden Store: Refined Phantom Cyber-Ops Theme */
         .phantom-void-bg {
-            background-color: #04060b;
+            background-color: #05070d;
             background-image:
-                radial-gradient(circle at 15% 15%, rgba(225, 29, 72, 0.11) 0%, transparent 40%),
+                radial-gradient(circle at 15% 15%, rgba(225, 29, 72, 0.1) 0%, transparent 40%),
                 radial-gradient(circle at 85% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 38%),
-                radial-gradient(circle at 50% 85%, rgba(6, 182, 212, 0.08) 0%, transparent 45%),
-                linear-gradient(rgba(255, 255, 255, 0.022) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 36px 36px;
+                radial-gradient(circle at 50% 85%, rgba(6, 182, 212, 0.07) 0%, transparent 45%),
+                linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 38px 38px, 38px 38px;
         }
 
         .hud-glass {
-            background: linear-gradient(160deg, rgba(13, 18, 30, 0.88) 0%, rgba(7, 10, 18, 0.94) 100%);
+            background: linear-gradient(160deg, rgba(14, 20, 34, 0.88) 0%, rgba(8, 12, 21, 0.94) 100%);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.85), inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+            box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.85), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
         }
 
         .hud-card {
             position: relative;
             background: linear-gradient(165deg, rgba(15, 21, 35, 0.92) 0%, rgba(8, 11, 20, 0.97) 100%);
-            border: 1px solid rgba(148, 163, 184, 0.12);
+            border: 1px solid rgba(148, 163, 184, 0.13);
             transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
             overflow: hidden;
         }
@@ -78,14 +87,14 @@
             left: 0;
             width: 100%;
             height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(244, 63, 94, 0.7), rgba(6, 182, 212, 0.7), transparent);
+            background: linear-gradient(90deg, transparent, rgba(244, 63, 94, 0.75), rgba(6, 182, 212, 0.75), transparent);
             opacity: 0;
             transition: opacity 0.28s ease;
         }
         .hud-card:hover {
             transform: translateY(-4px);
             border-color: rgba(244, 63, 94, 0.45);
-            box-shadow: 0 20px 40px -15px rgba(225, 29, 72, 0.22), 0 0 25px -5px rgba(6, 182, 212, 0.12);
+            box-shadow: 0 20px 40px -15px rgba(225, 29, 72, 0.2), 0 0 25px -5px rgba(6, 182, 212, 0.12);
         }
         .hud-card:hover::before {
             opacity: 1;
@@ -99,7 +108,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, transparent 50%, rgba(6, 182, 212, 0.025) 51%);
+            background: linear-gradient(to bottom, transparent 50%, rgba(6, 182, 212, 0.02) 51%);
             background-size: 100% 4px;
             pointer-events: none;
         }
@@ -112,97 +121,108 @@
             animation: pulseGlow 2.4s infinite ease-in-out;
         }
 
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #090d16; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #334155; }
+        ::-webkit-scrollbar { width: 7px; height: 7px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased selection:bg-rose-500 selection:text-white">
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-amber-400 selection:text-slate-950">
 
     <!-- ===================================================================== -->
     <!-- VIEW 1: SURFACE STORE (TANTOPUP24 - หน้าร้านรับเติมเกมปกติ)                -->
     <!-- ===================================================================== -->
-    <div id="view-app" class="min-h-screen flex flex-col bg-slate-50 text-slate-800">
-        <!-- Top Utility Notice -->
-        <div class="bg-slate-900 text-slate-300 text-xs py-2 px-4 border-b border-slate-800">
+    <div id="view-app" class="min-h-screen flex flex-col bg-[#f8fafc] text-slate-800">
+        <!-- Subtle Top Utility Strip -->
+        <div class="bg-slate-950 text-slate-300 text-[11px] py-2 px-4 border-b border-slate-800/80">
             <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-                <div class="flex items-center gap-2">
-                    <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-                    <span>ระบบเติมเกมอัตโนมัติตลอด 24 ชั่วโมง • ทำรายการรวดเร็วใน 10 วินาที</span>
+                <div class="flex items-center gap-2 text-slate-300">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+                    </span>
+                    <span>ระบบอัตโนมัติพร้อมให้บริการ 24 ชม. • เติมไวเฉลี่ย 10 วินาที</span>
                 </div>
-                <div class="flex items-center gap-4">
-                    <span id="surface-current-user-label" class="text-amber-400 font-medium">บัญชี: phanuphongchaisong@gmail.com (ผู้ดูแลระบบ)</span>
-                    <button type="button" onclick="openSurfaceAccountModal()" class="underline hover:text-white transition">สลับบัญชี / ตั้งค่าผู้ใช้</button>
+                <div class="flex items-center gap-3">
+                    <span id="surface-current-user-label" class="text-slate-300 font-medium truncate max-w-[230px] sm:max-w-none">บัญชี: phanuphongchaisong@gmail.com (ผู้ดูแลระบบ)</span>
+                    <button type="button" onclick="openSurfaceAccountModal()" class="px-2.5 py-0.5 rounded-full bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-medium transition">
+                        สลับบัญชี
+                    </button>
                 </div>
             </div>
         </div>
 
         <!-- Surface Header -->
-        <header class="bg-white/95 backdrop-blur-md sticky top-0 z-30 border-b border-slate-200 shadow-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
-                <div class="flex items-center gap-3">
-                    <div class="w-11 h-11 rounded-xl bg-slate-900 text-amber-400 flex items-center justify-center shadow-md border border-slate-800">
-                        <i class="fa-solid fa-gamepad text-xl"></i>
+        <header class="bg-white/90 backdrop-blur-lg sticky top-0 z-30 border-b border-slate-200/80">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+                <a href="#surface-catalog-anchor" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 text-amber-400 flex items-center justify-center shadow-sm ring-1 ring-slate-900/10 group-hover:scale-105 transition">
+                        <i class="fa-solid fa-gamepad text-lg"></i>
                     </div>
                     <div>
                         <div class="flex items-center gap-2">
-                            <span class="font-bold text-xl tracking-tight text-slate-900">TANTOPUP24</span>
-                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200">OFFICIAL</span>
+                            <span class="font-bold text-lg sm:text-xl tracking-tight text-slate-900">TANTOPUP24</span>
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80">
+                                <i class="fa-solid fa-circle-check text-[9px] mr-0.5"></i> OFFICIAL
+                            </span>
                         </div>
-                        <p class="text-xs text-slate-500">ศูนย์บริการเติมเกมออนไลน์และบัตรดิจิทัลครบวงจร</p>
+                        <p class="text-[11px] text-slate-500 hidden sm:block">ศูนย์บริการเติมเกมออนไลน์และบัตรดิจิทัลครบวงจร</p>
                     </div>
-                </div>
+                </a>
 
                 <!-- Right Controls -->
                 <div class="flex items-center flex-wrap gap-2">
                     <!-- Reward Points -->
-                    <button type="button" onclick="openSurfacePointsModal()" class="px-3.5 py-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold flex items-center gap-2 hover:bg-amber-100 transition">
+                    <button type="button" onclick="openSurfacePointsModal()" class="px-3 py-2 rounded-xl bg-amber-50/90 hover:bg-amber-100 border border-amber-200/80 text-amber-900 text-xs font-semibold flex items-center gap-1.5 transition">
                         <i class="fa-solid fa-coins text-amber-500"></i>
                         <span id="user-points-display">150 P</span>
                     </button>
 
-                    <!-- Inbox Button (Stealth Delivery of Account Code) -->
-                    <button type="button" id="btn-surface-inbox" onclick="openSurfaceInboxModal()" class="relative px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium flex items-center gap-2 transition border border-slate-200">
-                        <i class="fa-regular fa-envelope"></i>
-                        <span>กล่องข้อความ</span>
+                    <!-- Inbox Button -->
+                    <button type="button" id="btn-surface-inbox" onclick="openSurfaceInboxModal()" class="relative px-3 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-medium flex items-center gap-1.5 transition border border-slate-200 shadow-2xs">
+                        <i class="fa-regular fa-envelope text-slate-500"></i>
+                        <span class="hidden sm:inline">กล่องข้อความ</span>
                         <span id="surface-inbox-badge" class="w-2 h-2 rounded-full bg-rose-500"></span>
                     </button>
 
                     <!-- Surface Order History -->
-                    <button type="button" onclick="openSurfaceHistoryModal()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium flex items-center gap-2 transition border border-slate-200">
-                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    <button type="button" onclick="openSurfaceHistoryModal()" class="px-3 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-xs font-medium flex items-center gap-1.5 transition border border-slate-200">
+                        <i class="fa-solid fa-clock-rotate-left text-slate-500"></i>
                         <span class="hidden sm:inline">ประวัติการเติม</span>
-                        <span id="surface-order-count-badge" class="px-1.5 py-0.5 rounded-full bg-slate-200 text-slate-700 text-[10px] font-bold">0</span>
+                        <span id="surface-order-count-badge" class="px-1.5 py-0.2 rounded-full bg-slate-100 text-slate-700 text-[10px] font-bold">0</span>
                     </button>
 
                     <!-- Surface Admin Button -->
-                    <button type="button" id="btn-admin-surface" onclick="openSurfaceAdminModal()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 text-xs font-medium flex items-center gap-2 transition shadow-sm">
+                    <button type="button" id="btn-admin-surface" onclick="openSurfaceAdminModal()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 text-xs font-medium flex items-center gap-1.5 transition shadow-sm">
                         <i class="fa-solid fa-sliders"></i>
-                        <span class="hidden sm:inline">จัดการร้านเติมเกม</span>
+                        <span class="hidden md:inline">จัดการร้าน</span>
                     </button>
                 </div>
             </div>
         </header>
 
         <!-- Hero Banner -->
-        <section class="surface-luxury-bg text-white py-10 px-4 sm:px-6 border-b border-slate-800">
+        <section class="surface-hero-bg text-white py-10 sm:py-12 px-4 sm:px-6 border-b border-slate-800/80">
             <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
                 <div class="max-w-2xl space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-400/30 text-amber-300 text-xs font-medium">
-                        <i class="fa-solid fa-shield-halved"></i>
-                        <span>ปลอดภัย 100% ใช้เพียง UID ไม่ต้องใช้รหัสผ่านเกม</span>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/25 text-amber-300 text-xs font-medium">
+                        <i class="fa-solid fa-shield-halved text-amber-400"></i>
+                        <span>ปลอดภัย 100% เติมด้วย UID เท่านั้น ไม่ต้องใช้รหัสผ่าน</span>
                     </div>
-                    <h1 class="text-2xl sm:text-4xl font-bold leading-tight text-white">
-                        บริการเติมเกมชั้นนำ & บัตรเติมเงินดิจิทัล ราคาประหยัดคุ้มค่าทุกแพ็กเกจ
+                    <h1 class="text-2xl sm:text-4xl font-bold leading-snug tracking-tight text-white">
+                        เติมเกมออนไลน์ &amp; บัตรดิจิทัล <span class="text-amber-400">คุ้มค่าทุกแพ็กเกจ</span> เข้าไวในไม่กี่วินาที
                     </h1>
-                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
-                        เลือกเกมหรือบัตรดิจิทัลที่คุณต้องการทำรายการ ระบบพร้อมจัดส่งคูปองและพอยต์เข้าบัญชีเกมของคุณโดยอัตโนมัติ พร้อมสะสมแต้มแลกส่วนลดพิเศษสำหรับลูกค้าทุกท่าน
+                    <p class="text-slate-300/90 text-sm sm:text-base leading-relaxed">
+                        เลือกเกมหรือบัตรเติมเงินที่ต้องการ ระบบจัดส่งคูปองและพอยต์เข้าไอดีอัตโนมัติ พร้อมสะสมแต้ม TANTOPUP24 Reward แลกส่วนลดได้ทุกบิล
                     </p>
-                    <div class="flex flex-wrap gap-3 pt-1">
-                        <a href="#surface-catalog-anchor" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-sm transition shadow-md">
-                            เลือกเกมที่ต้องการเติม
+                    <div class="flex flex-wrap items-center gap-3 pt-1">
+                        <a href="#surface-catalog-anchor" class="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold text-sm transition shadow-lg shadow-amber-500/15 flex items-center gap-2">
+                            <span>เลือกเกมที่ต้องการเติม</span>
+                            <i class="fa-solid fa-arrow-down text-xs"></i>
                         </a>
                         <button type="button" onclick="openSurfaceHistoryModal()" class="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white font-medium text-sm border border-white/15 transition">
                             ตรวจสอบสถานะรายการ
@@ -210,31 +230,31 @@
                     </div>
                 </div>
 
-                <!-- Trust Stats Card -->
-                <div class="w-full lg:w-96 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-5 space-y-4 shadow-xl">
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                        <span class="text-xs text-slate-400">สถานะระบบเติมเงินอัตโนมัติ</span>
+                <!-- Sleek Trust & Reward Summary Card -->
+                <div class="w-full lg:w-[390px] bg-white/[0.04] backdrop-blur-md border border-white/10 rounded-2xl p-5 space-y-4 shadow-2xl">
+                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                        <span class="text-xs text-slate-300 font-medium">ภาพรวมระบบเติมเงิน</span>
                         <span class="text-xs font-semibold text-emerald-400 flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> พร้อมให้บริการ
+                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span> ทำงานปกติทุกเกม
                         </span>
                     </div>
-                    <div class="grid grid-cols-3 gap-3 text-center">
-                        <div class="bg-slate-800/70 rounded-xl p-3">
-                            <div class="text-lg font-bold text-amber-400">10 วิ</div>
-                            <div class="text-[11px] text-slate-400">ความเร็วเฉลี่ย</div>
+                    <div class="grid grid-cols-3 gap-2.5 text-center">
+                        <div class="bg-slate-900/60 border border-white/5 rounded-xl p-3">
+                            <div class="text-base sm:text-lg font-bold text-amber-400">~10 วิ</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">จัดส่งอัตโนมัติ</div>
                         </div>
-                        <div class="bg-slate-800/70 rounded-xl p-3">
-                            <div class="text-lg font-bold text-white">100%</div>
-                            <div class="text-[11px] text-slate-400">ปลอดภัยไร้รีฟันด์</div>
+                        <div class="bg-slate-900/60 border border-white/5 rounded-xl p-3">
+                            <div class="text-base sm:text-lg font-bold text-white">100%</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">แท้จากผู้ให้บริการ</div>
                         </div>
-                        <div class="bg-slate-800/70 rounded-xl p-3">
-                            <div class="text-lg font-bold text-emerald-400">24 ชม.</div>
-                            <div class="text-[11px] text-slate-400">ดูแลลูกค้าทุกวัน</div>
+                        <div class="bg-slate-900/60 border border-white/5 rounded-xl p-3">
+                            <div class="text-base sm:text-lg font-bold text-emerald-400">24 ชม.</div>
+                            <div class="text-[11px] text-slate-400 mt-0.5">ซัพพอร์ตทุกวัน</div>
                         </div>
                     </div>
-                    <div class="text-xs text-slate-400 bg-slate-800/40 rounded-xl p-3 flex items-center justify-between">
-                        <span>แต้มสะสมของคุณใช้ลดราคาได้ทันที</span>
-                        <span class="text-amber-300 font-semibold">100 P = 10 ฿</span>
+                    <div class="text-xs text-slate-300 bg-slate-900/50 border border-white/5 rounded-xl px-3.5 py-2.5 flex items-center justify-between">
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-gift text-amber-400"></i> แต้มสะสมใช้ลดราคาได้</span>
+                        <span class="text-amber-300 font-semibold">100 P = ฿10</span>
                     </div>
                 </div>
             </div>
@@ -242,20 +262,22 @@
 
         <!-- Surface Game & Card Catalog -->
         <main id="surface-catalog-anchor" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
-            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900">รายการเกมและบัตรเติมเงิน</h2>
-                    <p class="text-xs text-slate-500">เลือกรายการที่ต้องการเพื่อระบุ UID และเลือกแพ็กเกจ</p>
+                    <h2 class="text-xl font-bold text-slate-900">รายการเกมและบัตรเติมเงินยอดนิยม</h2>
+                    <p class="text-xs text-slate-500 mt-0.5">คลิกที่การ์ดเกมเพื่อระบุ UID และเลือกแพ็กเกจที่ต้องการ</p>
                 </div>
 
                 <!-- Surface Filters & Search -->
                 <div class="flex flex-wrap items-center gap-2">
-                    <button type="button" onclick="filterSurfaceGames('all')" id="surf-tab-all" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-900 text-white transition">ทั้งหมด</button>
-                    <button type="button" onclick="filterSurfaceGames('mobile')" id="surf-tab-mobile" class="px-3.5 py-2 rounded-xl text-xs font-medium bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 transition">เกมมือถือ & PC</button>
-                    <button type="button" onclick="filterSurfaceGames('card')" id="surf-tab-card" class="px-3.5 py-2 rounded-xl text-xs font-medium bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 transition">บัตรเติมเงินดิจิทัล</button>
-                    <div class="relative">
+                    <div class="inline-flex p-1 rounded-xl bg-slate-200/70">
+                        <button type="button" onclick="filterSurfaceGames('all')" id="surf-tab-all" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-900 shadow-xs transition">ทั้งหมด</button>
+                        <button type="button" onclick="filterSurfaceGames('mobile')" id="surf-tab-mobile" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">เกมมือถือ &amp; PC</button>
+                        <button type="button" onclick="filterSurfaceGames('card')" id="surf-tab-card" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">บัตรดิจิทัล</button>
+                    </div>
+                    <div class="relative flex-1 sm:flex-initial">
                         <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                        <input id="surface-search-input" type="text" oninput="handleSurfaceSearch(this.value)" placeholder="ค้นหาเกมหรือบัตร..." class="pl-8 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-700 focus:outline-none focus:border-slate-500 w-44 sm:w-56">
+                        <input id="surface-search-input" type="text" oninput="handleSurfaceSearch(this.value)" placeholder="ค้นหาชื่อเกมหรือบัตร..." class="w-full sm:w-56 pl-8 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition">
                     </div>
                 </div>
             </div>
@@ -265,14 +287,14 @@
         </main>
 
         <!-- Surface Footer with Discreet 5-Click Secret Dot -->
-        <footer class="bg-white border-t border-slate-200 py-6 px-4 sm:px-6 mt-12">
+        <footer class="bg-white border-t border-slate-200/80 py-6 px-4 sm:px-6 mt-10">
             <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
                 <div>
-                    <span>© 2025 TANTOPUP24 ศูนย์บริการเติมเกมและบัตรดิจิทัลออนไลน์ สงวนลิขสิทธิ์</span><span id="secret-dot-trigger" onclick="triggerSecretDot()" class="cursor-default select-none px-1 py-0.5 text-slate-500 hover:text-slate-700" title=".">.</span>
+                    <span>© 2025 TANTOPUP24 ศูนย์บริการเติมเกมและบัตรดิจิทัลออนไลน์ สงวนลิขสิทธิ์</span><span id="secret-dot-trigger" onclick="triggerSecretDot()" class="cursor-default select-none text-slate-500" title=".">.</span>
                 </div>
                 <div class="flex items-center gap-4">
                     <button type="button" onclick="openSurfaceTermsModal()" class="hover:text-slate-800 transition">เงื่อนไขการให้บริการ</button>
-                    <span>•</span>
+                    <span class="text-slate-300">•</span>
                     <button type="button" onclick="openSurfaceContactModal()" class="hover:text-slate-800 transition">ติดต่อฝ่ายบริการลูกค้า</button>
                 </div>
             </div>
@@ -280,15 +302,15 @@
     </div>
 
     <!-- ===================================================================== -->
-    <!-- VIEW 2: DISCREET GATEWAY (หน้ายืนยันรหัสประจำบัญชี - ไม่เปิดเผยว่ามีเว็บลับ)      -->
+    <!-- VIEW 2: DISCREET GATEWAY (หน้ายืนยันรหัสประจำบัญชี)                     -->
     <!-- ===================================================================== -->
     <div id="view-gateway" class="hidden min-h-screen bg-slate-100 flex items-center justify-center p-4">
         <div class="max-w-md w-full bg-white border border-slate-200 rounded-2xl shadow-xl p-6 sm:p-8 space-y-6">
             <div class="flex items-center justify-between">
-                <div class="w-11 h-11 rounded-xl bg-slate-900 text-white flex items-center justify-center">
+                <div class="w-11 h-11 rounded-xl bg-slate-900 text-amber-400 flex items-center justify-center shadow-sm">
                     <i class="fa-solid fa-key text-lg"></i>
                 </div>
-                <button type="button" onclick="closeGateway()" class="text-xs text-slate-500 hover:text-slate-800 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 transition">
+                <button type="button" onclick="closeGateway()" class="text-xs text-slate-500 hover:text-slate-900 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 transition">
                     <i class="fa-solid fa-arrow-left"></i> กลับหน้าหลัก
                 </button>
             </div>
@@ -308,17 +330,17 @@
                         type="text"
                         autocomplete="off"
                         placeholder="INV-XXXXXX"
-                        class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-900 font-mono-cyber text-base tracking-widest uppercase focus:outline-none focus:border-slate-900 focus:bg-white transition"
+                        class="w-full px-4 py-3 rounded-xl border border-slate-300 bg-slate-50 text-slate-900 font-mono-cyber text-base tracking-widest uppercase focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-900 focus:bg-white transition"
                     >
                     <p id="gateway-error-msg" class="hidden text-xs text-rose-600 mt-2 font-medium"></p>
                 </div>
 
-                <!-- Quick Auto-Fill from Current User Inbox (Only shown if user has a valid invite) -->
-                <div id="gateway-autofill-box" class="hidden p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2">
-                    <div class="text-xs text-slate-600">
-                        พบรหัสในกล่องข้อความของคุณ: <span id="gateway-detected-code" class="font-mono-cyber font-bold text-slate-900"></span>
+                <!-- Quick Auto-Fill from Current User Inbox -->
+                <div id="gateway-autofill-box" class="hidden p-3 rounded-xl bg-emerald-50/70 border border-emerald-200 flex items-center justify-between gap-2">
+                    <div class="text-xs text-slate-700">
+                        พบรหัสในกล่องข้อความ: <span id="gateway-detected-code" class="font-mono-cyber font-bold text-emerald-800"></span>
                     </div>
-                    <button type="button" onclick="fillDetectedInviteCode()" class="px-2.5 py-1 rounded-lg bg-slate-900 text-white text-[11px] font-medium hover:bg-slate-800 transition">
+                    <button type="button" onclick="fillDetectedInviteCode()" class="px-3 py-1.5 rounded-lg bg-slate-900 text-white text-[11px] font-medium hover:bg-slate-800 transition">
                         ใช้รหัสนี้
                     </button>
                 </div>
@@ -335,35 +357,33 @@
     <!-- ===================================================================== -->
     <div id="view-hidden" class="hidden min-h-screen phantom-void-bg text-slate-100 flex flex-col">
 
-        <!-- Futuristic Cyber-Ops Encrypted Telemetry Bar -->
-        <div class="bg-black/80 border-b border-rose-500/20 text-[11px] py-1.5 px-4 font-mono-cyber">
-            <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-                <div class="flex items-center gap-3 text-slate-400">
-                    <span class="inline-flex items-center gap-1.5 text-emerald-400 font-semibold">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse-glow"></span>
-                        PHANTOM-NET // ENCRYPTED
-                    </span>
-                    <span class="hidden sm:inline text-slate-600">|</span>
-                    <span class="hidden sm:inline text-cyan-400/90" id="hud-active-code-display">SESSION: INV-ZF5YKX</span>
-                    <span class="hidden md:inline text-slate-600">|</span>
-                    <span class="hidden md:inline text-slate-400">คลังยุทโธปกรณ์บีบีกันและชุดแต่งคัสตอมเฉพาะสมาชิก</span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <button type="button" onclick="openHiddenQuickGuide()" class="text-cyan-400 hover:text-cyan-300 transition flex items-center gap-1">
-                        <i class="fa-solid fa-circle-nodes"></i> คู่มือระบบคลังลับ
-                    </button>
-                    <span class="text-slate-700">|</span>
-                    <button type="button" onclick="instantDemoCreditBoost()" class="text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1 font-semibold">
-                        <i class="fa-solid fa-bolt"></i> เติมเครดิตด่วน +5,000 CR
-                    </button>
+        <!-- Hidden Store Unified Header & Navigation -->
+        <header class="hud-glass sticky top-0 z-30 border-b border-slate-800/90">
+            <!-- Compact Top Telemetry Strip -->
+            <div class="bg-black/50 border-b border-white/5 text-[11px] py-1.5 px-4 font-mono-cyber">
+                <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center gap-2.5 text-slate-400">
+                        <span class="inline-flex items-center gap-1.5 text-emerald-400 font-semibold">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-glow"></span>
+                            PHANTOM-NET
+                        </span>
+                        <span class="text-slate-700">•</span>
+                        <span class="text-cyan-400/90" id="hud-active-code-display">SESSION: INV-ZF5YKX</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button type="button" onclick="openHiddenQuickGuide()" class="text-slate-300 hover:text-cyan-300 transition flex items-center gap-1">
+                            <i class="fa-solid fa-circle-info text-cyan-400"></i> คู่มือการใช้งาน
+                        </button>
+                        <span class="text-slate-700">|</span>
+                        <button type="button" onclick="instantDemoCreditBoost()" class="text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1 font-semibold">
+                            <i class="fa-solid fa-bolt"></i> เติมด่วน +5,000 CR
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Hidden Store Top Header -->
-        <header class="hud-glass sticky top-0 z-30 border-b border-slate-800/90">
+            <!-- Main Brand & Action Row -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
-                <!-- Left Brand & Member Rank -->
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-600 to-rose-900 border border-rose-400/40 flex items-center justify-center shadow-lg shadow-rose-950/60">
                         <i class="fa-solid fa-crosshairs text-white text-lg"></i>
@@ -371,85 +391,80 @@
                     <div>
                         <div class="flex items-center gap-2 flex-wrap">
                             <span class="font-bold text-lg tracking-wider text-white font-mono-cyber">VALO ARMORY</span>
-                            <span id="hidden-rank-badge" class="text-[10px] font-semibold px-2.5 py-0.5 rounded-md bg-rose-500/15 text-rose-400 border border-rose-500/40">
+                            <span id="hidden-rank-badge" class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-rose-500/15 text-rose-400 border border-rose-500/40">
                                 ระดับ 4 (ผู้ดูแลระบบ)
                             </span>
                         </div>
-                        <p class="text-[11px] text-slate-400">ศูนย์จำหน่ายปืนบีบีกันและอุปกรณ์เสริม • ระบบปฏิบัติการคลังแสงรุ่น 4.5</p>
+                        <p class="text-[11px] text-slate-400">คลังยุทโธปกรณ์บีบีกันและอุปกรณ์แต่งคัสตอมเฉพาะสมาชิก</p>
                     </div>
                 </div>
 
                 <!-- Right Action Buttons -->
                 <div class="flex items-center flex-wrap gap-2">
-                    <!-- Wallet Balance Pill -->
-                    <button type="button" onclick="switchHiddenTab('wallet')" class="px-3.5 py-1.5 rounded-xl bg-emerald-950/70 hover:bg-emerald-900/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono-cyber font-semibold flex items-center gap-2 transition shadow-sm">
+                    <button type="button" onclick="switchHiddenTab('wallet')" class="px-3 py-1.5 rounded-xl bg-emerald-950/70 hover:bg-emerald-900/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono-cyber font-semibold flex items-center gap-1.5 transition">
                         <i class="fa-solid fa-wallet text-emerald-400"></i>
                         <span id="hidden-wallet-balance">15,000 CR</span>
                         <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-[10px] text-emerald-200">+เติม</span>
                     </button>
 
-                    <!-- Cart Button -->
-                    <button type="button" onclick="openHiddenCartModal()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-semibold text-xs flex items-center gap-2 transition shadow-md shadow-emerald-950/50">
+                    <button type="button" onclick="openHiddenCartModal()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-semibold text-xs flex items-center gap-1.5 transition shadow-md shadow-emerald-950/50">
                         <i class="fa-solid fa-cart-shopping"></i>
-                        <span>ตะกร้าสินค้า</span>
-                        <span id="hidden-cart-count" class="px-1.5 py-0.5 rounded-full bg-rose-600 text-white text-[10px] font-bold">0</span>
+                        <span>ตะกร้า</span>
+                        <span id="hidden-cart-count" class="px-1.5 py-0.2 rounded-full bg-rose-600 text-white text-[10px] font-bold">0</span>
                     </button>
 
-                    <!-- Member Profile -->
                     <button type="button" onclick="openHiddenMemberProfile()" class="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-cyan-300 text-xs font-medium flex items-center gap-1.5 transition">
                         <i class="fa-regular fa-id-badge"></i>
-                        <span class="hidden sm:inline">ข้อมูลบัญชี</span>
+                        <span class="hidden sm:inline">บัญชี</span>
                     </button>
 
-                    <!-- Exit Hidden Store -->
                     <button type="button" onclick="lockHiddenStore()" class="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-rose-950/80 border border-slate-700 hover:border-rose-500/50 text-rose-400 text-xs font-medium flex items-center gap-1.5 transition">
                         <i class="fa-solid fa-right-from-bracket"></i>
-                        <span class="hidden sm:inline">ออกจากหน้าร้าน</span>
+                        <span class="hidden sm:inline">ออก</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Multi-Page Sub-Navigation Bar -->
-            <div class="bg-black/60 border-t border-slate-800/80 px-4 sm:px-6 py-2">
-                <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-                    <nav class="flex items-center flex-wrap gap-1.5">
-                        <button type="button" id="hid-nav-shop" onclick="switchHiddenTab('shop')" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-600 text-white shadow-md shadow-rose-950/60 flex items-center gap-2 transition">
+            <!-- Sub-Navigation & Coupon Strip -->
+            <div class="bg-black/40 border-t border-slate-800/80 px-4 sm:px-6 py-2">
+                <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-2">
+                    <nav class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5 lg:pb-0">
+                        <button type="button" id="hid-nav-shop" onclick="switchHiddenTab('shop')" class="shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-600 text-white shadow-md shadow-rose-950/60 flex items-center gap-1.5 transition">
                             <i class="fa-solid fa-store"></i>
                             <span>รายการสินค้า</span>
                         </button>
-                        <button type="button" id="hid-nav-wallet" onclick="switchHiddenTab('wallet')" class="px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-2 transition">
+                        <button type="button" id="hid-nav-wallet" onclick="switchHiddenTab('wallet')" class="shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
                             <i class="fa-solid fa-coins text-emerald-400"></i>
-                            <span>เติมเครดิต ( <span id="nav-wallet-cr">15,000</span> )</span>
+                            <span>เติมเครดิต (<span id="nav-wallet-cr">15,000</span>)</span>
                         </button>
-                        <button type="button" id="hid-nav-tools" onclick="switchHiddenTab('tools')" class="px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-2 transition">
+                        <button type="button" id="hid-nav-tools" onclick="switchHiddenTab('tools')" class="shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
                             <i class="fa-solid fa-screwdriver-wrench text-amber-400"></i>
-                            <span>จัดเซ็ต & คำนวณ FPS</span>
-                            <span id="compare-count-badge" class="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-mono-cyber">0/3</span>
+                            <span>จัดเซ็ต &amp; FPS</span>
+                            <span id="compare-count-badge" class="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-mono-cyber">0/3</span>
                         </button>
-                        <button type="button" id="hid-nav-orders" onclick="switchHiddenTab('orders')" class="px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-2 transition">
+                        <button type="button" id="hid-nav-orders" onclick="switchHiddenTab('orders')" class="shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
                             <i class="fa-solid fa-box-open text-cyan-400"></i>
-                            <span>คำสั่งซื้อของฉัน (<span id="my-armory-order-count">0</span>)</span>
+                            <span>คำสั่งซื้อ (<span id="my-armory-order-count">0</span>)</span>
                         </button>
-                        <button type="button" id="hid-nav-admin" onclick="switchHiddenTab('admin')" class="px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-2 transition">
+                        <button type="button" id="hid-nav-admin" onclick="switchHiddenTab('admin')" class="shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
                             <i class="fa-solid fa-user-shield text-rose-400"></i>
-                            <span>จัดการร้าน & ส่งคำเชิญ</span>
+                            <span>จัดการร้าน &amp; คำเชิญ</span>
                         </button>
-                        <!-- Kept hidden for legacy DOM compatibility so it never floats unstyled -->
                         <button type="button" id="btn-admin-hidden" onclick="switchHiddenTab('admin')" class="hidden">จัดการคลังปืน</button>
                     </nav>
 
-                    <!-- Interactive Click-to-Apply Coupon Badges -->
-                    <div class="flex items-center flex-wrap gap-2 text-[11px]">
-                        <span class="text-slate-400 flex items-center gap-1">
-                            <i class="fa-solid fa-ticket text-emerald-400"></i> แตะเพื่อใช้โค้ดลดทันที:
+                    <!-- Interactive Coupon Pills -->
+                    <div class="flex items-center flex-wrap gap-1.5 text-[11px]">
+                        <span class="text-slate-400 flex items-center gap-1 mr-0.5">
+                            <i class="fa-solid fa-ticket text-emerald-400"></i> โค้ดส่วนลด:
                         </span>
-                        <button type="button" onclick="applyQuickCoupon('TACTICAL10')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-emerald-950 border border-slate-700 hover:border-emerald-500/50 text-slate-200 font-mono-cyber transition flex items-center gap-1.5" title="คลิกเพื่อคัดลอกและใช้โค้ดส่วนลด 10%">
+                        <button type="button" onclick="applyQuickCoupon('TACTICAL10')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-emerald-950 border border-slate-700 hover:border-emerald-500/50 text-slate-200 font-mono-cyber transition flex items-center gap-1">
                             <span class="font-bold text-emerald-400">TACTICAL10</span>
-                            <span class="text-slate-400">(-10%)</span>
+                            <span class="text-slate-400">-10%</span>
                         </button>
-                        <button type="button" onclick="applyQuickCoupon('ARMORY200')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-500/50 text-slate-200 font-mono-cyber transition flex items-center gap-1.5" title="คลิกเพื่อคัดลอกและใช้โค้ดส่วนลด 200 CR">
+                        <button type="button" onclick="applyQuickCoupon('ARMORY200')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-500/50 text-slate-200 font-mono-cyber transition flex items-center gap-1">
                             <span class="font-bold text-cyan-400">ARMORY200</span>
-                            <span class="text-slate-400">(-200 CR)</span>
+                            <span class="text-slate-400">-200 CR</span>
                         </button>
                     </div>
                 </div>
@@ -459,82 +474,50 @@
         <!-- Main Container for the 5 Separate Hidden Views -->
         <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
 
-            <!-- =============================================================== -->
-            <!-- SUB-PAGE 1: SHOP CATALOG (#tactical-shop-section)               -->
-            <!-- =============================================================== -->
-            <section id="tactical-shop-section" class="space-y-6">
-                <!-- Futuristic Command Hero Banner -->
-                <div class="hud-glass cyber-scanline rounded-2xl p-5 sm:p-6 border border-slate-800/90 relative overflow-hidden">
+            <!-- SUB-PAGE 1: SHOP CATALOG -->
+            <section id="tactical-shop-section" class="space-y-5">
+                <!-- Clean Tactical Hero -->
+                <div class="hud-glass cyber-scanline rounded-2xl p-5 sm:p-6 border border-slate-800/90">
                     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
                         <div class="space-y-2 max-w-2xl">
-                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-medium">
-                                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                                <span>สำหรับสมาชิกที่ได้รับเชิญ • ระบบคลังยุทโธปกรณ์พร้อมส่งจริงทุกรายการ</span>
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 text-xs font-medium">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                <span>สมาชิกที่ได้รับเชิญ • ตรวจเช็ค QC &amp; Chronograph ก่อนส่งทุกกระบอก</span>
                             </div>
                             <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight">
-                                รายการปืนบีบีกันและอุปกรณ์แต่งเกรดสนามแข่งขัน
+                                คลังปืนบีบีกันและอุปกรณ์แต่งเกรดสนามแข่งขัน
                             </h1>
                             <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
-                                คลิกที่การ์ดสินค้าเพื่อดูสเปกเชิงลึกและเลือกบริการคัสตอมจากช่างผู้เชี่ยวชาญ หรือกดปุ่มลัดเพื่อจำลองจัดเซ็ตปืนและคำนวณความแรง FPS ได้ทันที
+                                คลิกที่สินค้าเพื่อดูสเปกเชิงลึกและเลือกบริการปรับจูนจากช่างคลังแสง หรือจำลองจัดเซ็ตปืนและคำนวณความแรงได้ทันที
                             </p>
                         </div>
 
-                        <!-- Quick Navigation & Live Telemetry Pills -->
-                        <div class="flex flex-wrap items-center gap-2.5">
-                            <button type="button" onclick="switchHiddenTab('wallet')" class="px-4 py-2.5 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 text-xs font-semibold flex items-center gap-2 transition">
-                                <i class="fa-solid fa-circle-plus"></i>
-                                <span>เติมเครดิต</span>
-                            </button>
-                            <button type="button" onclick="switchHiddenTab('tools')" class="px-4 py-2.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 text-xs font-semibold flex items-center gap-2 transition">
-                                <i class="fa-solid fa-screwdriver-wrench"></i>
-                                <span>จัดเซ็ต & คำนวณ FPS</span>
-                            </button>
-                            <button type="button" onclick="switchHiddenTab('orders')" class="px-4 py-2.5 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 text-xs font-semibold flex items-center gap-2 transition">
-                                <i class="fa-solid fa-box-archive"></i>
-                                <span>ดูคำสั่งซื้อของฉัน</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Quick Interactive Status Strip -->
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5 pt-4 border-t border-slate-800/80 text-xs">
-                        <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
-                            <div>
-                                <div class="text-slate-400 text-[11px]">ยุทโธปกรณ์พร้อมส่ง</div>
-                                <div class="text-white font-bold font-mono-cyber text-sm" id="shop-stat-total-items">10 รายการ</div>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-2.5 shrink-0 text-xs">
+                            <div class="bg-slate-900/75 border border-slate-800 rounded-xl px-3.5 py-2.5">
+                                <div class="text-slate-400 text-[10px]">พร้อมส่งในคลัง</div>
+                                <div class="text-white font-bold font-mono-cyber text-sm mt-0.5" id="shop-stat-total-items">10 รายการ</div>
                             </div>
-                            <i class="fa-solid fa-crosshairs text-rose-500/70 text-lg"></i>
-                        </div>
-                        <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
-                            <div>
-                                <div class="text-slate-400 text-[11px]">เครดิตพร้อมใช้งาน</div>
-                                <div class="text-emerald-400 font-bold font-mono-cyber text-sm" id="shop-stat-wallet">15,000 CR</div>
+                            <div class="bg-slate-900/75 border border-slate-800 rounded-xl px-3.5 py-2.5">
+                                <div class="text-slate-400 text-[10px]">เครดิตของคุณ</div>
+                                <div class="text-emerald-400 font-bold font-mono-cyber text-sm mt-0.5" id="shop-stat-wallet">15,000 CR</div>
                             </div>
-                            <i class="fa-solid fa-wallet text-emerald-500/70 text-lg"></i>
-                        </div>
-                        <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
-                            <div>
-                                <div class="text-slate-400 text-[11px]">คูปองที่เลือกไว้</div>
-                                <div class="text-cyan-400 font-bold font-mono-cyber text-sm" id="shop-stat-coupon">ยังไม่ได้เลือก</div>
+                            <div class="bg-slate-900/75 border border-slate-800 rounded-xl px-3.5 py-2.5">
+                                <div class="text-slate-400 text-[10px]">คูปองที่เลือกไว้</div>
+                                <div class="text-cyan-400 font-bold font-mono-cyber text-sm mt-0.5" id="shop-stat-coupon">ยังไม่ได้เลือก</div>
                             </div>
-                            <i class="fa-solid fa-ticket text-cyan-500/70 text-lg"></i>
-                        </div>
-                        <div class="bg-slate-900/70 border border-slate-800 rounded-xl p-3 flex items-center justify-between">
-                            <div>
-                                <div class="text-slate-400 text-[11px]">การจัดส่งพัสดุ</div>
-                                <div class="text-amber-300 font-bold text-sm">ปกปิดชื่อสินค้า 100%</div>
+                            <div class="bg-slate-900/75 border border-slate-800 rounded-xl px-3.5 py-2.5">
+                                <div class="text-slate-400 text-[10px]">การจัดส่งพัสดุ</div>
+                                <div class="text-amber-300 font-bold text-sm mt-0.5">ปกปิดชื่อสินค้า</div>
                             </div>
-                            <i class="fa-solid fa-user-secret text-amber-400/70 text-lg"></i>
                         </div>
                     </div>
                 </div>
 
                 <!-- Category Filter Bar & Search/Sort Controls -->
                 <div class="hud-glass rounded-2xl p-3.5 border border-slate-800/90 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-                    <!-- Category Pills -->
                     <div class="flex items-center flex-wrap gap-2">
                         <button type="button" id="cat-btn-all" onclick="filterMarket('all')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-rose-600 text-white shadow-sm transition flex items-center gap-1.5">
-                            <span>สินค้าทั้งหมด</span>
+                            <span>ทั้งหมด</span>
                             <span id="count-badge-all" class="px-1.5 py-0.2 rounded-full bg-black/30 text-[10px] font-mono-cyber">10</span>
                         </button>
                         <button type="button" id="cat-btn-gun" onclick="filterMarket('gun')" class="px-3.5 py-2 rounded-xl text-xs font-medium bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition flex items-center gap-1.5">
@@ -554,11 +537,10 @@
                         </button>
                         <button type="button" id="cat-btn-fav" onclick="filterMarket('fav')" class="px-3.5 py-2 rounded-xl text-xs font-medium bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition flex items-center gap-1.5">
                             <i class="fa-solid fa-heart text-rose-400"></i>
-                            <span>รายการโปรด ( <span id="fav-count-badge">0</span> )</span>
+                            <span>รายการโปรด (<span id="fav-count-badge">0</span>)</span>
                         </button>
                     </div>
 
-                    <!-- Search & Sort -->
                     <div class="flex items-center flex-wrap sm:flex-nowrap gap-2">
                         <div class="relative flex-1 sm:w-60">
                             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
@@ -591,12 +573,9 @@
                 <div id="hidden-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
             </section>
 
-            <!-- =============================================================== -->
-            <!-- SUB-PAGE 2: WALLET & INSTANT CREDIT (#tactical-wallet-section)  -->
-            <!-- =============================================================== -->
+            <!-- SUB-PAGE 2: WALLET & INSTANT CREDIT -->
             <section id="tactical-wallet-section" class="hidden space-y-6">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Left: Balance & Member Rank Card -->
                     <div class="hud-glass rounded-2xl p-6 border border-emerald-500/30 space-y-5">
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-mono-cyber uppercase tracking-wider text-emerald-400">ENCRYPTED WALLET // CR</span>
@@ -624,13 +603,12 @@
                             </p>
                         </div>
 
-                        <!-- Instant Top-Up Shortcut Box -->
                         <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
                             <div class="text-xs font-semibold text-cyan-300 flex items-center gap-1.5">
                                 <i class="fa-solid fa-bolt"></i> เติมเครดิตด่วน (รับเครดิตเข้าทันที)
                             </div>
                             <p class="text-[11px] text-slate-400">
-                                กดปุ่มด้านล่างเพื่อเติมเครดิตเข้ากระเป๋าทันทีสำหรับใช้งานสั่งซื้อปืนและอุปกรณ์แต่งได้ทันทีโดยไม่ต้องรออนุมัติ
+                                กดปุ่มด้านล่างเพื่อเติมเครดิตเข้ากระเป๋าทันทีสำหรับใช้งานสั่งซื้อปืนและอุปกรณ์แต่ง
                             </p>
                             <div class="grid grid-cols-2 gap-2">
                                 <button type="button" onclick="instantGrantCredits(3000)" class="py-2 px-3 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 text-xs font-mono-cyber font-semibold transition">
@@ -643,7 +621,6 @@
                         </div>
                     </div>
 
-                    <!-- Right: Top-Up Form & Transaction Log -->
                     <div class="lg:col-span-2 hud-glass rounded-2xl p-6 border border-slate-800 space-y-6">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-4">
                             <div>
@@ -655,7 +632,6 @@
                             </span>
                         </div>
 
-                        <!-- Quick Amount Preset Chips -->
                         <div class="space-y-2">
                             <label class="block text-xs font-semibold text-slate-300">1. เลือกจำนวนเครดิตที่ต้องการเติมด่วน</label>
                             <div class="grid grid-cols-3 sm:grid-cols-5 gap-2">
@@ -692,7 +668,6 @@
                             </button>
                         </div>
 
-                        <!-- Wallet History List -->
                         <div class="pt-4 border-t border-slate-800 space-y-3">
                             <h3 class="text-sm font-bold text-white flex items-center gap-2">
                                 <i class="fa-solid fa-clock-rotate-left text-emerald-400"></i> ประวัติธุรกรรมเครดิตของคุณ
@@ -703,15 +678,12 @@
                 </div>
             </section>
 
-            <!-- =============================================================== -->
-            <!-- SUB-PAGE 3: LOADOUT BUILDER & FPS LAB (#tactical-tools-section) -->
-            <!-- =============================================================== -->
+            <!-- SUB-PAGE 3: LOADOUT BUILDER & FPS LAB -->
             <section id="tactical-tools-section" class="hidden space-y-6">
-                <!-- Quick Preset Loadout Bar -->
                 <div class="hud-glass rounded-2xl p-5 border border-amber-500/30 flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <div class="text-xs font-mono-cyber text-amber-400 uppercase">TACTICAL WORKSHOP & BALLISTICS LAB</div>
-                        <h2 class="text-lg font-bold text-white">จำลองจัดเซ็ตปืนคัสตอม & คำนวณความแรงกระสุน (FPS / Joule)</h2>
+                        <div class="text-xs font-mono-cyber text-amber-400 uppercase">TACTICAL WORKSHOP &amp; BALLISTICS LAB</div>
+                        <h2 class="text-lg font-bold text-white">จำลองจัดเซ็ตปืนคัสตอม &amp; คำนวณความแรงกระสุน (FPS / Joule)</h2>
                         <p class="text-xs text-slate-400">เลือกตัวปืน อะไหล่ภายใน และสโคปเพื่อดูความแรงรวม พร้อมรับส่วนลดจัดเซ็ต 5% ทันที</p>
                     </div>
                     <div class="flex flex-wrap gap-2">
@@ -749,12 +721,11 @@
                                 <select id="builder-part-select" onchange="updateLoadoutBuilder()" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-amber-500"></select>
                             </div>
                             <div>
-                                <label for="builder-acc-select" class="block text-xs font-medium text-slate-300 mb-1">เลือกสโคป / อุปกรณ์เสริม (Optic & Tactical Gear)</label>
+                                <label for="builder-acc-select" class="block text-xs font-medium text-slate-300 mb-1">เลือกสโคป / อุปกรณ์เสริม (Optic &amp; Tactical Gear)</label>
                                 <select id="builder-acc-select" onchange="updateLoadoutBuilder()" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-amber-500"></select>
                             </div>
                         </div>
 
-                        <!-- Visual Loadout Telemetry Output -->
                         <div class="p-4 rounded-2xl bg-slate-950/90 border border-slate-800 space-y-3">
                             <div class="grid grid-cols-3 gap-2 text-center">
                                 <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800">
@@ -787,7 +758,7 @@
                     <div class="hud-glass rounded-2xl p-6 border border-slate-800 space-y-5">
                         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                             <h3 class="text-base font-bold text-white flex items-center gap-2">
-                                <i class="fa-solid fa-gauge-high text-cyan-400"></i> 2. เครื่องคำนวณพลังงานจลน์ & ทดสอบ Chronograph
+                                <i class="fa-solid fa-gauge-high text-cyan-400"></i> 2. เครื่องคำนวณพลังงานจลน์ &amp; ทดสอบ Chronograph
                             </h3>
                             <button type="button" onclick="runChronoSimulation()" class="px-3 py-1 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 text-cyan-300 text-xs font-mono-cyber transition">
                                 <i class="fa-solid fa-play"></i> ยิงทดสอบ 5 นัด
@@ -812,7 +783,6 @@
                             </div>
                         </div>
 
-                        <!-- Ballistics Output Cards -->
                         <div class="grid grid-cols-3 gap-3 text-center">
                             <div class="p-3 rounded-xl bg-slate-950 border border-slate-800">
                                 <div class="text-[10px] text-slate-400">พลังงานจลน์</div>
@@ -832,7 +802,6 @@
                             ผ่านเกณฑ์สนามมาตรฐาน (Standard Outdoor Field Ready)
                         </div>
 
-                        <!-- 5-Shot Chronograph Log Output -->
                         <div id="chrono-sim-box" class="p-3.5 rounded-xl bg-black/60 border border-slate-800 font-mono-cyber text-xs text-slate-300 space-y-1.5">
                             <div class="flex items-center justify-between text-[11px] text-slate-400">
                                 <span>CHRONOGRAPH 5-SHOT LOG</span>
@@ -866,15 +835,13 @@
                 </div>
             </section>
 
-            <!-- =============================================================== -->
-            <!-- SUB-PAGE 4: MY ORDERS & QC CERTIFICATE (#tactical-locker-section)-->
-            <!-- =============================================================== -->
+            <!-- SUB-PAGE 4: MY ORDERS & QC CERTIFICATE -->
             <section id="tactical-locker-section" class="hidden space-y-6">
                 <div class="hud-glass rounded-2xl p-6 border border-slate-800 space-y-5">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
                         <div>
-                            <div class="text-xs font-mono-cyber text-cyan-400">DISCREET LOGISTICS & WORKSHOP QC</div>
-                            <h2 class="text-lg font-bold text-white">รายการคำสั่งซื้อและใบรับรองการตรวจสอบคุณภาพ (QC & Chronograph)</h2>
+                            <div class="text-xs font-mono-cyber text-cyan-400">DISCREET LOGISTICS &amp; WORKSHOP QC</div>
+                            <h2 class="text-lg font-bold text-white">รายการคำสั่งซื้อและใบรับรองการตรวจสอบคุณภาพ (QC &amp; Chronograph)</h2>
                             <p class="text-xs text-slate-400">ติดตามสถานะการปรับจูนปืน ผลทดสอบความเร็วกระสุน และเลขพัสดุแบบปกปิดชื่อสินค้า</p>
                         </div>
                         <button type="button" onclick="switchHiddenTab('shop')" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold transition self-start sm:self-auto">
@@ -886,16 +853,13 @@
                 </div>
             </section>
 
-            <!-- =============================================================== -->
-            <!-- SUB-PAGE 5: ADMIN COMMAND & INVITES (#tactical-admin-dashboard) -->
-            <!-- =============================================================== -->
+            <!-- SUB-PAGE 5: ADMIN COMMAND & INVITES -->
             <section id="tactical-admin-dashboard" class="hidden space-y-6">
-                <!-- Admin KPI Header -->
                 <div class="hud-glass rounded-2xl p-6 border border-rose-500/30 space-y-5">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                         <div>
                             <div class="text-xs font-mono-cyber text-rose-400">COMMAND CENTER // LEVEL 4 ADMINISTRATOR</div>
-                            <h2 class="text-xl font-bold text-white">ศูนย์ควบคุมคลังยุทโธปกรณ์ & ระบบออกคำเชิญสมาชิก</h2>
+                            <h2 class="text-xl font-bold text-white">ศูนย์ควบคุมคลังยุทโธปกรณ์ &amp; ระบบออกคำเชิญสมาชิก</h2>
                             <p class="text-xs text-slate-400">จัดการรหัสเชิญเข้าคลังลับ อนุมัติเครดิต อัปเดตสถานะคำสั่งซื้อ และเพิ่ม/แก้ไขสินค้า</p>
                         </div>
                         <div class="flex flex-wrap gap-2">
@@ -905,7 +869,6 @@
                         </div>
                     </div>
 
-                    <!-- 4 Live Admin Metrics -->
                     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="p-4 rounded-xl bg-slate-950/90 border border-slate-800">
                             <div class="text-xs text-slate-400">ยอดขายคลังลับสะสม</div>
@@ -926,7 +889,6 @@
                     </div>
                 </div>
 
-                <!-- Admin Grid: 1. Invite Generator + 2. Credit Top-Up Approvals -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Invite Generator Box -->
                     <div class="hud-glass rounded-2xl p-6 border border-slate-800 space-y-4">
@@ -951,7 +913,7 @@
                         </div>
 
                         <button type="button" onclick="createHiddenInvite()" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-paper-plane"></i> สุ่มรหัสผ่านใหม่ & ส่งเข้ากล่องข้อความทันที
+                            <i class="fa-solid fa-paper-plane"></i> สุ่มรหัสผ่านใหม่ &amp; ส่งเข้ากล่องข้อความทันที
                         </button>
 
                         <div class="space-y-2 pt-2">
@@ -965,7 +927,7 @@
                         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                             <div>
                                 <h3 class="text-base font-bold text-white flex items-center gap-2">
-                                    <i class="fa-solid fa-money-bill-transfer text-emerald-400"></i> 2. อนุมัติรายการเติมเครดิต & เพิ่มเครดิตด่วน
+                                    <i class="fa-solid fa-money-bill-transfer text-emerald-400"></i> 2. อนุมัติรายการเติมเครดิต &amp; เพิ่มเครดิตด่วน
                                 </h3>
                                 <p class="text-[11px] text-slate-400">ตรวจสอบคำขอโอนเครดิตหรือเติมเครดิตเข้ากระเป๋าสมาชิกได้โดยตรง</p>
                             </div>
@@ -978,17 +940,14 @@
                     </div>
                 </div>
 
-                <!-- Admin Order Management & Product Inventory -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <!-- Order Fulfillment -->
                     <div class="hud-glass rounded-2xl p-6 border border-slate-800 space-y-4">
                         <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
-                            <i class="fa-solid fa-truck-fast text-amber-400"></i> 3. จัดการคำสั่งซื้อปืน & ออกเลขพัสดุปกปิด
+                            <i class="fa-solid fa-truck-fast text-amber-400"></i> 3. จัดการคำสั่งซื้อปืน &amp; ออกเลขพัสดุปกปิด
                         </h3>
                         <div id="admin-order-list" class="space-y-3 max-h-96 overflow-y-auto pr-1"></div>
                     </div>
 
-                    <!-- Product Inventory Manager -->
                     <div class="hud-glass rounded-2xl p-6 border border-slate-800 space-y-4">
                         <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                             <h3 class="text-base font-bold text-white flex items-center gap-2">
@@ -1012,7 +971,7 @@
     <script>
         const STORAGE_KEY = 'VALO_PHANTOM_ARMORY_STATE_V5';
 
-        // Default Surface Store Games & Digital Cards (Isolated from Hidden Store)
+        // Default Surface Store Games & Digital Cards
         const DEFAULT_SURFACE_GAMES = [
             {
                 id: 'surf-valo',
@@ -1021,8 +980,9 @@
                 publisher: 'Riot Games Official',
                 badge: 'ยอดนิยม',
                 discountText: 'ลดสูงสุด 12%',
+                deliveryNote: 'เติมตรงเข้า Riot ID',
                 icon: 'fa-crosshairs',
-                accent: 'from-rose-600 to-slate-900',
+                accent: 'from-rose-700 via-rose-900 to-slate-950',
                 packages: [
                     { id: 'vp-1', name: '475 VP', price: 135, points: 15 },
                     { id: 'vp-2', name: '1,000 VP', price: 275, points: 30 },
@@ -1037,8 +997,9 @@
                 publisher: 'Garena Thailand',
                 badge: 'เข้าไวใน 5 วิ',
                 discountText: 'ลดสูงสุด 10%',
+                deliveryNote: 'ใช้เพียง OpenID / Player ID',
                 icon: 'fa-shield-halved',
-                accent: 'from-amber-600 to-slate-900',
+                accent: 'from-amber-600 via-amber-800 to-slate-950',
                 packages: [
                     { id: 'rov-1', name: '110 คูปอง', price: 95, points: 10 },
                     { id: 'rov-2', name: '370 คูปอง', price: 289, points: 30 },
@@ -1051,10 +1012,11 @@
                 title: 'Genshin Impact (UID)',
                 category: 'mobile',
                 publisher: 'HoYoverse',
-                badge: 'รับประกันปลอดภัย',
+                badge: 'ปลอดภัย 100%',
                 discountText: 'ลดสูงสุด 15%',
+                deliveryNote: 'รองรับเซิร์ฟเวอร์ Asia / Global',
                 icon: 'fa-wand-magic-sparkles',
-                accent: 'from-sky-600 to-slate-900',
+                accent: 'from-sky-600 via-sky-900 to-slate-950',
                 packages: [
                     { id: 'gs-1', name: 'พรแห่งดวงจันทร์ (Welkin)', price: 139, points: 15 },
                     { id: 'gs-2', name: '980 + 110 Crystals', price: 429, points: 45 },
@@ -1069,8 +1031,9 @@
                 publisher: 'Level Infinite',
                 badge: 'เติมอัตโนมัติ',
                 discountText: 'ลดสูงสุด 10%',
+                deliveryNote: 'UC เข้าไอดีทันที',
                 icon: 'fa-parachute-box',
-                accent: 'from-yellow-600 to-slate-900',
+                accent: 'from-yellow-600 via-amber-900 to-slate-950',
                 packages: [
                     { id: 'uc-1', name: '325 UC', price: 145, points: 15 },
                     { id: 'uc-2', name: '660 UC', price: 285, points: 30 },
@@ -1084,8 +1047,9 @@
                 publisher: 'Valve Corporation',
                 badge: 'รับรหัสทันที',
                 discountText: 'แท้ 100%',
+                deliveryNote: 'โค้ดโซนไทย ใช้งานได้ทันที',
                 icon: 'fa-brands fa-steam',
-                accent: 'from-indigo-700 to-slate-900',
+                accent: 'from-indigo-700 via-indigo-950 to-slate-950',
                 packages: [
                     { id: 'stm-1', name: 'Steam Wallet 200 THB', price: 198, points: 20 },
                     { id: 'stm-2', name: 'Steam Wallet 500 THB', price: 490, points: 50 },
@@ -1097,10 +1061,11 @@
                 title: 'Razer Gold Pin (TH)',
                 category: 'card',
                 publisher: 'Razer Inc.',
-                badge: 'รับรหัส PIN ทันที',
+                badge: 'PIN พร้อมใช้',
                 discountText: 'ลด 3%',
+                deliveryNote: 'จัดส่งรหัส Serial & PIN',
                 icon: 'fa-ticket',
-                accent: 'from-emerald-700 to-slate-900',
+                accent: 'from-emerald-700 via-emerald-950 to-slate-950',
                 packages: [
                     { id: 'rz-1', name: 'Razer Gold 300 THB', price: 292, points: 30 },
                     { id: 'rz-2', name: 'Razer Gold 500 THB', price: 485, points: 50 },
@@ -1114,8 +1079,9 @@
                 publisher: 'Garena Official',
                 badge: 'เข้าทันที',
                 discountText: 'โบนัสเพชรพิเศษ',
+                deliveryNote: 'เติมตรงเข้า Player ID',
                 icon: 'fa-fire',
-                accent: 'from-orange-600 to-slate-900',
+                accent: 'from-orange-600 via-orange-900 to-slate-950',
                 packages: [
                     { id: 'ff-1', name: '172 Diamonds', price: 50, points: 5 },
                     { id: 'ff-2', name: '688 Diamonds', price: 195, points: 20 },
@@ -1129,8 +1095,9 @@
                 publisher: 'Roblox Corp.',
                 badge: 'โค้ดพร้อมใช้',
                 discountText: 'แถมไอเทมพิเศษ',
+                deliveryNote: 'แลก Robux ได้ทุกแพลตฟอร์ม',
                 icon: 'fa-cubes',
-                accent: 'from-slate-700 to-slate-950',
+                accent: 'from-slate-700 via-slate-900 to-slate-950',
                 packages: [
                     { id: 'rbx-1', name: '800 Robux Code', price: 340, points: 35 },
                     { id: 'rbx-2', name: '2,000 Robux Code', price: 840, points: 85 }
@@ -1138,7 +1105,7 @@
             }
         ];
 
-        // Default Secret Tactical Store Products (BB-Guns, Internal Parts, Optics)
+        // Default Secret Tactical Store Products
         const DEFAULT_HIDDEN_PRODUCTS = [
             {
                 id: 'arm-gun-01',
@@ -1292,7 +1259,6 @@
             }
         ];
 
-        // Custom Workshop Services in Product Detail Modal
         const WORKSHOP_SERVICES = [
             { id: 'srv-shim', name: 'บริการชิมเกียร์ + ตั้งระยะ AOE + ทาจาระบีเกรดแข่งขัน', price: 450 },
             { id: 'srv-hop', name: 'ติดตั้งยางฮอปซิลิโคนคัดเกรด + ตั้งวิถีกระสุน 50 เมตร', price: 350 },
@@ -1322,7 +1288,6 @@
                         status: 'สำเร็จเรียบร้อย'
                     }
                 ],
-                // Hidden Store State
                 hiddenActiveTab: 'shop',
                 hiddenCategory: 'all',
                 hiddenSearch: '',
@@ -1414,6 +1379,7 @@
 
         function showToast(title, icon = 'success') {
             if (window.Swal) {
+                const isHidden = !document.getElementById('view-hidden').classList.contains('hidden');
                 Swal.fire({
                     toast: true,
                     position: 'top-end',
@@ -1422,8 +1388,8 @@
                     showConfirmButton: false,
                     timer: 2200,
                     timerProgressBar: true,
-                    background: document.getElementById('view-hidden').classList.contains('hidden') ? '#ffffff' : '#0f172a',
-                    color: document.getElementById('view-hidden').classList.contains('hidden') ? '#0f172a' : '#f8fafc'
+                    background: isHidden ? '#0f172a' : '#ffffff',
+                    color: isHidden ? '#f8fafc' : '#0f172a'
                 });
             }
         }
@@ -1451,7 +1417,7 @@
             const user = window.state.currentUser;
             const userLabel = document.getElementById('surface-current-user-label');
             if (userLabel) {
-                userLabel.textContent = `บัญชี: ${user.email} (${user.role === 'admin' ? 'ผู้ดูแลระบบ' : 'สมาชิกทั่วไป'})`;
+                userLabel.textContent = `บัญชี: ${user.email} (${user.role === 'admin' ? 'ผู้ดูแลระบบ' : 'สมาชิก'})`;
             }
             const pointsEl = document.getElementById('user-points-display');
             if (pointsEl) pointsEl.textContent = `${Number(user.points || 0).toLocaleString()} P`;
@@ -1464,7 +1430,6 @@
                 adminBtn.classList.toggle('hidden', user.role !== 'admin');
             }
 
-            // Check if current user has an active invite in inbox
             const myInvite = window.state.hiddenInvites.find(
                 i => i.active && i.email.toLowerCase() === user.email.toLowerCase()
             );
@@ -1473,7 +1438,6 @@
                 inboxBadge.classList.toggle('hidden', !myInvite);
             }
 
-            // Render game grid
             const grid = document.getElementById('surface-game-grid');
             if (!grid) return;
 
@@ -1484,9 +1448,9 @@
                 const btn = document.getElementById(`surf-tab-${c}`);
                 if (btn) {
                     if (c === cat) {
-                        btn.className = 'px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-900 text-white transition';
+                        btn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-900 shadow-xs transition';
                     } else {
-                        btn.className = 'px-3.5 py-2 rounded-xl text-xs font-medium bg-white border border-slate-200 text-slate-600 hover:bg-slate-100 transition';
+                        btn.className = 'px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition';
                     }
                 }
             });
@@ -1511,37 +1475,45 @@
 
             grid.innerHTML = filtered.map(g => {
                 const minPrice = Math.min(...g.packages.map(p => p.price));
+                const pkgCount = g.packages.length;
+                const noteText = g.deliveryNote || 'เติมตรงเข้าไอดีอัตโนมัติ';
                 return `
-                    <div class="surface-card rounded-2xl overflow-hidden flex flex-col justify-between">
+                    <div onclick="openSurfaceTopupModal('${g.id}')" class="surface-card rounded-2xl overflow-hidden flex flex-col justify-between cursor-pointer group">
                         <div>
-                            <div class="h-32 bg-gradient-to-br ${g.accent} p-4 flex flex-col justify-between text-white relative">
-                                <div class="flex items-center justify-between">
-                                    <span class="px-2.5 py-0.5 rounded-full bg-white/15 backdrop-blur-sm text-[10px] font-medium">${g.badge}</span>
-                                    <span class="px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[10px] font-bold">${g.discountText}</span>
+                            <div class="h-32 bg-gradient-to-br ${g.accent} surface-banner-pattern p-4 flex flex-col justify-between text-white relative overflow-hidden">
+                                <div class="flex items-center justify-between gap-2 relative z-10">
+                                    <span class="px-2.5 py-0.5 rounded-full bg-black/25 backdrop-blur-sm border border-white/15 text-[10px] font-medium">${g.badge}</span>
+                                    <span class="px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[10px] font-bold shadow-xs">${g.discountText}</span>
                                 </div>
-                                <div class="flex items-center gap-3">
-                                    <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-md flex items-center justify-center text-xl">
+                                <div class="flex items-center gap-3 relative z-10">
+                                    <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-md border border-white/15 flex items-center justify-center text-xl group-hover:scale-105 transition">
                                         <i class="fa-solid ${g.icon}"></i>
                                     </div>
-                                    <div>
-                                        <h3 class="font-bold text-sm leading-snug">${g.title}</h3>
-                                        <p class="text-[11px] text-slate-200">${g.publisher}</p>
+                                    <div class="min-w-0">
+                                        <h3 class="font-bold text-sm leading-snug truncate">${g.title}</h3>
+                                        <p class="text-[11px] text-white/75 truncate">${g.publisher}</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="p-4 space-y-2">
-                                <div class="flex items-center justify-between text-xs text-slate-500">
-                                    <span>แพ็กเกจเริ่มต้น</span>
-                                    <span class="font-bold text-slate-900 text-sm">฿${minPrice.toLocaleString()}</span>
-                                </div>
-                                <div class="text-[11px] text-slate-500 flex items-center gap-1.5">
-                                    <i class="fa-solid fa-bolt text-amber-500"></i> จัดส่งเข้าเกมอัตโนมัติทันที
+                            <div class="p-4 pb-3 space-y-2">
+                                <div class="flex items-center justify-between text-xs">
+                                    <span class="text-slate-500 flex items-center gap-1.5">
+                                        <i class="fa-solid fa-layer-group text-slate-400 text-[11px]"></i> ${pkgCount} แพ็กเกจ
+                                    </span>
+                                    <span class="text-[11px] text-emerald-600 font-medium flex items-center gap-1">
+                                        <i class="fa-solid fa-bolt text-amber-500"></i> ${noteText}
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="px-4 pb-4">
-                            <button type="button" onclick="openSurfaceTopupModal('${g.id}')" class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-xs transition">
-                                เลือกแพ็กเกจเติมเงิน
+                        <div class="px-4 pb-4 pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <div>
+                                <div class="text-[10px] text-slate-400">เริ่มต้นเพียง</div>
+                                <div class="font-bold text-slate-900 text-base leading-tight">฿${minPrice.toLocaleString()}</div>
+                            </div>
+                            <button type="button" onclick="event.stopPropagation(); openSurfaceTopupModal('${g.id}')" class="px-4 py-2 rounded-xl bg-slate-900 group-hover:bg-amber-400 text-white group-hover:text-slate-950 font-semibold text-xs transition flex items-center gap-1.5">
+                                <span>เติมเงิน</span>
+                                <i class="fa-solid fa-chevron-right text-[10px]"></i>
                             </button>
                         </div>
                     </div>
@@ -1565,7 +1537,7 @@
             if (!game) return;
 
             const pkgOptions = game.packages.map((p, idx) => `
-                <label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-slate-900 cursor-pointer transition bg-slate-50/60">
+                <label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-slate-900 cursor-pointer transition bg-slate-50/70">
                     <div class="flex items-center gap-2.5">
                         <input type="radio" name="surf-pkg" value="${p.id}" ${idx === 0 ? 'checked' : ''} class="accent-slate-900">
                         <div>
@@ -1642,7 +1614,6 @@
             });
         };
 
-        // STEALTH INBOX MODAL (Strict Compliance: No mention of secret store or 5 clicks!)
         window.openSurfaceInboxModal = function() {
             const user = window.state.currentUser;
             const myInvites = window.state.hiddenInvites.filter(
@@ -1861,7 +1832,6 @@
             const input = document.getElementById('gateway-passcode-input');
             if (input) input.value = '';
 
-            // Check if current logged-in user has an invite code to offer 1-click autofill
             const myInvite = window.state.hiddenInvites.find(
                 i => i.active && i.email.toLowerCase() === window.state.currentUser.email.toLowerCase()
             );
@@ -1987,9 +1957,9 @@
                 const btn = document.getElementById(`hid-nav-${k}`);
                 if (btn) {
                     if (k === tab) {
-                        btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-600 text-white shadow-md shadow-rose-950/60 flex items-center gap-2 transition';
+                        btn.className = 'shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-600 text-white shadow-md shadow-rose-950/60 flex items-center gap-1.5 transition';
                     } else {
-                        btn.className = 'px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-2 transition';
+                        btn.className = 'shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition';
                     }
                 }
             });
@@ -2049,7 +2019,6 @@
             const orderBadge = document.getElementById('my-armory-order-count');
             if (orderBadge) orderBadge.textContent = window.state.myArmoryOrders.length;
 
-            // Update category counts
             const allCount = window.state.hiddenProducts.length;
             const gunCount = window.state.hiddenProducts.filter(p => p.category === 'gun').length;
             const partCount = window.state.hiddenProducts.filter(p => p.category === 'part').length;
@@ -2078,7 +2047,6 @@
                 clearSearchBtn.classList.toggle('hidden', !q);
             }
 
-            // Highlight active category button
             ['all', 'gun', 'part', 'acc', 'fav'].forEach(c => {
                 const btn = document.getElementById(`cat-btn-${c}`);
                 if (!btn) return;
@@ -2134,7 +2102,6 @@
                 return `
                     <div class="hud-card rounded-2xl flex flex-col justify-between">
                         <div>
-                            <!-- Top Image / Schematic Header -->
                             <div class="relative border-b border-slate-800/80">
                                 <div onclick="openGunDetailModal('${p.id}')" class="cursor-pointer">
                                     ${getWeaponSvgIllustration(p.svgType, p.sku)}
@@ -2157,7 +2124,6 @@
                                 </div>
                             </div>
 
-                            <!-- Card Body -->
                             <div class="p-4 space-y-3">
                                 <div>
                                     <div class="flex items-center justify-between text-[10px] font-mono-cyber text-slate-400">
@@ -2170,7 +2136,6 @@
                                     <p class="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">${p.desc}</p>
                                 </div>
 
-                                <!-- Spec Telemetry Strip -->
                                 <div class="p-2.5 rounded-xl bg-slate-950/90 border border-slate-800/90 space-y-2 text-[11px]">
                                     <div class="flex items-center justify-between">
                                         <span class="text-slate-400">ระบบ: <b class="text-slate-200">${p.system}</b></span>
@@ -2185,7 +2150,6 @@
                             </div>
                         </div>
 
-                        <!-- Card Footer Actions -->
                         <div class="p-4 pt-0 space-y-2">
                             <div class="flex items-center justify-between pt-2 border-t border-slate-800/80">
                                 <div>
@@ -2197,7 +2161,7 @@
                                         <i class="fa-solid fa-screwdriver-wrench"></i>
                                     </button>
                                     <button type="button" onclick="openGunDetailModal('${p.id}')" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-medium transition">
-                                        สเปก/แต่งปืน
+                                        สเปก/แต่ง
                                     </button>
                                     <button type="button" onclick="addToHiddenCart('${p.id}')" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold transition shadow-md shadow-rose-950/60 flex items-center gap-1.5">
                                         <i class="fa-solid fa-cart-plus"></i> ซื้อ
@@ -2269,7 +2233,6 @@
             renderHiddenStoreAll();
         };
 
-        // Product Spec & Custom Tuning Modal
         window.openGunDetailModal = function(productId) {
             const p = window.state.hiddenProducts.find(item => item.id === productId);
             if (!p) return;
@@ -2340,9 +2303,6 @@
             });
         };
 
-        // =====================================================================
-        // CART, COUPON & CHECKOUT SYSTEM
-        // =====================================================================
         window.applyQuickCoupon = function(code) {
             window.state.activeCoupon = code;
             saveState();
@@ -2419,12 +2379,11 @@
                 background: '#090d16',
                 color: '#f8fafc',
                 width: '600px',
-                title: '<span class="text-lg font-bold text-white">ตะกร้ายุทโธปกรณ์ & ยืนยันคำสั่งซื้อ</span>',
+                title: '<span class="text-lg font-bold text-white">ตะกร้ายุทโธปกรณ์ &amp; ยืนยันคำสั่งซื้อ</span>',
                 html: `
                     <div class="text-left space-y-4 pt-2 text-xs">
                         <div class="space-y-2 max-h-56 overflow-y-auto pr-1">${itemsHtml}</div>
 
-                        <!-- Coupon Selector -->
                         <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between gap-2">
                             <span>โค้ดส่วนลดที่ใช้: <b class="text-cyan-400 font-mono-cyber">${coupon || 'ไม่มี'}</b></span>
                             <div class="flex gap-1.5">
@@ -2433,7 +2392,6 @@
                             </div>
                         </div>
 
-                        <!-- Totals -->
                         <div class="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
                             <div class="flex justify-between text-slate-400">
                                 <span>ยอดรวมสินค้า</span>
@@ -2453,7 +2411,6 @@
                             </div>
                         </div>
 
-                        <!-- Shipping & Payment -->
                         <div class="space-y-2.5">
                             <div>
                                 <label class="block text-slate-300 font-semibold mb-1">ชื่อ-ที่อยู่จัดส่ง (จัดส่งแบบพัสดุปกปิดชื่อสินค้า 100%)</label>
@@ -2550,9 +2507,6 @@
             });
         }
 
-        // =====================================================================
-        // SUB-PAGE 2: WALLET & INSTANT TOP-UP FUNCTIONS
-        // =====================================================================
         window.selectTopupAmount = function(amt) {
             const el = document.getElementById('wallet-topup-amount');
             if (el) el.value = amt;
@@ -2637,9 +2591,6 @@
             `).join('');
         }
 
-        // =====================================================================
-        // SUB-PAGE 3: LOADOUT BUILDER, BALLISTICS & COMPARISON
-        // =====================================================================
         function populateLoadoutSelectors() {
             const gunSel = document.getElementById('builder-gun-select');
             const partSel = document.getElementById('builder-part-select');
@@ -2883,9 +2834,6 @@
             renderHiddenStoreAll();
         };
 
-        // =====================================================================
-        // SUB-PAGE 4: MY ORDERS & QC CERTIFICATE
-        // =====================================================================
         function renderHiddenOrdersSection() {
             const container = document.getElementById('my-armory-orders-list');
             if (!container) return;
@@ -2920,8 +2868,7 @@
                         </div>
                     </div>
 
-                    <!-- 4-Step Progress Tracker -->
-                    <div class="grid grid-cols-4 gap-2 text-center text-[11px]">
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[11px]">
                         ${steps.map((label, idx) => {
                             const active = (idx + 1) <= (o.statusStep || 2);
                             return `
@@ -2939,7 +2886,7 @@
 
                     <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
                         <button type="button" onclick="openHiddenOrderDetail('${o.id}')" class="px-3.5 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i class="fa-solid fa-certificate"></i> ดูใบรับรอง QC & ผลทดสอบ Chronograph
+                            <i class="fa-solid fa-certificate"></i> ดูใบรับรอง QC &amp; ผลทดสอบ Chronograph
                         </button>
                         <button type="button" onclick="advanceOrderStatus('${o.id}')" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs transition">
                             จำลองอัปเดตสถานะถัดไป →
@@ -2959,7 +2906,7 @@
                 background: '#090d16',
                 color: '#f8fafc',
                 width: '560px',
-                title: `<span class="text-base font-bold font-mono-cyber text-cyan-400">OFFICIAL QC & CHRONOGRAPH CERTIFICATE // ${o.id}</span>`,
+                title: `<span class="text-base font-bold font-mono-cyber text-cyan-400">OFFICIAL QC &amp; CHRONOGRAPH CERTIFICATE // ${o.id}</span>`,
                 html: `
                     <div class="text-left space-y-3 text-xs pt-2">
                         <div class="p-4 rounded-xl bg-slate-900 border border-cyan-500/30 space-y-2 font-mono-cyber">
@@ -3000,9 +2947,6 @@
             showToast(`อัปเดตสถานะคำสั่งซื้อ ${o.id} เรียบร้อย`);
         };
 
-        // =====================================================================
-        // SUB-PAGE 5: ADMIN COMMAND CENTER & INVITE GENERATOR
-        // =====================================================================
         window.createHiddenInvite = function() {
             const emailInput = document.getElementById('invite-email-input');
             const noteInput = document.getElementById('invite-note-input');
@@ -3152,7 +3096,6 @@
             const topEl = document.getElementById('admin-stat-topups');
             if (topEl) topEl.textContent = `${pendingTopups} รายการ`;
 
-            // 1. Invites list
             const inviteList = document.getElementById('admin-invite-list');
             if (inviteList) {
                 inviteList.innerHTML = window.state.hiddenInvites.map(inv => `
@@ -3176,7 +3119,6 @@
                 `).join('');
             }
 
-            // 2. Top-up list
             const topupList = document.getElementById('admin-topup-list');
             if (topupList) {
                 topupList.innerHTML = window.state.hiddenTopups.map(t => `
@@ -3195,7 +3137,6 @@
                 `).join('');
             }
 
-            // 3. Orders list
             const orderList = document.getElementById('admin-order-list');
             if (orderList) {
                 orderList.innerHTML = window.state.myArmoryOrders.map(o => `
@@ -3215,7 +3156,6 @@
                 `).join('');
             }
 
-            // 4. Products list
             const prodList = document.getElementById('admin-product-list');
             if (prodList) {
                 prodList.innerHTML = window.state.hiddenProducts.map(p => `
@@ -3262,9 +3202,9 @@
                     <div class="text-left space-y-2.5 text-xs text-slate-300 pt-2 leading-relaxed">
                         <p>1. <b>รายการสินค้า:</b> เลือกหมวดหมู่ปืน อะไหล่ หรือสโคป คลิกที่สินค้าเพื่อเลือกบริการคัสตอมปืน หรือแตะโค้ดส่วนลดด้านบนเพื่อลดราคาทันที</p>
                         <p>2. <b>เติมเครดิต:</b> กดปุ่มเติมเครดิตด่วนเพื่อรับเครดิตเข้ากระเป๋าทันที หรือส่งสลิปเพื่อทดสอบการอนุมัติ</p>
-                        <p>3. <b>จัดเซ็ต & คำนวณ FPS:</b> จำลองประกอบปืนครบเซ็ตเพื่อรับส่วนลด 5%, ทดสอบยิง Chronograph 5 นัด และเปรียบเทียบสเปกปืน 3 รุ่น</p>
+                        <p>3. <b>จัดเซ็ต &amp; คำนวณ FPS:</b> จำลองประกอบปืนครบเซ็ตเพื่อรับส่วนลด 5%, ทดสอบยิง Chronograph 5 นัด และเปรียบเทียบสเปกปืน 3 รุ่น</p>
                         <p>4. <b>คำสั่งซื้อของฉัน:</b> ติดตามสถานะการปรับจูน QC และเปิดดูใบรับรองผลทดสอบ Chronograph</p>
-                        <p>5. <b>จัดการร้าน & ส่งคำเชิญ:</b> สุ่มรหัสเชิญ INV-XXXXXX ส่งเข้ากล่องข้อความหน้าร้านเติมเกมได้ทันที</p>
+                        <p>5. <b>จัดการร้าน &amp; ส่งคำเชิญ:</b> สุ่มรหัสเชิญ INV-XXXXXX ส่งเข้ากล่องข้อความหน้าร้านเติมเกมได้ทันที</p>
                     </div>
                 `,
                 confirmButtonText: 'เข้าใจแล้ว',
@@ -3283,7 +3223,6 @@
             renderHiddenAdminDashboard();
         }
 
-        // Initial Boot
         window.addEventListener('DOMContentLoaded', function() {
             renderSurfaceStore();
             renderHiddenStoreAll();
