@@ -974,41 +974,377 @@
     <!-- COMPLETE APPLICATION JAVASCRIPT (100% INTERACTIVE & PERSISTENT)       -->
     <!-- ===================================================================== -->
     <script>
-        const STORAGE_KEY = 'VALO_PHANTOM_ARMORY_STATE_V6';
+        const STORAGE_KEY = 'VALO_PHANTOM_ARMORY_STATE_V7';
 
         const DEFAULT_SURFACE_GAMES = [
             {
-                id: 'surf-valo',
-                title: 'VALORANT (Riot ID)',
+                id: 'surf-rov',
+                title: 'ROV : Arena of Valor',
                 category: 'mobile',
-                publisher: 'Riot Games Official',
-                badge: 'ยอดนิยม',
-                discountText: 'ลดสูงสุด 12%',
-                deliveryNote: 'เติมตรงเข้า Riot ID',
-                icon: 'fa-crosshairs',
-                accent: 'from-rose-700 via-rose-900 to-slate-950',
+                publisher: 'Garena Thailand (เฉพาะประเทศไทย)',
+                badge: 'เฉพาะประเทศไทย',
+                discountText: 'คูปองแท้เข้าไว',
+                deliveryNote: 'ระบุ OPEN ID (ภูมิภาคไทย ตัวเลขสั้น)',
+                icon: 'fa-shield-halved',
+                accent: 'from-amber-600 via-red-800 to-slate-950',
                 packages: [
-                    { id: 'vp-1', name: '475 VP', price: 135, points: 15 },
-                    { id: 'vp-2', name: '1,000 VP', price: 275, points: 30 },
-                    { id: 'vp-3', name: '2,050 VP', price: 540, points: 55 },
-                    { id: 'vp-4', name: '3,650 VP', price: 950, points: 95 }
+                    { id: 'rov-1', name: '11 คูปอง (10 + โบนัส 1)', costPrice: 9.45, fullPrice: 10, price: 10, points: 1 },
+                    { id: 'rov-2', name: '24 คูปอง (20 + โบนัส 4)', costPrice: 18.90, fullPrice: 20, price: 20, points: 2 },
+                    { id: 'rov-3', name: '60 คูปอง (50 + โบนัส 10)', costPrice: 47.25, fullPrice: 50, price: 49, points: 5 },
+                    { id: 'rov-4', name: '110 คูปอง (83 + โบนัส 27)', costPrice: 85.05, fullPrice: 90, price: 88, points: 9 },
+                    { id: 'rov-185', name: '185 คูปอง (125 + โบนัส 60)', costPrice: 141.75, fullPrice: 150, price: 146, points: 15 },
+                    { id: 'rov-209', name: '209 คูปอง (145 + โบนัส 64)', costPrice: 160.65, fullPrice: 170, price: 165, points: 16 },
+                    { id: 'rov-256', name: '256 คูปอง (185 + โบนัส 71)', costPrice: 198.45, fullPrice: 210, price: 204, points: 20 },
+                    { id: 'rov-295', name: '295 คูปอง (208 + โบนัส 87)', costPrice: 226.80, fullPrice: 240, price: 234, points: 23 },
+                    { id: 'rov-306', name: '306 คูปอง (218 + โบนัส 88)', costPrice: 236.25, fullPrice: 250, price: 243, points: 24 },
+                    { id: 'rov-370', name: '370 คูปอง (333 + โบนัส 37)', costPrice: 283.50, fullPrice: 300, price: 292, points: 29 },
+                    { id: 'rov-405', name: '405 คูปอง (363 + โบนัส 42)', costPrice: 311.85, fullPrice: 330, price: 321, points: 32 },
+                    { id: 'rov-504', name: '504 คูปอง (436 + โบนัส 68)', costPrice: 387.45, fullPrice: 410, price: 398, points: 40 },
+                    { id: 'rov-555', name: '555 คูปอง (458 + โบนัส 97)', costPrice: 425.25, fullPrice: 450, price: 437, points: 44 },
+                    { id: 'rov-620', name: '620 คูปอง (590 + โบนัส 30)', costPrice: 472.50, fullPrice: 500, price: 485, points: 48 },
+                    { id: 'rov-704', name: '704 คูปอง (660 + โบนัส 44)', costPrice: 538.65, fullPrice: 570, price: 554, points: 55 },
+                    { id: 'rov-805', name: '805 คูปอง (715 + โบนัส 90)', costPrice: 614.25, fullPrice: 650, price: 632, points: 63 },
+                    { id: 'rov-915', name: '915 คูปอง (798 + โบนัส 117)', costPrice: 699.30, fullPrice: 740, price: 719, points: 72 },
+                    { id: 'rov-1240', name: '1,240 คูปอง (1178 + โบนัส 62)', costPrice: 945.00, fullPrice: 1000, price: 970, points: 97 },
+                    { id: 'rov-1860', name: '1,860 คูปอง (1768 + โบนัส 92)', costPrice: 1417.50, fullPrice: 1500, price: 1455, points: 145 },
+                    { id: 'rov-2480', name: '2,480 คูปอง (2356 + โบนัส 124)', costPrice: 1890.00, fullPrice: 2000, price: 1940, points: 194 },
+                    { id: 'rov-3100', name: '3,100 คูปอง (2946 + โบนัส 154)', costPrice: 2362.50, fullPrice: 2500, price: 2425, points: 242 },
+                    { id: 'rov-4090', name: '4,090 คูปอง (3867 + โบนัส 223)', costPrice: 3118.50, fullPrice: 3300, price: 3205, points: 320 },
+                    { id: 'rov-4960', name: '4,960 คูปอง (4712 + โบนัส 248)', costPrice: 3780.00, fullPrice: 4000, price: 3880, points: 388 },
+                    { id: 'rov-6200', name: '6,200 คูปอง (5890 + โบนัส 310)', costPrice: 4725.00, fullPrice: 5000, price: 4850, points: 485 }
                 ]
             },
             {
-                id: 'surf-rov',
-                title: 'RoV : Arena of Valor',
+                id: 'surf-freefire',
+                title: 'Free Fire',
                 category: 'mobile',
-                publisher: 'Garena Thailand',
-                badge: 'เข้าไวใน 5 วิ',
-                discountText: 'ลดสูงสุด 10%',
-                deliveryNote: 'ใช้เพียง OpenID / Player ID',
-                icon: 'fa-shield-halved',
-                accent: 'from-amber-600 via-amber-800 to-slate-950',
+                publisher: 'Garena Thailand (เฉพาะประเทศไทย)',
+                badge: 'เฉพาะประเทศไทย',
+                discountText: 'เพชรแท้การีน่า',
+                deliveryNote: 'ระบุ UID (ภูมิภาคไทย และตัวเลขเท่านั้น)',
+                icon: 'fa-fire',
+                accent: 'from-orange-600 via-amber-900 to-slate-950',
                 packages: [
-                    { id: 'rov-1', name: '110 คูปอง', price: 95, points: 10 },
-                    { id: 'rov-2', name: '370 คูปอง', price: 289, points: 30 },
-                    { id: 'rov-3', name: '620 คูปอง', price: 479, points: 50 },
-                    { id: 'rov-4', name: '1,240 คูปอง', price: 949, points: 95 }
+                    { id: 'ff-1', name: '33 เพชร (30 + โบนัส 3)', costPrice: 9.45, fullPrice: 10, price: 10, points: 1 },
+                    { id: 'ff-2', name: '68 เพชร (43 + โบนัส 25)', costPrice: 18.90, fullPrice: 20, price: 20, points: 2 },
+                    { id: 'ff-3', name: '101 เพชร (73 + โบนัส 28)', costPrice: 28.35, fullPrice: 30, price: 29, points: 3 },
+                    { id: 'ff-136', name: '136 เพชร (86 + โบนัส 50)', costPrice: 37.80, fullPrice: 40, price: 39, points: 4 },
+                    { id: 'ff-172', name: '172 เพชร (137 + โบนัส 35)', costPrice: 47.25, fullPrice: 50, price: 49, points: 5 },
+                    { id: 'ff-205', name: '205 เพชร (167 + โบนัส 38)', costPrice: 56.70, fullPrice: 60, price: 59, points: 6 },
+                    { id: 'ff-240', name: '240 เพชร (180 + โบนัส 60)', costPrice: 66.15, fullPrice: 70, price: 68, points: 7 },
+                    { id: 'ff-273', name: '273 เพชร (210 + โบนัส 63)', costPrice: 75.60, fullPrice: 80, price: 78, points: 8 },
+                    { id: 'ff-310', name: '310 เพชร (231 + โบนัส 79)', costPrice: 85.05, fullPrice: 90, price: 88, points: 9 },
+                    { id: 'ff-344', name: '344 เพชร (274 + โบนัส 70)', costPrice: 94.50, fullPrice: 100, price: 97, points: 10 },
+                    { id: 'ff-517', name: '517 เพชร (470 + โบนัส 47)', costPrice: 141.75, fullPrice: 150, price: 146, points: 15 },
+                    { id: 'ff-690', name: '690 เพชร (627 + โบนัส 63)', costPrice: 189.00, fullPrice: 200, price: 195, points: 19 },
+                    { id: 'ff-862', name: '862 เพชร (764 + โบนัส 98)', costPrice: 236.25, fullPrice: 250, price: 243, points: 24 },
+                    { id: 'ff-1052', name: '1,052 เพชร (956 + โบนัส 96)', costPrice: 283.50, fullPrice: 300, price: 292, points: 29 },
+                    { id: 'ff-1380', name: '1,380 เพชร (1254 + โบนัส 126)', costPrice: 378.00, fullPrice: 400, price: 389, points: 39 },
+                    { id: 'ff-1801', name: '1,801 เพชร (1637 + โบนัส 164)', costPrice: 472.50, fullPrice: 500, price: 485, points: 48 },
+                    { id: 'ff-3698', name: '3,698 เพชร (3361 + โบนัส 337)', costPrice: 945.00, fullPrice: 1000, price: 970, points: 97 },
+                    { id: 'ff-5499', name: '5,499 เพชร (4998 + โบนัส 501)', costPrice: 1417.50, fullPrice: 1500, price: 1455, points: 145 },
+                    { id: 'ff-7396', name: '7,396 เพชร (6722 + โบนัส 674)', costPrice: 1890.00, fullPrice: 2000, price: 1940, points: 194 },
+                    { id: 'ff-11094', name: '11,094 เพชร (10083 + โบนัส 1011)', costPrice: 2835.00, fullPrice: 3000, price: 2910, points: 291 },
+                    { id: 'ff-18490', name: '18,490 เพชร (16805 + โบนัส 1685)', costPrice: 4725.00, fullPrice: 5000, price: 4850, points: 485 },
+                    { id: 'ff-mini', name: 'สมาชิกเพชร (แบบมินิ)', costPrice: 31.50, fullPrice: 33.33, price: 33, points: 3 },
+                    { id: 'ff-weekly', name: 'สมาชิกเพชร (รายสัปดาห์)', costPrice: 63.10, fullPrice: 66.77, price: 66, points: 7 },
+                    { id: 'ff-monthly', name: 'สมาชิกเพชร (รายเดือน)', costPrice: 283.50, fullPrice: 300, price: 292, points: 29 },
+                    { id: 'ff-booyah', name: 'บูย่าห์พาส (Booyah Pass)', costPrice: 85.05, fullPrice: 90, price: 88, points: 9 }
+                ]
+            },
+            {
+                id: 'surf-pubgm',
+                title: 'PubG Mobile',
+                category: 'mobile',
+                publisher: 'Level Infinite (เติมได้ทุกประเทศ)',
+                badge: 'เติมได้ทุกประเทศ',
+                discountText: 'UC เข้าไว',
+                deliveryNote: 'ระบุ UID ผู้เล่น (รองรับทุกเซิร์ฟเวอร์)',
+                icon: 'fa-parachute-box',
+                accent: 'from-yellow-600 via-amber-900 to-slate-950',
+                packages: [
+                    { id: 'uc-1', name: '60 UC', costPrice: 31.15, fullPrice: 35, price: 34, points: 3 },
+                    { id: 'uc-2', name: '60 + 60 UC (แพ็กคู่สุดคุ้ม)', costPrice: 62.30, fullPrice: 70, price: 67, points: 7 },
+                    { id: 'uc-3', name: '325 UC (300 + โบนัส 25)', costPrice: 146.50, fullPrice: 165, price: 155, points: 15 },
+                    { id: 'uc-660', name: '660 UC (600 + โบนัส 60)', costPrice: 290.00, fullPrice: 330, price: 309, points: 31 },
+                    { id: 'uc-1800', name: '1,800 UC (1500 + โบนัส 300)', costPrice: 720.00, fullPrice: 800, price: 765, points: 76 },
+                    { id: 'uc-3850', name: '3,850 UC (3000 + โบนัส 850)', costPrice: 1417.50, fullPrice: 1600, price: 1499, points: 150 },
+                    { id: 'uc-8100', name: '8,100 UC (6000 + โบนัส 2100)', costPrice: 2835.00, fullPrice: 3200, price: 2989, points: 299 },
+                    { id: 'uc-rp50', name: '385 UC Elite Pass LV.1-50', costPrice: 178.60, fullPrice: 200, price: 189, points: 19 },
+                    { id: 'uc-rp100', name: '720 UC Elite Pass LV.1-100', costPrice: 324.10, fullPrice: 365, price: 343, points: 34 }
+                ]
+            },
+            {
+                id: 'surf-mlbb',
+                title: 'Mobile Legends',
+                category: 'mobile',
+                publisher: 'Moonton (เฉพาะประเทศไทย)',
+                badge: 'เฉพาะประเทศไทย',
+                discountText: 'Diamonds ราคาถูก',
+                deliveryNote: 'ระบุ User ID และ Zone ID (Server ไทย)',
+                icon: 'fa-gem',
+                accent: 'from-blue-600 via-indigo-900 to-slate-950',
+                packages: [
+                    { id: 'ml-55', name: '50 + 5 Diamonds', costPrice: 24.50, fullPrice: 29, price: 26, points: 3 },
+                    { id: 'ml-86', name: '86 Diamonds (78 + 8 Bonus)', costPrice: 37.80, fullPrice: 45, price: 40, points: 4 },
+                    { id: 'ml-172', name: '172 Diamonds (156 + 16 Bonus)', costPrice: 74.65, fullPrice: 89, price: 79, points: 8 },
+                    { id: 'ml-257', name: '257 Diamonds (234 + 23 Bonus)', costPrice: 103.00, fullPrice: 120, price: 109, points: 11 },
+                    { id: 'ml-344', name: '344 Diamonds (172 x 2)', costPrice: 149.30, fullPrice: 175, price: 158, points: 16 },
+                    { id: 'ml-706', name: '706 Diamonds (625 + 81 Bonus)', costPrice: 278.75, fullPrice: 329, price: 295, points: 30 },
+                    { id: 'ml-1412', name: '1,412 Diamonds (706 x 2)', costPrice: 557.55, fullPrice: 650, price: 590, points: 59 },
+                    { id: 'ml-2195', name: '2,195 Diamonds (1860 + 335 Bonus)', costPrice: 845.75, fullPrice: 990, price: 895, points: 90 },
+                    { id: 'ml-3688', name: '3,688 Diamonds (3099 + 589 Bonus)', costPrice: 1403.30, fullPrice: 1650, price: 1485, points: 148 },
+                    { id: 'ml-5532', name: '5,532 Diamonds (4649 + 883 Bonus)', costPrice: 2087.50, fullPrice: 2490, price: 2209, points: 221 },
+                    { id: 'ml-weekly', name: 'Weekly Diamond Pass (1 แพ็ก)', costPrice: 46.30, fullPrice: 55, price: 49, points: 5 },
+                    { id: 'ml-twilight', name: 'Twilight Pass', costPrice: 239.00, fullPrice: 279, price: 253, points: 25 }
+                ]
+            },
+            {
+                id: 'surf-arenabreakout',
+                title: 'Arena Breakout',
+                category: 'mobile',
+                publisher: 'MoreFun Studios',
+                badge: 'Tactical FPS',
+                discountText: 'Bonds & เคสปลอดภัย',
+                deliveryNote: 'ระบุ Player ID (เฉพาะมือถือ)',
+                icon: 'fa-helmet-safety',
+                accent: 'from-stone-700 via-zinc-900 to-slate-950',
+                packages: [
+                    { id: 'ab-beginner', name: 'Beginner Select Pack', costPrice: 25.50, fullPrice: 35, price: 27, points: 3 },
+                    { id: 'ab-60', name: '60 + 6 Bonds', costPrice: 27.40, fullPrice: 35, price: 29, points: 3 },
+                    { id: 'ab-310', name: '310 + 25 Bonds', costPrice: 132.30, fullPrice: 159, price: 140, points: 14 },
+                    { id: 'ab-630', name: '630 + 45 Bonds', costPrice: 264.60, fullPrice: 319, price: 280, points: 28 },
+                    { id: 'ab-1580', name: '1,580 + 110 Bonds', costPrice: 660.55, fullPrice: 799, price: 699, points: 70 },
+                    { id: 'ab-3200', name: '3,200 + 200 Bonds', costPrice: 1323.95, fullPrice: 1590, price: 1401, points: 140 },
+                    { id: 'ab-6500', name: '6,500 + 320 Bonds', costPrice: 2642.20, fullPrice: 3190, price: 2796, points: 280 },
+                    { id: 'ab-bulletproof', name: 'Bulletproof Case (30 วัน)', costPrice: 72.75, fullPrice: 89, price: 77, points: 8 },
+                    { id: 'ab-composite', name: 'Composite Case (30 วัน)', costPrice: 216.40, fullPrice: 259, price: 229, points: 23 },
+                    { id: 'ab-pass-adv', name: 'Monthly Advanced Battle Pass', costPrice: 32.10, fullPrice: 39, price: 34, points: 3 },
+                    { id: 'ab-pass-prem', name: 'Monthly Premium Battle Pass', costPrice: 123.80, fullPrice: 149, price: 131, points: 13 }
+                ]
+            },
+            {
+                id: 'surf-swordofjustice',
+                title: 'Sword of Justice',
+                category: 'mobile',
+                publisher: 'NetEase Games • Server (SEA)',
+                badge: 'Server (SEA)',
+                discountText: 'ลดสูงสุด 18%',
+                deliveryNote: 'ระบุ UID ผู้เล่น (Server SEA)',
+                icon: 'fa-khanda',
+                accent: 'from-cyan-700 via-slate-900 to-slate-950',
+                packages: [
+                    { id: 'soj-treasure', name: 'Exquisite Treasures (สมบัติล้ำค่า)', costPrice: 11.30, fullPrice: 15, price: 12, points: 1 },
+                    { id: 'soj-60', name: '60 Ornate Jades', costPrice: 36.85, fullPrice: 45, price: 39, points: 4 },
+                    { id: 'soj-300', name: '300 Ornate Jades', costPrice: 153.10, fullPrice: 179, price: 162, points: 16 },
+                    { id: 'soj-980', name: '980 Ornate Jades', costPrice: 471.55, fullPrice: 549, price: 499, points: 50 },
+                    { id: 'soj-1980', name: '1,980 Ornate Jades', costPrice: 934.60, fullPrice: 1090, price: 989, points: 99 },
+                    { id: 'soj-3280', name: '3,280 Ornate Jades', costPrice: 1501.60, fullPrice: 1750, price: 1589, points: 159 },
+                    { id: 'soj-6480', name: '6,480 Ornate Jades', costPrice: 2862.40, fullPrice: 3390, price: 3029, points: 303 },
+                    { id: 'soj-monthly', name: 'Monthly Pass (บัตรรายเดือน)', costPrice: 155.90, fullPrice: 179, price: 165, points: 16 },
+                    { id: 'soj-bp-basic', name: 'Basic Battle Pass (คำสั่งรบพื้นฐาน)', costPrice: 301.45, fullPrice: 349, price: 319, points: 32 },
+                    { id: 'soj-bp-adv', name: 'Advance Battle Pass (คำสั่งรบขั้นสูง)', costPrice: 694.55, fullPrice: 799, price: 735, points: 73 }
+                ]
+            },
+            {
+                id: 'surf-valo',
+                title: 'Valorant',
+                category: 'mobile',
+                publisher: 'Riot Games Official (ID ไทย)',
+                badge: 'ยอดนิยม',
+                discountText: 'VP แท้เข้าทันที',
+                deliveryNote: 'ระบุ Riot ID พร้อม #Tag (เช่น Player#SEA)',
+                icon: 'fa-crosshairs',
+                accent: 'from-rose-700 via-rose-900 to-slate-950',
+                packages: [
+                    { id: 'vp-1', name: '475 VP', costPrice: 118.10, fullPrice: 130, price: 125, points: 12 },
+                    { id: 'vp-2', name: '1,000 VP (ซื้อ Battle Pass ได้)', costPrice: 236.25, fullPrice: 260, price: 250, points: 25 },
+                    { id: 'vp-3', name: '1,475 VP', costPrice: 354.35, fullPrice: 390, price: 375, points: 37 },
+                    { id: 'vp-4', name: '2,050 VP', costPrice: 472.50, fullPrice: 520, price: 500, points: 50 },
+                    { id: 'vp-3050', name: '3,050 VP', costPrice: 708.75, fullPrice: 780, price: 750, points: 75 },
+                    { id: 'vp-3650', name: '3,650 VP', costPrice: 817.40, fullPrice: 900, price: 865, points: 86 },
+                    { id: 'vp-5100', name: '5,100 VP (เหมา Bundle)', costPrice: 1181.25, fullPrice: 1300, price: 1250, points: 125 }
+                ]
+            },
+            {
+                id: 'surf-heartopia',
+                title: 'Heartopia',
+                category: 'mobile',
+                publisher: 'XD Entertainment',
+                badge: 'เพชรหัวใจเข้าไว',
+                discountText: 'ราคาพิเศษ',
+                deliveryNote: 'ระบุ AID / UID ในเกม',
+                icon: 'fa-heart',
+                accent: 'from-pink-600 via-rose-900 to-slate-950',
+                packages: [
+                    { id: 'ht-20', name: '20 เพชรหัวใจ', costPrice: 17.00, fullPrice: 20, price: 18, points: 2 },
+                    { id: 'ht-60', name: '60 เพชรหัวใจ', costPrice: 33.05, fullPrice: 39, price: 35, points: 3 },
+                    { id: 'ht-300', name: '300 + 20 เพชรหัวใจ', costPrice: 159.70, fullPrice: 189, price: 169, points: 17 },
+                    { id: 'ht-680', name: '680 + 50 เพชรหัวใจ', costPrice: 320.35, fullPrice: 379, price: 339, points: 34 },
+                    { id: 'ht-1280', name: '1,280 + 90 เพชรหัวใจ', costPrice: 603.85, fullPrice: 719, price: 639, points: 64 },
+                    { id: 'ht-1980', name: '1,980 + 150 เพชรหัวใจ', costPrice: 915.70, fullPrice: 1090, price: 969, points: 97 },
+                    { id: 'ht-3280', name: '3,280 + 270 เพชรหัวใจ', costPrice: 1511.05, fullPrice: 1790, price: 1599, points: 160 },
+                    { id: 'ht-6480', name: '6,480 + 570 เพชรหัวใจ', costPrice: 2928.55, fullPrice: 3490, price: 3099, points: 310 },
+                    { id: 'ht-acorn1', name: 'สมาชิกสมาคมลูกโอ๊กระดับต้น', costPrice: 19.85, fullPrice: 25, price: 21, points: 2 },
+                    { id: 'ht-acorn2', name: 'สมาชิกสมาคมลูกโอ๊กทองคำ', costPrice: 103.00, fullPrice: 119, price: 109, points: 11 }
+                ]
+            },
+            {
+                id: 'surf-mho',
+                title: 'Monster Hunter Outlanders',
+                category: 'mobile',
+                publisher: 'TiMi Studio & Capcom • Garena',
+                badge: 'Garena Official',
+                discountText: 'PlumeCoin แท้',
+                deliveryNote: 'ระบุ UID ผู้เล่น',
+                icon: 'fa-dragon',
+                accent: 'from-amber-700 via-stone-900 to-slate-950',
+                packages: [
+                    { id: 'mho-67', name: '67 Crimson PlumeCoin', costPrice: 31.18, fullPrice: 35, price: 33, points: 3 },
+                    { id: 'mho-338', name: '338 Crimson PlumeCoin', costPrice: 140.80, fullPrice: 159, price: 149, points: 15 },
+                    { id: 'mho-1128', name: '1,128 Crimson PlumeCoin', costPrice: 424.30, fullPrice: 499, price: 449, points: 45 },
+                    { id: 'mho-1478', name: '1,478 Crimson PlumeCoin', costPrice: 556.60, fullPrice: 649, price: 589, points: 59 },
+                    { id: 'mho-2320', name: '2,320 Crimson PlumeCoin', costPrice: 811.75, fullPrice: 949, price: 859, points: 86 },
+                    { id: 'mho-3980', name: '3,980 Crimson PlumeCoin', costPrice: 1350.40, fullPrice: 1590, price: 1429, points: 143 },
+                    { id: 'mho-8280', name: '8,280 Crimson PlumeCoin', costPrice: 2673.40, fullPrice: 3150, price: 2829, points: 283 }
+                ]
+            },
+            {
+                id: 'surf-identityv',
+                title: 'Identity V',
+                category: 'mobile',
+                publisher: 'NetEase Games',
+                badge: 'Echoes เข้าไว',
+                discountText: 'ลดสูงสุด 9%',
+                deliveryNote: 'ระบุ UID และ Server',
+                icon: 'fa-masks-theater',
+                accent: 'from-purple-800 via-slate-900 to-slate-950',
+                packages: [
+                    { id: 'idv-66', name: '66 Echoes', costPrice: 30.25, fullPrice: 35, price: 32, points: 3 },
+                    { id: 'idv-335', name: '335 Echoes', costPrice: 154.00, fullPrice: 179, price: 163, points: 16 },
+                    { id: 'idv-759', name: '759 Echoes', costPrice: 307.10, fullPrice: 349, price: 325, points: 32 },
+                    { id: 'idv-2227', name: '2,227 Echoes', costPrice: 991.30, fullPrice: 1050, price: 1029, points: 103 },
+                    { id: 'idv-3663', name: '3,663 Echoes', costPrice: 1514.80, fullPrice: 1750, price: 1603, points: 160 },
+                    { id: 'idv-7249', name: '7,249 Echoes', costPrice: 3015.50, fullPrice: 3500, price: 3191, points: 319 }
+                ]
+            },
+            {
+                id: 'surf-codm',
+                title: 'Call of Duty mobile',
+                category: 'mobile',
+                publisher: 'Garena Thailand (เฉพาะประเทศไทย)',
+                badge: 'เฉพาะประเทศไทย',
+                discountText: 'CP แท้การีน่า',
+                deliveryNote: 'ระบุ Player ID / OpenID',
+                icon: 'fa-gun',
+                accent: 'from-zinc-700 via-neutral-900 to-slate-950',
+                packages: [
+                    { id: 'cod-48', name: '48 CP (44 + โบนัส 4)', costPrice: 18.90, fullPrice: 20, price: 20, points: 2 },
+                    { id: 'cod-126', name: '126 CP (108 + โบนัส 18)', costPrice: 47.25, fullPrice: 50, price: 49, points: 5 },
+                    { id: 'cod-227', name: '227 CP (194 + โบนัส 33)', costPrice: 85.05, fullPrice: 90, price: 88, points: 9 },
+                    { id: 'cod-252', name: '252 CP (237 + โบนัส 15)', costPrice: 94.50, fullPrice: 100, price: 97, points: 10 },
+                    { id: 'cod-378', name: '378 CP (324 + โบนัส 54)', costPrice: 141.75, fullPrice: 150, price: 146, points: 15 },
+                    { id: 'cod-792', name: '792 CP (648 + โบนัส 144)', costPrice: 283.50, fullPrice: 300, price: 292, points: 29 },
+                    { id: 'cod-1440', name: '1,440 CP (1080 + โบนัส 360)', costPrice: 472.50, fullPrice: 500, price: 485, points: 48 },
+                    { id: 'cod-3000', name: '3,000 CP (2160 + โบนัส 840)', costPrice: 945.00, fullPrice: 1000, price: 970, points: 97 }
+                ]
+            },
+            {
+                id: 'surf-bloodstrike',
+                title: 'Blood Strike',
+                category: 'mobile',
+                publisher: 'NetEase Games',
+                badge: 'FPS Battle Royale',
+                discountText: 'Gold โบนัสพิเศษ',
+                deliveryNote: 'ระบุ UID ผู้เล่น',
+                icon: 'fa-skull-crossbones',
+                accent: 'from-red-700 via-rose-950 to-slate-950',
+                packages: [
+                    { id: 'bs-100', name: '100 + 5 Gold', costPrice: 27.40, fullPrice: 35, price: 29, points: 3 },
+                    { id: 'bs-300', name: '300 + 20 Gold', costPrice: 74.65, fullPrice: 89, price: 79, points: 8 },
+                    { id: 'bs-500', name: '500 + 40 Gold', costPrice: 121.90, fullPrice: 149, price: 129, points: 13 },
+                    { id: 'bs-1000', name: '1,000 + 100 Gold', costPrice: 244.75, fullPrice: 299, price: 259, points: 26 },
+                    { id: 'bs-2000', name: '2,000 + 260 Gold', costPrice: 481.00, fullPrice: 590, price: 509, points: 51 },
+                    { id: 'bs-5000', name: '5,000 + 800 Gold', costPrice: 1189.75, fullPrice: 1450, price: 1259, points: 126 },
+                    { id: 'bs-10000', name: '10,000 + 1,600 Gold', costPrice: 2379.50, fullPrice: 2900, price: 2518, points: 252 },
+                    { id: 'bs-15000', name: '15,000 + 2,400 Gold', costPrice: 3569.25, fullPrice: 4350, price: 3777, points: 378 }
+                ]
+            },
+            {
+                id: 'surf-deltaforce',
+                title: 'Delta Force',
+                category: 'mobile',
+                publisher: 'Garena Official',
+                badge: 'PC & Mobile',
+                discountText: 'Coins แท้การีน่า',
+                deliveryNote: 'ระบุ Player ID (ตัวเลขเท่านั้น)',
+                icon: 'fa-person-rifle',
+                accent: 'from-emerald-700 via-teal-950 to-slate-950',
+                packages: [
+                    { id: 'df-19', name: '19 Coins (18 + โบนัส 1)', costPrice: 9.45, fullPrice: 10, price: 10, points: 1 },
+                    { id: 'df-32', name: '32 Coins (30 + โบนัส 2)', costPrice: 16.38, fullPrice: 17.33, price: 17, points: 2 },
+                    { id: 'df-63', name: '63 Coins (60 + โบนัส 3)', costPrice: 32.13, fullPrice: 34, price: 33, points: 3 },
+                    { id: 'df-336', name: '336 Coins (300 + โบนัส 36)', costPrice: 165.69, fullPrice: 175.33, price: 172, points: 17 },
+                    { id: 'df-482', name: '482 Coins (420 + โบนัส 62)', costPrice: 231.84, fullPrice: 245.33, price: 240, points: 24 },
+                    { id: 'df-785', name: '785 Coins (680 + โบนัส 105)', costPrice: 326.34, fullPrice: 345.33, price: 339, points: 34 },
+                    { id: 'df-1544', name: '1,544 Coins (1280 + โบนัส 264)', costPrice: 652.05, fullPrice: 690, price: 675, points: 67 },
+                    { id: 'df-2065', name: '2,065 Coins (1680 + โบนัส 385)', costPrice: 817.74, fullPrice: 865.33, price: 849, points: 85 },
+                    { id: 'df-4114', name: '4,114 Coins (3280 + โบนัส 834)', costPrice: 1634.85, fullPrice: 1730, price: 1690, points: 169 },
+                    { id: 'df-8424', name: '8,424 Coins (6480 + โบนัส 1944)', costPrice: 3269.70, fullPrice: 3460, price: 3390, points: 339 },
+                    { id: 'df-16848', name: '16,848 Coins (12960 + โบนัส 3888)', costPrice: 6539.40, fullPrice: 6920, price: 6750, points: 675 },
+                    { id: 'df-25272', name: '25,272 Coins (19440 + โบนัส 5832)', costPrice: 9828.00, fullPrice: 10400, price: 10150, points: 1015 },
+                    { id: 'df-aurora1', name: 'เสบียง Aurora', costPrice: 22.68, fullPrice: 24, price: 24, points: 2 },
+                    { id: 'df-aurora2', name: 'ขั้นสูง เสบียง Aurora', costPrice: 69.31, fullPrice: 73.34, price: 72, points: 7 },
+                    { id: 'df-bazaar', name: 'Ahsarah Bazaar', costPrice: 22.68, fullPrice: 24, price: 24, points: 2 }
+                ]
+            },
+            {
+                id: 'surf-undawn',
+                title: 'Undawn',
+                category: 'mobile',
+                publisher: 'Garena Undawn',
+                badge: 'Garena Official',
+                discountText: 'RC & เสบียงคุ้ม',
+                deliveryNote: 'ระบุ UID ผู้เล่น',
+                icon: 'fa-biohazard',
+                accent: 'from-lime-800 via-emerald-950 to-slate-950',
+                packages: [
+                    { id: 'ud-55', name: '55 RC (50 + โบนัส 5)', costPrice: 18.90, fullPrice: 20, price: 20, points: 2 },
+                    { id: 'ud-138', name: '138 RC (125 + โบนัส 13)', costPrice: 47.25, fullPrice: 50, price: 49, points: 5 },
+                    { id: 'ud-253', name: '253 RC (230 + โบนัส 23)', costPrice: 85.05, fullPrice: 90, price: 88, points: 9 },
+                    { id: 'ud-440', name: '440 RC (400 + โบนัส 40)', costPrice: 141.75, fullPrice: 150, price: 146, points: 15 },
+                    { id: 'ud-880', name: '880 RC (800 + โบนัส 80)', costPrice: 283.50, fullPrice: 300, price: 292, points: 29 },
+                    { id: 'ud-1485', name: '1,485 RC (1350 + โบนัส 135)', costPrice: 472.50, fullPrice: 500, price: 485, points: 48 },
+                    { id: 'ud-2970', name: '2,970 RC (2700 + โบนัส 270)', costPrice: 945.00, fullPrice: 1000, price: 970, points: 97 },
+                    { id: 'ud-4510', name: '4,510 RC (4100 + โบนัส 410)', costPrice: 1417.50, fullPrice: 1500, price: 1455, points: 145 },
+                    { id: 'ud-6050', name: '6,050 RC (5500 + โบนัส 550)', costPrice: 1890.00, fullPrice: 2000, price: 1940, points: 194 },
+                    { id: 'ud-9218', name: '9,218 RC (8380 + โบนัส 838)', costPrice: 2835.00, fullPrice: 3000, price: 2910, points: 291 },
+                    { id: 'ud-15642', name: '15,642 RC (14220 + โบนัส 1422)', costPrice: 4725.00, fullPrice: 5000, price: 4850, points: 485 },
+                    { id: 'ud-wk', name: 'คูปองเสบียงรายสัปดาห์', costPrice: 74.34, fullPrice: 78.67, price: 77, points: 8 },
+                    { id: 'ud-mo', name: 'คูปองเสบียงรายเดือน', costPrice: 121.59, fullPrice: 128.67, price: 126, points: 13 },
+                    { id: 'ud-growth', name: 'กองทุนเติบโต', costPrice: 253.89, fullPrice: 268.67, price: 264, points: 26 },
+                    { id: 'ud-glory', name: 'Advanced Glory Pass', costPrice: 357.84, fullPrice: 378.67, price: 370, points: 37 },
+                    { id: 'ud-elite', name: 'กองทุนอีลีต', costPrice: 329.49, fullPrice: 348.67, price: 342, points: 34 },
+                    { id: 'ud-ace', name: 'Ace Fund', costPrice: 357.84, fullPrice: 378.67, price: 370, points: 37 }
+                ]
+            },
+            {
+                id: 'surf-haikyu',
+                title: 'Haikyu Fly High',
+                category: 'mobile',
+                publisher: 'Garena Official',
+                badge: 'Star Gems แท้',
+                discountText: 'เข้าไวอัตโนมัติ',
+                deliveryNote: 'ระบุ ID ผู้เล่น',
+                icon: 'fa-volleyball',
+                accent: 'from-orange-500 via-slate-900 to-slate-950',
+                packages: [
+                    { id: 'hk-60', name: '60 Star Gems', costPrice: 31.50, fullPrice: 33.33, price: 33, points: 3 },
+                    { id: 'hk-300', name: '300 Star Gems', costPrice: 157.50, fullPrice: 166.67, price: 163, points: 16 },
+                    { id: 'hk-980', name: '980 Star Gems', costPrice: 472.50, fullPrice: 500, price: 488, points: 49 },
+                    { id: 'hk-1980', name: '1,980 Star Gems', costPrice: 945.00, fullPrice: 1000, price: 975, points: 97 },
+                    { id: 'hk-3280', name: '3,280 Star Gems', costPrice: 1575.00, fullPrice: 1666.67, price: 1625, points: 162 },
+                    { id: 'hk-6480', name: '6,480 Star Gems', costPrice: 3150.00, fullPrice: 3333.33, price: 3240, points: 324 }
                 ]
             },
             {
@@ -1022,26 +1358,10 @@
                 icon: 'fa-wand-magic-sparkles',
                 accent: 'from-sky-600 via-sky-900 to-slate-950',
                 packages: [
-                    { id: 'gs-1', name: 'พรแห่งดวงจันทร์ (Welkin)', price: 139, points: 15 },
-                    { id: 'gs-2', name: '980 + 110 Crystals', price: 429, points: 45 },
-                    { id: 'gs-3', name: '1,980 + 260 Crystals', price: 859, points: 85 },
-                    { id: 'gs-4', name: '6,480 + 1,600 Crystals', price: 2690, points: 270 }
-                ]
-            },
-            {
-                id: 'surf-pubgm',
-                title: 'PUBG Mobile (UID)',
-                category: 'mobile',
-                publisher: 'Level Infinite',
-                badge: 'เติมอัตโนมัติ',
-                discountText: 'ลดสูงสุด 10%',
-                deliveryNote: 'UC เข้าไอดีทันที',
-                icon: 'fa-parachute-box',
-                accent: 'from-yellow-600 via-amber-900 to-slate-950',
-                packages: [
-                    { id: 'uc-1', name: '325 UC', price: 145, points: 15 },
-                    { id: 'uc-2', name: '660 UC', price: 285, points: 30 },
-                    { id: 'uc-3', name: '1,800 UC', price: 720, points: 75 }
+                    { id: 'gs-1', name: 'พรแห่งดวงจันทร์ (Welkin)', costPrice: 132.00, fullPrice: 179, price: 139, points: 15 },
+                    { id: 'gs-2', name: '980 + 110 Crystals', costPrice: 407.50, fullPrice: 499, price: 429, points: 45 },
+                    { id: 'gs-3', name: '1,980 + 260 Crystals', costPrice: 816.00, fullPrice: 990, price: 859, points: 85 },
+                    { id: 'gs-4', name: '6,480 + 1,600 Crystals', costPrice: 2555.00, fullPrice: 3100, price: 2690, points: 270 }
                 ]
             },
             {
@@ -1055,9 +1375,9 @@
                 icon: 'fa-brands fa-steam',
                 accent: 'from-indigo-700 via-indigo-950 to-slate-950',
                 packages: [
-                    { id: 'stm-1', name: 'Steam Wallet 200 THB', price: 198, points: 20 },
-                    { id: 'stm-2', name: 'Steam Wallet 500 THB', price: 490, points: 50 },
-                    { id: 'stm-3', name: 'Steam Wallet 1,000 THB', price: 975, points: 100 }
+                    { id: 'stm-1', name: 'Steam Wallet 200 THB', costPrice: 191.00, fullPrice: 200, price: 198, points: 20 },
+                    { id: 'stm-2', name: 'Steam Wallet 500 THB', costPrice: 475.00, fullPrice: 500, price: 490, points: 50 },
+                    { id: 'stm-3', name: 'Steam Wallet 1,000 THB', costPrice: 945.00, fullPrice: 1000, price: 975, points: 100 }
                 ]
             },
             {
@@ -1071,25 +1391,9 @@
                 icon: 'fa-ticket',
                 accent: 'from-emerald-700 via-emerald-950 to-slate-950',
                 packages: [
-                    { id: 'rz-1', name: 'Razer Gold 300 THB', price: 292, points: 30 },
-                    { id: 'rz-2', name: 'Razer Gold 500 THB', price: 485, points: 50 },
-                    { id: 'rz-3', name: 'Razer Gold 1,000 THB', price: 970, points: 95 }
-                ]
-            },
-            {
-                id: 'surf-freefire',
-                title: 'Free Fire (Player ID)',
-                category: 'mobile',
-                publisher: 'Garena Official',
-                badge: 'เข้าทันที',
-                discountText: 'โบนัสเพชรพิเศษ',
-                deliveryNote: 'เติมตรงเข้า Player ID',
-                icon: 'fa-fire',
-                accent: 'from-orange-600 via-orange-900 to-slate-950',
-                packages: [
-                    { id: 'ff-1', name: '172 Diamonds', price: 50, points: 5 },
-                    { id: 'ff-2', name: '688 Diamonds', price: 195, points: 20 },
-                    { id: 'ff-3', name: '1,408 Diamonds', price: 390, points: 40 }
+                    { id: 'rz-1', name: 'Razer Gold 300 THB', costPrice: 283.50, fullPrice: 300, price: 292, points: 30 },
+                    { id: 'rz-2', name: 'Razer Gold 500 THB', costPrice: 472.50, fullPrice: 500, price: 485, points: 50 },
+                    { id: 'rz-3', name: 'Razer Gold 1,000 THB', costPrice: 945.00, fullPrice: 1000, price: 970, points: 95 }
                 ]
             },
             {
@@ -1103,8 +1407,8 @@
                 icon: 'fa-cubes',
                 accent: 'from-slate-700 via-slate-900 to-slate-950',
                 packages: [
-                    { id: 'rbx-1', name: '800 Robux Code', price: 340, points: 35 },
-                    { id: 'rbx-2', name: '2,000 Robux Code', price: 840, points: 85 }
+                    { id: 'rbx-1', name: '800 Robux Code', costPrice: 320.00, fullPrice: 350, price: 340, points: 35 },
+                    { id: 'rbx-2', name: '2,000 Robux Code', costPrice: 795.00, fullPrice: 875, price: 840, points: 85 }
                 ]
             }
         ];
@@ -1700,13 +2004,17 @@
                     const finalPrice = Math.max(0, pkg.price - discountBaht);
                     const generatedPin = isCard ? generateDigitalPinCode(game.id) : '';
 
+                    const pkgCost = Number(pkg.costPrice != null ? pkg.costPrice : (pkg.price * 0.945));
+                    const netProfit = Number((finalPrice - pkgCost).toFixed(2));
                     const newOrder = {
                         id: 'TOP-' + Math.floor(100000 + Math.random() * 900000),
                         buyerEmail: window.state.currentUser.email,
                         gameTitle: game.title,
                         packageName: pkg.name,
                         targetId: res.value.uid,
+                        costPrice: pkgCost,
                         price: finalPrice,
+                        profit: netProfit,
                         discountBaht: discountBaht,
                         pointsEarned: pkg.points,
                         paymentMethod: res.value.payMethod,
@@ -2050,64 +2358,463 @@
             showToast('ออกจากระบบเรียบร้อยแล้ว', 'info');
         };
 
-        window.openSurfaceAdminModal = function() {
-            const totalSales = window.state.surfaceOrders.reduce((s, o) => s + (o.price || 0), 0);
-            const gamesHtml = window.state.surfaceGames.map(g => `
-                <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
-                    <div>
-                        <div class="font-bold text-slate-900">${g.title}</div>
-                        <div class="text-[11px] text-slate-500">${g.packages.length} แพ็กเกจ • ${g.publisher}</div>
+        window.openSurfaceAdminModal = function(activeTab = 'games') {
+            const totalSales = window.state.surfaceOrders.reduce((s, o) => s + Number(o.price || 0), 0);
+            const totalCost = window.state.surfaceOrders.reduce((s, o) => s + Number(o.costPrice != null ? o.costPrice : (o.price || 0) * 0.945), 0);
+            const totalProfit = totalSales - totalCost;
+            const totalPackages = window.state.surfaceGames.reduce((s, g) => s + (g.packages ? g.packages.length : 0), 0);
+
+            const gamesHtml = window.state.surfaceGames.map(g => {
+                const costs = g.packages.map(p => Number(p.costPrice != null ? p.costPrice : p.price * 0.945));
+                const prices = g.packages.map(p => Number(p.price || 0));
+                const minCost = costs.length ? Math.min(...costs) : 0;
+                const minPrice = prices.length ? Math.min(...prices) : 0;
+                const avgProfit = g.packages.length
+                    ? (g.packages.reduce((acc, p) => acc + (Number(p.price || 0) - Number(p.costPrice != null ? p.costPrice : p.price * 0.945)), 0) / g.packages.length)
+                    : 0;
+                return `
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <div class="min-w-0 flex-1">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-slate-900 truncate">${g.title}</span>
+                                <span class="px-2 py-0.5 rounded-md bg-slate-200 text-slate-700 text-[10px] font-semibold">${g.category === 'card' ? 'บัตรดิจิทัล' : 'เกม'}</span>
+                            </div>
+                            <div class="text-[11px] text-slate-500 mt-0.5">
+                                ${g.packages.length} แพ็กเกจ • ทุนเริ่ม <b class="text-slate-700">฿${minCost.toFixed(2)}</b> • ขายเริ่ม <b class="text-slate-900">฿${minPrice.toLocaleString()}</b> • กำไรเฉลี่ย <b class="text-emerald-600">+฿${avgProfit.toFixed(2)}/แพ็ก</b>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" onclick="openManageGamePackagesModal('${g.id}')" class="px-2.5 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-[11px] font-bold">
+                                <i class="fa-solid fa-tags"></i> แพ็กเกจ/ราคาทุน (${g.packages.length})
+                            </button>
+                            <button type="button" onclick="openEditSurfaceGameModal('${g.id}')" class="px-2.5 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-[11px] font-semibold">
+                                แก้ไขเกม
+                            </button>
+                            <button type="button" onclick="deleteSurfaceGame('${g.id}')" class="px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-[11px] font-semibold">
+                                ลบ
+                            </button>
+                        </div>
                     </div>
-                    <button type="button" onclick="deleteSurfaceGame('${g.id}')" class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-[11px] font-medium">ลบ</button>
+                `;
+            }).join('');
+
+            const ordersHtml = (window.state.surfaceOrders || []).map(o => {
+                const cPrice = Number(o.costPrice != null ? o.costPrice : (o.price || 0) * 0.945);
+                const prof = Number(o.price || 0) - cPrice;
+                return `
+                    <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <div>
+                            <div class="font-bold text-slate-900">${o.id} • ${o.gameTitle} (${o.packageName})</div>
+                            <div class="text-[11px] text-slate-500">
+                                UID: <b>${o.targetId}</b> • ผู้ซื้อ: ${o.buyerEmail || '-'} • ทุน <b>฿${cPrice.toFixed(2)}</b> • ขาย <b class="text-slate-900">฿${Number(o.price || 0).toLocaleString()}</b> • กำไร <b class="text-emerald-600">+฿${prof.toFixed(2)}</b> • <span class="text-emerald-700 font-semibold">${o.status}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" onclick="openEditSurfaceOrderModal('${o.id}')" class="px-2.5 py-1 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-[11px] font-semibold">แก้ไข</button>
+                            <button type="button" onclick="deleteSurfaceOrder('${o.id}')" class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-[11px] font-semibold">ลบ</button>
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<p class="text-[11px] text-slate-400 text-center py-4">ยังไม่มีรายการออเดอร์</p>';
+
+            const usersHtml = (window.state.registeredUsers || []).map(u => `
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <div>
+                        <div class="font-bold text-slate-900">${u.name} <span class="text-[10px] px-2 py-0.5 rounded bg-slate-200 text-slate-700">${u.role === 'admin' ? 'แอดมิน' : 'สมาชิก'}</span></div>
+                        <div class="text-[11px] text-slate-500">${u.email} • แต้มสะสม: <b class="text-amber-600">${Number(u.points || 0).toLocaleString()} P</b> • เครดิตคลังแสง: <b class="text-emerald-600">${Number(u.walletCr || 0).toLocaleString()} CR</b></div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button type="button" onclick="openAdminEditUserModal('${u.email}')" class="px-2.5 py-1 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-[11px] font-semibold">แก้ไข</button>
+                        <button type="button" onclick="deleteRegisteredUser('${u.email}')" class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-[11px] font-semibold">ลบ</button>
+                    </div>
                 </div>
             `).join('');
 
             const ticketsHtml = (window.state.supportTickets || []).map(t => `
-                <div class="p-2.5 rounded-xl bg-amber-50/70 border border-amber-200 text-xs space-y-1">
-                    <div class="flex justify-between font-bold text-slate-900">
-                        <span>${t.subject}</span>
-                        <span class="text-[10px] text-slate-500">${t.date}</span>
+                <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200 flex flex-wrap items-center justify-between gap-2 text-xs">
+                    <div class="space-y-0.5">
+                        <div class="font-bold text-slate-900">${t.subject} <span class="text-[10px] text-slate-500">(${t.date})</span></div>
+                        <div class="text-slate-600">${t.message} • ติดต่อ: <b>${t.contact}</b> ${t.status ? `• <span class="text-emerald-700 font-semibold">[${t.status}]</span>` : ''}</div>
                     </div>
-                    <div class="text-slate-600">${t.message} (${t.contact})</div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button type="button" onclick="openEditSupportTicketModal('${t.id}')" class="px-2.5 py-1 rounded-lg bg-white border border-amber-300 text-slate-800 text-[11px] font-semibold">แก้ไข</button>
+                        <button type="button" onclick="deleteSupportTicket('${t.id}')" class="px-2.5 py-1 rounded-lg bg-rose-100 text-rose-700 text-[11px] font-semibold">ลบ</button>
+                    </div>
                 </div>
-            `).join('') || '<p class="text-[11px] text-slate-400 text-center py-2">ยังไม่มีข้อความติดต่อใหม่</p>';
+            `).join('') || '<p class="text-[11px] text-slate-400 text-center py-4">ยังไม่มีข้อความติดต่อใหม่</p>';
 
             Swal.fire({
-                title: '<span class="text-lg font-bold text-slate-900">จัดการร้านเติมเกม (TANTOPUP24 Admin)</span>',
-                width: '620px',
+                title: '<span class="text-lg font-bold text-slate-900">แดชบอร์ดแอดมิน (จัดการเกม ราคาทุน กำไร ออเดอร์ & สมาชิก)</span>',
+                width: '780px',
                 html: `
                     <div class="text-left space-y-4 text-xs pt-2">
-                        <div class="grid grid-cols-3 gap-2 text-center">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
                             <div class="p-3 rounded-xl bg-slate-100 border border-slate-200">
-                                <div class="text-slate-500">เกมทั้งหมด</div>
-                                <div class="font-bold text-base text-slate-900">${window.state.surfaceGames.length}</div>
+                                <div class="text-slate-500">เกม & บัตร / แพ็กเกจ</div>
+                                <div class="font-bold text-sm text-slate-900">${window.state.surfaceGames.length} เกม (${totalPackages} แพ็ก)</div>
                             </div>
                             <div class="p-3 rounded-xl bg-slate-100 border border-slate-200">
-                                <div class="text-slate-500">ออเดอร์</div>
-                                <div class="font-bold text-base text-emerald-600">${window.state.surfaceOrders.length}</div>
+                                <div class="text-slate-500">ออเดอร์ทั้งหมด</div>
+                                <div class="font-bold text-sm text-slate-900">${window.state.surfaceOrders.length} รายการ</div>
                             </div>
                             <div class="p-3 rounded-xl bg-slate-100 border border-slate-200">
-                                <div class="text-slate-500">ยอดขายรวม</div>
-                                <div class="font-bold text-base text-amber-600">฿${totalSales.toLocaleString()}</div>
+                                <div class="text-slate-500">ยอดขาย / ต้นทุน WonDD</div>
+                                <div class="font-bold text-sm text-amber-600">฿${totalSales.toLocaleString()} <span class="text-[10px] text-slate-500">/ ทุน ฿${totalCost.toFixed(0)}</span></div>
+                            </div>
+                            <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
+                                <div class="text-emerald-700">กำไรสุทธิรวม</div>
+                                <div class="font-bold text-sm text-emerald-600">+฿${totalProfit.toFixed(2)}</div>
                             </div>
                         </div>
 
-                        <div class="space-y-2">
+                        <!-- Section 1: Games & Packages -->
+                        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 space-y-2.5">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <div>
+                                    <span class="font-bold text-slate-900 text-sm">1. จัดการเกม บัตรดิจิทัล & ราคาทุน-ราคาขาย</span>
+                                    <p class="text-[11px] text-slate-500">อ้างอิงราคาทุน WonDD พร้อมบวกกำไรราคาตลาด (แก้ไข/เพิ่ม/ลบ ได้ทุกรายการ)</p>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <button type="button" onclick="openBulkMarginModal()" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-semibold">
+                                        ปรับกำไรทั้งร้าน (%)
+                                    </button>
+                                    <button type="button" onclick="openAddSurfaceGameModal()" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-amber-400 text-[11px] font-semibold">
+                                        + เพิ่มเกม/บัตรใหม่
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="space-y-1.5 max-h-56 overflow-y-auto pr-1">${gamesHtml}</div>
+                        </div>
+
+                        <!-- Section 2: Orders -->
+                        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 space-y-2">
                             <div class="flex items-center justify-between">
-                                <span class="font-bold text-slate-900">รายการเกมและบัตรดิจิทัล</span>
-                                <button type="button" onclick="openAddSurfaceGameModal()" class="px-3 py-1 rounded-lg bg-slate-900 text-amber-400 text-[11px] font-semibold">+ เพิ่มเกมใหม่</button>
+                                <span class="font-bold text-slate-900 text-sm">2. จัดการออเดอร์เติมเกม (${window.state.surfaceOrders.length})</span>
+                                <button type="button" onclick="openAddSurfaceOrderModal()" class="px-3 py-1 rounded-lg bg-slate-900 text-white text-[11px] font-semibold">+ เพิ่มออเดอร์</button>
                             </div>
-                            <div class="space-y-1.5 max-h-44 overflow-y-auto pr-1">${gamesHtml}</div>
+                            <div class="space-y-1.5 max-h-40 overflow-y-auto pr-1">${ordersHtml}</div>
                         </div>
 
-                        <div class="space-y-1.5">
-                            <div class="font-bold text-slate-900">ข้อความจากฝ่ายบริการลูกค้า (${(window.state.supportTickets || []).length})</div>
-                            <div class="space-y-1.5 max-h-32 overflow-y-auto pr-1">${ticketsHtml}</div>
+                        <!-- Section 3: Registered Users -->
+                        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-slate-900 text-sm">3. จัดการสมาชิก & แต้มสะสม (${(window.state.registeredUsers || []).length})</span>
+                                <button type="button" onclick="openAdminAddUserModal()" class="px-3 py-1 rounded-lg bg-slate-900 text-white text-[11px] font-semibold">+ เพิ่มสมาชิก</button>
+                            </div>
+                            <div class="space-y-1.5 max-h-40 overflow-y-auto pr-1">${usersHtml}</div>
+                        </div>
+
+                        <!-- Section 4: Customer Support Tickets -->
+                        <div class="p-3.5 rounded-2xl bg-white border border-slate-200 space-y-2">
+                            <div class="flex items-center justify-between">
+                                <span class="font-bold text-slate-900 text-sm">4. ข้อความติดต่อฝ่ายบริการลูกค้า (${(window.state.supportTickets || []).length})</span>
+                                <button type="button" onclick="openAddSupportTicketModal()" class="px-3 py-1 rounded-lg bg-slate-900 text-white text-[11px] font-semibold">+ เพิ่มเคสติดต่อ</button>
+                            </div>
+                            <div class="space-y-1.5 max-h-36 overflow-y-auto pr-1">${ticketsHtml}</div>
                         </div>
                     </div>
                 `,
                 confirmButtonText: 'ปิดหน้าต่าง',
                 confirmButtonColor: '#0f172a'
+            });
+        };
+
+        // Manage Packages (Add / Edit / Delete Packages & Cost/Selling Prices) for a specific game
+        window.openManageGamePackagesModal = function(gameId) {
+            const game = window.state.surfaceGames.find(g => g.id === gameId);
+            if (!game) return;
+
+            const pkgRows = game.packages.map(p => {
+                const cost = Number(p.costPrice != null ? p.costPrice : (p.price * 0.945));
+                const full = Number(p.fullPrice != null ? p.fullPrice : p.price);
+                const sell = Number(p.price || 0);
+                const profit = sell - cost;
+                return `
+                    <div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <div class="min-w-0 flex-1">
+                            <div class="font-bold text-slate-900">${p.name}</div>
+                            <div class="text-[11px] text-slate-500">
+                                ราคาทุน WonDD: <b class="text-slate-800">฿${cost.toFixed(2)}</b> • ราคาเต็ม: ฿${full.toFixed(2)} • ราคาขาย: <b class="text-slate-900">฿${sell.toLocaleString()}</b> • กำไร: <b class="${profit >= 0 ? 'text-emerald-600' : 'text-rose-600'}">${profit >= 0 ? '+' : ''}฿${profit.toFixed(2)}</b> • แต้ม +${p.points || 0} P
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" onclick="openEditPackageModal('${game.id}', '${p.id}')" class="px-2.5 py-1 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-[11px] font-semibold">แก้ไข</button>
+                            <button type="button" onclick="deleteSurfacePackage('${game.id}', '${p.id}')" class="px-2.5 py-1 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 text-[11px] font-semibold">ลบ</button>
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<p class="text-center text-slate-400 py-4">ยังไม่มีแพ็กเกจในเกมนี้</p>';
+
+            Swal.fire({
+                title: `<span class="text-base font-bold text-slate-900">จัดการแพ็กเกจ & ราคาทุน: ${game.title}</span>`,
+                width: '700px',
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div class="flex items-center justify-between bg-slate-100 p-3 rounded-xl border border-slate-200">
+                            <div>
+                                <div class="font-bold text-slate-900">แพ็กเกจทั้งหมด ${game.packages.length} รายการ</div>
+                                <div class="text-[11px] text-slate-500">สามารถเพิ่ม แก้ไข หรือลบแพ็กเกจ ราคาทุน และราคาขายได้ตามต้องการ</div>
+                            </div>
+                            <button type="button" onclick="openAddPackageModal('${game.id}')" class="px-3 py-1.5 rounded-lg bg-slate-900 text-amber-400 font-semibold text-xs">
+                                + เพิ่มแพ็กเกจใหม่
+                            </button>
+                        </div>
+                        <div class="space-y-1.5 max-h-80 overflow-y-auto pr-1">${pkgRows}</div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'กลับหน้าแดชบอร์ดแอดมิน',
+                cancelButtonText: 'ปิด',
+                confirmButtonColor: '#0f172a'
+            }).then(res => {
+                if (res.isConfirmed) {
+                    openSurfaceAdminModal();
+                }
+            });
+        };
+
+        window.openAddPackageModal = function(gameId) {
+            const game = window.state.surfaceGames.find(g => g.id === gameId);
+            if (!game) return;
+            Swal.fire({
+                title: `<span class="text-base font-bold text-slate-900">เพิ่มแพ็กเกจใหม่: ${game.title}</span>`,
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">ชื่อแพ็กเกจ</label>
+                            <input id="pkg-add-name" type="text" placeholder="เช่น 500 คูปอง (450 + โบนัส 50)" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ราคาทุน WonDD (฿)</label>
+                                <input id="pkg-add-cost" type="number" step="0.01" value="94.50" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ราคาป้าย/เต็ม (฿)</label>
+                                <input id="pkg-add-full" type="number" step="0.01" value="100" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ราคาขายหน้าร้าน (฿)</label>
+                                <input id="pkg-add-price" type="number" step="0.01" value="98" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">แต้มสะสมที่ลูกค้าได้รับ (P)</label>
+                            <input id="pkg-add-pts" type="number" value="10" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึกแพ็กเกจ',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#0f172a',
+                preConfirm: () => {
+                    const name = document.getElementById('pkg-add-name').value.trim();
+                    const costPrice = Math.max(0, Number(document.getElementById('pkg-add-cost').value || 0));
+                    const fullPrice = Math.max(0, Number(document.getElementById('pkg-add-full').value || 0));
+                    const price = Math.max(1, Number(document.getElementById('pkg-add-price').value || 10));
+                    const points = Math.max(0, Number(document.getElementById('pkg-add-pts').value || Math.round(price / 10)));
+                    if (!name) {
+                        Swal.showValidationMessage('กรุณาระบุชื่อแพ็กเกจ');
+                        return false;
+                    }
+                    return { name, costPrice, fullPrice, price, points };
+                }
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    game.packages.push({
+                        id: 'pkg-' + Date.now(),
+                        name: res.value.name,
+                        costPrice: res.value.costPrice,
+                        fullPrice: res.value.fullPrice,
+                        price: res.value.price,
+                        points: res.value.points
+                    });
+                    saveState();
+                    renderSurfaceStore();
+                    openManageGamePackagesModal(gameId);
+                }
+            });
+        };
+
+        window.openEditPackageModal = function(gameId, pkgId) {
+            const game = window.state.surfaceGames.find(g => g.id === gameId);
+            if (!game) return;
+            const pkg = game.packages.find(p => p.id === pkgId);
+            if (!pkg) return;
+            const curCost = Number(pkg.costPrice != null ? pkg.costPrice : (pkg.price * 0.945));
+            const curFull = Number(pkg.fullPrice != null ? pkg.fullPrice : pkg.price);
+
+            Swal.fire({
+                title: `<span class="text-base font-bold text-slate-900">แก้ไขแพ็กเกจ: ${pkg.name}</span>`,
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">ชื่อแพ็กเกจ</label>
+                            <input id="pkg-edit-name" type="text" value="${pkg.name}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ราคาทุน WonDD (฿)</label>
+                                <input id="pkg-edit-cost" type="number" step="0.01" value="${curCost}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ราคาป้าย/เต็ม (฿)</label>
+                                <input id="pkg-edit-full" type="number" step="0.01" value="${curFull}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ราคาขายหน้าร้าน (฿)</label>
+                                <input id="pkg-edit-price" type="number" step="0.01" value="${pkg.price}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">แต้มสะสม (P)</label>
+                            <input id="pkg-edit-pts" type="number" value="${pkg.points || 0}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึกการแก้ไข',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#0f172a',
+                preConfirm: () => {
+                    const name = document.getElementById('pkg-edit-name').value.trim();
+                    const costPrice = Math.max(0, Number(document.getElementById('pkg-edit-cost').value || 0));
+                    const fullPrice = Math.max(0, Number(document.getElementById('pkg-edit-full').value || 0));
+                    const price = Math.max(1, Number(document.getElementById('pkg-edit-price').value || 1));
+                    const points = Math.max(0, Number(document.getElementById('pkg-edit-pts').value || 0));
+                    if (!name) {
+                        Swal.showValidationMessage('กรุณาระบุชื่อแพ็กเกจ');
+                        return false;
+                    }
+                    return { name, costPrice, fullPrice, price, points };
+                }
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    pkg.name = res.value.name;
+                    pkg.costPrice = res.value.costPrice;
+                    pkg.fullPrice = res.value.fullPrice;
+                    pkg.price = res.value.price;
+                    pkg.points = res.value.points;
+                    saveState();
+                    renderSurfaceStore();
+                    openManageGamePackagesModal(gameId);
+                }
+            });
+        };
+
+        window.deleteSurfacePackage = function(gameId, pkgId) {
+            const game = window.state.surfaceGames.find(g => g.id === gameId);
+            if (!game) return;
+            if (game.packages.length <= 1) {
+                showToast('แต่ละเกมต้องมีอย่างน้อย 1 แพ็กเกจ', 'warning');
+                return;
+            }
+            game.packages = game.packages.filter(p => p.id !== pkgId);
+            saveState();
+            renderSurfaceStore();
+            openManageGamePackagesModal(gameId);
+        };
+
+        window.openBulkMarginModal = function() {
+            Swal.fire({
+                title: '<span class="text-base font-bold text-slate-900">ตั้งค่ากำไรอัตโนมัติจากราคาทุน WonDD</span>',
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <p class="text-slate-600">ระบบจะคำนวณราคาขายหน้าร้านใหม่ทุกแพ็กเกจจาก <b>ราคาทุน WonDD + กำไร (%)</b> ที่คุณกำหนด (ปัดเศษเป็นจำนวนเต็มบาทอัตโนมัติ)</p>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">เปอร์เซ็นต์กำไรที่ต้องการบวกเพิ่มจากราคาทุน (%)</label>
+                            <input id="bulk-margin-pct" type="number" step="0.5" value="3.5" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'คำนวณราคาขายทั้งร้าน',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#059669'
+            }).then(res => {
+                if (res.isConfirmed) {
+                    const pct = Math.max(0, Number(document.getElementById('bulk-margin-pct').value || 3.5));
+                    window.state.surfaceGames.forEach(g => {
+                        (g.packages || []).forEach(p => {
+                            const cost = Number(p.costPrice != null ? p.costPrice : (p.price * 0.945));
+                            p.costPrice = cost;
+                            p.price = Math.max(Math.ceil(cost), Math.round(cost * (1 + pct / 100)));
+                        });
+                    });
+                    saveState();
+                    renderSurfaceStore();
+                    openSurfaceAdminModal();
+                    showToast(`ปรับราคาขายบวกกำไร +${pct}% จากราคาทุนเรียบร้อย`);
+                }
+            });
+        };
+
+        window.openEditSurfaceGameModal = function(gameId) {
+            const g = window.state.surfaceGames.find(item => item.id === gameId);
+            if (!g) return;
+            Swal.fire({
+                title: `<span class="text-base font-bold text-slate-900">แก้ไขข้อมูลเกม: ${g.title}</span>`,
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">ชื่อเกม / บัตรดิจิทัล</label>
+                            <input id="edit-surf-title" type="text" value="${g.title}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">หมวดหมู่</label>
+                                <select id="edit-surf-cat" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+                                    <option value="mobile" ${g.category === 'mobile' ? 'selected' : ''}>เกมมือถือ & PC</option>
+                                    <option value="card" ${g.category === 'card' ? 'selected' : ''}>บัตรดิจิทัล</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ผู้ให้บริการ / ค่ายเกม</label>
+                                <input id="edit-surf-pub" type="text" value="${g.publisher}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ป้ายกำกับมุมซ้าย (Badge)</label>
+                                <input id="edit-surf-badge" type="text" value="${g.badge || 'เฉพาะประเทศไทย'}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ป้ายโปรโมชั่นมุมขวา</label>
+                                <input id="edit-surf-disc" type="text" value="${g.discountText || 'ราคาพิเศษ'}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">คำแนะนำการกรอกไอดี</label>
+                            <input id="edit-surf-note" type="text" value="${g.deliveryNote || ''}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึกการแก้ไข',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#0f172a',
+                preConfirm: () => {
+                    const title = document.getElementById('edit-surf-title').value.trim();
+                    const category = document.getElementById('edit-surf-cat').value;
+                    const publisher = document.getElementById('edit-surf-pub').value.trim() || 'Official';
+                    const badge = document.getElementById('edit-surf-badge').value.trim() || 'ยอดนิยม';
+                    const discountText = document.getElementById('edit-surf-disc').value.trim() || 'ราคาคุ้ม';
+                    const deliveryNote = document.getElementById('edit-surf-note').value.trim();
+                    if (!title) {
+                        Swal.showValidationMessage('กรุณาระบุชื่อเกม');
+                        return false;
+                    }
+                    return { title, category, publisher, badge, discountText, deliveryNote };
+                }
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    Object.assign(g, res.value);
+                    saveState();
+                    renderSurfaceStore();
+                    openSurfaceAdminModal();
+                    showToast(`อัปเดตข้อมูล "${g.title}" เรียบร้อย`);
+                }
             });
         };
 
@@ -2118,7 +2825,7 @@
                     <div class="text-left space-y-3 text-xs pt-2">
                         <div>
                             <label class="block font-semibold text-slate-700 mb-1">ชื่อเกม / บัตร</label>
-                            <input id="new-surf-title" type="text" placeholder="เช่น Honkai: Star Rail (UID)" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            <input id="new-surf-title" type="text" placeholder="เช่น Black Clover M / Genshin Impact" class="w-full px-3 py-2 rounded-xl border border-slate-300">
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div>
@@ -2130,17 +2837,21 @@
                             </div>
                             <div>
                                 <label class="block font-semibold text-slate-700 mb-1">ผู้ให้บริการ</label>
-                                <input id="new-surf-pub" type="text" value="Official Partner" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                                <input id="new-surf-pub" type="text" value="Garena Official" class="w-full px-3 py-2 rounded-xl border border-slate-300">
                             </div>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">ชื่อแพ็กเกจเริ่มต้น</label>
+                            <input id="new-surf-pkg" type="text" value="แพ็กเกจเริ่มต้น 100 คูปอง" class="w-full px-3 py-2 rounded-xl border border-slate-300">
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="block font-semibold text-slate-700 mb-1">ชื่อแพ็กเกจเริ่มต้น</label>
-                                <input id="new-surf-pkg" type="text" value="Express Supply Pass" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                                <label class="block font-semibold text-slate-700 mb-1">ราคาทุน WonDD (บาท)</label>
+                                <input id="new-surf-cost" type="number" step="0.01" value="94.50" class="w-full px-3 py-2 rounded-xl border border-slate-300">
                             </div>
                             <div>
-                                <label class="block font-semibold text-slate-700 mb-1">ราคา (บาท)</label>
-                                <input id="new-surf-price" type="number" value="149" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                                <label class="block font-semibold text-slate-700 mb-1">ราคาขายหน้าร้าน (บาท)</label>
+                                <input id="new-surf-price" type="number" step="0.01" value="98" class="w-full px-3 py-2 rounded-xl border border-slate-300">
                             </div>
                         </div>
                     </div>
@@ -2154,12 +2865,13 @@
                     const category = document.getElementById('new-surf-cat').value;
                     const publisher = document.getElementById('new-surf-pub').value.trim() || 'Official';
                     const pkgName = document.getElementById('new-surf-pkg').value.trim() || 'Standard Pack';
-                    const price = Math.max(10, Number(document.getElementById('new-surf-price').value || 149));
+                    const costPrice = Math.max(1, Number(document.getElementById('new-surf-cost').value || 94.50));
+                    const price = Math.max(1, Number(document.getElementById('new-surf-price').value || 98));
                     if (!title) {
                         Swal.showValidationMessage('กรุณาระบุชื่อเกมหรือบัตร');
                         return false;
                     }
-                    return { title, category, publisher, pkgName, price };
+                    return { title, category, publisher, pkgName, costPrice, price };
                 }
             }).then(res => {
                 if (res.isConfirmed && res.value) {
@@ -2169,18 +2881,18 @@
                         title: v.title,
                         category: v.category,
                         publisher: v.publisher,
-                        badge: 'มาใหม่',
+                        badge: 'เฉพาะประเทศไทย',
                         discountText: 'ราคาพิเศษ',
                         deliveryNote: v.category === 'card' ? 'รับรหัสทันที' : 'เติมตรงเข้า UID',
                         icon: v.category === 'card' ? 'fa-ticket' : 'fa-gamepad',
                         accent: 'from-violet-700 via-slate-900 to-slate-950',
                         packages: [
-                            { id: 'pkg-' + Date.now() + '-1', name: v.pkgName, price: v.price, points: Math.round(v.price / 10) },
-                            { id: 'pkg-' + Date.now() + '-2', name: `${v.pkgName} x2`, price: Math.round(v.price * 1.9), points: Math.round(v.price / 5) }
+                            { id: 'pkg-' + Date.now() + '-1', name: v.pkgName, costPrice: v.costPrice, fullPrice: Math.ceil(v.price * 1.03), price: v.price, points: Math.round(v.price / 10) }
                         ]
                     });
                     saveState();
                     renderSurfaceStore();
+                    openSurfaceAdminModal();
                     showToast(`เพิ่ม "${v.title}" เข้าร้านเรียบร้อย`);
                 }
             });
@@ -2190,6 +2902,412 @@
             window.state.surfaceGames = window.state.surfaceGames.filter(g => g.id !== gameId);
             saveState();
             renderSurfaceStore();
+            openSurfaceAdminModal();
+        };
+
+        // Surface Orders CRUD (Add / Edit / Delete)
+        window.openAddSurfaceOrderModal = function() {
+            const firstGame = window.state.surfaceGames[0] || { title: 'ROV : Arena of Valor', packages: [{ name: '110 คูปอง', costPrice: 85.05, price: 88 }] };
+            const firstPkg = firstGame.packages[0] || { name: '110 คูปอง', costPrice: 85.05, price: 88 };
+            Swal.fire({
+                title: '<span class="text-base font-bold text-slate-900">เพิ่มรายการออเดอร์ใหม่ (โดยแอดมิน)</span>',
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">ชื่อเกม</label>
+                            <input id="ord-add-game" type="text" value="${firstGame.title}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">ชื่อแพ็กเกจ</label>
+                            <input id="ord-add-pkg" type="text" value="${firstPkg.name}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">UID / บัญชีลูกค้า</label>
+                                <input id="ord-add-uid" type="text" placeholder="เช่น 584920194" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">อีเมลผู้ซื้อ</label>
+                                <input id="ord-add-email" type="text" value="${window.state.currentUser.email || 'customer@example.com'}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ราคาทุน (฿)</label>
+                                <input id="ord-add-cost" type="number" step="0.01" value="${firstPkg.costPrice || 85.05}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ราคาขาย (฿)</label>
+                                <input id="ord-add-price" type="number" step="0.01" value="${firstPkg.price || 88}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">สถานะ</label>
+                                <select id="ord-add-status" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+                                    <option value="สำเร็จเรียบร้อย">สำเร็จเรียบร้อย</option>
+                                    <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                                    <option value="ยกเลิก/คืนเงิน">ยกเลิก/คืนเงิน</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึกออเดอร์',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#0f172a',
+                preConfirm: () => {
+                    const gameTitle = document.getElementById('ord-add-game').value.trim();
+                    const packageName = document.getElementById('ord-add-pkg').value.trim();
+                    const targetId = document.getElementById('ord-add-uid').value.trim() || 'UID-MANUAL';
+                    const buyerEmail = document.getElementById('ord-add-email').value.trim();
+                    const costPrice = Number(document.getElementById('ord-add-cost').value || 0);
+                    const price = Number(document.getElementById('ord-add-price').value || 0);
+                    const status = document.getElementById('ord-add-status').value;
+                    if (!gameTitle || !packageName) {
+                        Swal.showValidationMessage('กรุณากรอกชื่อเกมและแพ็กเกจ');
+                        return false;
+                    }
+                    return { gameTitle, packageName, targetId, buyerEmail, costPrice, price, status };
+                }
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    const v = res.value;
+                    window.state.surfaceOrders.unshift({
+                        id: 'TOP-' + Math.floor(100000 + Math.random() * 900000),
+                        buyerEmail: v.buyerEmail,
+                        gameTitle: v.gameTitle,
+                        packageName: v.packageName,
+                        targetId: v.targetId,
+                        costPrice: v.costPrice,
+                        price: v.price,
+                        profit: Number((v.price - v.costPrice).toFixed(2)),
+                        discountBaht: 0,
+                        pointsEarned: Math.round(v.price / 10),
+                        paymentMethod: 'Admin Manual',
+                        pinCode: '',
+                        date: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.',
+                        status: v.status
+                    });
+                    saveState();
+                    renderSurfaceStore();
+                    openSurfaceAdminModal();
+                }
+            });
+        };
+
+        window.openEditSurfaceOrderModal = function(orderId) {
+            const o = window.state.surfaceOrders.find(item => item.id === orderId);
+            if (!o) return;
+            const curCost = Number(o.costPrice != null ? o.costPrice : (o.price || 0) * 0.945);
+            Swal.fire({
+                title: `<span class="text-base font-bold text-slate-900">แก้ไขออเดอร์: ${o.id}</span>`,
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">ชื่อเกม</label>
+                            <input id="ord-edit-game" type="text" value="${o.gameTitle}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">แพ็กเกจ</label>
+                            <input id="ord-edit-pkg" type="text" value="${o.packageName}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">UID ลูกค้า</label>
+                                <input id="ord-edit-uid" type="text" value="${o.targetId}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ราคาทุน (฿)</label>
+                                <input id="ord-edit-cost" type="number" step="0.01" value="${curCost}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ราคาขาย (฿)</label>
+                                <input id="ord-edit-price" type="number" step="0.01" value="${o.price}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">สถานะ</label>
+                            <select id="ord-edit-status" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+                                <option value="สำเร็จเรียบร้อย" ${o.status === 'สำเร็จเรียบร้อย' ? 'selected' : ''}>สำเร็จเรียบร้อย</option>
+                                <option value="กำลังดำเนินการ" ${o.status === 'กำลังดำเนินการ' ? 'selected' : ''}>กำลังดำเนินการ</option>
+                                <option value="ยกเลิก/คืนเงิน" ${o.status === 'ยกเลิก/คืนเงิน' ? 'selected' : ''}>ยกเลิก/คืนเงิน</option>
+                            </select>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึกการแก้ไข',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#0f172a',
+                preConfirm: () => {
+                    return {
+                        gameTitle: document.getElementById('ord-edit-game').value.trim() || o.gameTitle,
+                        packageName: document.getElementById('ord-edit-pkg').value.trim() || o.packageName,
+                        targetId: document.getElementById('ord-edit-uid').value.trim() || o.targetId,
+                        costPrice: Number(document.getElementById('ord-edit-cost').value || 0),
+                        price: Number(document.getElementById('ord-edit-price').value || 0),
+                        status: document.getElementById('ord-edit-status').value
+                    };
+                }
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    Object.assign(o, res.value);
+                    o.profit = Number((o.price - o.costPrice).toFixed(2));
+                    saveState();
+                    renderSurfaceStore();
+                    openSurfaceAdminModal();
+                }
+            });
+        };
+
+        window.deleteSurfaceOrder = function(orderId) {
+            window.state.surfaceOrders = window.state.surfaceOrders.filter(o => o.id !== orderId);
+            saveState();
+            renderSurfaceStore();
+            openSurfaceAdminModal();
+        };
+
+        // Registered Users CRUD (Add / Edit / Delete)
+        window.openAdminAddUserModal = function() {
+            Swal.fire({
+                title: '<span class="text-base font-bold text-slate-900">เพิ่มบัญชีสมาชิกใหม่</span>',
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ชื่อผู้ใช้</label>
+                                <input id="adm-user-name" type="text" placeholder="เช่น คุณกิตติ" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ระดับสิทธิ์</label>
+                                <select id="adm-user-role" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+                                    <option value="member">สมาชิกทั่วไป</option>
+                                    <option value="admin">แอดมิน</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">อีเมล</label>
+                                <input id="adm-user-email" type="email" placeholder="user@example.com" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">รหัสผ่าน</label>
+                                <input id="adm-user-pass" type="text" value="123456" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">แต้มสะสม (P)</label>
+                                <input id="adm-user-pts" type="number" value="100" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">เครดิตคลังแสง (CR)</label>
+                                <input id="adm-user-cr" type="number" value="0" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึกสมาชิก',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#0f172a',
+                preConfirm: () => {
+                    const name = document.getElementById('adm-user-name').value.trim();
+                    const email = document.getElementById('adm-user-email').value.trim().toLowerCase();
+                    const password = document.getElementById('adm-user-pass').value.trim() || '123456';
+                    const role = document.getElementById('adm-user-role').value;
+                    const points = Number(document.getElementById('adm-user-pts').value || 0);
+                    const walletCr = Number(document.getElementById('adm-user-cr').value || 0);
+                    if (!name || !email) {
+                        Swal.showValidationMessage('กรุณากรอกชื่อและอีเมล');
+                        return false;
+                    }
+                    return { name, email, password, role, points, walletCr };
+                }
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    window.state.registeredUsers.push(res.value);
+                    saveState();
+                    openSurfaceAdminModal();
+                }
+            });
+        };
+
+        window.openAdminEditUserModal = function(email) {
+            const u = (window.state.registeredUsers || []).find(item => item.email.toLowerCase() === email.toLowerCase());
+            if (!u) return;
+            Swal.fire({
+                title: `<span class="text-base font-bold text-slate-900">แก้ไขข้อมูลสมาชิก: ${u.email}</span>`,
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ชื่อผู้ใช้</label>
+                                <input id="adm-edit-name" type="text" value="${u.name}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">ระดับสิทธิ์</label>
+                                <select id="adm-edit-role" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+                                    <option value="member" ${u.role !== 'admin' ? 'selected' : ''}>สมาชิกทั่วไป</option>
+                                    <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>แอดมิน</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">รหัสผ่าน</label>
+                                <input id="adm-edit-pass" type="text" value="${u.password || '123456'}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">แต้มสะสม (P)</label>
+                                <input id="adm-edit-pts" type="number" value="${u.points || 0}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">เครดิต (CR)</label>
+                                <input id="adm-edit-cr" type="number" value="${u.walletCr || 0}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึกการแก้ไข',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#0f172a',
+                preConfirm: () => {
+                    return {
+                        name: document.getElementById('adm-edit-name').value.trim() || u.name,
+                        role: document.getElementById('adm-edit-role').value,
+                        password: document.getElementById('adm-edit-pass').value || u.password,
+                        points: Number(document.getElementById('adm-edit-pts').value || 0),
+                        walletCr: Number(document.getElementById('adm-edit-cr').value || 0)
+                    };
+                }
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    Object.assign(u, res.value);
+                    if (window.state.currentUser.isLoggedIn && window.state.currentUser.email.toLowerCase() === u.email.toLowerCase()) {
+                        window.state.currentUser.name = u.name;
+                        window.state.currentUser.role = u.role;
+                        window.state.currentUser.points = u.points;
+                        window.state.currentUser.walletCr = u.walletCr;
+                    }
+                    saveState();
+                    renderSurfaceStore();
+                    renderHiddenStoreAll();
+                    openSurfaceAdminModal();
+                }
+            });
+        };
+
+        window.deleteRegisteredUser = function(email) {
+            window.state.registeredUsers = (window.state.registeredUsers || []).filter(u => u.email.toLowerCase() !== email.toLowerCase());
+            saveState();
+            openSurfaceAdminModal();
+        };
+
+        // Support Tickets CRUD (Add / Edit / Delete)
+        window.openAddSupportTicketModal = function() {
+            Swal.fire({
+                title: '<span class="text-base font-bold text-slate-900">เพิ่มเคสติดต่อฝ่ายบริการลูกค้า</span>',
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">หัวข้อ</label>
+                            <input id="tkt-add-subj" type="text" placeholder="เช่น ลูกค้าแจ้งตรวจสอบ UID" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">ช่องทางติดต่อลูกค้า</label>
+                            <input id="tkt-add-contact" type="text" placeholder="เบอร์โทรหรืออีเมล" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">รายละเอียด</label>
+                            <textarea id="tkt-add-msg" rows="2" class="w-full px-3 py-2 rounded-xl border border-slate-300"></textarea>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึกเคส',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#0f172a',
+                preConfirm: () => {
+                    const subject = document.getElementById('tkt-add-subj').value.trim();
+                    const contact = document.getElementById('tkt-add-contact').value.trim() || '-';
+                    const message = document.getElementById('tkt-add-msg').value.trim() || '-';
+                    if (!subject) {
+                        Swal.showValidationMessage('กรุณาระบุหัวข้อ');
+                        return false;
+                    }
+                    return { subject, contact, message };
+                }
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    window.state.supportTickets.unshift({
+                        id: 'TKT-' + Math.floor(1000 + Math.random() * 9000),
+                        subject: res.value.subject,
+                        contact: res.value.contact,
+                        message: res.value.message,
+                        status: 'รับเรื่องแล้ว',
+                        date: 'เมื่อสักครู่'
+                    });
+                    saveState();
+                    openSurfaceAdminModal();
+                }
+            });
+        };
+
+        window.openEditSupportTicketModal = function(ticketId) {
+            const t = (window.state.supportTickets || []).find(item => item.id === ticketId);
+            if (!t) return;
+            Swal.fire({
+                title: `<span class="text-base font-bold text-slate-900">แก้ไขเคสติดต่อ: ${t.id}</span>`,
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">หัวข้อ</label>
+                            <input id="tkt-edit-subj" type="text" value="${t.subject}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">ข้อมูลติดต่อ</label>
+                            <input id="tkt-edit-contact" type="text" value="${t.contact}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">รายละเอียด / บันทึกการแก้ไข</label>
+                            <textarea id="tkt-edit-msg" rows="2" class="w-full px-3 py-2 rounded-xl border border-slate-300">${t.message}</textarea>
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">สถานะเคส</label>
+                            <select id="tkt-edit-status" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+                                <option value="รอตรวจสอบ" ${t.status === 'รอตรวจสอบ' ? 'selected' : ''}>รอตรวจสอบ</option>
+                                <option value="ดำเนินการเรียบร้อย" ${t.status === 'ดำเนินการเรียบร้อย' ? 'selected' : ''}>ดำเนินการเรียบร้อย</option>
+                            </select>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึก',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#0f172a',
+                preConfirm: () => {
+                    return {
+                        subject: document.getElementById('tkt-edit-subj').value.trim() || t.subject,
+                        contact: document.getElementById('tkt-edit-contact').value.trim() || t.contact,
+                        message: document.getElementById('tkt-edit-msg').value.trim() || t.message,
+                        status: document.getElementById('tkt-edit-status').value
+                    };
+                }
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    Object.assign(t, res.value);
+                    saveState();
+                    openSurfaceAdminModal();
+                }
+            });
+        };
+
+        window.deleteSupportTicket = function(ticketId) {
+            window.state.supportTickets = (window.state.supportTickets || []).filter(t => t.id !== ticketId);
+            saveState();
             openSurfaceAdminModal();
         };
 
@@ -3722,6 +4840,161 @@
             showToast('ลบสินค้าออกจากคลังแล้ว', 'info');
         };
 
+        window.openEditHiddenInviteModal = function(inviteId) {
+            const inv = window.state.hiddenInvites.find(i => i.id === inviteId);
+            if (!inv) return;
+            Swal.fire({
+                background: '#090d16',
+                color: '#f8fafc',
+                title: `<span class="text-base font-bold text-white">แก้ไขรหัสเชิญ: ${inv.code}</span>`,
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div>
+                            <label class="block text-slate-300 mb-1">รหัสเชิญ (Code)</label>
+                            <input id="edit-inv-code" type="text" value="${inv.code}" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono-cyber">
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 mb-1">อีเมลผู้รับสิทธิ์</label>
+                            <input id="edit-inv-email" type="email" value="${inv.email}" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white">
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 mb-1">หมายเหตุ</label>
+                            <input id="edit-inv-note" type="text" value="${inv.note}" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white">
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึก',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#06b6d4',
+                preConfirm: () => {
+                    return {
+                        code: document.getElementById('edit-inv-code').value.trim().toUpperCase() || inv.code,
+                        email: document.getElementById('edit-inv-email').value.trim() || inv.email,
+                        note: document.getElementById('edit-inv-note').value.trim() || inv.note
+                    };
+                }
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    Object.assign(inv, res.value);
+                    saveState();
+                    renderHiddenStoreAll();
+                    renderSurfaceStore();
+                    showToast('อัปเดตรหัสเชิญเรียบร้อยแล้ว');
+                }
+            });
+        };
+
+        window.openEditHiddenTopupModal = function(topupId) {
+            const t = window.state.hiddenTopups.find(item => item.id === topupId);
+            if (!t) return;
+            Swal.fire({
+                background: '#090d16',
+                color: '#f8fafc',
+                title: `<span class="text-base font-bold text-white">แก้ไขรายการเติมเครดิต: ${t.id}</span>`,
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div>
+                            <label class="block text-slate-300 mb-1">อีเมลสมาชิก</label>
+                            <input id="edit-top-email" type="text" value="${t.email}" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-slate-300 mb-1">จำนวนเครดิต (CR)</label>
+                                <input id="edit-top-amt" type="number" value="${t.amount}" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white">
+                            </div>
+                            <div>
+                                <label class="block text-slate-300 mb-1">สถานะ</label>
+                                <select id="edit-top-status" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white">
+                                    <option value="รอตรวจสอบ" ${t.status === 'รอตรวจสอบ' ? 'selected' : ''}>รอตรวจสอบ</option>
+                                    <option value="อนุมัติแล้ว" ${t.status === 'อนุมัติแล้ว' ? 'selected' : ''}>อนุมัติแล้ว</option>
+                                    <option value="ปฏิเสธแล้ว" ${t.status === 'ปฏิเสธแล้ว' ? 'selected' : ''}>ปฏิเสธแล้ว</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึก',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#06b6d4',
+                preConfirm: () => {
+                    return {
+                        email: document.getElementById('edit-top-email').value.trim() || t.email,
+                        amount: Math.max(0, Number(document.getElementById('edit-top-amt').value || t.amount)),
+                        status: document.getElementById('edit-top-status').value
+                    };
+                }
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    Object.assign(t, res.value);
+                    saveState();
+                    renderHiddenStoreAll();
+                    showToast('อัปเดตรายการเครดิตแล้ว');
+                }
+            });
+        };
+
+        window.deleteHiddenTopup = function(topupId) {
+            window.state.hiddenTopups = window.state.hiddenTopups.filter(t => t.id !== topupId);
+            saveState();
+            renderHiddenStoreAll();
+            showToast('ลบรายการแจ้งเติมเครดิตแล้ว', 'info');
+        };
+
+        window.openEditHiddenOrderModal = function(orderId) {
+            const o = window.state.myArmoryOrders.find(item => item.id === orderId);
+            if (!o) return;
+            Swal.fire({
+                background: '#090d16',
+                color: '#f8fafc',
+                title: `<span class="text-base font-bold text-white">แก้ไขคำสั่งซื้อคลังแสง: ${o.id}</span>`,
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div>
+                            <label class="block text-slate-300 mb-1">เลขพัสดุปกปิด</label>
+                            <input id="edit-hord-track" type="text" value="${o.trackingCode || ''}" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono-cyber">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-slate-300 mb-1">ยอดรวม (CR)</label>
+                                <input id="edit-hord-total" type="number" value="${o.totalCr || 0}" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white">
+                            </div>
+                            <div>
+                                <label class="block text-slate-300 mb-1">สถานะคำสั่งซื้อ</label>
+                                <input id="edit-hord-status" type="text" value="${o.statusText || ''}" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white">
+                            </div>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'บันทึก',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#06b6d4',
+                preConfirm: () => {
+                    return {
+                        trackingCode: document.getElementById('edit-hord-track').value.trim() || o.trackingCode,
+                        totalCr: Math.max(0, Number(document.getElementById('edit-hord-total').value || o.totalCr)),
+                        statusText: document.getElementById('edit-hord-status').value.trim() || o.statusText
+                    };
+                }
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    Object.assign(o, res.value);
+                    saveState();
+                    renderHiddenStoreAll();
+                    showToast('แก้ไขคำสั่งซื้อคลังแสงแล้ว');
+                }
+            });
+        };
+
+        window.deleteHiddenOrder = function(orderId) {
+            window.state.myArmoryOrders = window.state.myArmoryOrders.filter(o => o.id !== orderId);
+            saveState();
+            renderHiddenStoreAll();
+            showToast('ลบคำสั่งซื้อคลังแสงแล้ว', 'info');
+        };
+
         function renderHiddenAdminDashboard() {
             const totalRev = window.state.myArmoryOrders.reduce((s, o) => s + (o.totalCr || 0), 0);
             const revEl = document.getElementById('admin-stat-revenue');
@@ -3749,11 +5022,14 @@
                             <div class="text-[11px] text-slate-500">${inv.note} • ${inv.createdAt}</div>
                         </div>
                         <div class="flex items-center gap-1.5">
-                            <button type="button" onclick="copyInviteCode('${inv.code}')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-[11px]">
+                            <button type="button" onclick="copyInviteCode('${inv.code}')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-[11px]">
                                 คัดลอก
                             </button>
-                            <button type="button" onclick="revokeHiddenInvite('${inv.id}')" class="px-2.5 py-1 rounded-lg bg-rose-950/80 hover:bg-rose-900 text-rose-300 text-[11px]">
-                                ยกเลิก
+                            <button type="button" onclick="openEditHiddenInviteModal('${inv.id}')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px]">
+                                แก้ไข
+                            </button>
+                            <button type="button" onclick="revokeHiddenInvite('${inv.id}')" class="px-2 py-1 rounded-lg bg-rose-950/80 hover:bg-rose-900 text-rose-300 text-[11px]">
+                                ลบ
                             </button>
                         </div>
                     </div>
@@ -3770,11 +5046,13 @@
                         </div>
                         <div class="flex items-center gap-1.5">
                             ${t.status === 'รอตรวจสอบ' ? `
-                                <button type="button" onclick="approveHiddenTopup('${t.id}')" class="px-2.5 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-[11px]">อนุมัติ</button>
-                                <button type="button" onclick="rejectHiddenTopup('${t.id}')" class="px-2.5 py-1 rounded-lg bg-rose-950 hover:bg-rose-900 text-rose-300 text-[11px]">ปฏิเสธ</button>
+                                <button type="button" onclick="approveHiddenTopup('${t.id}')" class="px-2 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-[11px]">อนุมัติ</button>
+                                <button type="button" onclick="rejectHiddenTopup('${t.id}')" class="px-2 py-1 rounded-lg bg-rose-950 hover:bg-rose-900 text-rose-300 text-[11px]">ปฏิเสธ</button>
                             ` : `
-                                <span class="px-2.5 py-1 rounded-lg ${t.status === 'อนุมัติแล้ว' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'} text-[10px] font-bold">${t.status}</span>
+                                <span class="px-2 py-1 rounded-lg ${t.status === 'อนุมัติแล้ว' ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/20 text-rose-300'} text-[10px] font-bold">${t.status}</span>
                             `}
+                            <button type="button" onclick="openEditHiddenTopupModal('${t.id}')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-[11px]">แก้ไข</button>
+                            <button type="button" onclick="deleteHiddenTopup('${t.id}')" class="px-2 py-1 rounded-lg bg-rose-950/70 hover:bg-rose-900 text-rose-300 text-[11px]">ลบ</button>
                         </div>
                     </div>
                 `).join('') : `<div class="p-6 rounded-xl bg-slate-950/60 border border-slate-800 text-center text-xs text-slate-500">ยังไม่มีรายการแจ้งเติมเครดิต</div>`;
@@ -3789,11 +5067,19 @@
                             <span class="font-mono-cyber font-bold text-emerald-400">${o.totalCr.toLocaleString()} CR</span>
                         </div>
                         <div class="text-slate-300">${o.items.map(i => `${i.name} x${i.qty}`).join(', ')}</div>
-                        <div class="flex items-center justify-between pt-1">
+                        <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
                             <span class="text-[11px] text-cyan-400">${o.statusText}</span>
-                            <button type="button" onclick="advanceOrderStatus('${o.id}')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-[11px]">
-                                เลื่อนสถานะถัดไป →
-                            </button>
+                            <div class="flex items-center gap-1.5">
+                                <button type="button" onclick="advanceOrderStatus('${o.id}')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-[11px]">
+                                    เลื่อนสถานะ →
+                                </button>
+                                <button type="button" onclick="openEditHiddenOrderModal('${o.id}')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-[11px]">
+                                    แก้ไข
+                                </button>
+                                <button type="button" onclick="deleteHiddenOrder('${o.id}')" class="px-2 py-1 rounded-lg bg-rose-950/70 hover:bg-rose-900 text-rose-300 text-[11px]">
+                                    ลบ
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `).join('') : `<div class="p-6 rounded-xl bg-slate-950/60 border border-slate-800 text-center text-xs text-slate-500">ยังไม่มีคำสั่งซื้อในคลังแสง</div>`;
