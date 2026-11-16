@@ -332,7 +332,7 @@
                 </div>
 
                 <!-- Surface Games Grid -->
-                <div id="surface-game-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+                <div id="surface-game-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
             </main>
         </div>
 
@@ -2490,8 +2490,8 @@
             }
             if (subtitleEl) {
                 subtitleEl.textContent = isLoggedIn
-                    ? 'คลิกที่การ์ดเกมเพื่อระบุ UID และหักจากยอดเครดิตในเว็บ (กรุณาเติมเงินเข้าเว็บก่อนทำรายการ)'
-                    : 'คลิกที่การ์ดเกมเพื่อดูรายการแพ็กเกจและราคาทั้งหมด (เข้าสู่ระบบเพื่อสั่งซื้อ)';
+                    ? 'แตะที่รูปเกมเพื่อดูราคาแพ็กเกจทั้งหมดและทำรายการเติมเกม'
+                    : 'แตะที่รูปเกมเพื่อดูราคาแพ็กเกจทั้งหมด (เข้าสู่ระบบเพื่อสั่งซื้อ)';
             }
             if (userNameEl && isLoggedIn) {
                 userNameEl.textContent = user.name || user.email;
@@ -2647,57 +2647,20 @@
             }
 
             grid.innerHTML = filtered.map(g => {
-                const minPrice = Math.min(...g.packages.map(p => p.price));
-                const maxPrice = Math.max(...g.packages.map(p => p.price));
-                const pkgCount = g.packages.length;
-                const actionLabel = isLoggedIn ? (g.category === 'card' ? 'ซื้อบัตร' : 'เติมเกม') : 'ดูราคาแพ็กเกจ';
-
-                const previewPills = g.packages.slice(0, 3).map(p => `
-                    <div class="flex items-center justify-between text-[11px] py-1 px-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                        <span class="text-slate-700 truncate pr-2">${escapeHtml(p.name)}</span>
-                        <span class="font-bold text-slate-900 shrink-0">฿${Number(p.price || 0).toLocaleString()}</span>
-                    </div>
-                `).join('');
+                const hasLogo = Boolean(g.logoImage && String(g.logoImage).trim());
+                const iconVisual = hasLogo
+                    ? `<img src="${escapeHtml(g.logoImage)}" alt="${escapeHtml(g.title)}" class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover shadow-md border border-slate-200 group-hover:scale-105 transition duration-200">`
+                    : `<div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br ${escapeHtml(g.accent)} text-white flex items-center justify-center text-3xl sm:text-4xl shadow-md group-hover:scale-105 transition duration-200">
+                           <i class="fa-solid ${escapeHtml(g.icon)}"></i>
+                       </div>`;
 
                 return `
-                    <div onclick="openSurfaceTopupModal('${escapeHtml(g.id)}')" class="surface-card rounded-2xl overflow-hidden flex flex-col justify-between cursor-pointer group">
-                        <div>
-                            <div class="h-32 bg-gradient-to-br ${escapeHtml(g.accent)} surface-banner-pattern p-4 flex flex-col justify-between text-white relative overflow-hidden">
-                                <div class="flex items-center justify-between gap-2 relative z-10">
-                                    <span class="px-2.5 py-0.5 rounded-full bg-black/25 backdrop-blur-sm border border-white/15 text-[10px] font-medium">${escapeHtml(g.badge)}</span>
-                                    <span class="px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[10px] font-bold shadow-xs">${escapeHtml(g.discountText)}</span>
-                                </div>
-                                <div class="flex items-center gap-3 relative z-10">
-                                    <div class="w-11 h-11 rounded-xl bg-white/15 backdrop-blur-md border border-white/15 flex items-center justify-center text-xl group-hover:scale-105 transition">
-                                        <i class="fa-solid ${escapeHtml(g.icon)}"></i>
-                                    </div>
-                                    <div class="min-w-0">
-                                        <h3 class="font-bold text-sm leading-snug truncate">${escapeHtml(g.title)}</h3>
-                                        <p class="text-[11px] text-white/75 truncate">${escapeHtml(g.publisher)}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-4 pb-3 space-y-2">
-                                <div class="flex items-center justify-between text-xs">
-                                    <span class="text-slate-500 font-medium">${pkgCount} แพ็กเกจ</span>
-                                    <span class="text-[11px] text-slate-500">฿${minPrice.toLocaleString()} - ฿${maxPrice.toLocaleString()}</span>
-                                </div>
-                                <div class="space-y-1 pt-0.5">
-                                    ${previewPills}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="px-4 pb-4 pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
-                            <div>
-                                <div class="text-[10px] text-slate-400">เริ่มต้น</div>
-                                <div class="font-bold text-slate-900 text-base leading-tight">฿${minPrice.toLocaleString()}</div>
-                            </div>
-                            <button type="button" onclick="event.stopPropagation(); openSurfaceTopupModal('${escapeHtml(g.id)}')" class="px-3.5 py-2 rounded-xl bg-slate-900 group-hover:bg-amber-400 text-white group-hover:text-slate-950 font-semibold text-xs transition flex items-center gap-1.5">
-                                <span>${actionLabel}</span>
-                                <i class="fa-solid fa-chevron-right text-[10px]"></i>
-                            </button>
-                        </div>
-                    </div>
+                    <button type="button" onclick="openSurfaceTopupModal('${escapeHtml(g.id)}')" class="surface-card rounded-2xl p-4 sm:p-5 flex flex-col items-center justify-center text-center gap-3 cursor-pointer group w-full">
+                        ${iconVisual}
+                        <h3 class="font-bold text-xs sm:text-sm text-slate-900 leading-snug line-clamp-2 group-hover:text-amber-600 transition">
+                            ${escapeHtml(g.title)}
+                        </h3>
+                    </button>
                 `;
             }).join('');
         }
@@ -3528,6 +3491,7 @@
                     <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
                         <div class="min-w-0 flex-1">
                             <div class="flex items-center gap-2">
+                                ${g.logoImage ? `<img src="${escapeHtml(g.logoImage)}" alt="" class="w-6 h-6 rounded-md object-cover border border-slate-200 shrink-0">` : `<span class="w-6 h-6 rounded-md bg-slate-800 text-amber-400 flex items-center justify-center text-[10px] shrink-0"><i class="fa-solid ${escapeHtml(g.icon)}"></i></span>`}
                                 <span class="font-bold text-slate-900 truncate">${escapeHtml(g.title)}</span>
                                 <span class="px-2 py-0.5 rounded-md bg-slate-200 text-slate-700 text-[10px] font-semibold">${g.category === 'card' ? 'บัตรดิจิทัล' : 'เกม'}</span>
                             </div>
@@ -3959,10 +3923,32 @@
             if (!requireAdminGuard('แก้ไขข้อมูลเกม')) return;
             const g = window.state.surfaceGames.find(item => item.id === gameId);
             if (!g) return;
+            const currentLogo = g.logoImage || '';
             Swal.fire({
                 title: `<span class="text-base font-bold text-slate-900">แก้ไขข้อมูลเกม: ${escapeHtml(g.title)}</span>`,
                 html: `
                     <div class="text-left space-y-3 text-xs pt-2">
+                        <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-200">
+                            ${currentLogo
+                                ? `<img src="${escapeHtml(currentLogo)}" alt="Logo" class="w-14 h-14 rounded-xl object-cover border border-slate-200 shrink-0">`
+                                : `<div class="w-14 h-14 rounded-xl bg-gradient-to-br ${escapeHtml(g.accent)} text-white flex items-center justify-center text-xl shrink-0"><i class="fa-solid ${escapeHtml(g.icon)}"></i></div>`
+                            }
+                            <div class="min-w-0 flex-1 space-y-1">
+                                <div class="font-bold text-slate-800">รูป Icon / Logo เกม</div>
+                                <div class="text-[11px] text-slate-500">อัปโหลดไฟล์รูปใหม่ หรือวางลิงก์ URL รูปภาพด้านล่าง</div>
+                                ${currentLogo ? `<label class="inline-flex items-center gap-1.5 text-[11px] text-rose-600 font-semibold cursor-pointer"><input id="edit-surf-logo-clear" type="checkbox" class="accent-rose-600"> ลบรูปโลโก้ (ใช้ไอคอนเริ่มต้น)</label>` : ''}
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">อัปโหลดรูป Icon/Logo จากเครื่อง</label>
+                                <input id="edit-surf-logo-file" type="file" accept="image/*" class="w-full text-[11px] text-slate-600 file:mr-2 file:py-1.5 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-slate-900 file:text-amber-400">
+                            </div>
+                            <div>
+                                <label class="block font-semibold text-slate-700 mb-1">หรือวางลิงก์ URL รูปภาพ</label>
+                                <input id="edit-surf-logo-url" type="text" value="${currentLogo.startsWith('data:') ? '' : escapeHtml(currentLogo)}" placeholder="https://example.com/logo.png" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                            </div>
+                        </div>
                         <div>
                             <label class="block font-semibold text-slate-700 mb-1">ชื่อเกม / บัตรดิจิทัล</label>
                             <input id="edit-surf-title" type="text" value="${escapeHtml(g.title)}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
@@ -3982,11 +3968,11 @@
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div>
-                                <label class="block font-semibold text-slate-700 mb-1">ป้ายกำกับมุมซ้าย (Badge)</label>
+                                <label class="block font-semibold text-slate-700 mb-1">ป้ายกำกับ (Badge)</label>
                                 <input id="edit-surf-badge" type="text" value="${escapeHtml(g.badge || 'เฉพาะประเทศไทย')}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
                             </div>
                             <div>
-                                <label class="block font-semibold text-slate-700 mb-1">ป้ายโปรโมชั่นมุมขวา</label>
+                                <label class="block font-semibold text-slate-700 mb-1">ข้อความโปรโมชั่น</label>
                                 <input id="edit-surf-disc" type="text" value="${escapeHtml(g.discountText || 'ราคาพิเศษ')}" class="w-full px-3 py-2 rounded-xl border border-slate-300">
                             </div>
                         </div>
@@ -4000,18 +3986,32 @@
                 confirmButtonText: 'บันทึกการแก้ไข',
                 cancelButtonText: 'ยกเลิก',
                 confirmButtonColor: '#0f172a',
-                preConfirm: () => {
+                preConfirm: async () => {
                     const title = document.getElementById('edit-surf-title').value.trim();
                     const category = document.getElementById('edit-surf-cat').value;
                     const publisher = document.getElementById('edit-surf-pub').value.trim() || 'Official';
                     const badge = document.getElementById('edit-surf-badge').value.trim() || 'ยอดนิยม';
                     const discountText = document.getElementById('edit-surf-disc').value.trim() || 'ราคาคุ้ม';
                     const deliveryNote = document.getElementById('edit-surf-note').value.trim();
+                    const fileEl = document.getElementById('edit-surf-logo-file');
+                    const urlVal = document.getElementById('edit-surf-logo-url').value.trim();
+                    const clearEl = document.getElementById('edit-surf-logo-clear');
+
                     if (!title) {
                         Swal.showValidationMessage('กรุณาระบุชื่อเกม');
                         return false;
                     }
-                    return { title, category, publisher, badge, discountText, deliveryNote };
+                    let logoImage = g.logoImage || '';
+                    if (clearEl && clearEl.checked) {
+                        logoImage = '';
+                    }
+                    const uploadedDataUrl = await readFileAsDataUrlLimited(fileEl);
+                    if (uploadedDataUrl) {
+                        logoImage = uploadedDataUrl;
+                    } else if (urlVal) {
+                        logoImage = urlVal;
+                    }
+                    return { title, category, publisher, badge, discountText, deliveryNote, logoImage };
                 }
             }).then(res => {
                 if (res.isConfirmed && res.value) {
@@ -4031,8 +4031,21 @@
                 html: `
                     <div class="text-left space-y-3 text-xs pt-2">
                         <div>
-                            <label class="block font-semibold text-slate-700 mb-1">ชื่อเกม / บัตร</label>
+                            <label class="block font-semibold text-slate-700 mb-1">ชื่อเกม / บัตร*</label>
                             <input id="new-surf-title" type="text" placeholder="เช่น Black Clover M / Genshin Impact" class="w-full px-3 py-2 rounded-xl border border-slate-300">
+                        </div>
+                        <div class="p-3 rounded-xl bg-amber-50/70 border border-amber-200 space-y-2">
+                            <div class="font-bold text-amber-900"><i class="fa-regular fa-image mr-1"></i> รูป Icon / Logo เกม* (อัปโหลดไฟล์ หรือใส่ลิงก์ URL)</div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">อัปโหลดรูปจากเครื่อง</label>
+                                    <input id="new-surf-logo-file" type="file" accept="image/*" class="w-full text-[11px] text-slate-600 file:mr-2 file:py-1.5 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-slate-900 file:text-amber-400">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">หรือลิงก์ URL รูปภาพ</label>
+                                    <input id="new-surf-logo-url" type="text" placeholder="https://example.com/game-logo.png" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white">
+                                </div>
+                            </div>
                         </div>
                         <div class="grid grid-cols-2 gap-2">
                             <div>
@@ -4067,18 +4080,27 @@
                 confirmButtonText: 'บันทึกเกมใหม่',
                 cancelButtonText: 'ยกเลิก',
                 confirmButtonColor: '#0f172a',
-                preConfirm: () => {
+                preConfirm: async () => {
                     const title = document.getElementById('new-surf-title').value.trim();
                     const category = document.getElementById('new-surf-cat').value;
                     const publisher = document.getElementById('new-surf-pub').value.trim() || 'Official';
                     const pkgName = document.getElementById('new-surf-pkg').value.trim() || 'Standard Pack';
                     const costPrice = Math.max(1, Number(document.getElementById('new-surf-cost').value || 94.50));
                     const price = Math.max(1, Number(document.getElementById('new-surf-price').value || 98));
+                    const fileEl = document.getElementById('new-surf-logo-file');
+                    const urlVal = document.getElementById('new-surf-logo-url').value.trim();
+
                     if (!title) {
                         Swal.showValidationMessage('กรุณาระบุชื่อเกมหรือบัตร');
                         return false;
                     }
-                    return { title, category, publisher, pkgName, costPrice, price };
+                    const uploadedDataUrl = await readFileAsDataUrlLimited(fileEl);
+                    const logoImage = uploadedDataUrl || urlVal;
+                    if (!logoImage) {
+                        Swal.showValidationMessage('กรุณาอัปโหลดรูป Icon / Logo เกม หรือใส่ลิงก์ URL รูปภาพ');
+                        return false;
+                    }
+                    return { title, category, publisher, pkgName, costPrice, price, logoImage };
                 }
             }).then(res => {
                 if (res.isConfirmed && res.value) {
@@ -4092,6 +4114,7 @@
                         discountText: 'ราคาพิเศษ',
                         deliveryNote: v.category === 'card' ? 'รับรหัสทันที' : 'เติมตรงเข้า UID',
                         icon: v.category === 'card' ? 'fa-ticket' : 'fa-gamepad',
+                        logoImage: v.logoImage,
                         accent: 'from-violet-700 via-slate-900 to-slate-950',
                         packages: [
                             { id: 'pkg-' + Date.now() + '-1', name: v.pkgName, costPrice: v.costPrice, fullPrice: Math.ceil(v.price * 1.03), price: v.price, points: Math.round(v.price / 10) }
