@@ -643,7 +643,7 @@
                 <div class="flex items-center flex-wrap gap-2">
                     <button type="button" onclick="switchHiddenTab('wallet')" class="px-3 py-1.5 rounded-xl bg-emerald-950/70 hover:bg-emerald-900/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono-cyber font-semibold flex items-center gap-1.5 transition">
                         <i class="fa-solid fa-wallet text-emerald-400"></i>
-                        <span id="hidden-wallet-balance">15,000 CR</span>
+                        <span id="hidden-wallet-balance">0 CR</span>
                         <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-[10px] text-emerald-200">+เติม</span>
                     </button>
 
@@ -675,7 +675,7 @@
                         </button>
                         <button type="button" id="hid-nav-wallet" onclick="switchHiddenTab('wallet')" class="shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
                             <i class="fa-solid fa-coins text-emerald-400"></i>
-                            <span>เติมเครดิต (<span id="nav-wallet-cr">15,000</span>)</span>
+                            <span>เติมเครดิต (<span id="nav-wallet-cr">0</span>)</span>
                         </button>
                         <button type="button" id="hid-nav-tools" onclick="switchHiddenTab('tools')" class="shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
                             <i class="fa-solid fa-screwdriver-wrench text-amber-400"></i>
@@ -739,7 +739,7 @@
                             </div>
                             <div class="bg-slate-900/75 border border-slate-800 rounded-xl px-3.5 py-2.5">
                                 <div class="text-slate-400 text-[10px]">เครดิตของคุณ</div>
-                                <div class="text-emerald-400 font-bold font-mono-cyber text-sm mt-0.5" id="shop-stat-wallet">15,000 CR</div>
+                                <div class="text-emerald-400 font-bold font-mono-cyber text-sm mt-0.5" id="shop-stat-wallet">0 CR</div>
                             </div>
                             <div class="bg-slate-900/75 border border-slate-800 rounded-xl px-3.5 py-2.5">
                                 <div class="text-slate-400 text-[10px]">คูปองที่เลือกไว้</div>
@@ -826,7 +826,7 @@
 
                         <div class="p-5 rounded-2xl bg-gradient-to-br from-emerald-950/90 via-slate-950 to-slate-900 border border-emerald-500/30 space-y-2">
                             <div class="text-xs text-emerald-300/80">ยอดเครดิตคงเหลือในบัญชี</div>
-                            <div class="text-3xl font-bold font-mono-cyber text-white" id="wallet-page-balance">15,000 CR</div>
+                            <div class="text-3xl font-bold font-mono-cyber text-white" id="wallet-page-balance">0 CR</div>
                             <div class="text-[11px] text-slate-400">อัตราแลกเปลี่ยนมาตรฐาน: 1 CR = 1 บาท</div>
                         </div>
 
@@ -1248,7 +1248,7 @@
     <!-- COMPLETE APPLICATION JAVASCRIPT (SECURITY HARDENED + FIREBASE + API)  -->
     <!-- ===================================================================== -->
     <script>
-        const STORAGE_KEY = 'VALO_PHANTOM_ARMORY_STATE_V8_SECURED';
+        const STORAGE_KEY = 'VALO_PHANTOM_ARMORY_STATE_V9_PROD';
         const MAIN_ADMIN_EMAIL = 'phanuphongchaisong@gmail.com';
 
         // =====================================================================
@@ -2023,17 +2023,8 @@
                         password: '123456',
                         name: 'คุณภานุพงศ์',
                         role: 'admin',
-                        points: 150,
-                        walletCr: 15000
-                    },
-                    {
-                        email: 'vip.shooter@gmail.com',
-                        passwordHash: 'sha256$6c933a44088a122f98f1b5012051962727e363390066a17c10f26b36976c746e',
-                        password: '123456',
-                        name: 'คุณธนกร',
-                        role: 'member',
-                        points: 120,
-                        walletCr: 8000
+                        points: 0,
+                        walletCr: 0
                     }
                 ],
                 currentUser: {
@@ -2067,15 +2058,7 @@
                         code: 'INV-ZF5YKX',
                         email: 'phanuphongchaisong@gmail.com',
                         note: 'รหัสประจำบัญชีผู้ดูแลระบบสูงสุด',
-                        createdAt: '27/10/2569 10:29:17',
-                        active: true
-                    },
-                    {
-                        id: 'inv-vip-member',
-                        code: 'INV-88K9P2',
-                        email: 'vip.shooter@gmail.com',
-                        note: 'สมาชิกกิตติมศักดิ์สนามยุทธกีฬา',
-                        createdAt: 'วันนี้ 09:40:00',
+                        createdAt: 'ระบบเริ่มต้น',
                         active: true
                     }
                 ],
@@ -2084,7 +2067,7 @@
             };
 
             try {
-                const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('VALO_PHANTOM_ARMORY_STATE_V7');
+                const raw = localStorage.getItem(STORAGE_KEY);
                 if (raw) {
                     const parsed = JSON.parse(raw);
                     return Object.assign({}, defaultState, parsed, {
@@ -2507,7 +2490,7 @@
             }
             if (subtitleEl) {
                 subtitleEl.textContent = isLoggedIn
-                    ? 'คลิกที่การ์ดเกมเพื่อระบุ UID ชำระเงินและแนบหลักฐานสลิปเพื่อให้แอดมินตรวจสอบ'
+                    ? 'คลิกที่การ์ดเกมเพื่อระบุ UID และหักจากยอดเครดิตในเว็บ (กรุณาเติมเงินเข้าเว็บก่อนทำรายการ)'
                     : 'คลิกที่การ์ดเกมเพื่อดูรายการแพ็กเกจและราคาทั้งหมด (เข้าสู่ระบบเพื่อสั่งซื้อ)';
             }
             if (userNameEl && isLoggedIn) {
@@ -2827,40 +2810,6 @@
             renderSurfaceStore();
         };
 
-        window.updatePaymentChannelDetailCard = function(channelKey) {
-            const box = document.getElementById('swal-payment-account-detail');
-            const slipBox = document.getElementById('swal-direct-slip-box');
-            if (slipBox) slipBox.classList.toggle('hidden', channelKey === 'balance');
-            if (!box) return;
-            if (channelKey === 'balance') {
-                const curBal = Number((window.state.currentUser && window.state.currentUser.walletCr) || 0);
-                box.innerHTML = `
-                    <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between text-xs">
-                        <span class="text-emerald-900 font-medium"><i class="fa-solid fa-wallet text-emerald-600 mr-1.5"></i> ยอดเงินคงเหลือของคุณ: <b class="font-mono-cyber">฿${curBal.toLocaleString()}</b></span>
-                        <button type="button" onclick="Swal.close(); switchSurfaceTab('topup');" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-semibold text-[11px]">+ ไปหน้าเติมเงิน</button>
-                    </div>
-                `;
-                return;
-            }
-            const ch = OFFICIAL_PAYMENT_CHANNELS[channelKey] || OFFICIAL_PAYMENT_CHANNELS.promptpay;
-            box.innerHTML = `
-                <div class="p-3.5 rounded-xl border ${ch.badgeClass} space-y-2 text-xs">
-                    <div class="flex items-center justify-between">
-                        <span class="font-bold flex items-center gap-1.5">
-                            <i class="fa-solid ${ch.icon}"></i> ${ch.label}
-                        </span>
-                        <button type="button" onclick="copyTextSafe('${ch.rawNo}', 'คัดลอกเลข ${ch.accountNo} เรียบร้อยแล้ว')" class="px-2.5 py-1 rounded-lg bg-slate-900 text-amber-400 font-semibold text-[11px] flex items-center gap-1">
-                            <i class="fa-regular fa-copy"></i> คัดลอกเลข
-                        </button>
-                    </div>
-                    <div class="flex items-center justify-between pt-1 border-t border-black/10">
-                        <span class="opacity-80">เลขบัญชี / เบอร์รับโอน:</span>
-                        <span class="font-mono-cyber font-bold text-sm tracking-wide">${ch.accountNo}</span>
-                    </div>
-                </div>
-            `;
-        };
-
         window.openSurfaceTopupModal = function(gameId) {
             const game = window.state.surfaceGames.find(g => g.id === gameId);
             if (!game) return;
@@ -2951,61 +2900,32 @@
                         ${pointsBox}
 
                         <div class="space-y-2 pt-2 border-t border-slate-200">
-                            <div class="flex items-center justify-between">
-                                <label class="block text-xs font-semibold text-slate-800">3. เลือกวิธีชำระเงินสำหรับเติมเกม</label>
-                                <button type="button" onclick="Swal.close(); switchSurfaceTab('topup');" class="text-[11px] font-semibold text-emerald-700 hover:underline flex items-center gap-1">
-                                    <i class="fa-solid fa-wallet"></i> ไปหน้าเติมเงินเข้ากระเป๋า (มี ฿${Number(window.state.currentUser.walletCr || 0).toLocaleString()})
+                            <label class="block text-xs font-semibold text-slate-800">3. ชำระเงินด้วยยอดเครดิตในเว็บ (ต้องเติมเงินเข้าเว็บก่อนจึงจะเติมได้)</label>
+                            <div class="p-3.5 rounded-xl ${Number(window.state.currentUser.walletCr || 0) > 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-rose-50 border-rose-200'} border flex flex-wrap items-center justify-between gap-2 text-xs">
+                                <div>
+                                    <div class="font-bold ${Number(window.state.currentUser.walletCr || 0) > 0 ? 'text-emerald-900' : 'text-rose-900'}">
+                                        <i class="fa-solid fa-wallet mr-1"></i> เครดิตคงเหลือในเว็บของคุณ: <span class="font-mono-cyber text-sm">฿${Number(window.state.currentUser.walletCr || 0).toLocaleString()}</span>
+                                    </div>
+                                    <div class="text-[11px] ${Number(window.state.currentUser.walletCr || 0) > 0 ? 'text-emerald-700' : 'text-rose-700'} mt-0.5">
+                                        ${Number(window.state.currentUser.walletCr || 0) > 0 ? 'ระบบจะหักยอดเครดิตในเว็บอัตโนมัติและส่งคำสั่งเข้าคิว API' : 'ยอดเครดิตไม่เพียงพอ กรุณาเติมเงินเข้าเว็บก่อนทำรายการ'}
+                                    </div>
+                                </div>
+                                <button type="button" onclick="Swal.close(); switchSurfaceTab('topup');" class="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-amber-400 font-semibold text-[11px] flex items-center gap-1 transition">
+                                    <i class="fa-solid fa-plus-circle"></i> ไปหน้าเติมเงิน
                                 </button>
                             </div>
-                            <select id="swal-surf-pay" onchange="updatePaymentChannelDetailCard(this.value)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white font-semibold text-slate-900">
-                                <option value="balance">หักจากยอดเงินในบัญชี (คงเหลือ ฿${Number(window.state.currentUser.walletCr || 0).toLocaleString()})</option>
-                                <option value="promptpay">โอนตรงพร้อมเพย์ (PromptPay): 065-972-8104</option>
-                                <option value="kbank">โอนตรงธนาคารกสิกรไทย (KBank): 126-8-83922-0</option>
-                                <option value="truemoney">โอนตรง TrueMoney Wallet: 065-972-8104</option>
-                            </select>
-                            <div id="swal-payment-account-detail"></div>
-                        </div>
-
-                        <div id="swal-direct-slip-box" class="hidden p-3.5 rounded-2xl bg-slate-100 border border-slate-200/90 space-y-3">
-                            <div class="text-xs font-bold text-slate-900 flex items-center justify-between">
-                                <span><i class="fa-solid fa-file-shield text-emerald-600 mr-1"></i> 4. ยืนยันสลิปโอนเงิน (เพื่อให้แอดมินตรวจสอบ)</span>
-                                <span class="text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold">รอเชื่อม API</span>
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                                <div>
-                                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">เลขอ้างอิงสลิป / เลขท้ายสลิป (ห้ามซ้ำ)*</label>
-                                    <input id="swal-surf-slip-ref" type="text" placeholder="เช่น 202511168849 หรือเลขท้าย 6 ตัว" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs font-mono-cyber">
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-semibold text-slate-700 mb-1">เวลาที่โอนตามสลิป*</label>
-                                    <input id="swal-surf-slip-time" type="text" value="${nowTimeStr}" placeholder="เช่น 19:35 น." class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-semibold text-slate-700 mb-1">แนบรูปภาพสลิปโอนเงิน</label>
-                                <input id="swal-surf-slip-file" type="file" accept="image/*" class="w-full text-[11px] text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-slate-900 file:text-amber-400 hover:file:bg-slate-800">
-                            </div>
+                            <input type="hidden" id="swal-surf-pay" value="balance">
                         </div>
                     </div>
                 `,
-                didOpen: () => {
-                    const sel = document.getElementById('swal-surf-pay');
-                    const hasBal = Number(window.state.currentUser.walletCr || 0) > 0;
-                    if (sel) sel.value = hasBal ? 'balance' : 'promptpay';
-                    updatePaymentChannelDetailCard(hasBal ? 'balance' : 'promptpay');
-                },
                 showCancelButton: true,
-                confirmButtonText: 'ส่งข้อมูลยืนยันการชำระเงิน',
+                confirmButtonText: 'ยืนยันเติมเกม (หักเครดิตในเว็บ)',
                 cancelButtonText: 'ยกเลิก',
                 confirmButtonColor: '#0f172a',
-                preConfirm: async () => {
+                preConfirm: () => {
                     const uid = document.getElementById('swal-surf-uid').value.trim();
                     const selectedRadio = document.querySelector('input[name="surf-pkg"]:checked');
                     const usePointsEl = document.getElementById('swal-use-points');
-                    const payKey = document.getElementById('swal-surf-pay').value;
-                    const slipRef = document.getElementById('swal-surf-slip-ref').value.trim();
-                    const slipTime = document.getElementById('swal-surf-slip-time').value.trim();
-                    const slipFileEl = document.getElementById('swal-surf-slip-file');
 
                     const pkgObj = game.packages.find(p => p.id === (selectedRadio ? selectedRadio.value : game.packages[0].id)) || game.packages[0];
                     let estDiscount = 0;
@@ -3020,46 +2940,20 @@
                         Swal.showValidationMessage(isCard ? 'กรุณาระบุอีเมลหรือเบอร์โทรสำหรับรับรหัส' : 'กรุณาระบุ UID หรือชื่อบัญชีในเกมของคุณ');
                         return false;
                     }
-                    if (payKey === 'balance') {
-                        const curBal = Number(window.state.currentUser.walletCr || 0);
-                        if (curBal < estNetPrice) {
-                            Swal.showValidationMessage(`ยอดเงินในกระเป๋าไม่พอ (มี ฿${curBal.toLocaleString()} ต้องใช้ ฿${estNetPrice.toLocaleString()}) กรุณาไปที่หน้า "เติมเงิน" หรือเลือกโอนตรงแนบสลิป`);
-                            return false;
-                        }
-                        return {
-                            uid,
-                            pkgId: pkgObj.id,
-                            usePoints: Boolean(usePointsEl && usePointsEl.checked),
-                            payKey: 'balance',
-                            payMethod: 'หักยอดเงินในบัญชี (Wallet Balance)',
-                            slipRef: 'WALLET-' + Math.floor(100000 + Math.random() * 900000),
-                            slipTime: nowTimeStr,
-                            slipImage: ''
-                        };
-                    }
-                    if (!slipRef || slipRef.length < 4) {
-                        Swal.showValidationMessage('กรุณากรอกเลขอ้างอิงสลิปโอนเงิน (อย่างน้อย 4 ตัวอักษร) เพื่อให้แอดมินตรวจสอบ');
+                    const curBal = Number(window.state.currentUser.walletCr || 0);
+                    if (curBal < estNetPrice) {
+                        Swal.showValidationMessage(`ยอดเครดิตในเว็บไม่เพียงพอ (คงเหลือ ฿${curBal.toLocaleString()} / ต้องใช้ ฿${estNetPrice.toLocaleString()}) กรุณากด "ไปหน้าเติมเงิน" เพื่อเติมเครดิตก่อน`);
                         return false;
                     }
-                    if (isSlipRefDuplicate(slipRef)) {
-                        Swal.showValidationMessage('เลขอ้างอิงสลิปนี้ถูกใช้แจ้งโอนไปแล้ว กรุณาตรวจสอบสลิปอีกครั้ง');
-                        return false;
-                    }
-                    if (!slipTime) {
-                        Swal.showValidationMessage('กรุณาระบุเวลาที่โอนเงินตามสลิป');
-                        return false;
-                    }
-                    const slipDataUrl = await readFileAsDataUrlLimited(slipFileEl);
-                    const ch = OFFICIAL_PAYMENT_CHANNELS[payKey] || OFFICIAL_PAYMENT_CHANNELS.promptpay;
                     return {
                         uid,
                         pkgId: pkgObj.id,
                         usePoints: Boolean(usePointsEl && usePointsEl.checked),
-                        payKey,
-                        payMethod: `${ch.label} (${ch.accountNo})`,
-                        slipRef,
-                        slipTime,
-                        slipImage: slipDataUrl
+                        payKey: 'balance',
+                        payMethod: 'หักยอดเครดิตในเว็บ (Wallet Balance)',
+                        slipRef: 'WALLET-' + Math.floor(100000 + Math.random() * 900000),
+                        slipTime: nowTimeStr,
+                        slipImage: ''
                     };
                 }
             }).then(res => {
@@ -3118,19 +3012,18 @@
                     renderSurfaceStore();
 
                     Swal.fire({
-                        icon: 'info',
-                        title: 'ส่งหลักฐานการชำระเงินเรียบร้อย!',
+                        icon: 'success',
+                        title: 'หักเครดิตและส่งคำสั่งเติมเกมเรียบร้อย!',
                         html: `<div class="text-xs text-slate-600 space-y-2 text-left bg-slate-50 p-4 rounded-xl border border-slate-200">
                             <p>เลขที่ใบเสร็จ: <b class="font-mono-cyber text-slate-900">${escapeHtml(newOrder.id)}</b></p>
                             <p>รายการ: <b>${escapeHtml(game.title)} (${escapeHtml(pkg.name)})</b></p>
                             <p>ไอดีปลายทาง (UID): <b>${escapeHtml(res.value.uid)}</b></p>
-                            <p>ช่องทางโอน: <b>${escapeHtml(res.value.payMethod)}</b></p>
-                            <p>เลขอ้างอิงสลิป: <b class="font-mono-cyber text-slate-900">${escapeHtml(res.value.slipRef)}</b> (เวลา ${escapeHtml(res.value.slipTime)})</p>
+                            <p>วิธีชำระเงิน: <b>${escapeHtml(res.value.payMethod)}</b></p>
                             ${discountBaht > 0 ? `<p class="text-emerald-600">หักแต้มส่วนลดแล้ว ${pointsSpent} P: <b>-฿${discountBaht}</b></p>` : ''}
-                            <p>ยอดโอนสุทธิ: <b class="text-slate-900">฿${finalPrice.toLocaleString()}</b></p>
+                            <p>ยอดที่หักเครดิต: <b class="text-slate-900">฿${finalPrice.toLocaleString()}</b> (คงเหลือ <b>฿${Number(window.state.currentUser.walletCr || 0).toLocaleString()}</b>)</p>
                             <div class="p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-[11px] mt-2">
-                                <i class="fa-solid fa-clock mr-1"></i> สถานะปัจจุบัน: <b>${escapeHtml(newOrder.status)}</b><br>
-                                เมื่อแอดมินตรวจสอบสลิปและกดอนุมัติ ระบบจะส่งคำสั่งเติมเข้าคิว API และมอบแต้มสะสม +${pkg.points} P ทันที
+                                <i class="fa-solid fa-plug-circle-bolt mr-1"></i> สถานะปัจจุบัน: <b>${escapeHtml(newOrder.status)}</b><br>
+                                รายการเข้าคิวรอเชื่อม API เรียบร้อยแล้ว (แต้มสะสม +${pkg.points} P จะได้รับเมื่อจัดส่งสำเร็จ)
                             </div>
                         </div>`,
                         confirmButtonColor: '#0f172a'
@@ -3348,8 +3241,8 @@
                                     passwordHash: passHash,
                                     name: email.split('@')[0],
                                     role: isMainAdmin ? 'admin' : 'member',
-                                    points: isMainAdmin ? 150 : 50,
-                                    walletCr: isMainAdmin ? 15000 : 0
+                                    points: 0,
+                                    walletCr: 0
                                 };
                                 window.state.registeredUsers.push(found);
                             }
@@ -3454,7 +3347,7 @@
                         passwordHash: res.value.passwordHash,
                         name: res.value.name,
                         role: res.value.email === MAIN_ADMIN_EMAIL ? 'admin' : 'member',
-                        points: 50,
+                        points: 0,
                         walletCr: 0
                     };
                     window.state.registeredUsers = window.state.registeredUsers || [];
@@ -3473,7 +3366,7 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'สมัครสมาชิกสำเร็จ!',
-                        text: `ยินดีต้อนรับ ${newUser.name} คุณได้รับแต้มต้อนรับ +50 P`,
+                        text: `ยินดีต้อนรับ ${newUser.name} บัญชีของคุณพร้อมใช้งานแล้ว กรุณาเติมเงินเข้าเว็บก่อนทำรายการเติมเกม`,
                         confirmButtonColor: '#0f172a'
                     });
                 }
@@ -6124,7 +6017,7 @@
             if (!requireAdminGuard('สร้างรหัสเชิญเข้าคลังลับ')) return;
             const emailInput = document.getElementById('invite-email-input');
             const noteInput = document.getElementById('invite-note-input');
-            const email = (emailInput && emailInput.value.trim()) ? emailInput.value.trim() : (window.state.currentUser.email || 'vip.shooter@gmail.com');
+            const email = (emailInput && emailInput.value.trim()) ? emailInput.value.trim() : (window.state.currentUser.email || MAIN_ADMIN_EMAIL);
             const note = (noteInput && noteInput.value.trim()) ? noteInput.value.trim() : 'สมาชิกคลังแสงที่ได้รับเชิญ';
 
             const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
