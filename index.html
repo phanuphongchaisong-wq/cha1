@@ -141,13 +141,13 @@
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-amber-400 selection:text-slate-950">
 
     <!-- ===================================================================== -->
-    <!-- VIEW 1: SURFACE STORE (TANTOPUP24 - หน้าร้านรับเติมเกมปกติ)                -->
+    <!-- VIEW 1: SURFACE STORE (TANTOPUP24 - แยกหน้าเติมเกม / หน้าเติมเงิน / หน้าเช็คสถานะ) -->
     <!-- ===================================================================== -->
     <div id="view-app" class="min-h-screen flex flex-col bg-[#f8fafc] text-slate-800">
         <!-- Surface Header -->
-        <header class="bg-white/90 backdrop-blur-lg sticky top-0 z-30 border-b border-slate-200/80">
+        <header class="bg-white/95 backdrop-blur-lg sticky top-0 z-30 border-b border-slate-200/80 shadow-2xs">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
-                <a href="#surface-catalog-anchor" class="flex items-center gap-3 group">
+                <a href="#surface-catalog-anchor" onclick="switchSurfaceTab('games')" class="flex items-center gap-3 group">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 text-amber-400 flex items-center justify-center shadow-sm ring-1 ring-slate-900/10 group-hover:scale-105 transition">
                         <i class="fa-solid fa-gamepad text-lg"></i>
                     </div>
@@ -167,10 +167,33 @@
                     </div>
                 </a>
 
+                <!-- Clean Main Navigation Tabs (แยกหน้าชัดเจน: เติมเกม | เติมเงิน | เช็คสถานะรายการ) -->
+                <nav id="surface-main-nav" class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/80 order-3 lg:order-2 w-full lg:w-auto justify-center">
+                    <button type="button" id="surf-page-btn-games" onclick="switchSurfaceTab('games')" class="flex-1 lg:flex-initial px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-amber-400 shadow-xs transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <span>เติมเกม</span>
+                    </button>
+                    <button type="button" id="surf-page-btn-topup" onclick="switchSurfaceTab('topup')" class="flex-1 lg:flex-initial px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-wallet text-emerald-600"></i>
+                        <span>เติมเงิน</span>
+                    </button>
+                    <button type="button" id="surf-page-btn-history" onclick="switchSurfaceTab('history')" class="flex-1 lg:flex-initial px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-receipt text-sky-600"></i>
+                        <span>เช็คสถานะรายการ</span>
+                    </button>
+                </nav>
+
                 <!-- Right Controls -->
-                <div class="flex items-center flex-wrap gap-2">
+                <div class="flex items-center flex-wrap gap-2 order-2 lg:order-3">
                     <!-- Personal Controls (Visible ONLY when logged in) -->
                     <div id="surface-user-actions" class="hidden flex items-center flex-wrap gap-2">
+                        <!-- User Top-Up Balance Button (Links to Dedicated Top-Up Page) -->
+                        <button type="button" onclick="switchSurfaceTab('topup')" class="px-3 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 text-xs font-bold flex items-center gap-1.5 transition" title="ไปหน้าเติมเงินเข้าระบบ">
+                            <i class="fa-solid fa-wallet text-emerald-600"></i>
+                            <span id="user-balance-display">฿0</span>
+                            <span class="px-1.5 py-0.2 rounded bg-emerald-600 text-white text-[10px]">+เติมเงิน</span>
+                        </button>
+
                         <!-- Reward Points -->
                         <button type="button" onclick="openSurfacePointsModal()" class="px-3 py-2 rounded-xl bg-amber-50/90 hover:bg-amber-100 border border-amber-200/80 text-amber-900 text-xs font-semibold flex items-center gap-1.5 transition">
                             <i class="fa-solid fa-coins text-amber-500"></i>
@@ -225,88 +248,278 @@
             </div>
         </header>
 
-        <!-- Hero Banner (Shown ONLY when logged in; guests see pure game & price catalog) -->
-        <section id="surface-hero-section" class="hidden surface-hero-bg text-white py-10 sm:py-12 px-4 sm:px-6 border-b border-slate-800/80">
-            <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
-                <div class="max-w-2xl space-y-4">
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/25 text-amber-300 text-xs font-medium">
-                        <i class="fa-solid fa-shield-halved text-amber-400"></i>
-                        <span>ปลอดภัย 100% เติมด้วย UID เท่านั้น • ชำระเงินพร้อมยืนยันสลิปตรวจสอบ</span>
+        <!-- =============================================================== -->
+        <!-- SURFACE SUB-PAGE 1: หน้าแรก / เติมเกม (ไม่มีกรอบเลขบัญชีรกหน้าแรก) -->
+        <!-- =============================================================== -->
+        <div id="surface-page-games" class="flex-1 flex flex-col">
+            <!-- Clean, Uncluttered Hero Banner (Shown ONLY when logged in) -->
+            <section id="surface-hero-section" class="hidden surface-hero-bg text-white py-8 sm:py-10 px-4 sm:px-6 border-b border-slate-800/80">
+                <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-6">
+                    <div class="max-w-2xl space-y-3.5">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/25 text-amber-300 text-xs font-medium">
+                            <i class="fa-solid fa-shield-halved text-amber-400"></i>
+                            <span>ปลอดภัย 100% เติมเกมด้วย UID เท่านั้น • สะสมแต้มแลกส่วนลดได้ทุกบิล</span>
+                        </div>
+                        <h1 class="text-2xl sm:text-3xl font-bold leading-snug tracking-tight text-white">
+                            ศูนย์บริการเติมเกมออนไลน์ &amp; บัตรดิจิทัล <span class="text-amber-400">คุ้มค่าทุกแพ็กเกจ</span>
+                        </h1>
+                        <p class="text-slate-300/90 text-xs sm:text-sm leading-relaxed">
+                            เลือกเกมที่ต้องการเติมด้านล่าง หรือเติมเงินเข้ากระเป๋าไว้ล่วงหน้าในหน้า <b>"เติมเงิน"</b> เพื่อทำรายการสั่งเติมเกมได้สะดวกรวดเร็วและเป็นระเบียบ
+                        </p>
+                        <div class="flex flex-wrap items-center gap-2.5 pt-1">
+                            <a href="#surface-catalog-anchor" class="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold text-xs sm:text-sm transition shadow-lg shadow-amber-500/15 flex items-center gap-2">
+                                <span>เลือกเกมที่ต้องการเติม</span>
+                                <i class="fa-solid fa-arrow-down text-xs"></i>
+                            </a>
+                            <button type="button" onclick="switchSurfaceTab('topup')" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold text-xs sm:text-sm transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-wallet"></i>
+                                <span>ไปหน้าเติมเงิน / แจ้งโอนสลิป</span>
+                            </button>
+                            <button type="button" id="hero-history-btn" onclick="switchSurfaceTab('history')" class="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white font-medium text-xs sm:text-sm border border-white/15 transition">
+                                ตรวจสอบสถานะรายการ
+                            </button>
+                        </div>
                     </div>
-                    <h1 class="text-2xl sm:text-4xl font-bold leading-snug tracking-tight text-white">
-                        เติมเกมออนไลน์ &amp; บัตรดิจิทัล <span class="text-amber-400">คุ้มค่าทุกแพ็กเกจ</span> เข้าไวปลอดภัยสูงสุด
-                    </h1>
-                    <p class="text-slate-300/90 text-sm sm:text-base leading-relaxed">
-                        รองรับชำระผ่านพร้อมเพย์ (065-972-8104), ธนาคารกสิกรไทย (126-8-83922-0) และ TrueMoney Wallet (065-972-8104) พร้อมระบบตรวจสอบสลิปและสะสมแต้มแลกส่วนลดได้ทุกบิล
-                    </p>
-                    <div class="flex flex-wrap items-center gap-3 pt-1">
-                        <a href="#surface-catalog-anchor" class="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold text-sm transition shadow-lg shadow-amber-500/15 flex items-center gap-2">
-                            <span>เลือกเกมที่ต้องการเติม</span>
-                            <i class="fa-solid fa-arrow-down text-xs"></i>
-                        </a>
-                        <button type="button" id="hero-history-btn" onclick="openSurfaceHistoryModal()" class="px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-white font-medium text-sm border border-white/15 transition">
-                            ตรวจสอบสถานะรายการ
+
+                    <!-- Compact Account & System Status Card (Clean Overview, No Cluttered Bank Numbers on Page 1) -->
+                    <div class="w-full lg:w-[360px] bg-white/[0.04] backdrop-blur-md border border-white/10 rounded-2xl p-4 space-y-3 shadow-xl">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-2.5">
+                            <span class="text-xs text-slate-300 font-medium flex items-center gap-1.5">
+                                <i class="fa-solid fa-user-check text-amber-400"></i> สรุปสถานะบัญชีของคุณ
+                            </span>
+                            <button type="button" onclick="switchSurfaceTab('topup')" class="text-[11px] font-semibold text-emerald-400 hover:underline flex items-center gap-1">
+                                <i class="fa-solid fa-plus-circle"></i> เติมเงินเข้ากระเป๋า
+                            </button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2.5 text-xs">
+                            <div class="bg-slate-900/60 border border-white/5 rounded-xl p-3">
+                                <div class="text-[10px] text-slate-400">ยอดเงินพร้อมเติมเกม</div>
+                                <div id="hero-user-balance" class="font-mono-cyber font-bold text-base text-emerald-400 mt-0.5">฿0</div>
+                            </div>
+                            <div class="bg-slate-900/60 border border-white/5 rounded-xl p-3">
+                                <div class="text-[10px] text-slate-400">แต้มสะสม Reward</div>
+                                <div id="hero-user-points" class="font-mono-cyber font-bold text-base text-amber-300 mt-0.5">0 P</div>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-300 bg-slate-900/50 border border-white/5 rounded-xl px-3.5 py-2 flex items-center justify-between">
+                            <span class="flex items-center gap-1.5"><i class="fa-solid fa-plug-circle-bolt text-cyan-400"></i> สถานะระบบเติมเกม</span>
+                            <span id="hero-api-status-badge" class="text-amber-300 font-semibold">รอเชื่อม API (แอดมินตรวจสอบ)</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Surface Game & Card Catalog -->
+            <main id="surface-catalog-anchor" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
+                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-900">รายการเกมและบัตรดิจิทัล</h2>
+                        <p id="surface-catalog-subtitle" class="text-xs text-slate-500 mt-0.5">คลิกปุ่ม "เติมเกม" บนการ์ดเกมที่ต้องการเพื่อเลือกแพ็กเกจและระบุ UID</p>
+                    </div>
+
+                    <!-- Surface Filters & Search -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <div class="inline-flex p-1 rounded-xl bg-slate-200/70">
+                            <button type="button" onclick="filterSurfaceGames('all')" id="surf-tab-all" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-900 shadow-xs transition">ทั้งหมด</button>
+                            <button type="button" onclick="filterSurfaceGames('mobile')" id="surf-tab-mobile" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">เกมมือถือ &amp; PC</button>
+                            <button type="button" onclick="filterSurfaceGames('card')" id="surf-tab-card" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">บัตรดิจิทัล</button>
+                        </div>
+                        <div class="relative flex-1 sm:flex-initial">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                            <input id="surface-search-input" type="text" oninput="handleSurfaceSearch(this.value)" placeholder="ค้นหาชื่อเกมหรือบัตร..." class="w-full sm:w-56 pl-8 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Surface Games Grid -->
+                <div id="surface-game-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+            </main>
+        </div>
+
+        <!-- =============================================================== -->
+        <!-- SURFACE SUB-PAGE 2: หน้าเติมเงิน & ช่องทางชำระเงิน (แยกเฉพาะเป็นระเบียบ) -->
+        <!-- =============================================================== -->
+        <div id="surface-page-topup" class="hidden flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full mb-1">
+                        <i class="fa-solid fa-shield-halved"></i> ระบบเติมเงิน &amp; ยืนยันสลิปโอนเงินปลอดภัย
+                    </div>
+                    <h1 class="text-xl font-bold text-slate-900">เติมเงินเข้าระบบ &amp; ช่องทางชำระเงินอย่างเป็นทางการ</h1>
+                    <p class="text-xs text-slate-500">โอนเงินผ่านพร้อมเพย์ ธนาคารกสิกรไทย หรือ TrueMoney Wallet แล้วแจ้งสลิปเพื่อให้แอดมินตรวจสอบอนุมัติยอดเงิน</p>
+                </div>
+                <button type="button" onclick="switchSurfaceTab('games')" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 text-xs font-semibold flex items-center gap-2 self-start sm:self-auto transition">
+                    <i class="fa-solid fa-gamepad"></i> กลับไปหน้าเลือกเติมเกม
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left Column: User Balance + Official Payment Channels -->
+                <div class="space-y-5">
+                    <!-- Balance Card -->
+                    <div class="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white rounded-2xl p-5 space-y-3 shadow-lg">
+                        <div class="flex items-center justify-between text-xs text-slate-300">
+                            <span>ยอดเงินคงเหลือในบัญชีของคุณ</span>
+                            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-mono-cyber text-[10px]">1 ฿ = 1 เครดิต</span>
+                        </div>
+                        <div id="topup-page-balance" class="text-3xl font-bold font-mono-cyber text-amber-400">฿0</div>
+                        <div class="text-[11px] text-slate-300 flex items-center justify-between pt-2 border-t border-white/10">
+                            <span>แต้มสะสม Reward:</span>
+                            <span id="topup-page-points" class="font-bold text-amber-300">0 P</span>
+                        </div>
+                    </div>
+
+                    <!-- Official 3 Payment Channels Card -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-5 space-y-3.5 shadow-2xs">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <span class="text-xs text-slate-800 font-bold flex items-center gap-1.5">
+                                <i class="fa-solid fa-building-columns text-amber-500"></i> ช่องทางชำระเงินอย่างเป็นทางการ
+                            </span>
+                            <span class="text-[11px] font-semibold text-emerald-600 flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span> แตะเพื่อคัดลอก
+                            </span>
+                        </div>
+
+                        <div class="space-y-2.5 text-xs">
+                            <div class="p-3.5 rounded-xl bg-sky-50/70 border border-sky-200/80 space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold text-sky-950"><i class="fa-solid fa-qrcode text-sky-600 mr-1.5"></i> พร้อมเพย์ (PromptPay)</span>
+                                    <button type="button" onclick="copyTextSafe('0659728104', 'คัดลอกเบอร์พร้อมเพย์ 0659728104 แล้ว')" class="font-mono-cyber font-bold text-sky-700 hover:underline">065-972-8104</button>
+                                </div>
+                                <div class="text-[11px] text-sky-700 flex items-center justify-between">
+                                    <span>เบอร์พร้อมเพย์รับโอน</span>
+                                    <button type="button" onclick="copyTextSafe('0659728104', 'คัดลอกเบอร์พร้อมเพย์ 0659728104 แล้ว')" class="text-[11px] px-2 py-0.5 rounded bg-sky-600 text-white font-semibold"><i class="fa-regular fa-copy mr-1"></i>คัดลอก</button>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200/80 space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold text-emerald-950"><i class="fa-solid fa-landmark text-emerald-600 mr-1.5"></i> ธ.กสิกรไทย (KBank)</span>
+                                    <button type="button" onclick="copyTextSafe('1268839220', 'คัดลอกเลขบัญชี 1268839220 แล้ว')" class="font-mono-cyber font-bold text-emerald-700 hover:underline">126-8-83922-0</button>
+                                </div>
+                                <div class="text-[11px] text-emerald-700 flex items-center justify-between">
+                                    <span>เลขบัญชีธนาคารกสิกรไทย</span>
+                                    <button type="button" onclick="copyTextSafe('1268839220', 'คัดลอกเลขบัญชี 1268839220 แล้ว')" class="text-[11px] px-2 py-0.5 rounded bg-emerald-600 text-white font-semibold"><i class="fa-regular fa-copy mr-1"></i>คัดลอก</button>
+                                </div>
+                            </div>
+
+                            <div class="p-3.5 rounded-xl bg-orange-50/70 border border-orange-200/80 space-y-1">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-bold text-orange-950"><i class="fa-solid fa-wallet text-orange-600 mr-1.5"></i> TrueMoney Wallet</span>
+                                    <button type="button" onclick="copyTextSafe('0659728104', 'คัดลอกเบอร์วอลเล็ท 0659728104 แล้ว')" class="font-mono-cyber font-bold text-orange-700 hover:underline">065-972-8104</button>
+                                </div>
+                                <div class="text-[11px] text-orange-700 flex items-center justify-between">
+                                    <span>เบอร์ทรูมันนี่ วอลเล็ท</span>
+                                    <button type="button" onclick="copyTextSafe('0659728104', 'คัดลอกเบอร์วอลเล็ท 0659728104 แล้ว')" class="text-[11px] px-2 py-0.5 rounded bg-orange-600 text-white font-semibold"><i class="fa-regular fa-copy mr-1"></i>คัดลอก</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right 2 Columns: Top-Up Form & Slip Verification History -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-5 shadow-2xs">
+                        <div class="border-b border-slate-100 pb-3 flex flex-wrap items-center justify-between gap-2">
+                            <div>
+                                <h2 class="text-base font-bold text-slate-900">แบบฟอร์มแจ้งเติมเงินเข้าระบบ (ยืนยันสลิปให้แอดมินตรวจสอบ)</h2>
+                                <p class="text-xs text-slate-500">เมื่อแอดมินตรวจสอบสลิปและกดอนุมัติ ยอดเงินจะเข้ากระเป๋าของคุณทันทีเพื่อใช้กดเติมเกมได้ทุกเกม</p>
+                            </div>
+                            <span class="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-[11px] font-semibold">
+                                ป้องกันสลิปซ้ำอัตโนมัติ
+                            </span>
+                        </div>
+
+                        <!-- Step 1: Quick Amount Buttons -->
+                        <div class="space-y-2">
+                            <label class="block text-xs font-semibold text-slate-700">1. เลือกจำนวนเงินที่ต้องการเติม (บาท)</label>
+                            <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                                <button type="button" onclick="selectSurfaceTopupAmount(50)" class="py-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-400 text-xs font-bold text-slate-800 transition">฿50</button>
+                                <button type="button" onclick="selectSurfaceTopupAmount(100)" class="py-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-400 text-xs font-bold text-slate-800 transition">฿100</button>
+                                <button type="button" onclick="selectSurfaceTopupAmount(300)" class="py-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-400 text-xs font-bold text-slate-800 transition">฿300</button>
+                                <button type="button" onclick="selectSurfaceTopupAmount(500)" class="py-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-400 text-xs font-bold text-slate-800 transition">฿500</button>
+                                <button type="button" onclick="selectSurfaceTopupAmount(1000)" class="py-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-400 text-xs font-bold text-slate-800 transition">฿1,000</button>
+                                <button type="button" onclick="selectSurfaceTopupAmount(2000)" class="py-2 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-400 text-xs font-bold text-emerald-700 transition">฿2,000</button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Amount & Channel -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="surf-wallet-amount" class="block text-xs font-semibold text-slate-700 mb-1">จำนวนเงินที่โอนตามสลิป (บาท)*</label>
+                                <input id="surf-wallet-amount" type="number" min="10" value="100" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 font-mono-cyber font-bold text-sm focus:outline-none focus:border-slate-900">
+                            </div>
+                            <div>
+                                <label for="surf-wallet-channel" class="block text-xs font-semibold text-slate-700 mb-1">ช่องทางที่โอนเงินเข้า*</label>
+                                <select id="surf-wallet-channel" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-xs font-semibold focus:outline-none focus:border-slate-900">
+                                    <option value="พร้อมเพย์ 065-972-8104">พร้อมเพย์ (PromptPay): 065-972-8104</option>
+                                    <option value="ธ.กสิกรไทย 126-8-83922-0">ธนาคารกสิกรไทย (KBank): 126-8-83922-0</option>
+                                    <option value="TrueMoney Wallet 065-972-8104">TrueMoney Wallet: 065-972-8104</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Slip Ref, Time & Image -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div>
+                                <label for="surf-wallet-ref" class="block text-xs font-semibold text-slate-700 mb-1">เลขอ้างอิงสลิป / เลขท้ายสลิป*</label>
+                                <input id="surf-wallet-ref" type="text" placeholder="เช่น 202511168849" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 bg-white text-slate-900 font-mono-cyber text-xs focus:outline-none focus:border-slate-900">
+                            </div>
+                            <div>
+                                <label for="surf-wallet-time" class="block text-xs font-semibold text-slate-700 mb-1">เวลาโอนตามสลิป*</label>
+                                <input id="surf-wallet-time" type="text" placeholder="เช่น 14:30 น." class="w-full px-3.5 py-2 rounded-xl border border-slate-300 bg-white text-slate-900 text-xs focus:outline-none focus:border-slate-900">
+                            </div>
+                            <div>
+                                <label for="surf-wallet-file" class="block text-xs font-semibold text-slate-700 mb-1">แนบรูปสลิปโอนเงิน</label>
+                                <input id="surf-wallet-file" type="file" accept="image/*" class="w-full text-[11px] text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-slate-900 file:text-amber-400 hover:file:bg-slate-800">
+                            </div>
+                        </div>
+
+                        <button type="button" onclick="submitSurfaceWalletTopup()" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 font-bold text-xs sm:text-sm transition shadow-sm flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-file-shield"></i> แจ้งชำระเงินและส่งสลิปให้แอดมินตรวจสอบ
                         </button>
                     </div>
-                </div>
 
-                <!-- Sleek Trust & Official Payment Channels Summary Card -->
-                <div class="w-full lg:w-[410px] bg-white/[0.04] backdrop-blur-md border border-white/10 rounded-2xl p-5 space-y-3.5 shadow-2xl">
-                    <div class="flex items-center justify-between border-b border-white/10 pb-3">
-                        <span class="text-xs text-slate-300 font-medium flex items-center gap-1.5">
-                            <i class="fa-solid fa-building-columns text-amber-400"></i> ช่องทางชำระเงินอย่างเป็นทางการ
-                        </span>
-                        <span class="text-[11px] font-semibold text-emerald-400 flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span> ยืนยันสลิปปลอดภัย
-                        </span>
-                    </div>
-                    <div class="space-y-2 text-xs">
-                        <div class="bg-slate-900/60 border border-white/5 rounded-xl px-3.5 py-2 flex items-center justify-between">
-                            <span class="text-slate-300"><i class="fa-solid fa-qrcode text-sky-400 mr-1.5"></i> พร้อมเพย์ (PromptPay)</span>
-                            <button type="button" onclick="copyTextSafe('0659728104', 'คัดลอกเบอร์พร้อมเพย์ 0659728104 แล้ว')" class="font-mono-cyber font-bold text-amber-300 hover:underline">065-972-8104 <i class="fa-regular fa-copy text-[10px]"></i></button>
+                    <!-- Surface Wallet Top-Up History -->
+                    <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-2xs">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                                <i class="fa-solid fa-clock-rotate-left text-emerald-600"></i> ประวัติการแจ้งเติมเงินของคุณ
+                            </h3>
+                            <span class="text-[11px] text-slate-500">ตรวจสอบโดยแอดมิน</span>
                         </div>
-                        <div class="bg-slate-900/60 border border-white/5 rounded-xl px-3.5 py-2 flex items-center justify-between">
-                            <span class="text-slate-300"><i class="fa-solid fa-landmark text-emerald-400 mr-1.5"></i> ธ.กสิกรไทย (KBank)</span>
-                            <button type="button" onclick="copyTextSafe('1268839220', 'คัดลอกเลขบัญชี 1268839220 แล้ว')" class="font-mono-cyber font-bold text-emerald-300 hover:underline">126-8-83922-0 <i class="fa-regular fa-copy text-[10px]"></i></button>
-                        </div>
-                        <div class="bg-slate-900/60 border border-white/5 rounded-xl px-3.5 py-2 flex items-center justify-between">
-                            <span class="text-slate-300"><i class="fa-solid fa-wallet text-orange-400 mr-1.5"></i> TrueMoney Wallet</span>
-                            <button type="button" onclick="copyTextSafe('0659728104', 'คัดลอกเบอร์วอลเล็ท 0659728104 แล้ว')" class="font-mono-cyber font-bold text-orange-300 hover:underline">065-972-8104 <i class="fa-regular fa-copy text-[10px]"></i></button>
-                        </div>
-                    </div>
-                    <div class="text-[11px] text-slate-300 bg-slate-900/50 border border-white/5 rounded-xl px-3.5 py-2 flex items-center justify-between">
-                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-plug-circle-Bolt text-cyan-400"></i> สถานะระบบเติมเกม</span>
-                        <span id="hero-api-status-badge" class="text-amber-300 font-semibold">รอเชื่อม API (แอดมินตรวจสอบสลิป)</span>
+                        <div id="surface-topup-history-list" class="space-y-2.5 max-h-80 overflow-y-auto pr-1"></div>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        <!-- Surface Game & Card Catalog -->
-        <main id="surface-catalog-anchor" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <!-- =============================================================== -->
+        <!-- SURFACE SUB-PAGE 3: หน้าเช็คสถานะรายการเติมเกม & คิวเชื่อม API  -->
+        <!-- =============================================================== -->
+        <div id="surface-page-history" class="hidden flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-5 rounded-2xl border border-slate-200 shadow-2xs">
                 <div>
-                    <h2 class="text-xl font-bold text-slate-900">รายการเกมและบัตรเติมเงิน</h2>
-                    <p id="surface-catalog-subtitle" class="text-xs text-slate-500 mt-0.5">คลิกที่การ์ดเกมเพื่อดูรายการแพ็กเกจและราคาทั้งหมด</p>
+                    <div class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-sky-700 bg-sky-50 border border-sky-200 px-2.5 py-0.5 rounded-full mb-1">
+                        <i class="fa-solid fa-plug-circle-bolt"></i> ระบบติดตามคำสั่งซื้อ &amp; คิวรอเชื่อม API
+                    </div>
+                    <h1 class="text-xl font-bold text-slate-900">ตรวจสอบสถานะรายการเติมเกม &amp; รหัสบัตรดิจิทัล</h1>
+                    <p class="text-xs text-slate-500">ติดตามสถานะการตรวจสอบสลิปโอนเงิน สถานะคิวส่งคำสั่งเติมเกม (รอเชื่อม API) และรับรหัสบัตรดิจิทัล</p>
                 </div>
-
-                <!-- Surface Filters & Search -->
-                <div class="flex flex-wrap items-center gap-2">
-                    <div class="inline-flex p-1 rounded-xl bg-slate-200/70">
-                        <button type="button" onclick="filterSurfaceGames('all')" id="surf-tab-all" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-900 shadow-xs transition">ทั้งหมด</button>
-                        <button type="button" onclick="filterSurfaceGames('mobile')" id="surf-tab-mobile" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">เกมมือถือ &amp; PC</button>
-                        <button type="button" onclick="filterSurfaceGames('card')" id="surf-tab-card" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">บัตรดิจิทัล</button>
-                    </div>
-                    <div class="relative flex-1 sm:flex-initial">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                        <input id="surface-search-input" type="text" oninput="handleSurfaceSearch(this.value)" placeholder="ค้นหาชื่อเกมหรือบัตร..." class="w-full sm:w-56 pl-8 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition">
-                    </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" onclick="switchSurfaceTab('topup')" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition">
+                        + ไปหน้าเติมเงิน
+                    </button>
+                    <button type="button" onclick="switchSurfaceTab('games')" class="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-amber-400 text-xs font-semibold transition">
+                        เลือกเกมเพิ่มเติม
+                    </button>
                 </div>
             </div>
 
-            <!-- Surface Games Grid -->
-            <div id="surface-game-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
-        </main>
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 shadow-2xs">
+                <div id="surface-page-orders-list" class="space-y-3"></div>
+            </div>
+        </div>
 
         <!-- Surface Footer with Discreet 5-Click Secret Dot -->
         <footer class="bg-white border-t border-slate-200/80 py-6 px-4 sm:px-6 mt-10">
@@ -1831,6 +2044,7 @@
                     points: 0,
                     walletCr: 0
                 },
+                surfaceActiveTab: 'games',
                 surfaceCategory: 'all',
                 surfaceSearch: '',
                 surfaceGames: DEFAULT_SURFACE_GAMES,
@@ -2302,6 +2516,46 @@
 
             const pointsEl = document.getElementById('user-points-display');
             if (pointsEl) pointsEl.textContent = `${Number(user.points || 0).toLocaleString()} P`;
+            const heroPtsEl = document.getElementById('hero-user-points');
+            if (heroPtsEl) heroPtsEl.textContent = `${Number(user.points || 0).toLocaleString()} P`;
+            const topupPtsEl = document.getElementById('topup-page-points');
+            if (topupPtsEl) topupPtsEl.textContent = `${Number(user.points || 0).toLocaleString()} P`;
+
+            const userBal = Number(user.walletCr || 0);
+            const balEl = document.getElementById('user-balance-display');
+            if (balEl) balEl.textContent = `฿${userBal.toLocaleString()}`;
+            const heroBalEl = document.getElementById('hero-user-balance');
+            if (heroBalEl) heroBalEl.textContent = `฿${userBal.toLocaleString()}`;
+            const topupBalEl = document.getElementById('topup-page-balance');
+            if (topupBalEl) topupBalEl.textContent = `฿${userBal.toLocaleString()}`;
+
+            const timeInput = document.getElementById('surf-wallet-time');
+            if (timeInput && !timeInput.value) {
+                timeInput.value = new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.';
+            }
+
+            // Render Surface Wallet Top-Up History on Dedicated Top-Up Page
+            const surfTopupListEl = document.getElementById('surface-topup-history-list');
+            if (surfTopupListEl) {
+                const myTopups = isLoggedIn
+                    ? (isAdmin
+                        ? (window.state.hiddenTopups || [])
+                        : (window.state.hiddenTopups || []).filter(t => t.email && t.email.toLowerCase() === (user.email || '').toLowerCase()))
+                    : [];
+                surfTopupListEl.innerHTML = myTopups.length ? myTopups.map(t => `
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <div>
+                            <div class="font-bold text-slate-900 font-mono-cyber">${escapeHtml(t.id)} • +฿${Number(t.amount || 0).toLocaleString()}</div>
+                            <div class="text-[11px] text-slate-500">ช่องทาง: ${escapeHtml(t.channel || '-')} • เลขสลิป: <b class="font-mono-cyber text-slate-800">${escapeHtml(t.ref || '-')}</b> • เวลา: ${escapeHtml(t.date || '-')}</div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            ${t.slipImage ? `<button type="button" onclick="previewSlipImage('${escapeHtml(t.id)}', 'hidden')" class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-semibold text-[11px]">ดูสลิป</button>` : ''}
+                            <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold ${t.status === 'อนุมัติแล้ว' ? 'bg-emerald-100 text-emerald-800' : (t.status === 'ปฏิเสธแล้ว' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800')}">${escapeHtml(t.status)}</span>
+                            ${isAdmin && t.status === 'รอตรวจสอบ' ? `<button type="button" onclick="approveHiddenTopup('${escapeHtml(t.id)}'); renderSurfaceStore();" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[11px]">✓ อนุมัติยอด</button>` : ''}
+                        </div>
+                    </div>
+                `).join('') : '<p class="text-xs text-slate-400 text-center py-6">ยังไม่มีรายการแจ้งเติมเงิน</p>';
+            }
 
             const visibleOrders = isLoggedIn
                 ? (isAdmin
@@ -2312,14 +2566,54 @@
             const orderBadge = document.getElementById('surface-order-count-badge');
             if (orderBadge) orderBadge.textContent = visibleOrders.length;
 
+            const pageOrdersList = document.getElementById('surface-page-orders-list');
+            if (pageOrdersList) {
+                pageOrdersList.innerHTML = visibleOrders.length ? visibleOrders.map(o => {
+                    const isDone = o.status === 'สำเร็จเรียบร้อย';
+                    const isCancel = o.status === 'ยกเลิก/คืนเงิน';
+                    const badgeCls = isDone
+                        ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
+                        : (isCancel ? 'text-rose-700 bg-rose-50 border-rose-200' : 'text-amber-700 bg-amber-50 border-amber-200');
+                    return `
+                        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-2 text-left text-xs">
+                            <div class="flex flex-wrap items-start justify-between gap-2">
+                                <div>
+                                    <div class="font-bold text-slate-900 text-sm">${escapeHtml(o.gameTitle)} • ${escapeHtml(o.packageName)}</div>
+                                    <div class="text-slate-500 mt-0.5">เลขที่ใบเสร็จ: <span class="font-mono-cyber font-semibold text-slate-800">${escapeHtml(o.id)}</span> • ไอดีผู้เล่น (UID): <b class="text-slate-900">${escapeHtml(o.targetId)}</b> • เวลา: ${escapeHtml(o.date)}</div>
+                                    <div class="text-[11px] text-slate-500 mt-0.5">การชำระเงิน: <b>${escapeHtml(o.paymentMethod || '-')}</b> ${o.slipRef ? `• เลขอ้างอิง: <b class="font-mono-cyber text-slate-800">${escapeHtml(o.slipRef)}</b>` : ''}</div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-slate-900 text-base">฿${Number(o.price || 0).toLocaleString()}</div>
+                                    <span class="inline-block mt-1 px-2.5 py-0.5 rounded-md border text-[11px] font-semibold ${badgeCls}">${escapeHtml(o.status)}</span>
+                                </div>
+                            </div>
+                            <div class="flex flex-wrap items-center justify-between gap-2 text-[11px] pt-2 border-t border-slate-200/80 text-slate-600">
+                                <span>สถานะคิวเติมเกม: <b class="text-sky-700">${escapeHtml(o.apiQueueStatus || 'รอเชื่อม API')}</b></span>
+                                ${o.slipImage ? `<button type="button" onclick="previewSlipImage('${escapeHtml(o.id)}', 'surface')" class="text-sky-600 font-semibold underline">ดูรูปสลิปที่แนบ</button>` : ''}
+                            </div>
+                            ${o.pinCode && isDone ? `
+                                <div class="p-2.5 rounded-lg bg-slate-900 text-emerald-400 font-mono-cyber text-xs flex items-center justify-between">
+                                    <span>รหัสบัตรดิจิทัล (PIN): ${escapeHtml(o.pinCode)}</span>
+                                    <button type="button" onclick="copyTextSafe('${escapeHtml(o.pinCode)}', 'คัดลอก PIN แล้ว')" class="text-amber-300 underline font-sans-th">คัดลอกรหัส</button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('') : '<div class="text-center py-10 text-xs text-slate-400">ยังไม่มีรายการสั่งเติมเกม</div>';
+            }
+
             const adminBtn = document.getElementById('btn-admin-surface');
             if (adminBtn) {
                 adminBtn.classList.toggle('hidden', !isAdmin);
             }
 
-            const pendingSurfaceCount = (window.state.surfaceOrders || []).filter(
+            const pendingSurfaceOrdersCount = (window.state.surfaceOrders || []).filter(
                 o => o.paymentVerified !== true && o.status !== 'สำเร็จเรียบร้อย' && o.status !== 'ยกเลิก/คืนเงิน'
             ).length;
+            const pendingWalletTopupsCount = (window.state.hiddenTopups || []).filter(
+                t => t.status === 'รอตรวจสอบ'
+            ).length;
+            const pendingSurfaceCount = pendingSurfaceOrdersCount + pendingWalletTopupsCount;
             const pendingAdminBadge = document.getElementById('admin-pending-surface-badge');
             if (pendingAdminBadge) {
                 pendingAdminBadge.textContent = pendingSurfaceCount;
@@ -2373,7 +2667,7 @@
                 const minPrice = Math.min(...g.packages.map(p => p.price));
                 const maxPrice = Math.max(...g.packages.map(p => p.price));
                 const pkgCount = g.packages.length;
-                const actionLabel = isLoggedIn ? 'เติมเงิน' : 'ดูราคาแพ็กเกจ';
+                const actionLabel = isLoggedIn ? (g.category === 'card' ? 'ซื้อบัตร' : 'เติมเกม') : 'ดูราคาแพ็กเกจ';
 
                 const previewPills = g.packages.slice(0, 3).map(p => `
                     <div class="flex items-center justify-between text-[11px] py-1 px-2.5 rounded-lg bg-slate-50 border border-slate-100">
@@ -2425,6 +2719,103 @@
             }).join('');
         }
 
+        
+        window.switchSurfaceTab = function(tab) {
+            const isLoggedIn = Boolean(window.state.currentUser && window.state.currentUser.isLoggedIn);
+            if ((tab === 'topup' || tab === 'history') && !isLoggedIn) {
+                openLoginModal();
+                return;
+            }
+            window.state.surfaceActiveTab = tab || 'games';
+            const pages = {
+                games: 'surface-page-games',
+                topup: 'surface-page-topup',
+                history: 'surface-page-history'
+            };
+            Object.keys(pages).forEach(k => {
+                const el = document.getElementById(pages[k]);
+                if (el) el.classList.toggle('hidden', k !== window.state.surfaceActiveTab);
+                const btn = document.getElementById(`surf-page-btn-${k}`);
+                if (btn) {
+                    if (k === window.state.surfaceActiveTab) {
+                        btn.className = 'flex-1 lg:flex-initial px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-amber-400 shadow-xs transition flex items-center justify-center gap-1.5';
+                    } else {
+                        btn.className = 'flex-1 lg:flex-initial px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-600 hover:text-slate-900 transition flex items-center justify-center gap-1.5';
+                    }
+                }
+            });
+            renderSurfaceStore();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.selectSurfaceTopupAmount = function(amt) {
+            const el = document.getElementById('surf-wallet-amount');
+            if (el) el.value = amt;
+        };
+
+        window.submitSurfaceWalletTopup = async function() {
+            const user = window.state.currentUser;
+            if (!user || !user.isLoggedIn) {
+                openLoginModal();
+                return;
+            }
+            const amtEl = document.getElementById('surf-wallet-amount');
+            const chEl = document.getElementById('surf-wallet-channel');
+            const refEl = document.getElementById('surf-wallet-ref');
+            const timeEl = document.getElementById('surf-wallet-time');
+            const fileEl = document.getElementById('surf-wallet-file');
+
+            const amount = Math.max(10, Number(amtEl ? amtEl.value : 100));
+            const channel = chEl ? chEl.value : 'พร้อมเพย์ 065-972-8104';
+            const ref = (refEl && refEl.value.trim()) ? refEl.value.trim() : '';
+            const slipTime = (timeEl && timeEl.value.trim())
+                ? timeEl.value.trim()
+                : new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.';
+
+            if (!ref || ref.length < 4) {
+                showToast('กรุณากรอกเลขอ้างอิงสลิปโอนเงินอย่างน้อย 4 ตัวอักษร', 'warning');
+                return;
+            }
+            if (isSlipRefDuplicate(ref)) {
+                showToast('เลขอ้างอิงสลิปนี้ถูกใช้แจ้งโอนไปแล้ว กรุณาตรวจสอบสลิปอีกครั้ง', 'error');
+                return;
+            }
+
+            const slipImage = await readFileAsDataUrlLimited(fileEl);
+            const newTopup = {
+                id: 'TOPUP-' + Math.floor(100000 + Math.random() * 900000),
+                email: user.email,
+                amount: amount,
+                channel: channel,
+                ref: ref,
+                slipTime: slipTime,
+                slipImage: slipImage,
+                date: slipTime,
+                status: 'รอตรวจสอบ'
+            };
+
+            window.state.hiddenTopups = window.state.hiddenTopups || [];
+            window.state.hiddenTopups.unshift(newTopup);
+            if (refEl) refEl.value = '';
+            if (fileEl) fileEl.value = '';
+            saveState();
+            renderSurfaceStore();
+            renderHiddenStoreAll();
+
+            Swal.fire({
+                icon: 'success',
+                title: 'ส่งหลักฐานแจ้งเติมเงินเรียบร้อย!',
+                html: `<div class="text-xs text-slate-600 space-y-1.5 text-left bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <div>เลขที่รายการ: <b class="font-mono-cyber text-slate-900">${escapeHtml(newTopup.id)}</b></div>
+                    <div>จำนวนเงินที่แจ้งโอน: <b class="text-emerald-700">฿${amount.toLocaleString()}</b></div>
+                    <div>ช่องทางโอน: <b>${escapeHtml(channel)}</b></div>
+                    <div>เลขอ้างอิงสลิป: <b class="font-mono-cyber">${escapeHtml(ref)}</b> (${escapeHtml(slipTime)})</div>
+                    <div class="text-[11px] text-amber-800 pt-1">สถานะ: <b>รอแอดมินตรวจสอบสลิป</b> เมื่ออนุมัติแล้วยอดเงินจะเข้าบัญชีของคุณทันที</div>
+                </div>`,
+                confirmButtonColor: '#0f172a'
+            });
+        };
+
         window.filterSurfaceGames = function(cat) {
             window.state.surfaceCategory = cat;
             saveState();
@@ -2438,7 +2829,19 @@
 
         window.updatePaymentChannelDetailCard = function(channelKey) {
             const box = document.getElementById('swal-payment-account-detail');
+            const slipBox = document.getElementById('swal-direct-slip-box');
+            if (slipBox) slipBox.classList.toggle('hidden', channelKey === 'balance');
             if (!box) return;
+            if (channelKey === 'balance') {
+                const curBal = Number((window.state.currentUser && window.state.currentUser.walletCr) || 0);
+                box.innerHTML = `
+                    <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-between text-xs">
+                        <span class="text-emerald-900 font-medium"><i class="fa-solid fa-wallet text-emerald-600 mr-1.5"></i> ยอดเงินคงเหลือของคุณ: <b class="font-mono-cyber">฿${curBal.toLocaleString()}</b></span>
+                        <button type="button" onclick="Swal.close(); switchSurfaceTab('topup');" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-semibold text-[11px]">+ ไปหน้าเติมเงิน</button>
+                    </div>
+                `;
+                return;
+            }
             const ch = OFFICIAL_PAYMENT_CHANNELS[channelKey] || OFFICIAL_PAYMENT_CHANNELS.promptpay;
             box.innerHTML = `
                 <div class="p-3.5 rounded-xl border ${ch.badgeClass} space-y-2 text-xs">
@@ -2547,20 +2950,26 @@
 
                         ${pointsBox}
 
-                        <div class="space-y-2 pt-1 border-t border-slate-200">
-                            <label class="block text-xs font-semibold text-slate-800">3. เลือกช่องทางชำระเงินและโอนเงินตามหมายเลขด้านล่าง</label>
+                        <div class="space-y-2 pt-2 border-t border-slate-200">
+                            <div class="flex items-center justify-between">
+                                <label class="block text-xs font-semibold text-slate-800">3. เลือกวิธีชำระเงินสำหรับเติมเกม</label>
+                                <button type="button" onclick="Swal.close(); switchSurfaceTab('topup');" class="text-[11px] font-semibold text-emerald-700 hover:underline flex items-center gap-1">
+                                    <i class="fa-solid fa-wallet"></i> ไปหน้าเติมเงินเข้ากระเป๋า (มี ฿${Number(window.state.currentUser.walletCr || 0).toLocaleString()})
+                                </button>
+                            </div>
                             <select id="swal-surf-pay" onchange="updatePaymentChannelDetailCard(this.value)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs bg-white font-semibold text-slate-900">
-                                <option value="promptpay">พร้อมเพย์ (PromptPay): 065-972-8104</option>
-                                <option value="kbank">ธนาคารกสิกรไทย (KBank): 126-8-83922-0</option>
-                                <option value="truemoney">TrueMoney Wallet (วอลเล็ท): 065-972-8104</option>
+                                <option value="balance">หักจากยอดเงินในบัญชี (คงเหลือ ฿${Number(window.state.currentUser.walletCr || 0).toLocaleString()})</option>
+                                <option value="promptpay">โอนตรงพร้อมเพย์ (PromptPay): 065-972-8104</option>
+                                <option value="kbank">โอนตรงธนาคารกสิกรไทย (KBank): 126-8-83922-0</option>
+                                <option value="truemoney">โอนตรง TrueMoney Wallet: 065-972-8104</option>
                             </select>
                             <div id="swal-payment-account-detail"></div>
                         </div>
 
-                        <div class="p-3.5 rounded-2xl bg-slate-100 border border-slate-200/90 space-y-3">
+                        <div id="swal-direct-slip-box" class="hidden p-3.5 rounded-2xl bg-slate-100 border border-slate-200/90 space-y-3">
                             <div class="text-xs font-bold text-slate-900 flex items-center justify-between">
-                                <span><i class="fa-solid fa-file-shield text-emerald-600 mr-1"></i> 4. ยืนยันการชำระเงิน (เพื่อให้แอดมินตรวจสอบ)</span>
-                                <span class="text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold">รอเชื่อม API อัตโนมัติ</span>
+                                <span><i class="fa-solid fa-file-shield text-emerald-600 mr-1"></i> 4. ยืนยันสลิปโอนเงิน (เพื่อให้แอดมินตรวจสอบ)</span>
+                                <span class="text-[10px] px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold">รอเชื่อม API</span>
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                                 <div>
@@ -2573,14 +2982,17 @@
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-[11px] font-semibold text-slate-700 mb-1">แนบรูปภาพสลิปโอนเงิน (ช่วยให้แอดมินตรวจสอบไวขึ้น)</label>
+                                <label class="block text-[11px] font-semibold text-slate-700 mb-1">แนบรูปภาพสลิปโอนเงิน</label>
                                 <input id="swal-surf-slip-file" type="file" accept="image/*" class="w-full text-[11px] text-slate-600 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-slate-900 file:text-amber-400 hover:file:bg-slate-800">
                             </div>
                         </div>
                     </div>
                 `,
                 didOpen: () => {
-                    updatePaymentChannelDetailCard('promptpay');
+                    const sel = document.getElementById('swal-surf-pay');
+                    const hasBal = Number(window.state.currentUser.walletCr || 0) > 0;
+                    if (sel) sel.value = hasBal ? 'balance' : 'promptpay';
+                    updatePaymentChannelDetailCard(hasBal ? 'balance' : 'promptpay');
                 },
                 showCancelButton: true,
                 confirmButtonText: 'ส่งข้อมูลยืนยันการชำระเงิน',
@@ -2595,9 +3007,35 @@
                     const slipTime = document.getElementById('swal-surf-slip-time').value.trim();
                     const slipFileEl = document.getElementById('swal-surf-slip-file');
 
+                    const pkgObj = game.packages.find(p => p.id === (selectedRadio ? selectedRadio.value : game.packages[0].id)) || game.packages[0];
+                    let estDiscount = 0;
+                    if (usePointsEl && usePointsEl.checked) {
+                        const availU = Math.floor((window.state.currentUser.points || 0) / 100);
+                        const maxU = Math.floor(pkgObj.price / 10);
+                        estDiscount = Math.min(availU, maxU) * 10;
+                    }
+                    const estNetPrice = Math.max(0, pkgObj.price - estDiscount);
+
                     if (!uid) {
                         Swal.showValidationMessage(isCard ? 'กรุณาระบุอีเมลหรือเบอร์โทรสำหรับรับรหัส' : 'กรุณาระบุ UID หรือชื่อบัญชีในเกมของคุณ');
                         return false;
+                    }
+                    if (payKey === 'balance') {
+                        const curBal = Number(window.state.currentUser.walletCr || 0);
+                        if (curBal < estNetPrice) {
+                            Swal.showValidationMessage(`ยอดเงินในกระเป๋าไม่พอ (มี ฿${curBal.toLocaleString()} ต้องใช้ ฿${estNetPrice.toLocaleString()}) กรุณาไปที่หน้า "เติมเงิน" หรือเลือกโอนตรงแนบสลิป`);
+                            return false;
+                        }
+                        return {
+                            uid,
+                            pkgId: pkgObj.id,
+                            usePoints: Boolean(usePointsEl && usePointsEl.checked),
+                            payKey: 'balance',
+                            payMethod: 'หักยอดเงินในบัญชี (Wallet Balance)',
+                            slipRef: 'WALLET-' + Math.floor(100000 + Math.random() * 900000),
+                            slipTime: nowTimeStr,
+                            slipImage: ''
+                        };
                     }
                     if (!slipRef || slipRef.length < 4) {
                         Swal.showValidationMessage('กรุณากรอกเลขอ้างอิงสลิปโอนเงิน (อย่างน้อย 4 ตัวอักษร) เพื่อให้แอดมินตรวจสอบ');
@@ -2615,8 +3053,9 @@
                     const ch = OFFICIAL_PAYMENT_CHANNELS[payKey] || OFFICIAL_PAYMENT_CHANNELS.promptpay;
                     return {
                         uid,
-                        pkgId: selectedRadio ? selectedRadio.value : game.packages[0].id,
+                        pkgId: pkgObj.id,
                         usePoints: Boolean(usePointsEl && usePointsEl.checked),
+                        payKey,
                         payMethod: `${ch.label} (${ch.accountNo})`,
                         slipRef,
                         slipTime,
@@ -2644,6 +3083,10 @@
                     if (pointsSpent > 0) {
                         window.state.currentUser.points = Math.max(0, (window.state.currentUser.points || 0) - pointsSpent);
                     }
+                    const paidByBalance = res.value.payKey === 'balance';
+                    if (paidByBalance) {
+                        window.state.currentUser.walletCr = Math.max(0, Number(window.state.currentUser.walletCr || 0) - finalPrice);
+                    }
 
                     const newOrder = {
                         id: 'TOP-' + Math.floor(100000 + Math.random() * 900000),
@@ -2664,11 +3107,11 @@
                         slipRef: res.value.slipRef,
                         slipTime: res.value.slipTime,
                         slipImage: res.value.slipImage || '',
-                        paymentVerified: false,
-                        apiQueueStatus: 'รอเชื่อม API (รอแอดมินอนุมัติสลิป)',
+                        paymentVerified: paidByBalance,
+                        apiQueueStatus: paidByBalance ? 'ชำระเงินแล้ว • รอเชื่อม API เติมเกม' : 'รอเชื่อม API (รอแอดมินอนุมัติสลิป)',
                         pinCode: '',
                         date: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.',
-                        status: 'รอแอดมินตรวจสอบสลิป (รอเชื่อม API)'
+                        status: paidByBalance ? 'ชำระเงินแล้ว (รอเชื่อม API)' : 'รอแอดมินตรวจสอบสลิป (รอเชื่อม API)'
                     };
                     window.state.surfaceOrders.unshift(newOrder);
                     saveState();
@@ -3295,6 +3738,33 @@
                             <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-200">
                                 <div class="text-emerald-700">กำไรสุทธิรวม</div>
                                 <div class="font-bold text-sm text-emerald-600">+฿${totalProfit.toFixed(2)}</div>
+                            </div>
+                        </div>
+
+                        <!-- Section 0: Wallet Top-Up Slip Verification -->
+                        <div class="p-3.5 rounded-2xl bg-emerald-50/60 border border-emerald-200 space-y-2">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <div>
+                                    <span class="font-bold text-slate-900 text-sm">รายการแจ้งเติมเงินเข้ากระเป๋า (${(window.state.hiddenTopups || []).length})</span>
+                                    <p class="text-[11px] text-slate-500">ตรวจสอบสลิปจากหน้า "เติมเงิน" เพื่ออนุมัติยอดเงินเข้าบัญชีลูกค้า</p>
+                                </div>
+                            </div>
+                            <div class="space-y-1.5 max-h-44 overflow-y-auto pr-1">
+                                ${(window.state.hiddenTopups || []).map(t => `
+                                    <div class="p-2.5 rounded-xl bg-white border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
+                                        <div>
+                                            <div class="font-bold text-slate-900 font-mono-cyber">${escapeHtml(t.id)} • +฿${Number(t.amount || 0).toLocaleString()} <span class="px-2 py-0.5 rounded text-[10px] ${t.status === "อนุมัติแล้ว" ? "bg-emerald-100 text-emerald-800" : (t.status === "ปฏิเสธแล้ว" ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800")}">${escapeHtml(t.status)}</span></div>
+                                            <div class="text-[11px] text-slate-500">ผู้แจ้ง: <b>${escapeHtml(t.email || "-")}</b> • ช่องทาง: ${escapeHtml(t.channel || "-")} • เลขสลิป: <b class="font-mono-cyber text-slate-900">${escapeHtml(t.ref || "-")}</b> (${escapeHtml(t.date || "-")})</div>
+                                        </div>
+                                        <div class="flex items-center gap-1.5">
+                                            ${t.slipImage ? `<button type="button" onclick="previewSlipImage('${escapeHtml(t.id)}', 'hidden')" class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-semibold text-[11px]">ดูสลิป</button>` : ""}
+                                            ${t.status === "รอตรวจสอบ" ? `
+                                                <button type="button" onclick="approveHiddenTopup('${escapeHtml(t.id)}'); renderSurfaceStore(); openSurfaceAdminModal();" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[11px]">✓ อนุมัติยอดเงิน</button>
+                                                <button type="button" onclick="rejectHiddenTopup('${escapeHtml(t.id)}'); renderSurfaceStore(); openSurfaceAdminModal();" class="px-2.5 py-1 rounded-lg bg-rose-100 text-rose-700 font-semibold text-[11px]">ปฏิเสธ</button>
+                                            ` : ""}
+                                        </div>
+                                    </div>
+                                `).join("") || "<p class=\"text-[11px] text-slate-400 text-center py-3\">ยังไม่มีรายการแจ้งเติมเงิน</p>"}
                             </div>
                         </div>
 
