@@ -160,9 +160,9 @@
                                 <i class="fa-solid fa-circle-check text-[9px] mr-0.5"></i> OFFICIAL
                             </span>
                             <!-- Cloud Status Pill -->
-                            <button type="button" onclick="openFirebaseStatusModal()" id="firebase-status-pill" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200/80 text-[10px] font-medium hover:bg-sky-100 transition" title="ตรวจสอบสถานะการเชื่อมต่อ Firebase Cloud & API">
-                                <span id="firebase-status-dot" class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
-                                <span id="firebase-status-text">Firebase Connecting...</span>
+                            <button type="button" onclick="openFirebaseStatusModal()" id="firebase-status-pill" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 border border-sky-200/80 text-[10px] font-medium hover:bg-sky-100 transition max-w-[120px] sm:max-w-none" title="ตรวจสอบสถานะการเชื่อมต่อ Firebase Cloud & API">
+                                <span id="firebase-status-dot" class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0"></span>
+                                <span id="firebase-status-text" class="truncate">Firebase</span>
                             </button>
                         </div>
                         <p class="text-[11px] text-slate-500 hidden sm:block">ศูนย์บริการเติมเกมออนไลน์และบัตรดิจิทัลครบวงจร</p>
@@ -170,7 +170,7 @@
                 </a>
 
                 <!-- Clean Main Navigation Tabs (แยกหน้าชัดเจน: เติมเกม | เติมเงิน | เช็คสถานะรายการ) -->
-                <nav id="surface-main-nav" class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/80 order-3 lg:order-2 w-full lg:w-auto justify-center">
+                <nav id="surface-main-nav" class="grid grid-cols-3 lg:inline-flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/80 order-3 lg:order-2 w-full lg:w-auto">
                     <button type="button" id="surf-page-btn-games" onclick="switchSurfaceTab('games')" class="flex-1 lg:flex-initial px-4 py-1.5 rounded-lg text-xs font-bold bg-slate-900 text-amber-400 shadow-xs transition flex items-center justify-center gap-1.5">
                         <i class="fa-solid fa-gamepad"></i>
                         <span>เติมเกม</span>
@@ -312,23 +312,23 @@
             </section>
 
             <!-- Surface Game & Card Catalog -->
-            <main id="surface-catalog-anchor" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 space-y-6">
-                <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <main id="surface-catalog-anchor" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-5">
+                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200/90 shadow-2xs flex flex-col lg:flex-row lg:items-center justify-between gap-3.5">
                     <div>
-                        <h2 class="text-xl font-bold text-slate-900">รายการเกมและบัตรดิจิทัล</h2>
-                        <p id="surface-catalog-subtitle" class="text-xs text-slate-500 mt-0.5">คลิกปุ่ม "เติมเกม" บนการ์ดเกมที่ต้องการเพื่อเลือกแพ็กเกจและระบุ UID</p>
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-900">รายการเกมและบัตรดิจิทัล</h2>
+                        <p id="surface-catalog-subtitle" class="text-xs text-slate-500 mt-0.5">คลิกที่ไอคอนเกมเพื่อดูราคาแพ็กเกจและทำรายการเติมเงิน</p>
                     </div>
 
                     <!-- Surface Filters & Search -->
-                    <div class="flex flex-wrap items-center gap-2">
-                        <div class="inline-flex p-1 rounded-xl bg-slate-200/70">
-                            <button type="button" onclick="filterSurfaceGames('all')" id="surf-tab-all" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-900 shadow-xs transition">ทั้งหมด</button>
-                            <button type="button" onclick="filterSurfaceGames('mobile')" id="surf-tab-mobile" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">เกมมือถือ &amp; PC</button>
-                            <button type="button" onclick="filterSurfaceGames('card')" id="surf-tab-card" class="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">บัตรดิจิทัล</button>
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-2">
+                        <div class="grid grid-cols-3 sm:inline-flex p-1 rounded-xl bg-slate-100 border border-slate-200/70">
+                            <button type="button" onclick="filterSurfaceGames('all')" id="surf-tab-all" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-900 shadow-xs transition">ทั้งหมด</button>
+                            <button type="button" onclick="filterSurfaceGames('mobile')" id="surf-tab-mobile" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">เกมมือถือ &amp; PC</button>
+                            <button type="button" onclick="filterSurfaceGames('card')" id="surf-tab-card" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">บัตรดิจิทัล</button>
                         </div>
-                        <div class="relative flex-1 sm:flex-initial">
+                        <div class="relative flex-1 sm:w-56">
                             <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                            <input id="surface-search-input" type="text" oninput="handleSurfaceSearch(this.value)" placeholder="ค้นหาชื่อเกมหรือบัตร..." class="w-full sm:w-56 pl-8 pr-3 py-2 rounded-xl border border-slate-200 bg-white text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition">
+                            <input id="surface-search-input" type="text" oninput="handleSurfaceSearch(this.value)" placeholder="ค้นหาชื่อเกมหรือบัตร..." class="w-full pl-8 pr-3 py-2 rounded-xl border border-slate-200 bg-slate-50/60 focus:bg-white text-xs text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400 transition">
                         </div>
                     </div>
                 </div>
@@ -632,196 +632,199 @@
     <div id="view-hidden" class="hidden min-h-screen phantom-void-bg text-slate-100 flex flex-col">
 
         <!-- Hidden Store Unified Header & Navigation -->
-        <header class="hud-glass sticky top-0 z-30 border-b border-slate-800/90">
-            <!-- Compact Top Telemetry Strip -->
-            <div class="bg-black/50 border-b border-white/5 text-[11px] py-1.5 px-4 font-mono-cyber">
-                <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
-                    <div class="flex items-center gap-2.5 text-slate-400">
-                        <span class="inline-flex items-center gap-1.5 text-emerald-400 font-semibold">
+        <header class="hud-glass sticky top-0 z-30 border-b border-slate-800/80 backdrop-blur-xl">
+            <!-- Slim Top Status Strip -->
+            <div class="bg-black/60 border-b border-white/5 text-[10px] sm:text-[11px] py-1 px-4 font-mono-cyber">
+                <div class="max-w-7xl mx-auto flex items-center justify-between gap-2">
+                    <div class="flex items-center gap-2 text-slate-400 truncate">
+                        <span class="inline-flex items-center gap-1.5 text-emerald-400 font-semibold shrink-0">
                             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-glow"></span>
-                            PHANTOM-NET SECURED
+                            <span class="hidden sm:inline">PHANTOM-NET</span> SECURED
                         </span>
+                        <span class="text-slate-700 hidden md:inline">•</span>
+                        <span class="text-cyan-400/90 hidden md:inline" id="hud-active-code-display">SESSION: INV-ZF5YKX</span>
                         <span class="text-slate-700">•</span>
-                        <span class="text-cyan-400/90" id="hud-active-code-display">SESSION: INV-ZF5YKX</span>
-                        <span class="text-slate-700">•</span>
-                        <button type="button" onclick="openFirebaseStatusModal()" class="text-sky-400 hover:text-sky-300 transition flex items-center gap-1">
-                            <i class="fa-solid fa-cloud-shield"></i> <span id="hud-cloud-status">CLOUD SYNC: ACTIVE</span>
+                        <button type="button" onclick="openFirebaseStatusModal()" class="text-sky-400 hover:text-sky-300 transition flex items-center gap-1 truncate">
+                            <i class="fa-solid fa-cloud-shield"></i> <span id="hud-cloud-status">CLOUD SYNC</span>
                         </button>
                     </div>
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2.5 shrink-0">
                         <button type="button" onclick="openHiddenQuickGuide()" class="text-slate-300 hover:text-cyan-300 transition flex items-center gap-1">
-                            <i class="fa-solid fa-circle-info text-cyan-400"></i> คู่มือการใช้งาน
+                            <i class="fa-solid fa-circle-info text-cyan-400"></i> <span>คู่มือ</span>
                         </button>
                         <span id="hud-admin-divider" class="text-slate-700 hidden">|</span>
-                        <!-- Protected Admin-Only Credit Grant -->
                         <button type="button" id="btn-hud-admin-boost" onclick="instantDemoCreditBoost()" class="hidden text-emerald-400 hover:text-emerald-300 transition flex items-center gap-1 font-semibold">
-                            <i class="fa-solid fa-bolt"></i> เติมด่วน +5,000 CR
+                            <i class="fa-solid fa-bolt"></i> +5,000 CR
                         </button>
                     </div>
                 </div>
             </div>
 
             <!-- Main Brand & Action Row -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-600 to-rose-900 border border-rose-400/40 flex items-center justify-center shadow-lg shadow-rose-950/60">
-                        <i class="fa-solid fa-crosshairs text-white text-lg"></i>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-rose-600 to-rose-900 border border-rose-400/40 flex items-center justify-center shadow-lg shadow-rose-950/60 shrink-0">
+                        <i class="fa-solid fa-crosshairs text-white text-base sm:text-lg"></i>
                     </div>
-                    <div>
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <span class="font-bold text-lg tracking-wider text-white font-mono-cyber">VALO ARMORY</span>
-                            <span id="hidden-rank-badge" class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-rose-500/15 text-rose-400 border border-rose-500/40">
+                    <div class="min-w-0">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-base sm:text-lg tracking-wider text-white font-mono-cyber truncate">VALO ARMORY</span>
+                            <span id="hidden-rank-badge" class="hidden sm:inline-block text-[10px] font-semibold px-2 py-0.5 rounded-md bg-rose-500/15 text-rose-400 border border-rose-500/40">
                                 ระดับ 4 (ผู้ดูแลระบบ)
                             </span>
                         </div>
-                        <p class="text-[11px] text-slate-400">คลังยุทโธปกรณ์บีบีกันและอุปกรณ์แต่งคัสตอมเฉพาะสมาชิก</p>
+                        <p class="text-[11px] text-slate-400 truncate hidden sm:block">คลังยุทโธปกรณ์บีบีกันและอุปกรณ์แต่งคัสตอมเฉพาะสมาชิก</p>
                     </div>
                 </div>
 
                 <!-- Right Action Buttons -->
-                <div class="flex items-center flex-wrap gap-2">
-                    <button type="button" onclick="switchHiddenTab('wallet')" class="px-3 py-1.5 rounded-xl bg-emerald-950/70 hover:bg-emerald-900/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono-cyber font-semibold flex items-center gap-1.5 transition">
+                <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                    <button type="button" onclick="switchHiddenTab('wallet')" class="h-9 px-2.5 sm:px-3 rounded-xl bg-emerald-950/70 hover:bg-emerald-900/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono-cyber font-semibold flex items-center gap-1.5 transition">
                         <i class="fa-solid fa-wallet text-emerald-400"></i>
                         <span id="hidden-wallet-balance">0 CR</span>
-                        <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-[10px] text-emerald-200">+เติม</span>
+                        <span class="px-1.5 py-0.5 rounded bg-emerald-500/20 text-[10px] text-emerald-200 hidden sm:inline">+เติม</span>
                     </button>
 
-                    <button type="button" onclick="openHiddenCartModal()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-semibold text-xs flex items-center gap-1.5 transition shadow-md shadow-emerald-950/50">
+                    <button type="button" onclick="openHiddenCartModal()" class="h-9 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-semibold text-xs flex items-center gap-1.5 transition shadow-md shadow-emerald-950/50">
                         <i class="fa-solid fa-cart-shopping"></i>
-                        <span>ตะกร้า</span>
+                        <span class="hidden sm:inline">ตะกร้า</span>
                         <span id="hidden-cart-count" class="px-1.5 py-0.2 rounded-full bg-rose-600 text-white text-[10px] font-bold">0</span>
                     </button>
 
-                    <button type="button" onclick="openHiddenMemberProfile()" class="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-cyan-300 text-xs font-medium flex items-center gap-1.5 transition">
+                    <button type="button" onclick="openHiddenMemberProfile()" title="บัญชีสมาชิก" class="h-9 px-2.5 sm:px-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-cyan-300 text-xs font-medium flex items-center gap-1.5 transition">
                         <i class="fa-regular fa-id-badge"></i>
-                        <span class="hidden sm:inline">บัญชี</span>
+                        <span class="hidden md:inline">บัญชี</span>
                     </button>
 
-                    <button type="button" onclick="lockHiddenStore()" class="px-3 py-1.5 rounded-xl bg-slate-900/90 hover:bg-rose-950/80 border border-slate-700 hover:border-rose-500/50 text-rose-400 text-xs font-medium flex items-center gap-1.5 transition">
+                    <button type="button" onclick="lockHiddenStore()" title="กลับหน้าเติมเกม" class="h-9 px-2.5 sm:px-3 rounded-xl bg-slate-900/90 hover:bg-rose-950/80 border border-slate-700 hover:border-rose-500/50 text-rose-400 text-xs font-medium flex items-center gap-1.5 transition">
                         <i class="fa-solid fa-right-from-bracket"></i>
-                        <span class="hidden sm:inline">ออก</span>
+                        <span class="hidden md:inline">ออก</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Sub-Navigation & Coupon Strip -->
+            <!-- Clean Sub-Navigation Bar (All 5 Tabs Visible & Aligned) -->
             <div class="bg-black/40 border-t border-slate-800/80 px-4 sm:px-6 py-2">
-                <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-2">
-                    <nav class="flex flex-wrap items-center gap-1.5">
-                        <button type="button" id="hid-nav-shop" onclick="switchHiddenTab('shop')" class="shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-600 text-white shadow-md shadow-rose-950/60 flex items-center gap-1.5 transition">
+                <div class="max-w-7xl mx-auto">
+                    <nav class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5">
+                        <button type="button" id="hid-nav-shop" onclick="switchHiddenTab('shop')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-600 text-white shadow-md shadow-rose-950/60 flex items-center justify-center sm:justify-start gap-1.5 transition">
                             <i class="fa-solid fa-store"></i>
                             <span>รายการสินค้า</span>
                         </button>
-                        <button type="button" id="hid-nav-wallet" onclick="switchHiddenTab('wallet')" class="shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
+                        <button type="button" id="hid-nav-wallet" onclick="switchHiddenTab('wallet')" class="px-3 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white bg-slate-900/60 sm:bg-transparent hover:bg-slate-800/70 flex items-center justify-center sm:justify-start gap-1.5 transition">
                             <i class="fa-solid fa-coins text-emerald-400"></i>
                             <span>เติมเครดิต (<span id="nav-wallet-cr">0</span>)</span>
                         </button>
-                        <button type="button" id="hid-nav-tools" onclick="switchHiddenTab('tools')" class="shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
+                        <button type="button" id="hid-nav-tools" onclick="switchHiddenTab('tools')" class="px-3 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white bg-slate-900/60 sm:bg-transparent hover:bg-slate-800/70 flex items-center justify-center sm:justify-start gap-1.5 transition">
                             <i class="fa-solid fa-screwdriver-wrench text-amber-400"></i>
                             <span>จัดเซ็ต &amp; FPS</span>
                             <span id="compare-count-badge" class="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] font-mono-cyber">0/3</span>
                         </button>
-                        <button type="button" id="hid-nav-orders" onclick="switchHiddenTab('orders')" class="shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
+                        <button type="button" id="hid-nav-orders" onclick="switchHiddenTab('orders')" class="px-3 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white bg-slate-900/60 sm:bg-transparent hover:bg-slate-800/70 flex items-center justify-center sm:justify-start gap-1.5 transition">
                             <i class="fa-solid fa-box-open text-cyan-400"></i>
                             <span>คำสั่งซื้อ (<span id="my-armory-order-count">0</span>)</span>
                         </button>
-                        <button type="button" id="hid-nav-admin" onclick="switchHiddenTab('admin')" class="shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition">
+                        <button type="button" id="hid-nav-admin" onclick="switchHiddenTab('admin')" class="col-span-2 sm:col-span-1 px-3 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white bg-slate-900/60 sm:bg-transparent hover:bg-slate-800/70 flex items-center justify-center sm:justify-start gap-1.5 transition">
                             <i class="fa-solid fa-user-shield text-rose-400"></i>
                             <span>จัดการร้าน &amp; คำเชิญ</span>
                         </button>
                         <button type="button" id="btn-admin-hidden" onclick="switchHiddenTab('admin')" class="hidden">จัดการคลังปืน</button>
                     </nav>
-
-                    <!-- Interactive Coupon Pills -->
-                    <div class="flex items-center flex-wrap gap-1.5 text-[11px]">
-                        <span class="text-slate-400 flex items-center gap-1 mr-0.5">
-                            <i class="fa-solid fa-ticket text-emerald-400"></i> โค้ดส่วนลด:
-                        </span>
-                        <button type="button" onclick="applyQuickCoupon('TACTICAL10')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-emerald-950 border border-slate-700 hover:border-emerald-500/50 text-slate-200 font-mono-cyber transition flex items-center gap-1">
-                            <span class="font-bold text-emerald-400">TACTICAL10</span>
-                            <span class="text-slate-400">-10%</span>
-                        </button>
-                        <button type="button" onclick="applyQuickCoupon('ARMORY200')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-500/50 text-slate-200 font-mono-cyber transition flex items-center gap-1">
-                            <span class="font-bold text-cyan-400">ARMORY200</span>
-                            <span class="text-slate-400">-200 CR</span>
-                        </button>
-                    </div>
                 </div>
             </div>
         </header>
 
         <!-- Main Container for the 5 Separate Hidden Views -->
-        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-5 sm:py-6 space-y-5">
 
             <!-- SUB-PAGE 1: SHOP CATALOG -->
-            <section id="tactical-shop-section" class="space-y-5">
-                <!-- Clean Tactical Hero -->
-                <div class="hud-glass cyber-scanline rounded-2xl p-4 sm:p-6 border border-slate-800/90">
-                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
-                        <div class="space-y-2 max-w-2xl">
-                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 text-xs font-medium">
+            <section id="tactical-shop-section" class="space-y-4 sm:space-y-5">
+                <!-- Sleek Editorial Tactical Banner -->
+                <div class="hud-glass cyber-scanline rounded-2xl p-4 sm:p-5 border border-slate-800/90">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
+                        <div class="space-y-1.5 max-w-2xl">
+                            <div class="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 text-[11px] font-medium">
                                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                                <span>สมาชิกที่ได้รับเชิญ • ตรวจเช็ค QC &amp; Chronograph ก่อนส่งทุกกระบอก</span>
+                                <span>สมาชิก VIP • ตรวจ QC &amp; Chronograph ก่อนส่งทุกกระบอก</span>
                             </div>
-                            <h1 class="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                            <h1 class="text-lg sm:text-2xl font-bold text-white tracking-tight">
                                 คลังปืนบีบีกันและอุปกรณ์แต่งเกรดสนามแข่งขัน
                             </h1>
-                            <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">
+                            <p class="text-xs text-slate-400 leading-relaxed hidden sm:block">
                                 คลิกที่สินค้าเพื่อดูสเปกเชิงลึกและเลือกบริการปรับจูนจากช่างคลังแสง หรือจำลองจัดเซ็ตปืนและคำนวณความแรงได้ทันที
                             </p>
                         </div>
 
                         <div class="hidden sm:grid sm:grid-cols-4 lg:grid-cols-2 gap-2.5 shrink-0 text-xs">
-                            <div class="bg-slate-900/75 border border-slate-800 rounded-xl px-3.5 py-2.5">
+                            <div class="bg-slate-900/75 border border-slate-800 rounded-xl px-3.5 py-2">
                                 <div class="text-slate-400 text-[10px]">พร้อมส่งในคลัง</div>
-                                <div class="text-white font-bold font-mono-cyber text-sm mt-0.5" id="shop-stat-total-items">10 รายการ</div>
+                                <div class="text-white font-bold font-mono-cyber text-sm" id="shop-stat-total-items">10 รายการ</div>
                             </div>
-                            <div class="bg-slate-900/75 border border-slate-800 rounded-xl px-3.5 py-2.5">
+                            <div class="bg-slate-900/75 border border-slate-800 rounded-xl px-3.5 py-2">
                                 <div class="text-slate-400 text-[10px]">เครดิตของคุณ</div>
-                                <div class="text-emerald-400 font-bold font-mono-cyber text-sm mt-0.5" id="shop-stat-wallet">0 CR</div>
+                                <div class="text-emerald-400 font-bold font-mono-cyber text-sm" id="shop-stat-wallet">0 CR</div>
                             </div>
-                            <div class="bg-slate-900/75 border border-slate-800 rounded-xl px-3.5 py-2.5">
+                            <div class="bg-slate-900/75 border border-slate-800 rounded-xl px-3.5 py-2">
                                 <div class="text-slate-400 text-[10px]">คูปองที่เลือกไว้</div>
-                                <div class="text-cyan-400 font-bold font-mono-cyber text-sm mt-0.5" id="shop-stat-coupon">ยังไม่ได้เลือก</div>
+                                <div class="text-cyan-400 font-bold font-mono-cyber text-sm" id="shop-stat-coupon">ยังไม่ได้เลือก</div>
                             </div>
-                            <div class="bg-slate-900/75 border border-slate-800 rounded-xl px-3.5 py-2.5">
+                            <div class="bg-slate-900/75 border border-slate-800 rounded-xl px-3.5 py-2">
                                 <div class="text-slate-400 text-[10px]">การจัดส่งพัสดุ</div>
-                                <div class="text-amber-300 font-bold text-sm mt-0.5">ปกปิดชื่อสินค้า</div>
+                                <div class="text-amber-300 font-bold text-sm">ปกปิดชื่อสินค้า</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Category Filter Bar & Search/Sort Controls -->
-                <div class="hud-glass rounded-2xl p-3.5 border border-slate-800/90 flex flex-col lg:flex-row lg:items-center justify-between gap-3">
-                    <div class="flex items-center flex-wrap gap-2">
-                        <button type="button" id="cat-btn-all" onclick="filterMarket('all')" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-rose-600 text-white shadow-sm transition flex items-center gap-1.5">
-                            <span>ทั้งหมด</span>
-                            <span id="count-badge-all" class="px-1.5 py-0.2 rounded-full bg-black/30 text-[10px] font-mono-cyber">10</span>
-                        </button>
-                        <button type="button" id="cat-btn-gun" onclick="filterMarket('gun')" class="px-3.5 py-2 rounded-xl text-xs font-medium bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-gun text-emerald-400"></i>
-                            <span>ตัวปืน BB-GUN</span>
-                            <span id="count-badge-gun" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px] font-mono-cyber">5</span>
-                        </button>
-                        <button type="button" id="cat-btn-part" onclick="filterMarket('part')" class="px-3.5 py-2 rounded-xl text-xs font-medium bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-gears text-amber-400"></i>
-                            <span>อะไหล่ภายใน</span>
-                            <span id="count-badge-part" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px] font-mono-cyber">3</span>
-                        </button>
-                        <button type="button" id="cat-btn-acc" onclick="filterMarket('acc')" class="px-3.5 py-2 rounded-xl text-xs font-medium bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-bullseye text-cyan-400"></i>
-                            <span>อุปกรณ์แต่ง/สโคป</span>
-                            <span id="count-badge-acc" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px] font-mono-cyber">2</span>
-                        </button>
-                        <button type="button" id="cat-btn-fav" onclick="filterMarket('fav')" class="px-3.5 py-2 rounded-xl text-xs font-medium bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition flex items-center gap-1.5">
-                            <i class="fa-solid fa-heart text-rose-400"></i>
-                            <span>รายการโปรด (<span id="fav-count-badge">0</span>)</span>
-                        </button>
+                <!-- Slim Coupon & Filter Bar -->
+                <div class="hud-glass rounded-2xl p-3.5 border border-slate-800/90 space-y-3">
+                    <!-- Row 1: Categories + Promo Coupons -->
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-2.5">
+                        <div class="flex items-center flex-wrap gap-1.5">
+                            <button type="button" id="cat-btn-all" onclick="filterMarket('all')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-600 text-white shadow-sm transition flex items-center gap-1.5">
+                                <span>ทั้งหมด</span>
+                                <span id="count-badge-all" class="px-1.5 py-0.2 rounded-full bg-black/30 text-[10px] font-mono-cyber">10</span>
+                            </button>
+                            <button type="button" id="cat-btn-gun" onclick="filterMarket('gun')" class="px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-gun text-emerald-400"></i>
+                                <span>ตัวปืน</span>
+                                <span id="count-badge-gun" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px] font-mono-cyber">5</span>
+                            </button>
+                            <button type="button" id="cat-btn-part" onclick="filterMarket('part')" class="px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-gears text-amber-400"></i>
+                                <span>อะไหล่</span>
+                                <span id="count-badge-part" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px] font-mono-cyber">3</span>
+                            </button>
+                            <button type="button" id="cat-btn-acc" onclick="filterMarket('acc')" class="px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-bullseye text-cyan-400"></i>
+                                <span>อุปกรณ์แต่ง</span>
+                                <span id="count-badge-acc" class="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px] font-mono-cyber">2</span>
+                            </button>
+                            <button type="button" id="cat-btn-fav" onclick="filterMarket('fav')" class="px-3 py-1.5 rounded-xl text-xs font-medium bg-slate-900/90 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-heart text-rose-400"></i>
+                                <span>โปรด (<span id="fav-count-badge">0</span>)</span>
+                            </button>
+                        </div>
+
+                        <!-- Promo Coupons Pill Strip -->
+                        <div class="flex items-center flex-wrap gap-1.5 text-[11px]">
+                            <span class="text-slate-400 flex items-center gap-1">
+                                <i class="fa-solid fa-ticket text-emerald-400"></i> โค้ดลด:
+                            </span>
+                            <button type="button" onclick="applyQuickCoupon('TACTICAL10')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-emerald-950 border border-slate-700 hover:border-emerald-500/50 text-slate-200 font-mono-cyber transition flex items-center gap-1">
+                                <span class="font-bold text-emerald-400">TACTICAL10</span>
+                                <span class="text-slate-400">-10%</span>
+                            </button>
+                            <button type="button" onclick="applyQuickCoupon('ARMORY200')" class="px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-cyan-950 border border-slate-700 hover:border-cyan-500/50 text-slate-200 font-mono-cyber transition flex items-center gap-1">
+                                <span class="font-bold text-cyan-400">ARMORY200</span>
+                                <span class="text-slate-400">-200</span>
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="flex items-center flex-wrap sm:flex-nowrap gap-2">
-                        <div class="relative flex-1 sm:w-60">
+                    <!-- Row 2: Search & Sort -->
+                    <div class="flex items-center gap-2 pt-2 border-t border-slate-800/80">
+                        <div class="relative flex-1">
                             <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
                             <input
                                 id="hidden-search-input"
@@ -838,12 +841,12 @@
                         <select
                             id="hidden-sort-select"
                             onchange="handleHiddenSort(this.value)"
-                            class="px-3.5 py-2 rounded-xl bg-slate-950/90 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-rose-500 transition"
+                            class="px-3 py-2 rounded-xl bg-slate-950/90 border border-slate-800 text-xs text-slate-200 focus:outline-none focus:border-rose-500 transition shrink-0"
                         >
-                            <option value="recommended">เรียงตามแนะนำ</option>
-                            <option value="price-asc">ราคา: ต่ำ → สูง</option>
-                            <option value="price-desc">ราคา: สูง → ต่ำ</option>
-                            <option value="fps-desc">ความแรง (FPS) สูงสุด</option>
+                            <option value="recommended">แนะนำ</option>
+                            <option value="price-asc">ราคา ต่ำ→สูง</option>
+                            <option value="price-desc">ราคา สูง→ต่ำ</option>
+                            <option value="fps-desc">FPS สูงสุด</option>
                         </select>
                     </div>
                 </div>
@@ -2729,7 +2732,7 @@
                        </div>`;
 
                 return `
-                    <button type="button" onclick="openSurfaceTopupModal('${escapeHtml(g.id)}')" class="surface-card rounded-2xl p-4 sm:p-5 flex flex-col items-center justify-center text-center gap-3 cursor-pointer group w-full">
+                    <button type="button" onclick="openSurfaceTopupModal('${escapeHtml(g.id)}')" class="surface-card rounded-2xl p-4 sm:p-5 min-h-[152px] sm:min-h-[172px] flex flex-col items-center justify-center text-center gap-3 cursor-pointer group w-full">
                         ${iconVisual}
                         <h3 class="font-bold text-xs sm:text-sm text-slate-900 leading-snug line-clamp-2 group-hover:text-amber-600 transition">
                             ${escapeHtml(g.title)}
@@ -5075,10 +5078,11 @@
 
                 const btn = document.getElementById(`hid-nav-${k}`);
                 if (btn) {
+                    const adminExtra = (k === 'admin' ? 'col-span-2 sm:col-span-1 ' : '') + (k === 'admin' && !isCurrentUserAdmin() ? 'hidden ' : '');
                     if (k === tab) {
-                        btn.className = 'shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-600 text-white shadow-md shadow-rose-950/60 flex items-center gap-1.5 transition';
+                        btn.className = adminExtra + 'px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-600 text-white shadow-md shadow-rose-950/60 flex items-center justify-center sm:justify-start gap-1.5 transition';
                     } else {
-                        btn.className = 'shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800/70 flex items-center gap-1.5 transition';
+                        btn.className = adminExtra + 'px-3 py-1.5 rounded-xl text-xs font-medium text-slate-300 hover:text-white bg-slate-900/60 sm:bg-transparent hover:bg-slate-800/70 flex items-center justify-center sm:justify-start gap-1.5 transition';
                     }
                 }
             });
@@ -5301,14 +5305,14 @@
                                     <div class="text-[10px] text-slate-400">ราคาสมาชิกคลังลับ</div>
                                     <div class="text-lg font-bold font-mono-cyber text-emerald-400">${Number(p.price || 0).toLocaleString()} CR</div>
                                 </div>
-                                <div class="flex items-center gap-1.5">
-                                    <button type="button" onclick="loadIntoBuilder('${escapeHtml(p.id)}')" class="px-2.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-amber-300 text-xs transition" title="จำลองจัดเซ็ต">
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <button type="button" onclick="loadIntoBuilder('${escapeHtml(p.id)}')" class="w-8 h-8 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-amber-300 text-xs flex items-center justify-center transition" title="จำลองจัดเซ็ต">
                                         <i class="fa-solid fa-screwdriver-wrench"></i>
                                     </button>
-                                    <button type="button" onclick="openGunDetailModal('${escapeHtml(p.id)}')" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-medium transition">
-                                        สเปก/แต่ง
+                                    <button type="button" onclick="openGunDetailModal('${escapeHtml(p.id)}')" class="h-8 px-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 text-xs font-medium transition">
+                                        สเปก
                                     </button>
-                                    <button type="button" ${outOfStock ? 'disabled' : ''} onclick="addToHiddenCart('${escapeHtml(p.id)}')" class="px-3.5 py-2 rounded-xl ${outOfStock ? 'bg-slate-800 text-slate-500 cursor-not-allowed' : 'bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-950/60'} text-xs font-semibold transition flex items-center gap-1.5">
+                                    <button type="button" ${outOfStock ? 'disabled' : ''} onclick="addToHiddenCart('${escapeHtml(p.id)}')" class="h-8 px-3 rounded-xl ${outOfStock ? 'bg-slate-800 text-slate-500 cursor-not-allowed' : 'bg-rose-600 hover:bg-rose-500 text-white shadow-md shadow-rose-950/60'} text-xs font-semibold transition flex items-center gap-1">
                                         <i class="fa-solid fa-cart-plus"></i> ${outOfStock ? 'หมด' : 'ซื้อ'}
                                     </button>
                                 </div>
