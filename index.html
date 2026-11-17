@@ -942,15 +942,24 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label for="wallet-topup-amount" class="block text-xs font-semibold text-slate-300 mb-1.5">จำนวนเครดิตที่โอน (CR = บาท)</label>
-                                <input id="wallet-topup-amount" type="number" min="100" value="5000" class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white font-mono-cyber text-sm focus:outline-none focus:border-emerald-500">
+                                <input id="wallet-topup-amount" type="number" min="1" value="5000" oninput="renderHiddenTopupQR()" class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white font-mono-cyber text-sm focus:outline-none focus:border-emerald-500">
                             </div>
                             <div>
                                 <label for="wallet-topup-channel" class="block text-xs font-semibold text-slate-300 mb-1.5">ช่องทางที่โอนเข้า</label>
-                                <select id="wallet-topup-channel" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-emerald-500">
-                                    <option value="พร้อมเพย์ 065-972-8104">พร้อมเพย์ 065-972-8104</option>
+                                <select id="wallet-topup-channel" onchange="renderHiddenTopupQR()" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-emerald-500">
+                                    <option value="พร้อมเพย์ 065-972-8104">พร้อมเพย์ 065-972-8104 (สร้าง QR อัตโนมัติ)</option>
                                     <option value="ธ.กสิกรไทย 126-8-83922-0">ธนาคารกสิกรไทย 126-8-83922-0</option>
                                     <option value="TrueMoney Wallet 065-972-8104">TrueMoney Wallet 065-972-8104</option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <div id="hidden-topup-qr-box" class="p-4 rounded-xl bg-slate-950/90 border border-emerald-500/30 flex flex-col sm:flex-row items-center gap-4">
+                            <div id="hidden-topup-qr-canvas" class="p-2 bg-white rounded-xl shrink-0 flex items-center justify-center min-w-[132px] min-h-[132px]"></div>
+                            <div class="space-y-1.5 text-xs text-center sm:text-left">
+                                <div class="font-bold text-emerald-400">สแกน QR พร้อมเพย์เพื่อเติมเครดิตคลังแสง</div>
+                                <div class="text-slate-300">ยอดโอนตาม QR: <b id="hidden-topup-qr-amount-text" class="font-mono-cyber text-white">5,000 CR</b></div>
+                                <div class="text-[11px] text-slate-400">พร้อมเพย์: <span class="font-mono-cyber text-sky-400">065-972-8104</span> • หลังโอนแล้วแนบรูปสลิปด้านล่างได้เลย</div>
                             </div>
                         </div>
 
@@ -1260,10 +1269,18 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="hud-glass rounded-2xl p-6 border border-slate-800 space-y-4">
-                        <h3 class="text-base font-bold text-white flex items-center gap-2 border-b border-slate-800 pb-3">
-                            <i class="fa-solid fa-truck-fast text-amber-400"></i> 3. จัดการคำสั่งซื้อปืน &amp; ออกเลขพัสดุปกปิด
-                        </h3>
-                        <div id="admin-order-list" class="space-y-3 max-h-96 overflow-y-auto pr-1"></div>
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                            <h3 class="text-base font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-truck-fast text-amber-400"></i> 3. จัดการคำสั่งซื้อปืน &amp; จัดส่งพัสดุ
+                            </h3>
+                            <div class="flex flex-wrap gap-1.5 text-[11px]">
+                                <button type="button" onclick="setHiddenAdminOrderFilter('all')" id="adm-hord-flt-all" class="px-2.5 py-1 rounded-lg bg-rose-600 text-white font-semibold transition">ทั้งหมด</button>
+                                <button type="button" onclick="setHiddenAdminOrderFilter('verify')" id="adm-hord-flt-verify" class="px-2.5 py-1 rounded-lg bg-slate-900 text-slate-300 border border-slate-700 transition">รอตรวจสลิป</button>
+                                <button type="button" onclick="setHiddenAdminOrderFilter('toship')" id="adm-hord-flt-toship" class="px-2.5 py-1 rounded-lg bg-slate-900 text-slate-300 border border-slate-700 transition">รอจัดส่ง</button>
+                                <button type="button" onclick="setHiddenAdminOrderFilter('shipped')" id="adm-hord-flt-shipped" class="px-2.5 py-1 rounded-lg bg-slate-900 text-slate-300 border border-slate-700 transition">จัดส่งแล้ว</button>
+                            </div>
+                        </div>
+                        <div id="admin-order-list" class="space-y-3 max-h-[28rem] overflow-y-auto pr-1"></div>
                     </div>
 
                     <div class="hud-glass rounded-2xl p-6 border border-slate-800 space-y-4">
@@ -5446,7 +5463,44 @@
         window.toggleHiddenCheckoutTransferBox = function(methodVal) {
             const box = document.getElementById('swal-hidden-transfer-box');
             if (!box) return;
-            box.classList.toggle('hidden', methodVal !== 'transfer');
+            const isTransfer = methodVal === 'transfer';
+            box.classList.toggle('hidden', !isTransfer);
+            if (isTransfer) {
+                renderHiddenCheckoutQR();
+            }
+        };
+
+        window.renderHiddenCheckoutQR = function() {
+            const qrWrap = document.getElementById('swal-hidden-checkout-qr');
+            const amtAttr = qrWrap ? Number(qrWrap.getAttribute('data-amount') || 0) : 0;
+            if (!qrWrap || amtAttr <= 0) return;
+            qrWrap.innerHTML = '';
+            const payload = generatePromptPayPayload('0659728104', amtAttr);
+            if (typeof QRCode !== 'undefined') {
+                new QRCode(qrWrap, {
+                    text: payload,
+                    width: 120,
+                    height: 120,
+                    colorDark: '#0f172a',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+            }
+        };
+
+        window.previewHiddenCheckoutSlip = function(input) {
+            const wrap = document.getElementById('swal-hidden-slip-preview-wrap');
+            const img = document.getElementById('swal-hidden-slip-preview-img');
+            if (!input || !input.files || !input.files[0]) {
+                if (wrap) wrap.classList.add('hidden');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                if (img) img.src = e.target.result;
+                if (wrap) wrap.classList.remove('hidden');
+            };
+            reader.readAsDataURL(input.files[0]);
         };
 
         window.openHiddenCartModal = function() {
@@ -5491,10 +5545,12 @@
                 </div>
             `).join('');
 
+            const hasEnoughCr = Number(window.state.currentUser.walletCr || 0) >= netTotal;
+
             Swal.fire({
                 background: '#090d16',
                 color: '#f8fafc',
-                width: '640px',
+                width: '680px',
                 title: '<span class="text-lg font-bold text-white">ตะกร้ายุทโธปกรณ์ &amp; ยืนยันคำสั่งซื้อ</span>',
                 html: `
                     <div class="text-left space-y-3.5 pt-2 text-xs">
@@ -5502,7 +5558,7 @@
                             <span class="text-slate-400">รายการในตะกร้า (${cart.reduce((s, c) => s + c.qty, 0)} ชิ้น)</span>
                             <button type="button" onclick="clearHiddenCart()" class="text-rose-400 hover:text-rose-300 text-[11px] underline">ล้างตะกร้า</button>
                         </div>
-                        <div class="space-y-2 max-h-44 overflow-y-auto pr-1">${itemsHtml}</div>
+                        <div class="space-y-2 max-h-40 overflow-y-auto pr-1">${itemsHtml}</div>
 
                         <div class="p-3 rounded-xl bg-slate-900/90 border border-slate-800 space-y-2">
                             <div class="flex items-center gap-2">
@@ -5539,68 +5595,142 @@
                             </div>
                             <div class="flex justify-between text-[11px] text-slate-400 pt-1">
                                 <span>เครดิตคงเหลือของคุณ</span>
-                                <span class="font-mono-cyber">${Number(window.state.currentUser.walletCr || 0).toLocaleString()} CR</span>
+                                <span class="font-mono-cyber ${hasEnoughCr ? 'text-emerald-400' : 'text-rose-400'}">${Number(window.state.currentUser.walletCr || 0).toLocaleString()} CR</span>
                             </div>
                         </div>
 
-                        <div class="space-y-2.5">
-                            <div>
-                                <label class="block text-slate-300 font-semibold mb-1">ชื่อ-ที่อยู่จัดส่ง (จัดส่งแบบพัสดุปกปิดชื่อสินค้า 100%)</label>
-                                <input id="swal-checkout-addr" type="text" placeholder="ระบุชื่อผู้รับ เบอร์โทร และที่อยู่จัดส่งพัสดุ" value="${window.state.currentUser.isLoggedIn ? escapeHtml(window.state.currentUser.name) : ''}" class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs">
+                        <div class="p-3.5 rounded-xl bg-slate-900/70 border border-slate-800 space-y-2.5">
+                            <div class="text-xs font-bold text-cyan-400 flex items-center gap-1.5">
+                                <i class="fa-solid fa-truck-fast"></i> ข้อมูลจัดส่งพัสดุ (ปกปิดชื่อสินค้า 100%)
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-slate-300 font-semibold mb-1">ชื่อ-นามสกุลผู้รับ*</label>
+                                    <input id="swal-checkout-name" type="text" placeholder="ระบุชื่อผู้รับพัสดุ" value="${window.state.currentUser.isLoggedIn ? escapeHtml(window.state.currentUser.name) : ''}" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs">
+                                </div>
+                                <div>
+                                    <label class="block text-slate-300 font-semibold mb-1">เบอร์โทรติดต่อ*</label>
+                                    <input id="swal-checkout-phone" type="tel" placeholder="เช่น 08x-xxx-xxxx" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono-cyber text-xs">
+                                </div>
                             </div>
                             <div>
-                                <label class="block text-slate-300 font-semibold mb-1">วิธีชำระเงิน</label>
-                                <select id="swal-checkout-method" onchange="toggleHiddenCheckoutTransferBox(this.value)" class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs">
-                                    <option value="wallet">หักเครดิตคลังแสงทันที (CR Wallet)</option>
-                                    <option value="transfer">โอนชำระผ่านบัญชี / พร้อมเพย์ / วอลเล็ท (แนบเลขอ้างอิงสลิป)</option>
-                                </select>
+                                <label class="block text-slate-300 font-semibold mb-1">ที่อยู่จัดส่ง (บ้านเลขที่ / ถนน / แขวง-ตำบล / เขต-อำเภอ / จังหวัด / รหัสไปรษณีย์)*</label>
+                                <textarea id="swal-checkout-addr" rows="2" placeholder="ระบุที่อยู่จัดส่งพัสดุอย่างละเอียด..." class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs"></textarea>
                             </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <div>
+                                    <label class="block text-slate-300 font-semibold mb-1">เลือกบริษัทขนส่ง</label>
+                                    <select id="swal-checkout-carrier" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs">
+                                        <option value="Flash Express (พัสดุปกปิด)">Flash Express (พัสดุปกปิด)</option>
+                                        <option value="Kerry Express (พัสดุปกปิด)">Kerry Express (พัสดุปกปิด)</option>
+                                        <option value="J&T Express (พัสดุปกปิด)">J&T Express (พัสดุปกปิด)</option>
+                                        <option value="ไปรษณีย์ไทย EMS (พัสดุปกปิด)">ไปรษณีย์ไทย EMS (พัสดุปกปิด)</option>
+                                        <option value="Lalamove / นัดรับหน้าสนาม">Lalamove / นัดรับหน้าสนาม</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-slate-300 font-semibold mb-1">หมายเหตุถึงช่าง/ขนส่ง (ถ้ามี)</label>
+                                    <input id="swal-checkout-note" type="text" placeholder="เช่น โทรก่อนส่ง / จูนไม่เกิน 400 FPS" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs">
+                                </div>
+                            </div>
+                        </div>
 
-                            <!-- Transfer Slip Details Box -->
-                            <div id="swal-hidden-transfer-box" class="hidden p-3.5 rounded-xl bg-slate-900 border border-emerald-500/30 space-y-2.5">
-                                <div class="text-[11px] text-emerald-300 font-semibold">
-                                    ช่องทางโอน: พร้อมเพย์ 065-972-8104 | กสิกรไทย 126-8-83922-0 | TrueMoney 065-972-8104
+                        <div class="space-y-2">
+                            <label class="block text-slate-300 font-semibold">วิธีชำระเงิน</label>
+                            <select id="swal-checkout-method" onchange="toggleHiddenCheckoutTransferBox(this.value)" class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs">
+                                <option value="wallet" ${hasEnoughCr ? 'selected' : ''}>หักเครดิตคลังแสงทันที (CR Wallet)</option>
+                                <option value="transfer" ${!hasEnoughCr ? 'selected' : ''}>โอนชำระผ่านพร้อมเพย์ QR / บัญชีร้าน (แนบสลิป)</option>
+                            </select>
+
+                            <!-- Transfer Slip Details Box + Auto PromptPay QR -->
+                            <div id="swal-hidden-transfer-box" class="${hasEnoughCr ? 'hidden' : ''} p-3.5 rounded-xl bg-slate-900 border border-emerald-500/30 space-y-3">
+                                <div class="flex flex-col sm:flex-row items-center gap-3">
+                                    <div id="swal-hidden-checkout-qr" data-amount="${netTotal}" class="p-2 bg-white rounded-xl shrink-0 flex items-center justify-center min-w-[120px] min-h-[120px]"></div>
+                                    <div class="space-y-1 text-[11px] flex-1">
+                                        <div class="font-bold text-emerald-300">สแกน QR พร้อมเพย์ยอด ${netTotal.toLocaleString()} บาท</div>
+                                        <div class="text-slate-300">พร้อมเพย์: <b class="font-mono-cyber text-sky-400">065-972-8104</b></div>
+                                        <div class="text-slate-300">กสิกรไทย: <b class="font-mono-cyber text-emerald-400">126-8-83922-0</b></div>
+                                        <div class="text-slate-300">TrueMoney: <b class="font-mono-cyber text-amber-400">065-972-8104</b></div>
+                                    </div>
                                 </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                     <select id="swal-hidden-pay-channel" class="px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white text-xs">
-                                        <option value="พร้อมเพย์ 065-972-8104">พร้อมเพย์ 065-972-8104</option>
+                                        <option value="พร้อมเพย์ QR 065-972-8104">พร้อมเพย์ QR 065-972-8104</option>
                                         <option value="ธ.กสิกรไทย 126-8-83922-0">ธ.กสิกรไทย 126-8-83922-0</option>
                                         <option value="TrueMoney Wallet 065-972-8104">TrueMoney Wallet 065-972-8104</option>
                                     </select>
-                                    <input id="swal-hidden-slip-ref" type="text" placeholder="ระบุเลขอ้างอิงสลิปโอนเงิน*" class="px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-white font-mono-cyber text-xs">
+                                    <input id="swal-hidden-slip-file" type="file" accept="image/*" onchange="previewHiddenCheckoutSlip(this)" class="w-full text-[11px] text-slate-300 file:mr-2 file:py-1.5 file:px-2.5 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-emerald-500/20 file:text-emerald-300">
+                                </div>
+                                <div id="swal-hidden-slip-preview-wrap" class="hidden flex items-center gap-2 p-2 rounded-lg bg-slate-950 border border-slate-800">
+                                    <img id="swal-hidden-slip-preview-img" src="" alt="สลิป" class="w-12 h-12 rounded object-cover border border-slate-700">
+                                    <span class="text-[11px] text-emerald-400">แนบสลิปเรียบร้อย พร้อมส่งให้แอดมินตรวจสอบ</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 `,
+                didOpen: () => {
+                    const methodSel = document.getElementById('swal-checkout-method');
+                    if (methodSel && methodSel.value === 'transfer') {
+                        renderHiddenCheckoutQR();
+                    }
+                },
                 showCancelButton: true,
                 confirmButtonText: `ยืนยันสั่งซื้อ (${netTotal.toLocaleString()} CR)`,
                 cancelButtonText: 'เลือกสินค้าต่อ',
                 confirmButtonColor: '#10b981',
-                preConfirm: () => {
+                preConfirm: async () => {
                     const method = document.getElementById('swal-checkout-method').value;
+                    const recipientName = document.getElementById('swal-checkout-name').value.trim();
+                    const phone = document.getElementById('swal-checkout-phone').value.trim();
                     const addr = document.getElementById('swal-checkout-addr').value.trim();
-                    const transferChannel = document.getElementById('swal-hidden-pay-channel')?.value || 'พร้อมเพย์ 065-972-8104';
-                    const slipRef = document.getElementById('swal-hidden-slip-ref')?.value.trim() || '';
-                    if (!addr) {
-                        Swal.showValidationMessage('กรุณาระบุชื่อและที่อยู่สำหรับจัดส่งพัสดุ');
+                    const carrier = document.getElementById('swal-checkout-carrier').value;
+                    const shippingNote = document.getElementById('swal-checkout-note').value.trim();
+                    const transferChannel = document.getElementById('swal-hidden-pay-channel')?.value || 'พร้อมเพย์ QR 065-972-8104';
+
+                    if (!recipientName || !phone || !addr) {
+                        Swal.showValidationMessage('กรุณากรอกชื่อผู้รับ เบอร์โทรศัพท์ และที่อยู่จัดส่งให้ครบถ้วน');
                         return false;
                     }
-                    if (method === 'wallet' && window.state.currentUser.walletCr < netTotal) {
-                        Swal.showValidationMessage('เครดิตในกระเป๋าไม่เพียงพอ กรุณาแจ้งโอนเติมเครดิตหรือเลือกโอนชำระแนบสลิป');
+                    if (method === 'wallet' && Number(window.state.currentUser.walletCr || 0) < netTotal) {
+                        Swal.showValidationMessage('เครดิตในกระเป๋าไม่เพียงพอ กรุณาเติมเครดิตหรือเปลี่ยนเป็นโอนชำระแนบสลิป');
                         return false;
                     }
+
+                    let slipImage = null;
+                    let slipRef = 'CR-WALLET';
                     if (method === 'transfer') {
-                        if (!slipRef || slipRef.length < 4) {
-                            Swal.showValidationMessage('กรุณาระบุเลขอ้างอิงสลิปโอนเงินเพื่อให้แอดมินตรวจสอบ');
+                        const fileEl = document.getElementById('swal-hidden-slip-file');
+                        if (!fileEl || !fileEl.files || !fileEl.files[0]) {
+                            Swal.showValidationMessage('กรุณาแนบรูปสลิปการโอนเงินเพื่อให้แอดมินตรวจสอบ');
                             return false;
                         }
+                        slipImage = await readFileAsDataUrlLimited(fileEl);
+                        if (!slipImage) {
+                            Swal.showValidationMessage('ไม่สามารถอ่านไฟล์สลิปได้ กรุณาลองใหม่อีกครั้ง');
+                            return false;
+                        }
+                        const hash = await sha256Hash(slipImage);
+                        slipRef = 'SLIP-' + hash.slice(0, 8).toUpperCase();
                         if (isSlipRefDuplicate(slipRef)) {
-                            Swal.showValidationMessage('เลขอ้างอิงสลิปนี้ถูกใช้ไปแล้ว กรุณาตรวจสอบอีกครั้ง');
+                            Swal.showValidationMessage('สลิปนี้ถูกใช้ทำรายการไปแล้ว กรุณาใช้สลิปใหม่');
                             return false;
                         }
                     }
-                    return { method, addr, netTotal, totalDiscount, transferChannel, slipRef };
+
+                    return {
+                        method,
+                        recipientName,
+                        phone,
+                        addr,
+                        carrier,
+                        shippingNote,
+                        netTotal,
+                        totalDiscount,
+                        transferChannel,
+                        slipRef,
+                        slipImage
+                    };
                 }
             }).then(res => {
                 if (res.isConfirmed && res.value) {
@@ -5652,9 +5782,13 @@
             }
         };
 
-        function completeHiddenCheckout({ method, addr, netTotal, totalDiscount, transferChannel, slipRef }) {
+        function completeHiddenCheckout({ method, recipientName, phone, addr, carrier, shippingNote, netTotal, totalDiscount, transferChannel, slipRef, slipImage }) {
             if (method === 'wallet') {
-                window.state.currentUser.walletCr -= netTotal;
+                window.state.currentUser.walletCr = Math.max(0, Number(window.state.currentUser.walletCr || 0) - netTotal);
+                const regUser = (window.state.registeredUsers || []).find(
+                    u => u.email && window.state.currentUser.email && u.email.toLowerCase() === window.state.currentUser.email.toLowerCase()
+                );
+                if (regUser) regUser.walletCr = window.state.currentUser.walletCr;
             }
 
             window.state.hiddenCart.forEach(c => {
@@ -5664,11 +5798,20 @@
                 }
             });
 
+            const fullAddressText = `${recipientName || ''} (${phone || ''}) • ${addr}`;
+            const nowText = new Date().toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' });
+
             const newOrder = {
                 id: 'ARM-' + Math.floor(100000 + Math.random() * 900000),
                 buyerEmail: window.state.currentUser.email || 'vip@valo-armory.net',
-                address: addr,
+                recipientName: recipientName || window.state.currentUser.name || 'สมาชิกคลังแสง',
+                phone: phone || '-',
+                address: fullAddressText,
+                rawAddress: addr,
+                carrier: carrier || 'Flash Express (พัสดุปกปิด)',
+                shippingNote: shippingNote || '',
                 items: window.state.hiddenCart.map(c => ({
+                    productId: c.productId,
                     name: c.name,
                     qty: c.qty,
                     price: c.unitPrice,
@@ -5677,12 +5820,16 @@
                 totalCr: netTotal,
                 discountCr: totalDiscount,
                 paymentMethod: method === 'wallet' ? 'หักเครดิตคลังแสง (CR Wallet)' : `โอนชำระ (${transferChannel})`,
-                slipRef: method === 'transfer' ? slipRef : 'CR-WALLET',
+                paymentStatus: method === 'wallet' ? 'ชำระแล้ว' : 'รอตรวจสอบสลิป',
+                slipRef: slipRef || 'CR-WALLET',
+                slipImage: slipImage || null,
                 statusStep: method === 'wallet' ? 2 : 1,
-                statusText: method === 'wallet' ? 'ช่างคลังแสงกำลังปรับจูน & ตรวจ QC' : `รอแอดมินตรวจสอบสลิป (${slipRef})`,
-                trackingCode: 'TH-DISC-' + Math.floor(1000000 + Math.random() * 9000000) + 'TH',
+                statusText: method === 'wallet' ? 'ชำระเงินแล้ว • รอแอดมินปรับจูน & แพ็กจัดส่ง' : 'รอแอดมินตรวจสอบสลิปโอนเงิน',
+                trackingCode: '',
+                shippedAt: '',
+                adminShippingNote: '',
                 chronoShots: [415.2, 416.0, 415.8, 416.4, 415.6],
-                createdAt: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.'
+                createdAt: nowText
             };
 
             window.state.myArmoryOrders.unshift(newOrder);
@@ -5690,25 +5837,51 @@
             window.state.activeCoupon = null;
             window.state.bundleDiscountPct = 0;
             saveState();
+            renderHiddenStoreAll();
             switchHiddenTab('orders');
             Swal.fire({
                 background: '#090d16',
                 color: '#f8fafc',
                 icon: 'success',
-                title: 'สั่งซื้อยุทโธปกรณ์สำเร็จ!',
-                html: `<div class="text-xs text-slate-300 space-y-1">
-                    <p>รหัสคำสั่งซื้อ: <b class="text-cyan-400 font-mono-cyber">${escapeHtml(newOrder.id)}</b></p>
-                    <p>การชำระเงิน: <b>${escapeHtml(newOrder.paymentMethod)}</b></p>
-                    <p>เลขพัสดุปกปิดชื่อสินค้า: <b class="text-emerald-400 font-mono-cyber">${escapeHtml(newOrder.trackingCode)}</b></p>
-                    <p>คุณสามารถเปิดดูใบรับรองผลทดสอบ Chronograph ได้ทันที</p>
+                title: 'สั่งซื้อสินค้าสำเร็จ!',
+                html: `<div class="text-xs text-slate-300 space-y-1.5 text-left p-3 rounded-xl bg-slate-900 border border-slate-800">
+                    <div>รหัสคำสั่งซื้อ: <b class="text-cyan-400 font-mono-cyber">${escapeHtml(newOrder.id)}</b></div>
+                    <div>การชำระเงิน: <b>${escapeHtml(newOrder.paymentMethod)}</b></div>
+                    <div>ขนส่งที่เลือก: <b class="text-emerald-400">${escapeHtml(newOrder.carrier)}</b></div>
+                    <div>สถานะ: <b class="text-amber-300">${escapeHtml(newOrder.statusText)}</b></div>
+                    <div class="text-[11px] text-slate-400 pt-1">แอดมินจะอัปเดตเลขพัสดุปกปิดให้ในหน้า "คำสั่งซื้อ" ทันทีที่จัดส่ง</div>
                 </div>`,
                 confirmButtonColor: '#10b981'
             });
         }
 
+        window.renderHiddenTopupQR = function() {
+            const qrWrap = document.getElementById('hidden-topup-qr-canvas');
+            const amtEl = document.getElementById('wallet-topup-amount');
+            const amtTxt = document.getElementById('hidden-topup-qr-amount-text');
+            if (!qrWrap || !amtEl) return;
+            const amount = Math.max(1, Number(amtEl.value || 5000));
+            if (amtTxt) amtTxt.textContent = `${amount.toLocaleString()} CR`;
+            qrWrap.innerHTML = '';
+            const payload = generatePromptPayPayload('0659728104', amount);
+            if (typeof QRCode !== 'undefined') {
+                new QRCode(qrWrap, {
+                    text: payload,
+                    width: 120,
+                    height: 120,
+                    colorDark: '#0f172a',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.M
+                });
+            }
+        };
+
         window.selectTopupAmount = function(amt) {
             const el = document.getElementById('wallet-topup-amount');
-            if (el) el.value = amt;
+            if (el) {
+                el.value = amt;
+                renderHiddenTopupQR();
+            }
         };
 
         window.generateMockSlipRef = function() {
@@ -5740,7 +5913,6 @@
         };
 
         window.submitHiddenWalletTopup = async function(instantApprove = false) {
-            // Non-admins can NEVER force instantApprove = true
             const canInstantApprove = Boolean(instantApprove && isCurrentUserAdmin());
 
             const amtEl = document.getElementById('wallet-topup-amount');
@@ -5749,21 +5921,24 @@
             const timeEl = document.getElementById('wallet-topup-time');
             const fileEl = document.getElementById('wallet-topup-slip-file');
 
-            const amount = Math.max(100, Number(amtEl ? amtEl.value : 5000));
+            const amount = Math.max(1, Number(amtEl ? amtEl.value : 5000));
             const channel = chEl ? chEl.value : 'พร้อมเพย์ 065-972-8104';
-            const ref = (refEl && refEl.value.trim()) ? refEl.value.trim() : '';
+            let ref = (refEl && refEl.value.trim()) ? refEl.value.trim() : '';
             const slipTime = (timeEl && timeEl.value.trim()) ? timeEl.value.trim() : new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }) + ' น.';
+            const slipImage = await readFileAsDataUrlLimited(fileEl);
 
-            if (!ref || ref.length < 4) {
-                showToast('กรุณากรอกเลขอ้างอิงสลิปโอนเงินอย่างน้อย 4 ตัวอักษร', 'warning');
+            if (!slipImage && (!ref || ref.length < 4)) {
+                showToast('กรุณาแนบรูปสลิปโอนเงิน (หรือกรอกเลขอ้างอิงสลิป)', 'warning');
                 return;
+            }
+            if (!ref && slipImage) {
+                const hash = await sha256Hash(slipImage);
+                ref = 'SLIP-' + hash.slice(0, 8).toUpperCase();
             }
             if (isSlipRefDuplicate(ref)) {
-                showToast('เลขอ้างอิงสลิปนี้ถูกใช้แจ้งโอนไปแล้ว กรุณาตรวจสอบอีกครั้ง', 'error');
+                showToast('สลิปนี้ถูกใช้แจ้งโอนไปแล้ว กรุณาตรวจสอบอีกครั้ง', 'error');
                 return;
             }
-
-            const slipImage = await readFileAsDataUrlLimited(fileEl);
 
             const newTopup = {
                 id: 'CR-' + Math.floor(10000 + Math.random() * 90000),
@@ -6097,52 +6272,237 @@
                 return;
             }
 
-            const steps = ['รับคำสั่งซื้อ', 'ช่างปรับจูน & QC', 'Chronograph ผ่าน', 'จัดส่งพัสดุปกปิด'];
+            const steps = ['รับคำสั่งซื้อ/ตรวจสลิป', 'ช่างปรับจูน & QC', 'แพ็กพัสดุปกปิด', 'จัดส่งแล้ว'];
 
-            container.innerHTML = orders.map(o => `
-                <div class="p-5 rounded-2xl bg-slate-950/90 border border-slate-800 space-y-4">
+            container.innerHTML = orders.map(o => {
+                const isCancelled = (o.statusStep === 0);
+                const isShipped = Boolean(o.trackingCode && o.statusStep >= 4);
+                const isCompleted = (o.statusStep >= 5);
+                return `
+                <div class="p-5 rounded-2xl bg-slate-950/90 border ${isCancelled ? 'border-rose-500/40' : (isShipped ? 'border-emerald-500/30' : 'border-slate-800')} space-y-4">
                     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
-                        <div class="flex items-center gap-2.5">
+                        <div class="flex items-center gap-2.5 flex-wrap">
                             <span class="px-2.5 py-1 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-400 font-mono-cyber font-bold text-xs">${escapeHtml(o.id)}</span>
                             <span class="text-xs text-slate-400">${escapeHtml(o.createdAt)}</span>
+                            ${o.paymentStatus ? `<span class="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-[10px] ${o.paymentStatus.includes('ปฏิเสธ') ? 'text-rose-400' : (o.paymentStatus.includes('รอ') ? 'text-amber-300' : 'text-emerald-400')}">${escapeHtml(o.paymentStatus)}</span>` : ''}
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-semibold">
+                            <span class="px-3 py-1 rounded-full ${isCancelled ? 'bg-rose-500/15 border-rose-500/30 text-rose-300' : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300'} border text-xs font-semibold">
                                 ${escapeHtml(o.statusText)}
                             </span>
                             <span class="font-mono-cyber font-bold text-sm text-white">${Number(o.totalCr || 0).toLocaleString()} CR</span>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[11px]">
-                        ${steps.map((label, idx) => {
-                            const active = (idx + 1) <= (o.statusStep || 2);
-                            return `
-                                <div class="p-2 rounded-xl border ${active ? 'bg-emerald-950/50 border-emerald-500/40 text-emerald-300 font-semibold' : 'bg-slate-900/50 border-slate-800 text-slate-500'}">
-                                    ${idx + 1}. ${label}
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
+                    ${!isCancelled ? `
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[11px]">
+                            ${steps.map((label, idx) => {
+                                const active = (idx + 1) <= (o.statusStep || 1);
+                                return `
+                                    <div class="p-2 rounded-xl border ${active ? 'bg-emerald-950/50 border-emerald-500/40 text-emerald-300 font-semibold' : 'bg-slate-900/50 border-slate-800 text-slate-500'}">
+                                        ${idx + 1}. ${label}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    ` : ''}
 
-                    <div class="space-y-1 text-xs text-slate-300">
-                        ${o.items.map(i => `<div>• <b>${escapeHtml(i.name)}</b> x${i.qty} ${i.services && i.services.length ? `<span class="text-amber-400">(${escapeHtml(i.services.join(', '))})</span>` : ''}</div>`).join('')}
-                        <div class="text-slate-400 pt-1">เลขพัสดุปกปิดชื่อสินค้า: <span class="font-mono-cyber text-cyan-400">${escapeHtml(o.trackingCode)}</span></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                        <div class="p-3 rounded-xl bg-slate-900/70 border border-slate-800 space-y-1 text-slate-300">
+                            <div class="text-[11px] font-bold text-slate-400 mb-1">รายการสินค้า</div>
+                            ${o.items.map(i => `<div>• <b>${escapeHtml(i.name)}</b> x${i.qty} ${i.services && i.services.length ? `<span class="text-amber-400">(${escapeHtml(i.services.join(', '))})</span>` : ''}</div>`).join('')}
+                            <div class="text-[11px] text-slate-400 pt-1">ชำระโดย: ${escapeHtml(o.paymentMethod || '-')}</div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-slate-900/70 border border-slate-800 space-y-1 text-slate-300">
+                            <div class="text-[11px] font-bold text-slate-400 mb-1">ข้อมูลจัดส่ง &amp; เลขพัสดุ</div>
+                            <div>ที่อยู่: <span class="text-slate-200">${escapeHtml(o.address || '-')}</span></div>
+                            <div>ขนส่ง: <span class="text-cyan-300">${escapeHtml(o.carrier || 'Flash Express (พัสดุปกปิด)')}</span></div>
+                            ${o.shippingNote ? `<div class="text-[11px] text-amber-300">หมายเหตุลูกค้า: ${escapeHtml(o.shippingNote)}</div>` : ''}
+                            ${o.trackingCode ? `
+                                <div class="mt-2 p-2 rounded-lg bg-emerald-950/50 border border-emerald-500/30 flex items-center justify-between gap-2">
+                                    <div>
+                                        <div class="text-[10px] text-emerald-300">เลขพัสดุ (${escapeHtml(o.carrier || 'ขนส่ง')})</div>
+                                        <div class="font-mono-cyber font-bold text-sm text-white">${escapeHtml(o.trackingCode)}</div>
+                                    </div>
+                                    <button type="button" onclick="copyTextSafe('${escapeHtml(o.trackingCode)}', 'คัดลอกเลขพัสดุแล้ว')" class="px-2.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-[11px]">
+                                        คัดลอก
+                                    </button>
+                                </div>
+                                ${o.adminShippingNote ? `<div class="text-[11px] text-emerald-300 pt-1">โน้ตจากแอดมิน: ${escapeHtml(o.adminShippingNote)}</div>` : ''}
+                            ` : `<div class="text-[11px] text-amber-300 pt-1"><i class="fa-regular fa-clock"></i> รอแอดมินแพ็กสินค้าและแจ้งเลขพัสดุ</div>`}
+                        </div>
                     </div>
 
                     <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80">
-                        <button type="button" onclick="openHiddenOrderDetail('${escapeHtml(o.id)}')" class="px-3.5 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 text-xs font-semibold flex items-center gap-1.5 transition">
-                            <i class="fa-solid fa-certificate"></i> ดูใบรับรอง QC &amp; ผลทดสอบ Chronograph
-                        </button>
-                        ${isAdmin ? `
-                            <button type="button" onclick="advanceOrderStatus('${escapeHtml(o.id)}')" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs transition">
-                                อัปเดตสถานะถัดไป (แอดมิน) →
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" onclick="openHiddenOrderDetail('${escapeHtml(o.id)}')" class="px-3.5 py-2 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-300 text-xs font-semibold flex items-center gap-1.5 transition">
+                                <i class="fa-solid fa-certificate"></i> ใบรับรอง QC &amp; Chronograph
                             </button>
-                        ` : ''}
+                            ${o.slipImage ? `
+                                <button type="button" onclick="previewHiddenOrderSlip('${escapeHtml(o.id)}')" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-sky-300 text-xs transition">
+                                    <i class="fa-solid fa-receipt"></i> ดูสลิปที่แนบ
+                                </button>
+                            ` : ''}
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            ${o.statusStep === 4 ? `
+                                <button type="button" onclick="confirmHiddenOrderReceived('${escapeHtml(o.id)}')" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-slate-950 text-xs font-bold transition">
+                                    <i class="fa-solid fa-box-check"></i> ยืนยันได้รับสินค้าแล้ว
+                                </button>
+                            ` : ''}
+                            ${isCompleted ? `<span class="text-xs text-emerald-400 font-semibold"><i class="fa-solid fa-circle-check"></i> ลูกค้ายืนยันรับสินค้าแล้ว</span>` : ''}
+                            ${isAdmin ? `
+                                <button type="button" onclick="openAdminShipHiddenOrderModal('${escapeHtml(o.id)}')" class="px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition">
+                                    <i class="fa-solid fa-truck-fast"></i> จัดส่ง / ใส่เลขพัสดุ
+                                </button>
+                            ` : ''}
+                        </div>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
         }
+
+        window.confirmHiddenOrderReceived = function(orderId) {
+            const o = window.state.myArmoryOrders.find(item => item.id === orderId);
+            if (!o) return;
+            o.statusStep = 5;
+            o.statusText = 'ได้รับสินค้าเรียบร้อยแล้ว';
+            saveState();
+            renderHiddenStoreAll();
+            showToast(`ขอบคุณครับ! ยืนยันรับสินค้าคำสั่งซื้อ ${o.id} เรียบร้อย`);
+        };
+
+        window.previewHiddenOrderSlip = function(orderId) {
+            const o = window.state.myArmoryOrders.find(item => item.id === orderId);
+            if (!o || !o.slipImage) return;
+            Swal.fire({
+                background: '#090d16',
+                color: '#f8fafc',
+                title: `<span class="text-base font-bold text-white">สลิปคำสั่งซื้อ ${escapeHtml(o.id)}</span>`,
+                html: `
+                    <div class="space-y-2 text-xs">
+                        <img src="${o.slipImage}" alt="สลิปโอนเงิน" class="max-h-96 mx-auto rounded-xl border border-slate-700">
+                        <div class="text-slate-400">ยอดชำระ: <b class="text-emerald-400 font-mono-cyber">${Number(o.totalCr || 0).toLocaleString()} CR</b> • ${escapeHtml(o.paymentMethod || '')}</div>
+                    </div>
+                `,
+                confirmButtonText: 'ปิดหน้าต่าง',
+                confirmButtonColor: '#06b6d4'
+            });
+        };
+
+        window.approveHiddenOrderPayment = function(orderId) {
+            if (!requireAdminGuard('อนุมัติการชำระเงินคำสั่งซื้อ')) return;
+            const o = window.state.myArmoryOrders.find(item => item.id === orderId);
+            if (!o) return;
+            o.paymentStatus = 'อนุมัติแล้ว';
+            if ((o.statusStep || 1) < 2) {
+                o.statusStep = 2;
+                o.statusText = 'อนุมัติสลิปแล้ว • รอแอดมินปรับจูน & แพ็กจัดส่ง';
+            }
+            saveState();
+            renderHiddenStoreAll();
+            showToast(`อนุมัติการชำระเงิน ${o.id} เรียบร้อย! พร้อมจัดส่งแล้ว`);
+        };
+
+        window.rejectHiddenOrderPayment = function(orderId) {
+            if (!requireAdminGuard('ปฏิเสธคำสั่งซื้อ')) return;
+            const o = window.state.myArmoryOrders.find(item => item.id === orderId);
+            if (!o) return;
+            if (o.statusStep === 0) return;
+
+            // Restore stock back to hiddenProducts
+            (o.items || []).forEach(item => {
+                const prod = window.state.hiddenProducts.find(p => p.id === item.productId || p.name === item.name);
+                if (prod) prod.stock = Number(prod.stock || 0) + Number(item.qty || 1);
+            });
+
+            o.statusStep = 0;
+            o.paymentStatus = 'ปฏิเสธสลิป / ยกเลิก';
+            o.statusText = 'ยกเลิกคำสั่งซื้อ (สลิปไม่ถูกต้อง)';
+            saveState();
+            renderHiddenStoreAll();
+            showToast(`ปฏิเสธและคืนสต็อกคำสั่งซื้อ ${o.id} แล้ว`, 'info');
+        };
+
+        window.openAdminShipHiddenOrderModal = function(orderId) {
+            if (!requireAdminGuard('จัดส่งสินค้าและกรอกเลขพัสดุ')) return;
+            const o = window.state.myArmoryOrders.find(item => item.id === orderId);
+            if (!o) return;
+
+            Swal.fire({
+                background: '#090d16',
+                color: '#f8fafc',
+                width: '540px',
+                title: `<span class="text-base font-bold text-amber-400">จัดส่งสินค้า &amp; แจ้งเลขพัสดุ // ${escapeHtml(o.id)}</span>`,
+                html: `
+                    <div class="text-left space-y-3 text-xs pt-2">
+                        <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-1 text-slate-300">
+                            <div>ผู้รับ: <b class="text-white">${escapeHtml(o.address || o.buyerEmail)}</b></div>
+                            <div>สินค้า: <b class="text-emerald-400">${(o.items || []).map(i => `${escapeHtml(i.name)} x${i.qty}`).join(', ')}</b></div>
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 font-semibold mb-1">บริษัทขนส่ง</label>
+                            <select id="ship-hord-carrier" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white">
+                                <option value="Flash Express (พัสดุปกปิด)" ${(o.carrier || '').includes('Flash') ? 'selected' : ''}>Flash Express (พัสดุปกปิด)</option>
+                                <option value="Kerry Express (พัสดุปกปิด)" ${(o.carrier || '').includes('Kerry') ? 'selected' : ''}>Kerry Express (พัสดุปกปิด)</option>
+                                <option value="J&T Express (พัสดุปกปิด)" ${(o.carrier || '').includes('J&T') ? 'selected' : ''}>J&T Express (พัสดุปกปิด)</option>
+                                <option value="ไปรษณีย์ไทย EMS (พัสดุปกปิด)" ${(o.carrier || '').includes('EMS') ? 'selected' : ''}>ไปรษณีย์ไทย EMS (พัสดุปกปิด)</option>
+                                <option value="Lalamove / นัดรับหน้าสนาม" ${(o.carrier || '').includes('Lalamove') ? 'selected' : ''}>Lalamove / นัดรับหน้าสนาม</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 font-semibold mb-1">เลขพัสดุ (Tracking Number)*</label>
+                            <input id="ship-hord-track" type="text" value="${escapeHtml(o.trackingCode || '')}" placeholder="เช่น TH0104589231A หรือ EY123456789TH" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono-cyber">
+                        </div>
+                        <div>
+                            <label class="block text-slate-300 font-semibold mb-1">หมายเหตุการจัดส่ง / ผล QC (ถ้ามี)</label>
+                            <input id="ship-hord-note" type="text" value="${escapeHtml(o.adminShippingNote || 'แพ็กกันกระแทกอย่างดี ปกปิดชื่อสินค้าหน้ากล่อง 100%')}" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white">
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: 'ยืนยันจัดส่งสินค้า & แจ้งเลขพัสดุ',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#10b981',
+                preConfirm: () => {
+                    const carrier = document.getElementById('ship-hord-carrier').value;
+                    const trackingCode = document.getElementById('ship-hord-track').value.trim();
+                    const adminShippingNote = document.getElementById('ship-hord-note').value.trim();
+                    if (!trackingCode) {
+                        Swal.showValidationMessage('กรุณาระบุเลขพัสดุจริง หรือข้อมูลการนัดรับ');
+                        return false;
+                    }
+                    return { carrier, trackingCode, adminShippingNote };
+                }
+            }).then(res => {
+                if (res.isConfirmed && res.value) {
+                    o.carrier = res.value.carrier;
+                    o.trackingCode = res.value.trackingCode;
+                    o.adminShippingNote = res.value.adminShippingNote;
+                    o.shippedAt = new Date().toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'short' });
+                    o.paymentStatus = 'ชำระแล้ว';
+                    o.statusStep = 4;
+                    o.statusText = 'จัดส่งพัสดุปกปิดเรียบร้อยแล้ว';
+                    saveState();
+                    renderHiddenStoreAll();
+                    showToast(`บันทึกการจัดส่ง ${o.id} (${o.trackingCode}) เรียบร้อย!`);
+                }
+            });
+        };
+
+        window.hiddenAdminOrderFilter = 'all';
+        window.setHiddenAdminOrderFilter = function(flt) {
+            window.hiddenAdminOrderFilter = flt;
+            ['all', 'verify', 'toship', 'shipped'].forEach(key => {
+                const btn = document.getElementById('adm-hord-flt-' + key);
+                if (!btn) return;
+                btn.className = key === flt
+                    ? 'px-2.5 py-1 rounded-lg bg-rose-600 text-white font-semibold transition'
+                    : 'px-2.5 py-1 rounded-lg bg-slate-900 text-slate-300 border border-slate-700 transition';
+            });
+            renderHiddenAdminDashboard();
+        };
 
         window.openHiddenOrderDetail = function(orderId) {
             const o = window.state.myArmoryOrders.find(item => item.id === orderId);
@@ -6167,9 +6527,10 @@
                             <div class="text-emerald-400">AVERAGE VELOCITY: ${avg} FPS • SEAL INTEGRITY: 100%</div>
                         </div>
                         <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
-                            <div>ผู้รับ: <b>${escapeHtml(o.buyerEmail)}</b></div>
+                            <div>ผู้สั่งซื้อ: <b>${escapeHtml(o.buyerEmail)}</b></div>
+                            <div>ที่อยู่จัดส่ง: <b>${escapeHtml(o.address || '-')}</b></div>
                             <div>การชำระเงิน: <b>${escapeHtml(o.paymentMethod || '-')}</b></div>
-                            <div>เลขพัสดุปกปิด: <b class="font-mono-cyber text-amber-300">${escapeHtml(o.trackingCode)}</b></div>
+                            <div>ขนส่ง / เลขพัสดุ: <b class="font-mono-cyber text-amber-300">${escapeHtml(o.carrier || '-')} ${o.trackingCode ? '• ' + escapeHtml(o.trackingCode) : '(รอจัดส่ง)'}</b></div>
                             <div>สถานะปัจจุบัน: <b class="text-emerald-400">${escapeHtml(o.statusText)}</b></div>
                         </div>
                     </div>
@@ -6184,12 +6545,13 @@
             const o = window.state.myArmoryOrders.find(item => item.id === orderId);
             if (!o) return;
             const map = {
-                1: { step: 2, text: 'ช่างคลังแสงกำลังปรับจูน & ตรวจ QC' },
-                2: { step: 3, text: 'ตรวจสอบ QC & Chronograph ผ่านแล้ว' },
+                1: { step: 2, text: 'อนุมัติสลิปแล้ว • ช่างคลังแสงกำลังปรับจูน & ตรวจ QC' },
+                2: { step: 3, text: 'ตรวจสอบ QC & แพ็กพัสดุปกปิดเรียบร้อย รอจัดส่ง' },
                 3: { step: 4, text: 'จัดส่งพัสดุปกปิดชื่อสินค้าเรียบร้อยแล้ว' },
                 4: { step: 4, text: 'จัดส่งพัสดุปกปิดชื่อสินค้าเรียบร้อยแล้ว' }
             };
             const next = map[o.statusStep || 1];
+            if ((o.statusStep || 1) === 1) o.paymentStatus = 'อนุมัติแล้ว';
             o.statusStep = next.step;
             o.statusText = next.text;
             saveState();
@@ -6640,17 +7002,38 @@
 
             const orderList = document.getElementById('admin-order-list');
             if (orderList) {
-                orderList.innerHTML = window.state.myArmoryOrders.length ? window.state.myArmoryOrders.map(o => `
-                    <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs">
-                        <div class="flex items-center justify-between">
-                            <span class="font-mono-cyber font-bold text-rose-400">${escapeHtml(o.id)}</span>
+                const flt = window.hiddenAdminOrderFilter || 'all';
+                const filteredOrders = window.state.myArmoryOrders.filter(o => {
+                    if (flt === 'verify') return o.statusStep === 1;
+                    if (flt === 'toship') return o.statusStep === 2 || o.statusStep === 3;
+                    if (flt === 'shipped') return o.statusStep >= 4;
+                    return true;
+                });
+                orderList.innerHTML = filteredOrders.length ? filteredOrders.map(o => `
+                    <div class="p-3.5 rounded-xl bg-slate-950 border ${o.statusStep === 1 ? 'border-amber-500/40' : (o.statusStep === 0 ? 'border-rose-500/40' : 'border-slate-800')} space-y-2 text-xs">
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2">
+                                <span class="font-mono-cyber font-bold text-rose-400">${escapeHtml(o.id)}</span>
+                                <span class="text-[10px] text-slate-400">${escapeHtml(o.createdAt || '')}</span>
+                            </div>
                             <span class="font-mono-cyber font-bold text-emerald-400">${Number(o.totalCr || 0).toLocaleString()} CR</span>
                         </div>
-                        <div class="text-slate-300">${o.items.map(i => `${escapeHtml(i.name)} x${i.qty}`).join(', ')}</div>
-                        <div class="text-[11px] text-slate-400">ชำระโดย: ${escapeHtml(o.paymentMethod || '-')} ${o.slipRef ? `• สลิป: <b class="font-mono-cyber text-slate-200">${escapeHtml(o.slipRef)}</b>` : ''}</div>
-                        <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
-                            <span class="text-[11px] text-cyan-400">${escapeHtml(o.statusText)}</span>
-                            <div class="flex items-center gap-1.5">
+                        <div class="text-slate-200 font-medium">${(o.items || []).map(i => `${escapeHtml(i.name)} x${i.qty}`).join(', ')}</div>
+                        <div class="text-[11px] text-slate-400">จัดส่ง: <span class="text-slate-200">${escapeHtml(o.address || '-')}</span> (${escapeHtml(o.carrier || '-')})</div>
+                        <div class="text-[11px] text-slate-400">ชำระโดย: ${escapeHtml(o.paymentMethod || '-')} ${o.trackingCode ? `• พัสดุ: <b class="font-mono-cyber text-emerald-400">${escapeHtml(o.trackingCode)}</b>` : ''}</div>
+                        <div class="flex flex-wrap items-center justify-between gap-2 pt-1.5 border-t border-slate-800/80">
+                            <span class="text-[11px] ${o.statusStep === 0 ? 'text-rose-400' : (o.statusStep >= 4 ? 'text-emerald-400' : 'text-cyan-400')}">${escapeHtml(o.statusText)}</span>
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                ${o.slipImage ? `<button type="button" onclick="previewHiddenOrderSlip('${escapeHtml(o.id)}')" class="px-2 py-1 rounded-lg bg-sky-900/60 hover:bg-sky-800 text-sky-300 text-[11px]">ดูสลิป</button>` : ''}
+                                ${o.statusStep === 1 ? `
+                                    <button type="button" onclick="approveHiddenOrderPayment('${escapeHtml(o.id)}')" class="px-2 py-1 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-[11px]">อนุมัติยอด</button>
+                                    <button type="button" onclick="rejectHiddenOrderPayment('${escapeHtml(o.id)}')" class="px-2 py-1 rounded-lg bg-rose-950 hover:bg-rose-900 text-rose-300 text-[11px]">ปฏิเสธ</button>
+                                ` : ''}
+                                ${o.statusStep >= 1 ? `
+                                    <button type="button" onclick="openAdminShipHiddenOrderModal('${escapeHtml(o.id)}')" class="px-2.5 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-[11px]">
+                                        <i class="fa-solid fa-truck-fast"></i> จัดส่ง/ใส่เลขพัสดุ
+                                    </button>
+                                ` : ''}
                                 <button type="button" onclick="advanceOrderStatus('${escapeHtml(o.id)}')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-[11px]">
                                     เลื่อนสถานะ →
                                 </button>
@@ -6663,7 +7046,7 @@
                             </div>
                         </div>
                     </div>
-                `).join('') : `<div class="p-6 rounded-xl bg-slate-950/60 border border-slate-800 text-center text-xs text-slate-500">ยังไม่มีคำสั่งซื้อในคลังแสง</div>`;
+                `).join('') : `<div class="p-6 rounded-xl bg-slate-950/60 border border-slate-800 text-center text-xs text-slate-500">ไม่มีคำสั่งซื้อในหมวดหมู่นี้</div>`;
             }
 
             const prodList = document.getElementById('admin-product-list');
@@ -6731,6 +7114,7 @@
             renderHiddenHeaderAndCounts();
             renderHiddenCatalog();
             renderHiddenWalletSection();
+            renderHiddenTopupQR();
             populateLoadoutSelectors();
             calculateBallistics();
             renderComparisonTable();
