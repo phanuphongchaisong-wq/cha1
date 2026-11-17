@@ -707,7 +707,7 @@
             <!-- Sub-Navigation & Coupon Strip -->
             <div class="bg-black/40 border-t border-slate-800/80 px-4 sm:px-6 py-2">
                 <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center justify-between gap-2">
-                    <nav class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5 lg:pb-0">
+                    <nav class="flex flex-wrap items-center gap-1.5">
                         <button type="button" id="hid-nav-shop" onclick="switchHiddenTab('shop')" class="shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-600 text-white shadow-md shadow-rose-950/60 flex items-center gap-1.5 transition">
                             <i class="fa-solid fa-store"></i>
                             <span>รายการสินค้า</span>
@@ -756,7 +756,7 @@
             <!-- SUB-PAGE 1: SHOP CATALOG -->
             <section id="tactical-shop-section" class="space-y-5">
                 <!-- Clean Tactical Hero -->
-                <div class="hud-glass cyber-scanline rounded-2xl p-5 sm:p-6 border border-slate-800/90">
+                <div class="hud-glass cyber-scanline rounded-2xl p-4 sm:p-6 border border-slate-800/90">
                     <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5 relative z-10">
                         <div class="space-y-2 max-w-2xl">
                             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/25 text-emerald-300 text-xs font-medium">
@@ -771,7 +771,7 @@
                             </p>
                         </div>
 
-                        <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-2.5 shrink-0 text-xs">
+                        <div class="hidden sm:grid sm:grid-cols-4 lg:grid-cols-2 gap-2.5 shrink-0 text-xs">
                             <div class="bg-slate-900/75 border border-slate-800 rounded-xl px-3.5 py-2.5">
                                 <div class="text-slate-400 text-[10px]">พร้อมส่งในคลัง</div>
                                 <div class="text-white font-bold font-mono-cyber text-sm mt-0.5" id="shop-stat-total-items">10 รายการ</div>
@@ -978,8 +978,14 @@
                                 <input id="wallet-topup-time" type="text" placeholder="เช่น 14:35 น." class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-emerald-500">
                             </div>
                             <div>
-                                <label for="wallet-topup-slip-file" class="block text-xs font-semibold text-slate-300 mb-1.5">แนบรูปสลิปโอนเงิน (ถ้ามี)</label>
-                                <input id="wallet-topup-slip-file" type="file" accept="image/*" class="w-full text-[11px] text-slate-300 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-emerald-500/20 file:text-emerald-300 hover:file:bg-emerald-500/30">
+                                <label for="wallet-topup-slip-file" class="block text-xs font-semibold text-slate-300 mb-1.5">แนบรูปสลิปโอนเงิน*</label>
+                                <input id="wallet-topup-slip-file" type="file" accept="image/*" onchange="previewHiddenWalletSlip(this)" class="w-full text-[11px] text-slate-300 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[11px] file:font-semibold file:bg-emerald-500/20 file:text-emerald-300 hover:file:bg-emerald-500/30">
+                            </div>
+                        </div>
+                        <div id="hidden-wallet-slip-preview-wrap" class="hidden p-3 rounded-xl bg-slate-950 border border-emerald-500/30 flex items-center gap-3">
+                            <img id="hidden-wallet-slip-preview-img" src="" alt="ตัวอย่างสลิป" class="w-14 h-14 rounded-lg object-cover border border-slate-700">
+                            <div class="text-xs text-emerald-300 font-medium">
+                                <i class="fa-solid fa-circle-check mr-1"></i> แนบรูปสลิปพร้อมส่งให้แอดมินตรวจสอบแล้ว
                             </div>
                         </div>
 
@@ -2118,6 +2124,7 @@
                         active: true
                     }
                 ],
+                surfaceTopups: [],
                 hiddenTopups: [],
                 myArmoryOrders: []
             };
@@ -2202,6 +2209,7 @@
                 supportTickets: window.state.supportTickets || [],
                 hiddenProducts: window.state.hiddenProducts || [],
                 hiddenInvites: window.state.hiddenInvites || [],
+                surfaceTopups: window.state.surfaceTopups || [],
                 hiddenTopups: window.state.hiddenTopups || [],
                 myArmoryOrders: window.state.myArmoryOrders || []
             };
@@ -2218,6 +2226,7 @@
                         supportTickets: payload.supportTickets,
                         hiddenProducts: payload.hiddenProducts,
                         hiddenInvites: payload.hiddenInvites,
+                        surfaceTopups: payload.surfaceTopups,
                         hiddenTopups: payload.hiddenTopups,
                         myArmoryOrders: payload.myArmoryOrders
                     };
@@ -2254,6 +2263,7 @@
                         syncCollection('supportTickets', payload.supportTickets, 'id'),
                         syncCollection('hiddenProducts', payload.hiddenProducts, 'id'),
                         syncCollection('hiddenInvites', payload.hiddenInvites, 'id'),
+                        syncCollection('surfaceTopups', payload.surfaceTopups, 'id'),
                         syncCollection('hiddenTopups', payload.hiddenTopups, 'id'),
                         syncCollection('myArmoryOrders', payload.myArmoryOrders, 'id')
                     ]).catch(() => {});
@@ -2323,7 +2333,8 @@
                                 'supportTickets',
                                 'hiddenProducts',
                                 'hiddenInvites',
-                                'hiddenTopups',
+                                'surfaceTopups',
+                            'hiddenTopups',
                                 'myArmoryOrders'
                             ];
                             mergeKeys.forEach(k => {
@@ -2509,13 +2520,16 @@
             const inSurface = (window.state.surfaceOrders || []).some(
                 o => o.slipRef && String(o.slipRef).trim().toUpperCase() === clean && o.status !== 'ยกเลิก/คืนเงิน'
             );
+            const inSurfaceTopups = (window.state.surfaceTopups || []).some(
+                t => t.ref && String(t.ref).trim().toUpperCase() === clean && t.status !== 'ปฏิเสธแล้ว'
+            );
             const inHidden = (window.state.hiddenTopups || []).some(
                 t => t.ref && String(t.ref).trim().toUpperCase() === clean && t.status !== 'ปฏิเสธแล้ว'
             );
             const inArmoryOrders = (window.state.myArmoryOrders || []).some(
                 o => o.slipRef && String(o.slipRef).trim().toUpperCase() === clean
             );
-            return inSurface || inHidden || inArmoryOrders;
+            return inSurface || inSurfaceTopups || inHidden || inArmoryOrders;
         }
 
         // =====================================================================
@@ -2578,8 +2592,8 @@
             if (surfTopupListEl) {
                 const myTopups = isLoggedIn
                     ? (isAdmin
-                        ? (window.state.hiddenTopups || [])
-                        : (window.state.hiddenTopups || []).filter(t => t.email && t.email.toLowerCase() === (user.email || '').toLowerCase()))
+                        ? (window.state.surfaceTopups || [])
+                        : (window.state.surfaceTopups || []).filter(t => t.email && t.email.toLowerCase() === (user.email || '').toLowerCase()))
                     : [];
                 surfTopupListEl.innerHTML = myTopups.length ? myTopups.map(t => `
                     <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
@@ -2588,9 +2602,9 @@
                             <div class="text-[11px] text-slate-500">ช่องทาง: ${escapeHtml(t.channel || '-')} • เวลา: ${escapeHtml(t.date || '-')}</div>
                         </div>
                         <div class="flex items-center gap-2">
-                            ${t.slipImage ? `<button type="button" onclick="previewSlipImage('${escapeHtml(t.id)}', 'hidden')" class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-semibold text-[11px]">ดูสลิป</button>` : ''}
+                            ${t.slipImage ? `<button type="button" onclick="previewSlipImage('${escapeHtml(t.id)}', 'surface-topup')" class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-semibold text-[11px]">ดูสลิป</button>` : ''}
                             <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold ${t.status === 'อนุมัติแล้ว' ? 'bg-emerald-100 text-emerald-800' : (t.status === 'ปฏิเสธแล้ว' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-800')}">${escapeHtml(t.status)}</span>
-                            ${isAdmin && t.status === 'รอตรวจสอบ' ? `<button type="button" onclick="approveHiddenTopup('${escapeHtml(t.id)}'); renderSurfaceStore();" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[11px]">✓ อนุมัติยอด</button>` : ''}
+                            ${isAdmin && t.status === 'รอตรวจสอบ' ? `<button type="button" onclick="approveSurfaceTopup('${escapeHtml(t.id)}');" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[11px]">✓ อนุมัติยอด</button>` : ''}
                         </div>
                     </div>
                 `).join('') : '<p class="text-xs text-slate-400 text-center py-6">ยังไม่มีรายการแจ้งเติมเงิน</p>';
@@ -2653,7 +2667,7 @@
             const pendingSurfaceOrdersCount = (window.state.surfaceOrders || []).filter(
                 o => o.paymentVerified !== true && o.status !== 'สำเร็จเรียบร้อย' && o.status !== 'ยกเลิก/คืนเงิน'
             ).length;
-            const pendingWalletTopupsCount = (window.state.hiddenTopups || []).filter(
+            const pendingWalletTopupsCount = (window.state.surfaceTopups || []).filter(
                 t => t.status === 'รอตรวจสอบ'
             ).length;
             const pendingSurfaceCount = pendingSurfaceOrdersCount + pendingWalletTopupsCount;
@@ -2880,8 +2894,8 @@
                 status: 'รอตรวจสอบ'
             };
 
-            window.state.hiddenTopups = window.state.hiddenTopups || [];
-            window.state.hiddenTopups.unshift(newTopup);
+            window.state.surfaceTopups = window.state.surfaceTopups || [];
+            window.state.surfaceTopups.unshift(newTopup);
             if (fileEl) fileEl.value = '';
             const wrap = document.getElementById('surf-slip-preview-wrap');
             if (wrap) wrap.classList.add('hidden');
@@ -3286,7 +3300,7 @@
         };
 
         window.previewSlipImage = function(recordId, type = 'surface') {
-            const list = type === 'surface' ? window.state.surfaceOrders : window.state.hiddenTopups;
+            const list = type === 'surface' ? window.state.surfaceOrders : (type === 'surface-topup' ? (window.state.surfaceTopups || []) : (window.state.hiddenTopups || []));
             const item = (list || []).find(x => x.id === recordId);
             if (!item || !item.slipImage) {
                 showToast('ไม่พบรูปสลิปที่แนบไว้', 'info');
@@ -3562,6 +3576,32 @@
         };
 
         // Admin slip verification & API dispatch handler for Surface Orders
+        window.approveSurfaceTopup = function(topupId) {
+            if (!requireAdminGuard('อนุมัติรายการเติมเงิน')) return;
+            const t = (window.state.surfaceTopups || []).find(item => item.id === topupId);
+            if (!t || t.status !== 'รอตรวจสอบ') return;
+            t.status = 'อนุมัติแล้ว';
+            if (window.state.currentUser.email && window.state.currentUser.email.toLowerCase() === (t.email || '').toLowerCase()) {
+                window.state.currentUser.walletCr = Number(window.state.currentUser.walletCr || 0) + Number(t.amount || 0);
+            }
+            const reg = (window.state.registeredUsers || []).find(u => u.email && t.email && u.email.toLowerCase() === t.email.toLowerCase());
+            if (reg) reg.walletCr = Number(reg.walletCr || 0) + Number(t.amount || 0);
+            saveState();
+            renderSurfaceStore();
+            renderHiddenStoreAll();
+            showToast(`อนุมัติยอดเงิน +฿${Number(t.amount || 0).toLocaleString()} เข้าบัญชี ${t.email} เรียบร้อย!`);
+        };
+
+        window.rejectSurfaceTopup = function(topupId) {
+            if (!requireAdminGuard('ปฏิเสธรายการเติมเงิน')) return;
+            const t = (window.state.surfaceTopups || []).find(item => item.id === topupId);
+            if (!t || t.status !== 'รอตรวจสอบ') return;
+            t.status = 'ปฏิเสธแล้ว';
+            saveState();
+            renderSurfaceStore();
+            showToast(`ปฏิเสธรายการเติมเงิน ${t.id} แล้ว`, 'info');
+        };
+
         window.approveSurfaceOrderPayment = function(orderId) {
             if (!requireAdminGuard('อนุมัติสลิปออเดอร์เติมเกม')) return;
             const o = (window.state.surfaceOrders || []).find(item => item.id === orderId);
@@ -3776,26 +3816,26 @@
                             </div>
                         </div>
 
-                        <!-- Section 0: Wallet Top-Up Slip Verification -->
+                        <!-- Section 0: Wallet Top-Up Slip Verification (Surface Store Only) -->
                         <div class="p-3.5 rounded-2xl bg-emerald-50/60 border border-emerald-200 space-y-2">
                             <div class="flex flex-wrap items-center justify-between gap-2">
                                 <div>
-                                    <span class="font-bold text-slate-900 text-sm">รายการแจ้งเติมเงินเข้ากระเป๋า (${(window.state.hiddenTopups || []).length})</span>
-                                    <p class="text-[11px] text-slate-500">ตรวจสอบสลิปจากหน้า "เติมเงิน" เพื่ออนุมัติยอดเงินเข้าบัญชีลูกค้า</p>
+                                    <span class="font-bold text-slate-900 text-sm">0. รายการแจ้งเติมเงินเข้ากระเป๋าเว็บ (${(window.state.surfaceTopups || []).length})</span>
+                                    <p class="text-[11px] text-slate-500">ตรวจสอบสลิปจากหน้า "เติมเงิน" เพื่ออนุมัติยอดเงินเข้าบัญชีลูกค้า (แยกจากคลังลับ)</p>
                                 </div>
                             </div>
                             <div class="space-y-1.5 max-h-44 overflow-y-auto pr-1">
-                                ${(window.state.hiddenTopups || []).map(t => `
+                                ${(window.state.surfaceTopups || []).map(t => `
                                     <div class="p-2.5 rounded-xl bg-white border border-slate-200 flex flex-wrap items-center justify-between gap-2 text-xs">
                                         <div>
                                             <div class="font-bold text-slate-900 font-mono-cyber">${escapeHtml(t.id)} • +฿${Number(t.amount || 0).toLocaleString()} <span class="px-2 py-0.5 rounded text-[10px] ${t.status === "อนุมัติแล้ว" ? "bg-emerald-100 text-emerald-800" : (t.status === "ปฏิเสธแล้ว" ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800")}">${escapeHtml(t.status)}</span></div>
-                                            <div class="text-[11px] text-slate-500">ผู้แจ้ง: <b>${escapeHtml(t.email || "-")}</b> • ช่องทาง: ${escapeHtml(t.channel || "-")} • เลขสลิป: <b class="font-mono-cyber text-slate-900">${escapeHtml(t.ref || "-")}</b> (${escapeHtml(t.date || "-")})</div>
+                                            <div class="text-[11px] text-slate-500">ผู้แจ้ง: <b>${escapeHtml(t.email || "-")}</b> • ช่องทาง: ${escapeHtml(t.channel || "-")} (${escapeHtml(t.date || "-")})</div>
                                         </div>
                                         <div class="flex items-center gap-1.5">
-                                            ${t.slipImage ? `<button type="button" onclick="previewSlipImage('${escapeHtml(t.id)}', 'hidden')" class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-semibold text-[11px]">ดูสลิป</button>` : ""}
+                                            ${t.slipImage ? `<button type="button" onclick="previewSlipImage('${escapeHtml(t.id)}', 'surface-topup')" class="px-2.5 py-1 rounded-lg bg-sky-100 text-sky-800 font-semibold text-[11px]">ดูสลิป</button>` : ""}
                                             ${t.status === "รอตรวจสอบ" ? `
-                                                <button type="button" onclick="approveHiddenTopup('${escapeHtml(t.id)}'); renderSurfaceStore(); openSurfaceAdminModal();" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[11px]">✓ อนุมัติยอดเงิน</button>
-                                                <button type="button" onclick="rejectHiddenTopup('${escapeHtml(t.id)}'); renderSurfaceStore(); openSurfaceAdminModal();" class="px-2.5 py-1 rounded-lg bg-rose-100 text-rose-700 font-semibold text-[11px]">ปฏิเสธ</button>
+                                                <button type="button" onclick="approveSurfaceTopup('${escapeHtml(t.id)}'); openSurfaceAdminModal();" class="px-2.5 py-1 rounded-lg bg-emerald-600 text-white font-bold text-[11px]">✓ อนุมัติยอดเงิน</button>
+                                                <button type="button" onclick="rejectSurfaceTopup('${escapeHtml(t.id)}'); openSurfaceAdminModal();" class="px-2.5 py-1 rounded-lg bg-rose-100 text-rose-700 font-semibold text-[11px]">ปฏิเสธ</button>
                                             ` : ""}
                                         </div>
                                     </div>
@@ -5114,8 +5154,12 @@
             const compareBadge = document.getElementById('compare-count-badge');
             if (compareBadge) compareBadge.textContent = `${window.state.hiddenCompare.length}/3`;
 
+            const myEmailLower = (window.state.currentUser.email || '').toLowerCase();
+            const myOrderCount = isAdmin
+                ? (window.state.myArmoryOrders || []).length
+                : (window.state.myArmoryOrders || []).filter(o => !o.buyerEmail || o.buyerEmail.toLowerCase() === myEmailLower).length;
             const orderBadge = document.getElementById('my-armory-order-count');
-            if (orderBadge) orderBadge.textContent = window.state.myArmoryOrders.length;
+            if (orderBadge) orderBadge.textContent = myOrderCount;
 
             const allCount = window.state.hiddenProducts.length;
             const gunCount = window.state.hiddenProducts.filter(p => p.category === 'gun').length;
@@ -5876,6 +5920,21 @@
             }
         };
 
+        window.previewHiddenWalletSlip = function(input) {
+            const wrap = document.getElementById('hidden-wallet-slip-preview-wrap');
+            const img = document.getElementById('hidden-wallet-slip-preview-img');
+            if (!input || !input.files || !input.files[0]) {
+                if (wrap) wrap.classList.add('hidden');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                if (img) img.src = e.target.result;
+                if (wrap) wrap.classList.remove('hidden');
+            };
+            reader.readAsDataURL(input.files[0]);
+        };
+
         window.selectTopupAmount = function(amt) {
             const el = document.getElementById('wallet-topup-amount');
             if (el) {
@@ -5893,7 +5952,11 @@
         window.instantGrantCredits = function(amount) {
             if (!requireAdminGuard('เสกเครดิตด่วน')) return;
             const amt = Number(amount || 5000);
-            window.state.currentUser.walletCr = (window.state.currentUser.walletCr || 0) + amt;
+            window.state.currentUser.walletCr = Number(window.state.currentUser.walletCr || 0) + amt;
+            const regGrant = (window.state.registeredUsers || []).find(
+                u => u.email && window.state.currentUser.email && u.email.toLowerCase() === window.state.currentUser.email.toLowerCase()
+            );
+            if (regGrant) regGrant.walletCr = window.state.currentUser.walletCr;
             window.state.hiddenTopups.unshift({
                 id: 'CR-' + Math.floor(10000 + Math.random() * 90000),
                 email: window.state.currentUser.email || MAIN_ADMIN_EMAIL,
@@ -5958,6 +6021,8 @@
             window.state.hiddenTopups.unshift(newTopup);
             if (refEl) refEl.value = '';
             if (fileEl) fileEl.value = '';
+            const hidPrevWrap = document.getElementById('hidden-wallet-slip-preview-wrap');
+            if (hidPrevWrap) hidPrevWrap.classList.add('hidden');
             saveState();
             renderHiddenStoreAll();
 
