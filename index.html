@@ -1342,9 +1342,6 @@
                             <p class="text-xs text-slate-400">เลือกเมนูย่อยด้านล่างเพื่อจัดการคำสั่งซื้อ อนุมัติสลิป สินค้า และรหัสเชิญ</p>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <button type="button" onclick="openFirebaseStatusModal()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-sky-500/40 text-sky-300 text-xs font-semibold flex items-center gap-1.5 transition">
-                                <i class="fa-solid fa-cloud-arrow-up"></i> ซิงค์ Firebase
-                            </button>
                             <button type="button" onclick="openAddHiddenProductModal()" class="px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold flex items-center gap-1.5 transition shadow-md">
                                 <i class="fa-solid fa-plus"></i> เพิ่มสินค้าใหม่
                             </button>
@@ -1438,22 +1435,43 @@
                         <h3 class="text-base font-bold text-white flex items-center gap-2">
                             <i class="fa-solid fa-user-plus text-cyan-400"></i> สร้างและจัดการรหัสเชิญสมาชิก
                         </h3>
-                        <p class="text-[11px] text-slate-400">ระบบจะสุ่มรหัส INV-XXXXXX และส่งเข้ากล่องข้อความหน้าร้านเติมเกมของผู้รับอัตโนมัติ</p>
+                        <p class="text-[11px] text-slate-400">เลือกจากรายชื่อสมาชิกเว็บเติมเกมหรือกรอกอีเมล เพื่อสร้างรหัสเชิญและส่งเข้ากล่องข้อความของผู้รับทันที</p>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
+                    <div class="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
                         <div>
-                            <label for="invite-email-input" class="block text-xs font-medium text-slate-300 mb-1">อีเมลหรือชื่อบัญชีผู้รับเชิญ</label>
-                            <input id="invite-email-input" type="text" placeholder="เช่น customer01@gmail.com" class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-cyan-500">
+                            <label for="invite-member-select" class="block text-xs font-semibold text-cyan-400 mb-1">
+                                <i class="fa-solid fa-users mr-1"></i> เลือกจากสมาชิกที่สมัครเข้าเว็บเติมเกม
+                            </label>
+                            <select id="invite-member-select" onchange="onSelectInviteMember(this.value)" class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-500">
+                                <option value="">-- เลือกสมาชิกเพื่อกรอกอีเมลอัตโนมัติ --</option>
+                            </select>
                         </div>
-                        <div>
-                            <label for="invite-note-input" class="block text-xs font-medium text-slate-300 mb-1">หมายเหตุ / สิทธิ์สมาชิก</label>
-                            <input id="invite-note-input" type="text" placeholder="เช่น ลูกค้า VIP" class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white focus:outline-none focus:border-cyan-500">
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                            <div>
+                                <label for="invite-email-input" class="block text-xs font-medium text-slate-300 mb-1">อีเมลผู้รับเชิญ*</label>
+                                <input id="invite-email-input" type="text" placeholder="เช่น customer01@gmail.com" class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-500">
+                            </div>
+                            <div>
+                                <label for="invite-custom-code-input" class="block text-xs font-medium text-slate-300 mb-1">กำหนดรหัสเอง (เว้นว่างเพื่อสุ่ม)</label>
+                                <input id="invite-custom-code-input" type="text" placeholder="เช่น INV-VIP888" class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white font-mono-cyber uppercase focus:outline-none focus:border-cyan-500">
+                            </div>
+                            <div>
+                                <label for="invite-note-input" class="block text-xs font-medium text-slate-300 mb-1">หมายเหตุ / สิทธิ์สมาชิก</label>
+                                <input id="invite-note-input" type="text" placeholder="เช่น ลูกค้า VIP" class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-cyan-500">
+                            </div>
                         </div>
+
+                        <button type="button" onclick="createHiddenInvite()" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-paper-plane"></i> สร้างรหัสเชิญ &amp; ส่งเข้ากล่องข้อความทันที
+                        </button>
                     </div>
-                    <button type="button" onclick="createHiddenInvite()" class="w-full py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-paper-plane"></i> สุ่มรหัสใหม่ &amp; ส่งเข้ากล่องข้อความ
-                    </button>
-                    <div id="admin-invite-list" class="space-y-2 max-h-80 overflow-y-auto pr-1 pt-2"></div>
+
+                    <div class="space-y-2 pt-1">
+                        <div class="text-xs font-semibold text-slate-300">รายการรหัสเชิญทั้งหมด</div>
+                        <div id="admin-invite-list" class="space-y-2 max-h-80 overflow-y-auto pr-1"></div>
+                    </div>
                 </div>
             </section>
 
@@ -6844,19 +6862,40 @@
             showToast(`อัปเดตสถานะคำสั่งซื้อ ${o.id} เรียบร้อย`);
         };
 
+        window.onSelectInviteMember = function(emailVal) {
+            const emailInput = document.getElementById('invite-email-input');
+            if (emailInput && emailVal) {
+                emailInput.value = emailVal;
+            }
+        };
+
         window.createHiddenInvite = function() {
             if (!requireAdminGuard('สร้างรหัสเชิญเข้าคลังลับ')) return;
             const emailInput = document.getElementById('invite-email-input');
+            const customCodeInput = document.getElementById('invite-custom-code-input');
             const noteInput = document.getElementById('invite-note-input');
-            const email = (emailInput && emailInput.value.trim()) ? emailInput.value.trim() : (window.state.currentUser.email || MAIN_ADMIN_EMAIL);
-            const note = (noteInput && noteInput.value.trim()) ? noteInput.value.trim() : 'สมาชิกคลังแสงที่ได้รับเชิญ';
+            const memberSel = document.getElementById('invite-member-select');
 
-            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-            let randomPart = '';
-            for (let i = 0; i < 6; i++) {
-                randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
+            const email = (emailInput && emailInput.value.trim())
+                ? emailInput.value.trim()
+                : ((memberSel && memberSel.value) ? memberSel.value : (window.state.currentUser.email || MAIN_ADMIN_EMAIL));
+            const note = (noteInput && noteInput.value.trim()) ? noteInput.value.trim() : 'สมาชิก Shop airsoft ที่ได้รับเชิญ';
+
+            let code = (customCodeInput && customCodeInput.value.trim())
+                ? customCodeInput.value.trim().toUpperCase().replace(/\s+/g, '')
+                : '';
+
+            if (!code) {
+                const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+                let randomPart = '';
+                for (let i = 0; i < 6; i++) {
+                    randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                code = `INV-${randomPart}`;
+            } else if ((window.state.hiddenInvites || []).some(i => i.code.toUpperCase() === code)) {
+                showToast(`รหัส ${code} มีอยู่ในระบบแล้ว กรุณาใช้รหัสอื่น`, 'warning');
+                return;
             }
-            const code = `INV-${randomPart}`;
 
             const newInv = {
                 id: 'inv-' + Date.now(),
@@ -6869,7 +6908,9 @@
 
             window.state.hiddenInvites.unshift(newInv);
             if (emailInput) emailInput.value = '';
+            if (customCodeInput) customCodeInput.value = '';
             if (noteInput) noteInput.value = '';
+            if (memberSel) memberSel.value = '';
             saveState();
             renderHiddenStoreAll();
             renderSurfaceStore();
@@ -7268,30 +7309,39 @@
             const topEl = document.getElementById('admin-stat-topups');
             if (topEl) topEl.textContent = `${pendingTopups} รายการ`;
 
+            const memberSelect = document.getElementById('invite-member-select');
+            if (memberSelect) {
+                const curSel = memberSelect.value;
+                const users = window.state.registeredUsers || [];
+                memberSelect.innerHTML = `<option value="">-- เลือกสมาชิกที่สมัครเว็บเติมเกม (${users.length} คน) --</option>` +
+                    users.map(u => `<option value="${escapeHtml(u.email)}">${escapeHtml(u.name || u.email)} (${escapeHtml(u.email)})${u.role === 'admin' ? ' [แอดมิน]' : ''}</option>`).join('');
+                if (curSel && users.some(u => u.email === curSel)) memberSelect.value = curSel;
+            }
+
             const inviteList = document.getElementById('admin-invite-list');
             if (inviteList) {
-                inviteList.innerHTML = window.state.hiddenInvites.map(inv => `
-                    <div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between gap-2 text-xs">
-                        <div>
-                            <div class="flex items-center gap-2">
+                inviteList.innerHTML = window.state.hiddenInvites.length ? window.state.hiddenInvites.map(inv => `
+                    <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
+                        <div class="min-w-0 flex-1 space-y-0.5">
+                            <div class="flex flex-wrap items-center gap-2">
                                 <span class="font-mono-cyber font-bold text-emerald-400 text-sm">${escapeHtml(inv.code)}</span>
-                                <span class="text-slate-300 font-medium">${escapeHtml(inv.email)}</span>
+                                <span class="text-slate-300 font-medium break-all">${escapeHtml(inv.email)}</span>
                             </div>
                             <div class="text-[11px] text-slate-500">${escapeHtml(inv.note)} • ${escapeHtml(inv.createdAt)}</div>
                         </div>
-                        <div class="flex items-center gap-1.5">
-                            <button type="button" onclick="copyInviteCode('${escapeHtml(inv.code)}')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-[11px]">
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button type="button" onclick="copyInviteCode('${escapeHtml(inv.code)}')" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-300 text-[11px] font-medium">
                                 คัดลอก
                             </button>
-                            <button type="button" onclick="openEditHiddenInviteModal('${escapeHtml(inv.id)}')" class="px-2 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px]">
+                            <button type="button" onclick="openEditHiddenInviteModal('${escapeHtml(inv.id)}')" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 text-[11px] font-medium">
                                 แก้ไข
                             </button>
-                            <button type="button" onclick="revokeHiddenInvite('${escapeHtml(inv.id)}')" class="px-2 py-1 rounded-lg bg-rose-950/80 hover:bg-rose-900 text-rose-300 text-[11px]">
+                            <button type="button" onclick="revokeHiddenInvite('${escapeHtml(inv.id)}')" class="px-2.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-[11px] font-semibold">
                                 ลบ
                             </button>
                         </div>
                     </div>
-                `).join('');
+                `).join('') : '<div class="p-6 rounded-xl bg-slate-950/60 border border-slate-800 text-center text-xs text-slate-500">ยังไม่มีรหัสเชิญในระบบ</div>';
             }
 
             const topupList = document.getElementById('admin-topup-list');
