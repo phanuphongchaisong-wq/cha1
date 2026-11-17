@@ -154,72 +154,169 @@
         ::-webkit-scrollbar-thumb:hover { background: #475569; }
 
         /* =========================================================
-           LIGHT MODE OVERRIDES (html[data-theme="light"])
+           LIGHT MODE OVERRIDES (html[data-theme="light"]) - HIGH CONTRAST
            ========================================================= */
         html[data-theme="light"], html[data-theme="light"] body {
-            background-color: #f8fafc !important;
-            color: #1e293b !important;
+            background-color: #f1f5f9 !important;
+            color: #0f172a !important;
         }
         html[data-theme="light"] .luxury-obsidian-bg {
-            background-color: #f8fafc !important;
+            background-color: #f1f5f9 !important;
             background-image:
                 radial-gradient(circle at 12% 10%, rgba(245, 158, 11, 0.08) 0%, transparent 42%),
                 radial-gradient(circle at 88% 18%, rgba(16, 185, 129, 0.06) 0%, transparent 38%) !important;
-            color: #1e293b !important;
+            color: #0f172a !important;
         }
         html[data-theme="light"] #view-app header {
-            background-color: rgba(255, 255, 255, 0.94) !important;
-            border-bottom-color: #e2e8f0 !important;
+            background-color: rgba(255, 255, 255, 0.96) !important;
+            border-bottom-color: #cbd5e1 !important;
         }
+        /* Header controls & user pills in Light Mode */
         html[data-theme="light"] #view-app header .text-white,
+        html[data-theme="light"] #view-app header .text-slate-100,
+        html[data-theme="light"] #view-app header .text-slate-200,
+        html[data-theme="light"] #view-app header .text-slate-300 {
+            color: #0f172a !important;
+        }
+        html[data-theme="light"] #view-app header .bg-white\/\[0\.05\],
+        html[data-theme="light"] #view-app header .bg-white\/\[0\.06\] {
+            background-color: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+        html[data-theme="light"] #view-app header .text-emerald-300 {
+            color: #047857 !important;
+        }
+        html[data-theme="light"] #view-app header .text-amber-300,
+        html[data-theme="light"] #view-app header .text-amber-400 {
+            color: #b45309 !important;
+        }
+        html[data-theme="light"] #view-app header #btn-admin-surface {
+            background-color: #0f172a !important;
+            color: #fbbf24 !important;
+        }
+        html[data-theme="light"] #view-app header #btn-admin-surface span,
+        html[data-theme="light"] #view-app header #btn-admin-surface i {
+            color: #fbbf24 !important;
+        }
+        html[data-theme="light"] #view-app header #surf-page-btn-games.bg-gradient-to-r,
+        html[data-theme="light"] #view-app header #surf-page-btn-topup.bg-gradient-to-r,
+        html[data-theme="light"] #view-app header #surf-page-btn-history.bg-gradient-to-r {
+            color: #0f172a !important;
+        }
+        html[data-theme="light"] #view-app header #surface-main-nav {
+            background-color: #e2e8f0 !important;
+            border-color: #cbd5e1 !important;
+        }
+        html[data-theme="light"] #view-app header #surface-main-nav button.text-slate-300 {
+            color: #334155 !important;
+        }
+        html[data-theme="light"] #view-app header .text-sky-300 {
+            color: #0369a1 !important;
+        }
+        /* Surface Panels & Cards in Light Mode */
+        html[data-theme="light"] #view-app .luxury-panel,
+        html[data-theme="light"] #view-app .surface-card {
+            background: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 8px 22px -10px rgba(15, 23, 42, 0.09) !important;
+            color: #0f172a !important;
+        }
+        html[data-theme="light"] #view-app .surface-card:hover {
+            border-color: #d97706 !important;
+        }
         html[data-theme="light"] #view-app .luxury-panel .text-white,
         html[data-theme="light"] #view-app .surface-card .text-white,
         html[data-theme="light"] #view-app #surface-page-topup .text-white,
-        html[data-theme="light"] #view-app #surface-page-history .text-white {
+        html[data-theme="light"] #view-app #surface-page-history .text-white,
+        html[data-theme="light"] #view-app .luxury-panel .text-slate-100,
+        html[data-theme="light"] #view-app .luxury-panel .text-slate-200 {
             color: #0f172a !important;
         }
+        /* Keep dark gradient balance card & dark buttons crisp in Light Mode */
+        html[data-theme="light"] #view-app .bg-gradient-to-br.from-slate-900,
+        html[data-theme="light"] #view-app #surface-hero-section {
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%) !important;
+            color: #ffffff !important;
+        }
+        html[data-theme="light"] #view-app .bg-gradient-to-br.from-slate-900 *,
         html[data-theme="light"] #view-app #surface-hero-section .text-white {
             color: #ffffff !important;
         }
-        html[data-theme="light"] #view-app .luxury-panel {
-            background: #ffffff !important;
-            border-color: #e2e8f0 !important;
-            box-shadow: 0 8px 24px -10px rgba(15, 23, 42, 0.08) !important;
+        html[data-theme="light"] #view-app .bg-gradient-to-br.from-slate-900 .text-amber-400,
+        html[data-theme="light"] #view-app .bg-gradient-to-br.from-slate-900 .text-amber-300 {
+            color: #fbbf24 !important;
         }
-        html[data-theme="light"] #view-app .surface-card {
-            background: #ffffff !important;
-            border-color: #e2e8f0 !important;
-            box-shadow: 0 8px 20px -10px rgba(15, 23, 42, 0.08) !important;
+        html[data-theme="light"] #view-app .bg-gradient-to-br.from-slate-900 .text-emerald-300 {
+            color: #6ee7b7 !important;
         }
-        html[data-theme="light"] #view-app .surface-card:hover {
-            border-color: #f59e0b !important;
+        html[data-theme="light"] #view-app .bg-gradient-to-br.from-slate-900 .text-slate-300 {
+            color: #cbd5e1 !important;
+        }
+        html[data-theme="light"] #view-app button.bg-slate-900 {
+            background-color: #0f172a !important;
+            color: #fbbf24 !important;
+        }
+        html[data-theme="light"] #view-app button.bg-emerald-600,
+        html[data-theme="light"] #view-app button.bg-sky-600,
+        html[data-theme="light"] #view-app button.bg-orange-600 {
+            color: #ffffff !important;
+        }
+        /* High-contrast accent text inside white cards in Light Mode */
+        html[data-theme="light"] #view-app .luxury-panel .text-amber-300,
+        html[data-theme="light"] #view-app .luxury-panel .text-amber-400 {
+            color: #b45309 !important;
+        }
+        html[data-theme="light"] #view-app .luxury-panel .text-sky-300,
+        html[data-theme="light"] #view-app .luxury-panel .text-sky-400 {
+            color: #0369a1 !important;
+        }
+        html[data-theme="light"] #view-app .luxury-panel .text-emerald-300,
+        html[data-theme="light"] #view-app .luxury-panel .text-emerald-400 {
+            color: #047857 !important;
+        }
+        html[data-theme="light"] #view-app .luxury-panel .text-orange-300,
+        html[data-theme="light"] #view-app .luxury-panel .text-orange-400 {
+            color: #c2410c !important;
+        }
+        html[data-theme="light"] #view-app .luxury-panel .text-slate-300,
+        html[data-theme="light"] #view-app .luxury-panel .text-slate-400 {
+            color: #475569 !important;
+        }
+        html[data-theme="light"] #view-app .bg-black\/40,
+        html[data-theme="light"] #view-app .bg-white\/\[0\.04\] {
+            background-color: #f8fafc !important;
+            border-color: #cbd5e1 !important;
         }
         html[data-theme="light"] #view-app input,
         html[data-theme="light"] #view-app select,
         html[data-theme="light"] #view-app textarea {
-            background-color: #f8fafc !important;
+            background-color: #ffffff !important;
             color: #0f172a !important;
             border-color: #cbd5e1 !important;
         }
         html[data-theme="light"] #view-app footer {
             background-color: #ffffff !important;
-            border-top-color: #e2e8f0 !important;
-        }
-        html[data-theme="light"] #view-app .text-slate-300,
-        html[data-theme="light"] #view-app .text-slate-400 {
+            border-top-color: #cbd5e1 !important;
             color: #475569 !important;
         }
-        html[data-theme="light"] #view-app #surface-hero-section .text-slate-300,
-        html[data-theme="light"] #view-app #surface-hero-section .text-slate-400 {
-            color: #cbd5e1 !important;
+
+        /* Gateway in Light Mode */
+        html[data-theme="light"] #view-gateway .luxury-panel {
+            background: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
         }
-        html[data-theme="light"] #view-app #surface-main-nav {
-            background-color: #f1f5f9 !important;
-            border-color: #e2e8f0 !important;
+        html[data-theme="light"] #view-gateway .text-white {
+            color: #0f172a !important;
         }
-        html[data-theme="light"] #view-app #surface-main-nav button.text-slate-300 {
-            color: #475569 !important;
+        html[data-theme="light"] #view-gateway input {
+            background-color: #f8fafc !important;
+            color: #0f172a !important;
+            border-color: #cbd5e1 !important;
         }
+
+        /* Shop airsoft (#view-hidden) in Light Mode - HIGH CONTRAST */
         html[data-theme="light"] .phantom-void-bg {
             background-color: #f1f5f9 !important;
             background-image: none !important;
@@ -228,30 +325,60 @@
         html[data-theme="light"] #view-hidden .hud-glass,
         html[data-theme="light"] #view-hidden .hud-card {
             background: #ffffff !important;
-            border-color: #e2e8f0 !important;
-            box-shadow: 0 10px 25px -10px rgba(15, 23, 42, 0.09) !important;
+            border-color: #cbd5e1 !important;
+            box-shadow: 0 8px 22px -10px rgba(15, 23, 42, 0.09) !important;
             color: #0f172a !important;
         }
-        html[data-theme="light"] #view-hidden .text-white {
+        html[data-theme="light"] #view-hidden .text-white,
+        html[data-theme="light"] #view-hidden .text-slate-100,
+        html[data-theme="light"] #view-hidden .text-slate-200 {
             color: #0f172a !important;
-        }
-        html[data-theme="light"] #view-hidden .bg-rose-600.text-white,
-        html[data-theme="light"] #view-hidden .bg-gradient-to-r.text-white {
-            color: #ffffff !important;
         }
         html[data-theme="light"] #view-hidden .text-slate-300,
         html[data-theme="light"] #view-hidden .text-slate-400 {
             color: #475569 !important;
         }
+        html[data-theme="light"] #view-hidden .text-emerald-300,
+        html[data-theme="light"] #view-hidden .text-emerald-400 {
+            color: #047857 !important;
+        }
+        html[data-theme="light"] #view-hidden .text-cyan-300,
+        html[data-theme="light"] #view-hidden .text-cyan-400 {
+            color: #0369a1 !important;
+        }
+        html[data-theme="light"] #view-hidden .text-amber-300,
+        html[data-theme="light"] #view-hidden .text-amber-400 {
+            color: #b45309 !important;
+        }
+        html[data-theme="light"] #view-hidden .text-rose-300,
+        html[data-theme="light"] #view-hidden .text-rose-400 {
+            color: #be123c !important;
+        }
+        html[data-theme="light"] #view-hidden .bg-rose-600,
+        html[data-theme="light"] #view-hidden .bg-gradient-to-r.from-amber-500 {
+            color: #ffffff !important;
+        }
+        html[data-theme="light"] #view-hidden .bg-rose-600 *,
+        html[data-theme="light"] #view-hidden .bg-gradient-to-r.from-amber-500 *,
+        html[data-theme="light"] #view-hidden .bg-emerald-600,
+        html[data-theme="light"] #view-hidden .bg-emerald-600 *,
+        html[data-theme="light"] #view-hidden .bg-cyan-500,
+        html[data-theme="light"] #view-hidden .bg-cyan-500 * {
+            color: #ffffff !important;
+        }
         html[data-theme="light"] #view-hidden .bg-slate-950,
         html[data-theme="light"] #view-hidden .bg-slate-950\/90,
+        html[data-theme="light"] #view-hidden .bg-slate-950\/80,
+        html[data-theme="light"] #view-hidden .bg-slate-950\/60,
         html[data-theme="light"] #view-hidden .bg-slate-900,
+        html[data-theme="light"] #view-hidden .bg-slate-900\/60,
         html[data-theme="light"] #view-hidden .bg-slate-900\/70,
         html[data-theme="light"] #view-hidden .bg-slate-900\/90,
+        html[data-theme="light"] #view-hidden .bg-slate-800,
         html[data-theme="light"] #view-hidden .bg-black\/40,
         html[data-theme="light"] #view-hidden .bg-black\/60 {
             background-color: #f8fafc !important;
-            border-color: #e2e8f0 !important;
+            border-color: #cbd5e1 !important;
         }
         html[data-theme="light"] #view-hidden input,
         html[data-theme="light"] #view-hidden select,
@@ -260,14 +387,16 @@
             color: #0f172a !important;
             border-color: #cbd5e1 !important;
         }
+
+        /* SweetAlert2 in Light Mode */
         html[data-theme="light"] .swal2-popup {
             background: #ffffff !important;
             color: #0f172a !important;
-            border-color: #e2e8f0 !important;
+            border-color: #cbd5e1 !important;
         }
         html[data-theme="light"] .swal2-title,
         html[data-theme="light"] .swal2-html-container {
-            color: #1e293b !important;
+            color: #0f172a !important;
         }
         html[data-theme="light"] .swal2-html-container .bg-white,
         html[data-theme="light"] .swal2-html-container .bg-slate-50,
@@ -276,12 +405,25 @@
         html[data-theme="light"] .swal2-html-container .bg-slate-950 {
             background-color: #f8fafc !important;
             color: #0f172a !important;
-            border-color: #e2e8f0 !important;
+            border-color: #cbd5e1 !important;
         }
         html[data-theme="light"] .swal2-html-container .text-white,
         html[data-theme="light"] .swal2-html-container .text-slate-200,
-        html[data-theme="light"] .swal2-html-container .text-slate-300 {
-            color: #1e293b !important;
+        html[data-theme="light"] .swal2-html-container .text-slate-300,
+        html[data-theme="light"] .swal2-html-container .text-slate-400 {
+            color: #334155 !important;
+        }
+        html[data-theme="light"] .swal2-html-container .text-emerald-300,
+        html[data-theme="light"] .swal2-html-container .text-emerald-400 {
+            color: #047857 !important;
+        }
+        html[data-theme="light"] .swal2-html-container .text-amber-300,
+        html[data-theme="light"] .swal2-html-container .text-amber-400 {
+            color: #b45309 !important;
+        }
+        html[data-theme="light"] .swal2-html-container .text-cyan-300,
+        html[data-theme="light"] .swal2-html-container .text-cyan-400 {
+            color: #0369a1 !important;
         }
         html[data-theme="light"] .swal2-html-container input,
         html[data-theme="light"] .swal2-html-container select,
