@@ -26,8 +26,8 @@
         html, body {
             max-width: 100vw;
             overflow-x: hidden;
-            background-color: #06080f;
-            color: #e2e8f0;
+            background-color: #f4f7fe;
+            color: #0f172a;
             transition: background-color 0.35s ease, color 0.35s ease;
             font-family: 'Prompt', 'Inter', sans-serif;
             scroll-behavior: smooth;
@@ -38,111 +38,84 @@
         .swal2-popup {
             max-width: 95vw !important;
             font-family: 'Prompt', 'Inter', sans-serif !important;
-            border-radius: 1.25rem !important;
-            background: #0c111e !important;
-            color: #f1f5f9 !important;
-            border: 1px solid rgba(251, 191, 36, 0.22) !important;
-            box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9) !important;
-        }
-        .swal2-title { color: #f8fafc !important; }
-        .swal2-html-container { color: #cbd5e1 !important; }
-        .swal2-html-container .bg-white,
-        .swal2-html-container .bg-slate-50,
-        .swal2-html-container .bg-slate-100 {
-            background-color: #111827 !important;
-            color: #e2e8f0 !important;
-            border-color: rgba(255, 255, 255, 0.1) !important;
-        }
-        .swal2-html-container .text-slate-900,
-        .swal2-html-container .text-slate-800,
-        .swal2-html-container .text-slate-700,
-        .swal2-html-container .text-slate-600 {
-            color: #e2e8f0 !important;
-        }
-        .swal2-html-container input,
-        .swal2-html-container select,
-        .swal2-html-container textarea {
-            background-color: #070a12 !important;
-            color: #f8fafc !important;
-            border-color: rgba(255, 255, 255, 0.16) !important;
+            border-radius: 1.35rem !important;
+            background: #ffffff !important;
+            color: #0f172a !important;
+            border: 1px solid #e0e7ff !important;
+            box-shadow: 0 25px 50px -12px rgba(49, 46, 129, 0.22) !important;
         }
 
-        /* Dark Luxury Surface Theme: Obsidian & Champagne Gold */
+        /* Vibrant Colorful Luxury Game Store Background */
         .luxury-obsidian-bg {
-            background-color: #06080f;
+            background-color: #f4f7fe;
             background-image:
-                radial-gradient(circle at 12% 10%, rgba(245, 158, 11, 0.10) 0%, transparent 42%),
-                radial-gradient(circle at 88% 18%, rgba(16, 185, 129, 0.07) 0%, transparent 38%),
-                radial-gradient(circle at 50% 90%, rgba(56, 189, 248, 0.06) 0%, transparent 45%);
+                radial-gradient(circle at 8% 8%, rgba(99, 102, 241, 0.14) 0%, transparent 40%),
+                radial-gradient(circle at 92% 12%, rgba(236, 72, 153, 0.10) 0%, transparent 38%),
+                radial-gradient(circle at 50% 85%, rgba(14, 165, 233, 0.09) 0%, transparent 45%);
         }
         .surface-hero-bg {
-            background: linear-gradient(145deg, rgba(16, 21, 35, 0.92) 0%, rgba(9, 12, 22, 0.98) 100%);
-            border-bottom: 1px solid rgba(251, 191, 36, 0.15);
+            background: linear-gradient(135deg, #312e81 0%, #5b21b6 48%, #1d4ed8 100%);
+            border-bottom: 2px solid rgba(251, 191, 36, 0.35);
+            box-shadow: 0 12px 30px -10px rgba(49, 46, 129, 0.35);
         }
         .surface-card {
-            background: linear-gradient(165deg, rgba(17, 23, 38, 0.92) 0%, rgba(10, 14, 24, 0.97) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.7);
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 6px 20px -8px rgba(49, 46, 129, 0.10);
             transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, border-color 0.25s ease;
         }
         .surface-card:hover {
             transform: translateY(-4px);
-            border-color: rgba(251, 191, 36, 0.55);
-            box-shadow: 0 20px 40px -14px rgba(245, 158, 11, 0.18), 0 4px 14px -4px rgba(0, 0, 0, 0.6);
+            border-color: #6366f1;
+            box-shadow: 0 18px 36px -12px rgba(99, 102, 241, 0.24), 0 4px 12px -4px rgba(245, 158, 11, 0.14);
         }
         .luxury-panel {
-            background: linear-gradient(165deg, rgba(15, 20, 34, 0.9) 0%, rgba(9, 13, 23, 0.96) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.09);
-            box-shadow: 0 16px 40px -16px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid #e0e7ff;
+            box-shadow: 0 10px 30px -12px rgba(49, 46, 129, 0.10);
         }
 
-        /* Hidden Store: Luxury Noir & Crimson/Gold */
+        /* Shop airsoft: Vibrant Luxury Rose-Indigo & Pearl Theme */
         .phantom-void-bg {
-            background-color: #05060b;
+            background-color: #f5f3ff;
             background-image:
-                radial-gradient(circle at 15% 12%, rgba(225, 29, 72, 0.11) 0%, transparent 40%),
-                radial-gradient(circle at 85% 18%, rgba(245, 158, 11, 0.08) 0%, transparent 38%),
-                radial-gradient(circle at 50% 88%, rgba(16, 185, 129, 0.06) 0%, transparent 45%);
+                radial-gradient(circle at 12% 10%, rgba(225, 29, 72, 0.10) 0%, transparent 40%),
+                radial-gradient(circle at 88% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 50% 88%, rgba(16, 185, 129, 0.08) 0%, transparent 45%);
         }
-
         .hud-glass {
-            background: linear-gradient(160deg, rgba(14, 18, 30, 0.90) 0%, rgba(8, 11, 19, 0.96) 100%);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.85), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 28px -10px rgba(30, 41, 59, 0.10);
         }
-
         .hud-card {
             position: relative;
-            background: linear-gradient(165deg, rgba(16, 21, 34, 0.94) 0%, rgba(9, 12, 20, 0.98) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.09);
-            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 8px 22px -10px rgba(30, 41, 59, 0.10);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             overflow: hidden;
         }
         .hud-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.75), rgba(244, 63, 94, 0.75), transparent);
+            top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, #6366f1, #ec4899, #f59e0b);
             opacity: 0;
-            transition: opacity 0.28s ease;
+            transition: opacity 0.25s ease;
         }
         .hud-card:hover {
             transform: translateY(-4px);
-            border-color: rgba(251, 191, 36, 0.42);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.9), 0 0 25px -8px rgba(251, 191, 36, 0.16);
+            border-color: #f43f5e;
+            box-shadow: 0 20px 36px -14px rgba(225, 29, 72, 0.18);
         }
-        .hud-card:hover::before {
-            opacity: 1;
-        }
+        .hud-card:hover::before { opacity: 1; }
 
         .cyber-scanline { position: relative; overflow: hidden; }
         @keyframes pulseGlow {
-            0%, 100% { opacity: 0.65; transform: scale(1); }
+            0%, 100% { opacity: 0.7; transform: scale(1); }
             50% { opacity: 1; transform: scale(1.08); }
         }
         .animate-pulse-glow { animation: pulseGlow 2.4s infinite ease-in-out; }
@@ -150,28 +123,20 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         ::-webkit-scrollbar { width: 7px; height: 7px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
         /* =========================================================
-           LIGHT MODE OVERRIDES (html[data-theme="light"]) - HIGH CONTRAST
+           LIGHT MODE (DEFAULT COLORFUL LUXURY) HIGH-CONTRAST POLISH
            ========================================================= */
         html[data-theme="light"], html[data-theme="light"] body {
-            background-color: #f1f5f9 !important;
-            color: #0f172a !important;
-        }
-        html[data-theme="light"] .luxury-obsidian-bg {
-            background-color: #f1f5f9 !important;
-            background-image:
-                radial-gradient(circle at 12% 10%, rgba(245, 158, 11, 0.08) 0%, transparent 42%),
-                radial-gradient(circle at 88% 18%, rgba(16, 185, 129, 0.06) 0%, transparent 38%) !important;
+            background-color: #f4f7fe !important;
             color: #0f172a !important;
         }
         html[data-theme="light"] #view-app header {
             background-color: rgba(255, 255, 255, 0.96) !important;
-            border-bottom-color: #cbd5e1 !important;
+            border-bottom-color: #e0e7ff !important;
         }
-        /* Header controls & user pills in Light Mode */
         html[data-theme="light"] #view-app header .text-white,
         html[data-theme="light"] #view-app header .text-slate-100,
         html[data-theme="light"] #view-app header .text-slate-200,
@@ -184,46 +149,31 @@
             border-color: #cbd5e1 !important;
             color: #0f172a !important;
         }
-        html[data-theme="light"] #view-app header .text-emerald-300 {
-            color: #047857 !important;
-        }
+        html[data-theme="light"] #view-app header .text-emerald-300 { color: #047857 !important; }
         html[data-theme="light"] #view-app header .text-amber-300,
-        html[data-theme="light"] #view-app header .text-amber-400 {
-            color: #b45309 !important;
-        }
+        html[data-theme="light"] #view-app header .text-amber-400 { color: #b45309 !important; }
+        html[data-theme="light"] #view-app header .text-sky-300 { color: #0369a1 !important; }
         html[data-theme="light"] #view-app header #btn-admin-surface {
-            background-color: #0f172a !important;
-            color: #fbbf24 !important;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
+            color: #ffffff !important;
         }
         html[data-theme="light"] #view-app header #btn-admin-surface span,
         html[data-theme="light"] #view-app header #btn-admin-surface i {
-            color: #fbbf24 !important;
-        }
-        html[data-theme="light"] #view-app header #surf-page-btn-games.bg-gradient-to-r,
-        html[data-theme="light"] #view-app header #surf-page-btn-topup.bg-gradient-to-r,
-        html[data-theme="light"] #view-app header #surf-page-btn-history.bg-gradient-to-r {
-            color: #0f172a !important;
+            color: #ffffff !important;
         }
         html[data-theme="light"] #view-app header #surface-main-nav {
-            background-color: #e2e8f0 !important;
-            border-color: #cbd5e1 !important;
+            background-color: #eef2ff !important;
+            border-color: #c7d2fe !important;
+        }
+        html[data-theme="light"] #view-app header #surface-main-nav button.bg-gradient-to-r {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
+            color: #ffffff !important;
+        }
+        html[data-theme="light"] #view-app header #surface-main-nav button.bg-gradient-to-r i {
+            color: #fde047 !important;
         }
         html[data-theme="light"] #view-app header #surface-main-nav button.text-slate-300 {
             color: #334155 !important;
-        }
-        html[data-theme="light"] #view-app header .text-sky-300 {
-            color: #0369a1 !important;
-        }
-        /* Surface Panels & Cards in Light Mode */
-        html[data-theme="light"] #view-app .luxury-panel,
-        html[data-theme="light"] #view-app .surface-card {
-            background: #ffffff !important;
-            border-color: #cbd5e1 !important;
-            box-shadow: 0 8px 22px -10px rgba(15, 23, 42, 0.09) !important;
-            color: #0f172a !important;
-        }
-        html[data-theme="light"] #view-app .surface-card:hover {
-            border-color: #d97706 !important;
         }
         html[data-theme="light"] #view-app .luxury-panel .text-white,
         html[data-theme="light"] #view-app .surface-card .text-white,
@@ -233,56 +183,40 @@
         html[data-theme="light"] #view-app .luxury-panel .text-slate-200 {
             color: #0f172a !important;
         }
-        /* Keep dark gradient balance card & dark buttons crisp in Light Mode */
-        html[data-theme="light"] #view-app .bg-gradient-to-br.from-slate-900,
-        html[data-theme="light"] #view-app #surface-hero-section {
-            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%) !important;
+        /* Vibrant Royal Gradient Balance Card & Hero */
+        html[data-theme="light"] #view-app .bg-gradient-to-br.from-slate-900 {
+            background: linear-gradient(135deg, #4338ca 0%, #6d28d9 55%, #1d4ed8 100%) !important;
             color: #ffffff !important;
         }
         html[data-theme="light"] #view-app .bg-gradient-to-br.from-slate-900 *,
+        html[data-theme="light"] #view-app #surface-hero-section,
         html[data-theme="light"] #view-app #surface-hero-section .text-white {
             color: #ffffff !important;
         }
         html[data-theme="light"] #view-app .bg-gradient-to-br.from-slate-900 .text-amber-400,
-        html[data-theme="light"] #view-app .bg-gradient-to-br.from-slate-900 .text-amber-300 {
-            color: #fbbf24 !important;
+        html[data-theme="light"] #view-app .bg-gradient-to-br.from-slate-900 .text-amber-300,
+        html[data-theme="light"] #view-app #surface-hero-section .text-amber-400,
+        html[data-theme="light"] #view-app #surface-hero-section .text-amber-300 {
+            color: #fde047 !important;
         }
-        html[data-theme="light"] #view-app .bg-gradient-to-br.from-slate-900 .text-emerald-300 {
-            color: #6ee7b7 !important;
-        }
-        html[data-theme="light"] #view-app .bg-gradient-to-br.from-slate-900 .text-slate-300 {
-            color: #cbd5e1 !important;
+        html[data-theme="light"] #view-app #surface-hero-section .text-slate-300,
+        html[data-theme="light"] #view-app #surface-hero-section .text-slate-400 {
+            color: #e0e7ff !important;
         }
         html[data-theme="light"] #view-app button.bg-slate-900 {
-            background-color: #0f172a !important;
-            color: #fbbf24 !important;
-        }
-        html[data-theme="light"] #view-app button.bg-emerald-600,
-        html[data-theme="light"] #view-app button.bg-sky-600,
-        html[data-theme="light"] #view-app button.bg-orange-600 {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
             color: #ffffff !important;
         }
-        /* High-contrast accent text inside white cards in Light Mode */
         html[data-theme="light"] #view-app .luxury-panel .text-amber-300,
-        html[data-theme="light"] #view-app .luxury-panel .text-amber-400 {
-            color: #b45309 !important;
-        }
+        html[data-theme="light"] #view-app .luxury-panel .text-amber-400 { color: #b45309 !important; }
         html[data-theme="light"] #view-app .luxury-panel .text-sky-300,
-        html[data-theme="light"] #view-app .luxury-panel .text-sky-400 {
-            color: #0369a1 !important;
-        }
+        html[data-theme="light"] #view-app .luxury-panel .text-sky-400 { color: #0369a1 !important; }
         html[data-theme="light"] #view-app .luxury-panel .text-emerald-300,
-        html[data-theme="light"] #view-app .luxury-panel .text-emerald-400 {
-            color: #047857 !important;
-        }
+        html[data-theme="light"] #view-app .luxury-panel .text-emerald-400 { color: #047857 !important; }
         html[data-theme="light"] #view-app .luxury-panel .text-orange-300,
-        html[data-theme="light"] #view-app .luxury-panel .text-orange-400 {
-            color: #c2410c !important;
-        }
+        html[data-theme="light"] #view-app .luxury-panel .text-orange-400 { color: #c2410c !important; }
         html[data-theme="light"] #view-app .luxury-panel .text-slate-300,
-        html[data-theme="light"] #view-app .luxury-panel .text-slate-400 {
-            color: #475569 !important;
-        }
+        html[data-theme="light"] #view-app .luxury-panel .text-slate-400 { color: #475569 !important; }
         html[data-theme="light"] #view-app .bg-black\/40,
         html[data-theme="light"] #view-app .bg-white\/\[0\.04\] {
             background-color: #f8fafc !important;
@@ -297,75 +231,32 @@
         }
         html[data-theme="light"] #view-app footer {
             background-color: #ffffff !important;
-            border-top-color: #cbd5e1 !important;
+            border-top-color: #e0e7ff !important;
             color: #475569 !important;
         }
 
-        /* Gateway in Light Mode */
-        html[data-theme="light"] #view-gateway .luxury-panel {
-            background: #ffffff !important;
-            border-color: #cbd5e1 !important;
-            color: #0f172a !important;
-        }
-        html[data-theme="light"] #view-gateway .text-white {
-            color: #0f172a !important;
-        }
-        html[data-theme="light"] #view-gateway input {
-            background-color: #f8fafc !important;
-            color: #0f172a !important;
-            border-color: #cbd5e1 !important;
-        }
-
-        /* Shop airsoft (#view-hidden) in Light Mode - HIGH CONTRAST */
-        html[data-theme="light"] .phantom-void-bg {
-            background-color: #f1f5f9 !important;
-            background-image: none !important;
-            color: #0f172a !important;
-        }
-        html[data-theme="light"] #view-hidden .hud-glass,
-        html[data-theme="light"] #view-hidden .hud-card {
-            background: #ffffff !important;
-            border-color: #cbd5e1 !important;
-            box-shadow: 0 8px 22px -10px rgba(15, 23, 42, 0.09) !important;
-            color: #0f172a !important;
-        }
+        /* Shop airsoft (#view-hidden) Colorful Luxury Light Styles */
         html[data-theme="light"] #view-hidden .text-white,
         html[data-theme="light"] #view-hidden .text-slate-100,
-        html[data-theme="light"] #view-hidden .text-slate-200 {
-            color: #0f172a !important;
-        }
+        html[data-theme="light"] #view-hidden .text-slate-200 { color: #0f172a !important; }
         html[data-theme="light"] #view-hidden .text-slate-300,
-        html[data-theme="light"] #view-hidden .text-slate-400 {
-            color: #475569 !important;
-        }
+        html[data-theme="light"] #view-hidden .text-slate-400 { color: #475569 !important; }
         html[data-theme="light"] #view-hidden .text-emerald-300,
-        html[data-theme="light"] #view-hidden .text-emerald-400 {
-            color: #047857 !important;
-        }
+        html[data-theme="light"] #view-hidden .text-emerald-400 { color: #047857 !important; }
         html[data-theme="light"] #view-hidden .text-cyan-300,
-        html[data-theme="light"] #view-hidden .text-cyan-400 {
-            color: #0369a1 !important;
-        }
+        html[data-theme="light"] #view-hidden .text-cyan-400 { color: #0369a1 !important; }
         html[data-theme="light"] #view-hidden .text-amber-300,
-        html[data-theme="light"] #view-hidden .text-amber-400 {
-            color: #b45309 !important;
-        }
+        html[data-theme="light"] #view-hidden .text-amber-400 { color: #b45309 !important; }
         html[data-theme="light"] #view-hidden .text-rose-300,
-        html[data-theme="light"] #view-hidden .text-rose-400 {
-            color: #be123c !important;
-        }
+        html[data-theme="light"] #view-hidden .text-rose-400 { color: #be123c !important; }
         html[data-theme="light"] #view-hidden .bg-rose-600,
-        html[data-theme="light"] #view-hidden .bg-gradient-to-r.from-amber-500 {
-            color: #ffffff !important;
-        }
         html[data-theme="light"] #view-hidden .bg-rose-600 *,
+        html[data-theme="light"] #view-hidden .bg-gradient-to-r.from-amber-500,
         html[data-theme="light"] #view-hidden .bg-gradient-to-r.from-amber-500 *,
         html[data-theme="light"] #view-hidden .bg-emerald-600,
         html[data-theme="light"] #view-hidden .bg-emerald-600 *,
         html[data-theme="light"] #view-hidden .bg-cyan-500,
-        html[data-theme="light"] #view-hidden .bg-cyan-500 * {
-            color: #ffffff !important;
-        }
+        html[data-theme="light"] #view-hidden .bg-cyan-500 * { color: #ffffff !important; }
         html[data-theme="light"] #view-hidden .bg-slate-950,
         html[data-theme="light"] #view-hidden .bg-slate-950\/90,
         html[data-theme="light"] #view-hidden .bg-slate-950\/80,
@@ -388,50 +279,41 @@
             border-color: #cbd5e1 !important;
         }
 
-        /* SweetAlert2 in Light Mode */
-        html[data-theme="light"] .swal2-popup {
-            background: #ffffff !important;
-            color: #0f172a !important;
-            border-color: #cbd5e1 !important;
+        /* =========================================================
+           OPTIONAL DARK MODE (when user clicks toggle to dark)
+           ========================================================= */
+        html[data-theme="dark"], html[data-theme="dark"] body {
+            background-color: #0b1020 !important;
+            color: #f1f5f9 !important;
         }
-        html[data-theme="light"] .swal2-title,
-        html[data-theme="light"] .swal2-html-container {
-            color: #0f172a !important;
+        html[data-theme="dark"] .luxury-obsidian-bg {
+            background-color: #0b1020 !important;
+            background-image:
+                radial-gradient(circle at 12% 10%, rgba(99, 102, 241, 0.14) 0%, transparent 42%),
+                radial-gradient(circle at 88% 18%, rgba(245, 158, 11, 0.08) 0%, transparent 38%) !important;
         }
-        html[data-theme="light"] .swal2-html-container .bg-white,
-        html[data-theme="light"] .swal2-html-container .bg-slate-50,
-        html[data-theme="light"] .swal2-html-container .bg-slate-100,
-        html[data-theme="light"] .swal2-html-container .bg-slate-900,
-        html[data-theme="light"] .swal2-html-container .bg-slate-950 {
-            background-color: #f8fafc !important;
-            color: #0f172a !important;
-            border-color: #cbd5e1 !important;
+        html[data-theme="dark"] #view-app header {
+            background-color: rgba(11, 16, 32, 0.92) !important;
+            border-bottom-color: rgba(255, 255, 255, 0.1) !important;
         }
-        html[data-theme="light"] .swal2-html-container .text-white,
-        html[data-theme="light"] .swal2-html-container .text-slate-200,
-        html[data-theme="light"] .swal2-html-container .text-slate-300,
-        html[data-theme="light"] .swal2-html-container .text-slate-400 {
-            color: #334155 !important;
+        html[data-theme="dark"] .luxury-panel,
+        html[data-theme="dark"] .surface-card,
+        html[data-theme="dark"] .hud-glass,
+        html[data-theme="dark"] .hud-card {
+            background: rgba(17, 24, 39, 0.92) !important;
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            color: #f1f5f9 !important;
         }
-        html[data-theme="light"] .swal2-html-container .text-emerald-300,
-        html[data-theme="light"] .swal2-html-container .text-emerald-400 {
-            color: #047857 !important;
+        html[data-theme="dark"] .phantom-void-bg {
+            background-color: #090d1a !important;
         }
-        html[data-theme="light"] .swal2-html-container .text-amber-300,
-        html[data-theme="light"] .swal2-html-container .text-amber-400 {
-            color: #b45309 !important;
+        html[data-theme="dark"] .swal2-popup {
+            background: #111827 !important;
+            color: #f1f5f9 !important;
+            border-color: rgba(255, 255, 255, 0.12) !important;
         }
-        html[data-theme="light"] .swal2-html-container .text-cyan-300,
-        html[data-theme="light"] .swal2-html-container .text-cyan-400 {
-            color: #0369a1 !important;
-        }
-        html[data-theme="light"] .swal2-html-container input,
-        html[data-theme="light"] .swal2-html-container select,
-        html[data-theme="light"] .swal2-html-container textarea {
-            background-color: #ffffff !important;
-            color: #0f172a !important;
-            border-color: #cbd5e1 !important;
-        }
+        html[data-theme="dark"] .swal2-title,
+        html[data-theme="dark"] .swal2-html-container { color: #e2e8f0 !important; }
     </style>
 </head>
 <body class="bg-[#06080f] text-slate-100 antialiased selection:bg-amber-400 selection:text-slate-950">
@@ -444,7 +326,7 @@
         <header class="bg-[#080b14]/90 backdrop-blur-xl sticky top-0 z-30 border-b border-white/10 shadow-lg">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
                 <a href="#surface-catalog-anchor" onclick="switchSurfaceTab('games')" class="flex items-center gap-3 group">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 text-amber-400 flex items-center justify-center shadow-sm ring-1 ring-slate-900/10 group-hover:scale-105 transition">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-700 text-amber-300 shadow-md shadow-indigo-500/25 flex items-center justify-center shadow-sm ring-1 ring-slate-900/10 group-hover:scale-105 transition">
                         <i class="fa-solid fa-gamepad text-lg"></i>
                     </div>
                     <div>
@@ -2413,7 +2295,7 @@
                     walletCr: 0,
                     airsoftWallet: 0
                 },
-                themeMode: 'dark',
+                themeMode: 'light',
                 surfaceActiveTab: 'games',
                 surfaceCategory: 'all',
                 surfaceSearch: '',
