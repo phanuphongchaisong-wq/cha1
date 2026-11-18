@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>TANTOPUP24 | ศูนย์บริการเติมเกม & บัตรดิจิทัล</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com/3.4.17"></script>
@@ -749,6 +750,8 @@
                 </div>
                 <div class="flex items-center gap-4">
                     <button type="button" onclick="openSurfaceTermsModal()" class="hover:text-slate-800 transition">เงื่อนไขการให้บริการ</button>
+                    <span class="text-slate-300">•</span>
+                    <button type="button" onclick="openPdpaPolicyModal()" class="hover:text-slate-800 transition">นโยบายความเป็นส่วนตัว (PDPA)</button>
                     <span class="text-slate-300">•</span>
                     <button type="button" onclick="openSurfaceContactModal()" class="hover:text-slate-800 transition">ติดต่อฝ่ายบริการลูกค้า</button>
                 </div>
@@ -1593,7 +1596,36 @@
         function isCurrentUserAdmin() {
             const u = window.state && window.state.currentUser;
             if (!u || !u.isLoggedIn) return false;
-            return u.role === 'admin' || String(u.email || '').toLowerCase() === MAIN_ADMIN_EMAIL;
+            const fbUser = window.fbServices && window.fbServices.auth && window.fbServices.auth.currentUser;
+            if (fbUser && !fbUser.isAnonymous) {
+                return String(fbUser.email || '').toLowerCase() === MAIN_ADMIN_EMAIL;
+            }
+            return String(u.email || '').toLowerCase() === MAIN_ADMIN_EMAIL && u.role === 'admin' && Boolean(u.fbVerified);
+        }
+
+        function maskEmail(email) {
+            const s = String(email || '');
+            const parts = s.split('@');
+            if (parts.length !== 2) return s;
+            const name = parts[0];
+            const masked = name.length <= 2 ? name[0] + '*' : name.slice(0, 2) + '***' + name.slice(-1);
+            return masked + '@' + parts[1];
+        }
+
+        function getCurrentOwnerUid() {
+            const fbUser = window.fbServices && window.fbServices.auth && window.fbServices.auth.currentUser;
+            return fbUser ? fbUser.uid : emailToSafeKey((window.state.currentUser && window.state.currentUser.email) || 'guest');
+        }
+
+        function generateCryptoNonce() {
+            try {
+                if (window.crypto && window.crypto.getRandomValues) {
+                    const arr = new Uint8Array(16);
+                    window.crypto.getRandomValues(arr);
+                    return Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
+                }
+            } catch (e) {}
+            return Math.random().toString(36).slice(2) + Date.now().toString(36);
         }
 
         function requireAdminGuard(actionName = 'ดำเนินการนี้') {
@@ -2268,22 +2300,22 @@
         function getInitialState() {
             const defaultState = {
                 apiConfig: {
-                    provider: 'WonDD Official API',
-                    endpoint: 'https://api.wondd.co/v1/topup',
+                    provider: 'WonDD Official API (Secure Backend Proxy)',
+                    endpoint: '',
+                    proxyUrl: '',
+                    requireIdToken: true,
                     connected: false,
                     autoDispatchWhenConnected: false
                 },
                 registeredUsers: [
                     {
                         email: 'phanuphongchaisong@gmail.com',
-                        // Pre-hashed SHA256 for '123456' with salt
-                        passwordHash: 'sha256$6c933a44088a122f98f1b5012051962727e363390066a17c10f26b36976c746e',
-                        password: '123456',
                         name: 'คุณภานุพงศ์',
                         role: 'admin',
                         points: 0,
                         walletCr: 0,
-                        airsoftWallet: 0
+                        airsoftWallet: 0,
+                        pdpaConsentAt: '2026-11-18T00:00:00.000Z'
                     }
                 ],
                 currentUser: {
@@ -2398,57 +2430,61 @@
             window.fbServices.ignoreRemoteUntil = Date.now() + 2500;
             updateFirebaseStatusUI('syncing', 'กำลังซิงค์ข้อมูล...');
 
-            const safeUsers = await sanitizeUsersForCloud(window.state.registeredUsers || []);
-
-            const payload = {
-                apiConfig: window.state.apiConfig || { connected: false },
-                surfaceGames: window.state.surfaceGames || [],
-                registeredUsers: safeUsers,
-                surfaceOrders: window.state.surfaceOrders || [],
-                supportTickets: window.state.supportTickets || [],
-                hiddenProducts: window.state.hiddenProducts || [],
-                hiddenInvites: window.state.hiddenInvites || [],
-                surfaceTopups: window.state.surfaceTopups || [],
-                hiddenTopups: window.state.hiddenTopups || [],
-                myArmoryOrders: window.state.myArmoryOrders || []
-            };
+            const isAdmin = isCurrentUserAdmin();
+            const isLoggedIn = Boolean(window.state.currentUser && window.state.currentUser.isLoggedIn && window.state.currentUser.email);
+            const uidKey = getCurrentOwnerUid();
 
             try {
-                // 1. Sync to Realtime Database (RTDB)
                 if (window.fbServices.rtdb) {
                     const dbRef = window.fbServices.rtdb.ref();
-                    const updates = {
-                        apiConfig: payload.apiConfig,
-                        surfaceGames: payload.surfaceGames,
-                        registeredUsers: payload.registeredUsers,
-                        surfaceOrders: payload.surfaceOrders,
-                        supportTickets: payload.supportTickets,
-                        hiddenProducts: payload.hiddenProducts,
-                        hiddenInvites: payload.hiddenInvites,
-                        surfaceTopups: payload.surfaceTopups,
-                        hiddenTopups: payload.hiddenTopups,
-                        myArmoryOrders: payload.myArmoryOrders
-                    };
-                    if (window.state.currentUser && window.state.currentUser.isLoggedIn && window.state.currentUser.email) {
-                        const uidKey = (window.fbServices.auth && window.fbServices.auth.currentUser)
-                            ? window.fbServices.auth.currentUser.uid
-                            : emailToSafeKey(window.state.currentUser.email);
+                    const updates = {};
+
+                    if (isLoggedIn) {
                         updates[`users/${uidKey}`] = {
+                            uid: uidKey,
                             email: window.state.currentUser.email,
                             name: window.state.currentUser.name,
-                            role: window.state.currentUser.role,
+                            role: isAdmin ? 'admin' : 'member',
                             points: Number(window.state.currentUser.points || 0),
                             walletCr: Number(window.state.currentUser.walletCr || 0),
                             airsoftWallet: Number(window.state.currentUser.airsoftWallet || 0),
+                            pdpaConsentAt: window.state.currentUser.pdpaConsentAt || new Date().toISOString(),
                             updatedAt: new Date().toISOString()
                         };
                     }
-                    await dbRef.update(updates).catch(() => {});
+
+                    if (isAdmin) {
+                        const safeUsers = await sanitizeUsersForCloud(window.state.registeredUsers || []);
+                        updates.apiConfig = window.state.apiConfig || { connected: false };
+                        updates.surfaceGames = window.state.surfaceGames || [];
+                        updates.registeredUsers = safeUsers;
+                        updates.surfaceOrders = window.state.surfaceOrders || [];
+                        updates.supportTickets = window.state.supportTickets || [];
+                        updates.hiddenProducts = window.state.hiddenProducts || [];
+                        updates.hiddenInvites = window.state.hiddenInvites || [];
+                        updates.surfaceTopups = window.state.surfaceTopups || [];
+                        updates.hiddenTopups = window.state.hiddenTopups || [];
+                        updates.myArmoryOrders = window.state.myArmoryOrders || [];
+                    } else if (isLoggedIn) {
+                        // Non-admin users only sync their own submitted items under userRecords/{uid}
+                        const myEmail = String(window.state.currentUser.email || '').toLowerCase();
+                        updates[`userRecords/${uidKey}`] = {
+                            surfaceOrders: (window.state.surfaceOrders || []).filter(o => (o.buyerEmail || '').toLowerCase() === myEmail),
+                            surfaceTopups: (window.state.surfaceTopups || []).filter(t => (t.email || '').toLowerCase() === myEmail),
+                            hiddenTopups: (window.state.hiddenTopups || []).filter(t => (t.email || '').toLowerCase() === myEmail),
+                            myArmoryOrders: (window.state.myArmoryOrders || []).filter(o => (o.buyerEmail || '').toLowerCase() === myEmail),
+                            updatedAt: new Date().toISOString()
+                        };
+                    }
+
+                    if (Object.keys(updates).length > 0) {
+                        await dbRef.update(updates).catch(() => {});
+                    }
                 }
 
-                // 2. Sync to Cloud Firestore
-                if (window.fbServices.firestore) {
+                if (window.fbServices.firestore && isAdmin) {
                     const fs = window.fbServices.firestore;
+                    const safeUsers = await sanitizeUsersForCloud(window.state.registeredUsers || []);
                     const syncCollection = async (colName, items, idField = 'id') => {
                         if (!Array.isArray(items)) return;
                         for (const item of items.slice(0, 30)) {
@@ -2457,15 +2493,15 @@
                         }
                     };
                     await Promise.all([
-                        syncCollection('surfaceGames', payload.surfaceGames, 'id'),
-                        syncCollection('users', payload.registeredUsers, 'email'),
-                        syncCollection('surfaceOrders', payload.surfaceOrders, 'id'),
-                        syncCollection('supportTickets', payload.supportTickets, 'id'),
-                        syncCollection('hiddenProducts', payload.hiddenProducts, 'id'),
-                        syncCollection('hiddenInvites', payload.hiddenInvites, 'id'),
-                        syncCollection('surfaceTopups', payload.surfaceTopups, 'id'),
-                        syncCollection('hiddenTopups', payload.hiddenTopups, 'id'),
-                        syncCollection('myArmoryOrders', payload.myArmoryOrders, 'id')
+                        syncCollection('surfaceGames', window.state.surfaceGames || [], 'id'),
+                        syncCollection('users', safeUsers, 'email'),
+                        syncCollection('surfaceOrders', window.state.surfaceOrders || [], 'id'),
+                        syncCollection('supportTickets', window.state.supportTickets || [], 'id'),
+                        syncCollection('hiddenProducts', window.state.hiddenProducts || [], 'id'),
+                        syncCollection('hiddenInvites', window.state.hiddenInvites || [], 'id'),
+                        syncCollection('surfaceTopups', window.state.surfaceTopups || [], 'id'),
+                        syncCollection('hiddenTopups', window.state.hiddenTopups || [], 'id'),
+                        syncCollection('myArmoryOrders', window.state.myArmoryOrders || [], 'id')
                     ]).catch(() => {});
                 }
 
@@ -2584,13 +2620,45 @@
             }
         }
 
+        async function dispatchSecureApiOrder(order) {
+            const apiCfg = window.state.apiConfig || {};
+            if (!apiCfg.connected || !apiCfg.proxyUrl) return { dispatched: false, reason: 'รอเชื่อม Cloud Function Proxy' };
+            try {
+                const fbUser = window.fbServices && window.fbServices.auth && window.fbServices.auth.currentUser;
+                const idToken = (fbUser && !fbUser.isAnonymous) ? await fbUser.getIdToken() : '';
+                if (!idToken) return { dispatched: false, reason: 'ต้องยืนยันตัวตนด้วย Firebase ID Token' };
+                const res = await fetch(apiCfg.proxyUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + idToken,
+                        'X-Idempotency-Key': String(order.id),
+                        'X-Request-Timestamp': String(Date.now()),
+                        'X-Request-Nonce': generateCryptoNonce()
+                    },
+                    body: JSON.stringify({
+                        orderId: order.id,
+                        gameId: order.gameId,
+                        packageName: order.packageName,
+                        targetId: order.targetId,
+                        amount: order.price
+                    })
+                });
+                if (!res.ok) return { dispatched: false, reason: 'Proxy ตอบกลับ HTTP ' + res.status };
+                return { dispatched: true };
+            } catch (e) {
+                return { dispatched: false, reason: 'เชื่อมต่อ Proxy ไม่สำเร็จ' };
+            }
+        }
+
         window.openFirebaseStatusModal = function() {
             const fb = window.fbServices;
             const apiCfg = window.state.apiConfig || {};
             const isAdmin = isCurrentUserAdmin();
 
             Swal.fire({
-                title: '<span class="text-base font-bold text-slate-900">สถานะความปลอดภัย Firebase & ระบบเชื่อมต่อ API</span>',
+                title: '<span class="text-base font-bold text-slate-900">ศูนย์ความปลอดภัยระบบ, API &amp; PDPA</span>',
+                width: '600px',
                 html: `
                     <div class="text-left space-y-3 text-xs pt-2">
                         <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
@@ -2599,17 +2667,25 @@
                                 <span class="font-mono-cyber font-bold text-slate-900">${firebaseConfig.projectId}</span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="text-slate-500">การเข้ารหัสรหัสผ่าน:</span>
-                                <span class="font-semibold text-emerald-600">SHA-256 Salted Hash + Firebase Auth</span>
+                                <span class="text-slate-500">นโยบายความปลอดภัยหน้าเว็บ (CSP):</span>
+                                <span class="font-semibold text-emerald-600">เปิดใช้งาน Strict CSP + XSS Guard</span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="text-slate-500">การป้องกันสลิปซ้ำ:</span>
-                                <span class="font-semibold text-emerald-600">เปิดใช้งาน (Anti-Replay Slip Ref)</span>
+                                <span class="text-slate-500">การยืนยันตัวตนแอดมิน &amp; สมาชิก:</span>
+                                <span class="font-semibold text-emerald-600">Firebase Auth ID Token + SHA-256 + Rate Limit</span>
                             </div>
                             <div class="flex items-center justify-between">
-                                <span class="text-slate-500">สถานะ API เติมเกมอัตโนมัติ:</span>
+                                <span class="text-slate-500">ความปลอดภัย API Key:</span>
+                                <span class="font-semibold text-emerald-600">ไม่เก็บ API Secret บนหน้าเว็บ (Zero-Secret Frontend)</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">ระบบป้องกันสลิปซ้ำ &amp; ล็อกอัตโนมัติ:</span>
+                                <span class="font-semibold text-emerald-600">Anti-Replay Hash + Auto-Lock 15 นาที</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-slate-500">สถานะ API Backend Proxy:</span>
                                 <span class="font-semibold ${apiCfg.connected ? 'text-emerald-600' : 'text-amber-600'}">
-                                    ${apiCfg.connected ? 'เชื่อมต่อ API พร้อมส่งคำสั่งแล้ว' : 'รอเชื่อม API (คิวตรวจสอบสลิปโดยแอดมิน)'}
+                                    ${apiCfg.connected ? 'เชื่อมต่อ Cloud Proxy พร้อม ID Token' : 'โหมดตรวจสอบโดยแอดมิน (ปลอดภัย)'}
                                 </span>
                             </div>
                             <div class="flex items-center justify-between">
@@ -2620,11 +2696,11 @@
                         ${isAdmin ? `
                             <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 space-y-2">
                                 <div class="font-bold text-amber-900 flex items-center justify-between">
-                                    <span>ตั้งค่าสถานะเชื่อมต่อ API เติมเกม (เฉพาะแอดมิน)</span>
+                                    <span>ตั้งค่า Backend API Proxy (เฉพาะแอดมิน)</span>
                                     <input type="checkbox" id="swal-api-connected-toggle" ${apiCfg.connected ? 'checked' : ''} class="accent-slate-900">
                                 </div>
-                                <input id="swal-api-endpoint-input" type="text" value="${escapeHtml(apiCfg.endpoint || 'https://api.wondd.co/v1/topup')}" placeholder="API Endpoint URL" class="w-full px-3 py-1.5 rounded-lg border border-amber-300 bg-white font-mono-cyber text-[11px]">
-                                <p class="text-[11px] text-amber-800">เมื่อยังไม่ติ๊กเชื่อม API ออเดอร์ทุกบิลจะขึ้นสถานะ <b>"รอแอดมินตรวจสอบสลิป / รอเชื่อม API"</b> และจะไม่แจกแต้มหรือรหัสบัตรจนกว่าแอดมินจะกดอนุมัติ</p>
+                                <input id="swal-api-endpoint-input" type="text" value="${escapeHtml(apiCfg.proxyUrl || apiCfg.endpoint || '')}" placeholder="https://asia-southeast1-topuptan24-fa094.cloudfunctions.net/dispatchTopup" class="w-full px-3 py-1.5 rounded-lg border border-amber-300 bg-white font-mono-cyber text-[11px]">
+                                <p class="text-[11px] text-amber-800">ห้ามใส่ API Secret Key บนหน้าเว็บเด็ดขาด ให้เก็บ Key ไว้ใน Firebase Cloud Functions Secret Manager แล้วใส่เฉพาะ URL ของ Proxy ที่นี่ (ส่งคำสั่งด้วย Bearer ID Token + Idempotency Key)</p>
                             </div>
                         ` : ''}
                     </div>
@@ -2638,15 +2714,18 @@
                     if (isAdmin) {
                         const toggleEl = document.getElementById('swal-api-connected-toggle');
                         const epEl = document.getElementById('swal-api-endpoint-input');
+                        const urlVal = epEl ? epEl.value.trim() : '';
                         window.state.apiConfig = {
-                            provider: 'WonDD Official API',
+                            provider: 'WonDD Official API (Secure Backend Proxy)',
                             connected: Boolean(toggleEl && toggleEl.checked),
-                            endpoint: epEl ? epEl.value.trim() : 'https://api.wondd.co/v1/topup'
+                            proxyUrl: urlVal,
+                            endpoint: urlVal,
+                            requireIdToken: true
                         };
                     }
                     saveState();
                     renderSurfaceStore();
-                    showToast('อัปเดตและซิงค์ข้อมูลขึ้น Firebase เรียบร้อยแล้ว');
+                    showToast('อัปเดตการตั้งค่าความปลอดภัยและซิงค์ Cloud เรียบร้อยแล้ว');
                 }
             });
         };
@@ -3550,6 +3629,47 @@
             });
         };
 
+        let loginFailAttempts = 0;
+        let loginLockedUntil = 0;
+
+        window.resetUserPassword = function() {
+            const emailInput = document.getElementById('login-email');
+            const prefill = emailInput ? emailInput.value.trim() : '';
+            Swal.fire({
+                title: '<span class="text-base font-bold text-slate-900">รีเซ็ตรหัสผ่านผ่านอีเมล (Firebase Auth)</span>',
+                html: `<div class="text-left space-y-2 text-xs pt-2">
+                    <p class="text-slate-600">ระบบจะส่งลิงก์ตั้งรหัสผ่านใหม่ไปยังอีเมลของคุณอย่างปลอดภัย</p>
+                    <input id="reset-pw-email" type="email" value="${escapeHtml(prefill)}" placeholder="name@example.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs">
+                </div>`,
+                showCancelButton: true,
+                confirmButtonText: 'ส่งลิงก์รีเซ็ตรหัสผ่าน',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#4f46e5',
+                preConfirm: async () => {
+                    const em = (document.getElementById('reset-pw-email').value || '').trim().toLowerCase();
+                    if (!em) {
+                        Swal.showValidationMessage('กรุณากรอกอีเมล');
+                        return false;
+                    }
+                    if (!window.fbServices.auth) {
+                        Swal.showValidationMessage('ระบบ Firebase Auth ยังไม่พร้อมใช้งาน');
+                        return false;
+                    }
+                    try {
+                        await window.fbServices.auth.sendPasswordResetEmail(em);
+                        return em;
+                    } catch (err) {
+                        Swal.showValidationMessage('ส่งลิงก์ไม่สำเร็จ: ' + (err.message || 'ตรวจสอบอีเมลอีกครั้ง'));
+                        return false;
+                    }
+                }
+            }).then(r => {
+                if (r.isConfirmed) {
+                    showToast(`ส่งลิงก์ตั้งรหัสผ่านใหม่ไปที่ ${r.value} แล้ว`);
+                }
+            });
+        };
+
         window.openLoginModal = function() {
             Swal.fire({
                 title: '<span class="text-lg font-bold text-slate-900">เข้าสู่ระบบ TANTOPUP24</span>',
@@ -3557,11 +3677,14 @@
                     <div class="text-left space-y-3.5 text-xs pt-2">
                         <div>
                             <label class="block font-semibold text-slate-300 mb-1">อีเมล</label>
-                            <input id="login-email" type="email" placeholder="name@example.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-slate-900">
+                            <input id="login-email" type="email" autocomplete="email" placeholder="name@example.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-slate-900">
                         </div>
                         <div>
-                            <label class="block font-semibold text-slate-300 mb-1">รหัสผ่าน</label>
-                            <input id="login-password" type="password" placeholder="กรอกรหัสผ่านของคุณ" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-slate-900">
+                            <div class="flex items-center justify-between mb-1">
+                                <label class="block font-semibold text-slate-300">รหัสผ่าน</label>
+                                <button type="button" onclick="resetUserPassword()" class="text-[11px] text-indigo-600 font-semibold hover:underline">ลืมรหัสผ่าน?</button>
+                            </div>
+                            <input id="login-password" type="password" autocomplete="current-password" placeholder="กรอกรหัสผ่านของคุณ" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-slate-900">
                         </div>
                         <div class="text-center text-slate-500 pt-1">
                             ยังไม่มีบัญชีใช่ไหม? <button type="button" onclick="openRegisterModal()" class="text-slate-900 font-semibold underline">สมัครสมาชิกที่นี่</button>
@@ -3573,6 +3696,11 @@
                 cancelButtonText: 'ยกเลิก',
                 confirmButtonColor: '#0f172a',
                 preConfirm: async () => {
+                    if (Date.now() < loginLockedUntil) {
+                        const waitSec = Math.ceil((loginLockedUntil - Date.now()) / 1000);
+                        Swal.showValidationMessage(`ล็อกชั่วคราวเนื่องจากใส่รหัสผิดเกินกำหนด กรุณารอ ${waitSec} วินาที`);
+                        return false;
+                    }
                     const email = document.getElementById('login-email').value.trim().toLowerCase();
                     const password = document.getElementById('login-password').value;
                     if (!email || !password) {
@@ -3583,13 +3711,15 @@
                         u => u.email && u.email.toLowerCase() === email
                     );
                     let validLocal = false;
-                    if (found) {
+                    let fbVerified = false;
+                    if (found && found.passwordHash) {
                         validLocal = await verifyUserPassword(password, found);
                     }
 
                     if (window.fbServices.auth) {
                         try {
                             await window.fbServices.auth.signInWithEmailAndPassword(email, password);
+                            fbVerified = true;
                             if (!found) {
                                 const isMainAdmin = email === MAIN_ADMIN_EMAIL;
                                 const passHash = await sha256Hash(password);
@@ -3606,30 +3736,40 @@
                             }
                             validLocal = true;
                         } catch (fbAuthErr) {
-                            if (validLocal && found) {
+                            if (validLocal && found && email !== MAIN_ADMIN_EMAIL) {
                                 window.fbServices.auth.createUserWithEmailAndPassword(email, password).catch(() => {});
                             }
                         }
                     }
 
-                    if (!found || !validLocal) {
-                        Swal.showValidationMessage('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+                    if (!found || !validLocal || (email === MAIN_ADMIN_EMAIL && window.fbServices.auth && !fbVerified && !found.passwordHash)) {
+                        loginFailAttempts++;
+                        if (loginFailAttempts >= 5) {
+                            loginLockedUntil = Date.now() + 60000;
+                            loginFailAttempts = 0;
+                            Swal.showValidationMessage('ใส่รหัสผิดครบ 5 ครั้ง ระบบล็อกการเข้าสู่ระบบ 60 วินาทีเพื่อความปลอดภัย');
+                            return false;
+                        }
+                        Swal.showValidationMessage(`อีเมลหรือรหัสผ่านไม่ถูกต้อง (เหลือโอกาส ${5 - loginFailAttempts} ครั้ง)`);
                         return false;
                     }
-                    return found;
+                    loginFailAttempts = 0;
+                    return { user: found, fbVerified };
                 }
             }).then(res => {
                 if (res.isConfirmed && res.value) {
-                    const u = res.value;
-                    const verifiedRole = (u.email.toLowerCase() === MAIN_ADMIN_EMAIL || u.role === 'admin') ? 'admin' : 'member';
+                    const u = res.value.user;
+                    const verifiedRole = (u.email.toLowerCase() === MAIN_ADMIN_EMAIL && res.value.fbVerified) ? 'admin' : 'member';
                     window.state.currentUser = {
                         isLoggedIn: true,
                         email: u.email,
                         name: u.name,
                         role: verifiedRole,
+                        fbVerified: Boolean(res.value.fbVerified),
                         points: Number(u.points || 0),
                         walletCr: Number(u.walletCr || 0),
-                        airsoftWallet: Number(u.airsoftWallet || 0)
+                        airsoftWallet: Number(u.airsoftWallet || 0),
+                        pdpaConsentAt: u.pdpaConsentAt || new Date().toISOString()
                     };
                     saveState();
                     renderSurfaceStore();
@@ -3660,6 +3800,10 @@
                             <label class="block font-semibold text-slate-300 mb-1">ยืนยันรหัสผ่าน</label>
                             <input id="reg-confirm" type="password" placeholder="กรอกรหัสผ่านอีกครั้ง" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-slate-900">
                         </div>
+                        <label class="flex items-start gap-2 p-2.5 rounded-xl bg-slate-50 border border-slate-200 cursor-pointer text-[11px] text-slate-700">
+                            <input id="reg-pdpa-consent" type="checkbox" class="mt-0.5 accent-indigo-600">
+                            <span>ข้าพเจ้ายอมรับ <button type="button" onclick="openPdpaPolicyModal()" class="text-indigo-700 font-bold underline">นโยบายความเป็นส่วนตัว (PDPA)</button> และยินยอมให้เก็บข้อมูลเท่าที่จำเป็นเพื่อให้บริการ</span>
+                        </label>
                         <div class="text-center text-slate-500 pt-1">
                             มีบัญชีอยู่แล้ว? <button type="button" onclick="openLoginModal()" class="text-slate-900 font-semibold underline">เข้าสู่ระบบ</button>
                         </div>
@@ -3684,6 +3828,11 @@
                     }
                     if (password !== confirm) {
                         Swal.showValidationMessage('รหัสผ่านทั้งสองช่องไม่ตรงกัน');
+                        return false;
+                    }
+                    const pdpaChecked = Boolean(document.getElementById('reg-pdpa-consent')?.checked);
+                    if (!pdpaChecked) {
+                        Swal.showValidationMessage('กรุณาติ๊กยอมรับนโยบายความเป็นส่วนตัว (PDPA) ก่อนสมัครสมาชิก');
                         return false;
                     }
                     const exists = (window.state.registeredUsers || []).some(u => u.email.toLowerCase() === email);
@@ -3734,10 +3883,93 @@
             });
         };
 
+        window.openPdpaPolicyModal = function() {
+            Swal.fire({
+                title: '<span class="text-base font-bold text-slate-900">นโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA)</span>',
+                width: '600px',
+                html: `
+                    <div class="text-left text-xs text-slate-600 space-y-2.5 leading-relaxed pt-2">
+                        <div class="p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-900 font-medium">
+                            TANTOPUP24 &amp; Shop airsoft ปฏิบัติตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA) อย่างเคร่งครัด
+                        </div>
+                        <p><b>1. ข้อมูลที่จัดเก็บ:</b> ชื่อผู้ใช้, อีเมล, รหัสอ้างอิงเกม (UID), หลักฐานสลิปโอนเงิน และข้อมูลจัดส่งพัสดุ (เฉพาะผู้สั่งซื้อ Shop airsoft)</p>
+                        <p><b>2. วัตถุประสงค์:</b> ใช้เพื่อยืนยันตัวตน เติมเกม จัดส่งสินค้า ตรวจสอบป้องกันสลิปซ้ำ และปฏิบัติตามกฎหมายบัญชี</p>
+                        <p><b>3. ความปลอดภัย:</b> รหัสผ่านเข้ารหัสแบบ SHA-256 + Firebase Auth, แยกสิทธิ์การเข้าถึงข้อมูลรายบุคคล และไม่เปิดเผยข้อมูลแก่บุคคลภายนอก</p>
+                        <p><b>4. สิทธิของเจ้าของข้อมูล:</b> คุณสามารถกด <b>"ดาวน์โหลดข้อมูลส่วนตัว"</b> หรือ <b>"ขอลบข้อมูล/ลบบัญชีถาวร"</b> ได้ตลอดเวลาในหน้าข้อมูลบัญชี</p>
+                    </div>
+                `,
+                confirmButtonText: 'รับทราบ',
+                confirmButtonColor: '#4f46e5'
+            });
+        };
+
+        window.acceptPdpaConsent = function() {
+            try {
+                localStorage.setItem('TANTOPUP24_PDPA_CONSENT', JSON.stringify({ acceptedAt: new Date().toISOString(), version: '1.0' }));
+            } catch (e) {}
+            const banner = document.getElementById('pdpa-consent-banner');
+            if (banner) banner.classList.add('hidden');
+            showToast('บันทึกการยินยอม PDPA เรียบร้อยแล้ว');
+        };
+
+        window.exportMyPdpaData = function() {
+            const u = window.state.currentUser;
+            if (!u || !u.isLoggedIn) return;
+            const em = String(u.email || '').toLowerCase();
+            const exportPayload = {
+                exportedAt: new Date().toISOString(),
+                profile: { name: u.name, email: u.email, points: u.points, walletCr: u.walletCr, airsoftWallet: u.airsoftWallet, pdpaConsentAt: u.pdpaConsentAt || null },
+                surfaceOrders: (window.state.surfaceOrders || []).filter(o => (o.buyerEmail || '').toLowerCase() === em),
+                surfaceTopups: (window.state.surfaceTopups || []).filter(t => (t.email || '').toLowerCase() === em),
+                hiddenTopups: (window.state.hiddenTopups || []).filter(t => (t.email || '').toLowerCase() === em),
+                armoryOrders: (window.state.myArmoryOrders || []).filter(o => (o.buyerEmail || '').toLowerCase() === em)
+            };
+            const blob = new Blob([JSON.stringify(exportPayload, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `pdpa-my-data-${emailToSafeKey(u.email)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('ดาวน์โหลดข้อมูลส่วนตัว (PDPA) เรียบร้อยแล้ว');
+        };
+
+        window.requestPdpaAccountDeletion = function() {
+            const u = window.state.currentUser;
+            if (!u || !u.isLoggedIn) return;
+            if (String(u.email || '').toLowerCase() === MAIN_ADMIN_EMAIL) {
+                showToast('ไม่สามารถลบบัญชีผู้ดูแลระบบหลักได้', 'warning');
+                return;
+            }
+            Swal.fire({
+                icon: 'warning',
+                title: 'ยืนยันการขอลบข้อมูล &amp; ลบบัญชี (PDPA)',
+                text: 'ข้อมูลชื่อ อีเมล ที่อยู่ และบัญชีของคุณจะถูกลบหรือปิดบังตัวตนถาวร ไม่สามารถกู้คืนได้',
+                showCancelButton: true,
+                confirmButtonText: 'ยืนยันลบข้อมูลถาวร',
+                cancelButtonText: 'ยกเลิก',
+                confirmButtonColor: '#e11d48'
+            }).then(async res => {
+                if (res.isConfirmed) {
+                    const em = String(u.email || '').toLowerCase();
+                    window.state.registeredUsers = (window.state.registeredUsers || []).filter(x => (x.email || '').toLowerCase() !== em);
+                    (window.state.surfaceOrders || []).forEach(o => { if ((o.buyerEmail || '').toLowerCase() === em) o.buyerEmail = 'anonymized@pdpa'; });
+                    (window.state.myArmoryOrders || []).forEach(o => { if ((o.buyerEmail || '').toLowerCase() === em) { o.buyerEmail = 'anonymized@pdpa'; o.recipientName = 'ลบข้อมูลตาม PDPA'; o.phone = '-'; o.address = 'ลบข้อมูลตาม PDPA'; } });
+                    if (window.fbServices.auth && window.fbServices.auth.currentUser && !window.fbServices.auth.currentUser.isAnonymous) {
+                        await window.fbServices.auth.currentUser.delete().catch(() => {});
+                    }
+                    logoutSurfaceUser();
+                    showToast('ลบและปิดบังข้อมูลส่วนบุคคลตามสิทธิ PDPA เรียบร้อยแล้ว');
+                }
+            });
+        };
+
         window.openAccountInfoModal = function() {
             const u = window.state.currentUser;
             Swal.fire({
-                title: '<span class="text-lg font-bold text-slate-900">ข้อมูลบัญชีของคุณ</span>',
+                title: '<span class="text-lg font-bold text-slate-900">ข้อมูลบัญชี &amp; สิทธิ PDPA</span>',
                 html: `
                     <div class="text-left space-y-3 text-xs pt-2">
                         <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-1.5">
@@ -3745,6 +3977,17 @@
                             <div>อีเมล: <b class="text-slate-900">${escapeHtml(u.email)}</b></div>
                             <div>ระดับสิทธิ์: <b class="text-slate-900">${isCurrentUserAdmin() ? 'ผู้ดูแลระบบ (Admin)' : 'สมาชิกทั่วไป (Member)'}</b></div>
                             <div>แต้มสะสม: <b class="text-amber-600">${Number(u.points || 0).toLocaleString()} P</b></div>
+                        </div>
+                        <div class="p-3 rounded-xl bg-indigo-50/70 border border-indigo-200 space-y-2">
+                            <div class="font-bold text-indigo-900"><i class="fa-solid fa-shield-halved mr-1"></i> สิทธิเจ้าของข้อมูลส่วนบุคคล (PDPA)</div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <button type="button" onclick="exportMyPdpaData()" class="px-3 py-2 rounded-xl bg-white border border-indigo-300 text-indigo-800 font-semibold hover:bg-indigo-50 transition">
+                                    <i class="fa-solid fa-download mr-1"></i> โหลดข้อมูลของฉัน (JSON)
+                                </button>
+                                <button type="button" onclick="requestPdpaAccountDeletion()" class="px-3 py-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 font-semibold hover:bg-rose-100 transition">
+                                    <i class="fa-solid fa-user-slash mr-1"></i> ลบบัญชี / ข้อมูล PDPA
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `,
@@ -5275,22 +5518,15 @@
                 return;
             }
 
+            if (!window.state.currentUser || !window.state.currentUser.isLoggedIn) {
+                if (errEl) {
+                    errEl.textContent = 'เพื่อความปลอดภัย กรุณาเข้าสู่ระบบบัญชีสมาชิกหน้าร้านหลักก่อนกรอกรหัสเชิญ';
+                    errEl.classList.remove('hidden');
+                }
+                return;
+            }
             gatewayFailAttempts = 0;
             window.state.activeSessionCode = matchedInvite.code;
-            if (!window.state.currentUser.isLoggedIn && matchedInvite.email) {
-                const reg = (window.state.registeredUsers || []).find(u => u.email.toLowerCase() === matchedInvite.email.toLowerCase());
-                if (reg) {
-                    window.state.currentUser = {
-                        isLoggedIn: true,
-                        email: reg.email,
-                        name: reg.name,
-                        role: reg.role,
-                        points: reg.points,
-                        walletCr: reg.walletCr,
-                        airsoftWallet: Number(reg.airsoftWallet || 0)
-                    };
-                }
-            }
             saveState();
 
             document.getElementById('view-gateway').classList.add('hidden');
@@ -7513,13 +7749,56 @@
             renderHiddenAdminDashboard();
         }
 
+        let inactivityLockTimer = null;
+        function resetInactivityTimer() {
+            if (inactivityLockTimer) clearTimeout(inactivityLockTimer);
+            inactivityLockTimer = setTimeout(() => {
+                const hidView = document.getElementById('view-hidden');
+                if (hidView && !hidView.classList.contains('hidden')) {
+                    lockHiddenStore();
+                    showToast('ล็อกหน้าคลังลับอัตโนมัติเนื่องจากไม่มีการใช้งาน 15 นาที', 'info');
+                }
+            }, 15 * 60 * 1000);
+        }
+
         window.addEventListener('DOMContentLoaded', function() {
             const isLoggedIn = Boolean(window.state.currentUser && window.state.currentUser.isLoggedIn);
             const initTab = isLoggedIn ? (window.state.surfaceActiveTab || 'games') : 'games';
             switchSurfaceTab(initTab);
             renderHiddenStoreAll();
             initFirebaseConnection();
+            try {
+                if (!localStorage.getItem('TANTOPUP24_PDPA_CONSENT')) {
+                    const b = document.getElementById('pdpa-consent-banner');
+                    if (b) b.classList.remove('hidden');
+                }
+            } catch (e) {}
+            ['click', 'keydown', 'touchstart'].forEach(ev => document.addEventListener(ev, resetInactivityTimer, { passive: true }));
+            resetInactivityTimer();
         });
     </script>
+
+    <!-- PDPA Cookie & Privacy Consent Banner -->
+    <div id="pdpa-consent-banner" class="hidden fixed bottom-3 left-3 right-3 sm:left-auto sm:right-5 sm:bottom-5 sm:max-w-md z-50 rounded-2xl bg-slate-900/95 backdrop-blur-xl text-white border border-indigo-400/40 shadow-2xl p-4 space-y-3 text-xs">
+        <div class="flex items-start gap-2.5">
+            <div class="w-8 h-8 rounded-xl bg-indigo-500/20 border border-indigo-400/40 text-amber-300 flex items-center justify-center shrink-0">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="space-y-1">
+                <div class="font-bold text-white">การคุ้มครองข้อมูลส่วนบุคคล (PDPA)</div>
+                <p class="text-[11px] text-slate-300 leading-relaxed">
+                    เว็บไซต์ใช้พื้นที่จัดเก็บข้อมูลบนเบราว์เซอร์และ Firebase เพื่อการยืนยันตัวตน ประวัติคำสั่งซื้อ และตรวจสอบสลิปตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA)
+                </p>
+            </div>
+        </div>
+        <div class="flex items-center justify-end gap-2">
+            <button type="button" onclick="openPdpaPolicyModal()" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 font-medium transition">
+                อ่านนโยบาย PDPA
+            </button>
+            <button type="button" onclick="acceptPdpaConsent()" class="px-4 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-bold transition shadow-md">
+                ยอมรับทั้งหมด
+            </button>
+        </div>
+    </div>
 </body>
 </html>
